@@ -26,7 +26,10 @@
 
     <body class="bg-lightColor w-full antialiased">
         <header>
-            <div></div>
+            <div class="content-x-padding bg-darkColor flex py-4">
+                <x-layout.header.home.social />
+                <div class="flex w-[50%]"></div>
+            </div>
         </header>
 
         {{ $slot }}
