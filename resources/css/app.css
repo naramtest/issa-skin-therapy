@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.no-tailwind * {
+    all: revert;
+    line-height: 2;
+    font-size: 18px;
+    max-width: 100%;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+:root {
+    --color-light: white;
+    --color-dark: black;
+}
+
+.dark {
+    --color-light: black;
+    --color-dark: white;
+}
+
+.content-x-padding {
+    @apply px-[1.874rem]
+}
