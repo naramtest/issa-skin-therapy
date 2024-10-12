@@ -10,9 +10,15 @@
     max-width: 100%;
 }
 
+.vertical-text {
+    writing-mode: tb;
+    transform: rotate(180deg);
+}
+
 body {
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
+    @apply text-darkColor;
 }
 
 [x-cloak] {
@@ -30,7 +36,7 @@ body {
 }
 
 .content-x-padding {
-    @apply px-[1.874rem]
+    @apply px-[1.875rem]
 }
 
 

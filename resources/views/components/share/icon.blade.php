@@ -11,9 +11,9 @@
     <x-dynamic-component
         {{
     $attributes->class([
-        'max-w-2xl dark:text-white hover:cursor-pointer hover:text-gray-300
-                    hover:scale-90 transition-transform duration-300
-                ',
+        'max-w-2xl dark:text-white hover:cursor-pointer
+                        hover:scale-90 transition-transform duration-300
+                    ',
     ])
 }}
         :component="'share.'.$name"
