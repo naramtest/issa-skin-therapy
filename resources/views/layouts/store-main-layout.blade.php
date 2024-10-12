@@ -34,6 +34,25 @@
                     <x-shared.currency-switcher />
                 </div>
             </div>
+            <div class="bg-darkColor">
+                <nav class="content-x-padding flex gap-x-8 bg-lightColor py-5">
+                    <div class="w-[20%]">
+                        <img
+                            class="w-[100px]"
+                            src="{{ asset("storage/images/issa-logo.webp") }}"
+                            alt="{{ __("store.Logo") }}"
+                        />
+                    </div>
+                    <ul
+                        class="flex w-[50%] items-center justify-center gap-x-3"
+                    >
+                        <li>{{ __("store.Home") }}</li>
+                        <li>{{ __("store.Shop") }}</li>
+                        <li>{{ __("store.About") }}</li>
+                        <li>{{ __("store.Contact Us") }}</li>
+                    </ul>
+                </nav>
+            </div>
         </header>
 
         {{ $slot }}
