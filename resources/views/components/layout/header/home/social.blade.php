@@ -1,5 +1,5 @@
 <div
-    {{ $attributes->class(["flex w-[25%] items-center justify-start gap-x-6"]) }}
+    {{ $attributes->class(["flex w-[20%] items-center justify-start gap-x-6"]) }}
 >
     <x-share.icon
         class="h-[1.4rem] w-[1.4rem] text-white"

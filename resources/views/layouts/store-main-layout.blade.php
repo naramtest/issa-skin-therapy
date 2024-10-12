@@ -24,11 +24,15 @@
         @stack("header-scripts")
     </head>
 
-    <body class="bg-lightColor w-full antialiased">
+    <body class="w-full bg-lightColor antialiased">
         <header>
-            <div class="content-x-padding bg-darkColor flex py-4">
+            <div class="content-x-padding flex gap-x-10 bg-darkColor py-4">
                 <x-layout.header.home.social />
-                <div class="flex w-[50%]"></div>
+                <x-layout.header.home.alert-swiper />
+                <div class="flex w-[30%] justify-end gap-x-4">
+                    <x-shared.local-switcher />
+                    <x-shared.currency-switcher />
+                </div>
             </div>
         </header>
 
