@@ -32,3 +32,9 @@ body {
 .content-x-padding {
     @apply px-[1.874rem]
 }
+
+
+/*Home Css*/
+.nav-padding {
+    @apply py-5;
+}

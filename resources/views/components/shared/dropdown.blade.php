@@ -13,7 +13,7 @@
     </button>
 
     <ul
-        class="absolute left-1/2 top-full min-w-[240px] origin-top-right -translate-x-1/2 rounded-lg border border-slate-200 bg-white p-2 shadow-xl [&[x-cloak]]:hidden"
+        class="absolute left-1/2 top-full z-[10] min-w-[240px] origin-top-right -translate-x-1/2 rounded-lg border border-slate-200 bg-white p-2 shadow-xl [&[x-cloak]]:hidden"
         x-show="open"
         x-transition:enter="transform transition duration-200 ease-out"
         x-transition:enter-start="-translate-y-2 opacity-0"

@@ -34,11 +34,12 @@
                     <x-shared.currency-switcher />
                 </div>
             </div>
-            <div class="bg-darkColor">
+            <div class="relative bg-darkColor" x-data="{ open: false }">
                 <nav
-                    class="content-x-padding flex gap-x-8 rounded-t-[1.25rem] bg-lightColor py-5"
+                    @mouseenter="open = false"
+                    class="content-x-padding flex gap-x-8 rounded-t-[1.25rem] bg-lightColor"
                 >
-                    <div class="w-[20%]">
+                    <div class="nav-padding w-[20%]">
                         <img
                             class="w-[100px]"
                             src="{{ asset("storage/images/issa-logo.webp") }}"
@@ -51,7 +52,8 @@
                         <x-layout.header.home.nav-item
                             :title="__('store.Home')"
                         />
-                        <x-layout.header.home.nav-item
+                        <x-layout.header.home.shop-nav-item
+                            @click="open = ! open"
                             :title="__('store.Shop')"
                         />
                         <x-layout.header.home.nav-item
