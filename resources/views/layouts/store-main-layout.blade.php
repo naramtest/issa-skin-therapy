@@ -15,7 +15,7 @@
         {{ $seo ?? null }}
         {{ $graph ?? null }}
         {{ $keywords ?? null }}
-
+        @googlefonts
         <!-- Styles -->
         @stack("styles")
         @livewireStyles
@@ -35,7 +35,9 @@
                 </div>
             </div>
             <div class="bg-darkColor">
-                <nav class="content-x-padding flex gap-x-8 bg-lightColor py-5">
+                <nav
+                    class="content-x-padding flex gap-x-8 rounded-t-[1.25rem] bg-lightColor py-5"
+                >
                     <div class="w-[20%]">
                         <img
                             class="w-[100px]"
@@ -44,13 +46,28 @@
                         />
                     </div>
                     <ul
-                        class="flex w-[50%] items-center justify-center gap-x-3"
+                        class="flex w-[50%] items-center justify-center gap-x-5"
                     >
-                        <li>{{ __("store.Home") }}</li>
-                        <li>{{ __("store.Shop") }}</li>
-                        <li>{{ __("store.About") }}</li>
-                        <li>{{ __("store.Contact Us") }}</li>
+                        <x-layout.header.home.nav-item
+                            :title="__('store.Home')"
+                        />
+                        <x-layout.header.home.nav-item
+                            :title="__('store.Shop')"
+                        />
+                        <x-layout.header.home.nav-item
+                            :title="__('store.About')"
+                        />
+                        <x-layout.header.home.nav-item
+                            :title="__('store.Contact Us')"
+                        />
                     </ul>
+
+                    <div class="flex w-[30%] items-center justify-end gap-x-5">
+                        <x-icons.person class="h-7 w-7" />
+                        <x-icons.search class="h-6 w-6" />
+                        <x-icons.bookmark class="h-7 w-7" />
+                        <x-icons.cart-icon class="h-7 w-7" />
+                    </div>
                 </nav>
             </div>
         </header>

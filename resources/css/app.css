@@ -10,17 +10,22 @@
     max-width: 100%;
 }
 
+body {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+}
+
 [x-cloak] {
     display: none !important;
 }
 
 :root {
     --color-light: white;
-    --color-dark: black;
+    --color-dark: #1f1f1f;
 }
 
 .dark {
-    --color-light: black;
+    --color-light: #1f1f1f;
     --color-dark: white;
 }
 
