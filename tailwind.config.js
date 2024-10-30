@@ -11,6 +11,7 @@ export default {
             colors: {
                 lightColor: "var(--color-light)",
                 darkColor: "var(--color-dark)",
+                lightAccentColor: "var(--color-accent)",
             },
         },
     },

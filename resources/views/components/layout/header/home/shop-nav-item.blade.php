@@ -10,8 +10,9 @@
         class="cursor-pointer rounded-[3.125rem] px-4 py-2 font-medium transition-all duration-300 hover:bg-darkColor hover:text-lightColor"
     >
         <p class="">{{ $title }}</p>
+        {{-- TODO: add shop nav --}}
         <div
-            class="absolute left-0 top-[100%] z-[10] w-full shadow"
+            class="absolute left-0 top-[100%] z-[10] w-full bg-black"
             x-show="open"
             x-transition:enter="transform transition duration-300 ease-out"
             x-transition:enter-start="-translate-y-2 opacity-0"

@@ -28,11 +28,14 @@ body {
 :root {
     --color-light: white;
     --color-dark: #1f1f1f;
+    --color-accent: #ccdbe1;
 }
 
 .dark {
     --color-light: #1f1f1f;
     --color-dark: white;
+    --color-accent: #ccdbe1;
+    
 }
 
 .content-x-padding {
