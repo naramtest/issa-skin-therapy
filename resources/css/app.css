@@ -29,13 +29,15 @@ body {
     --color-light: white;
     --color-dark: #1f1f1f;
     --color-accent: #ccdbe1;
+    --footer-bg: #292929;
+    --color-secondary: #d7e6be;
 }
 
 .dark {
     --color-light: #1f1f1f;
     --color-dark: white;
     --color-accent: #ccdbe1;
-    
+
 }
 
 .content-x-padding {

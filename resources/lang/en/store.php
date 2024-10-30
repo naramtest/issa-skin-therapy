@@ -11,4 +11,10 @@ return [
     "Next Arrow" => "Next Arrow",
     "Previous Arrow" => "Previous Arrow",
     "Headphone Icon" => "Headphone Icon",
+    "Payment methods" => "Payment methods",
+    "Subscribe for the latest offers & updates" =>
+        "Subscribe for the latest offers & updates",
+    "My Account" => "My Account",
+    "Checkout" => "Checkout",
+    "Order Tracking" => "Order Tracking",
 ];

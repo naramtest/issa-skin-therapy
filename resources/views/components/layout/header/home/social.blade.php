@@ -1,5 +1,5 @@
-<div
-    {{ $attributes->class(["flex w-[20%] items-center justify-start gap-x-6"]) }}
+<ul
+    {{ $attributes->class(["flex  items-center justify-start "]) }}
 >
     <x-share.icon
         class="h-[1.4rem] w-[1.4rem] text-white hover:text-gray-300"
@@ -22,4 +22,4 @@
         name="youtube"
         url="https://www.youtube.com/@issaskintherapy?si=sjj6hRWeLYQb0MEC"
     />
-</div>
+</ul>

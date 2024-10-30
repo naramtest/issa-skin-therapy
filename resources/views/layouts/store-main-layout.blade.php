@@ -29,12 +29,7 @@
         <x-layout.fixed-menu />
         {{ $slot }}
 
-        <footer class="relative">
-            <x-layout.footer.home.top class="relative z-[20]" />
-            <div
-                class="relative z-[10] h-[300px] -translate-y-10 rounded-b-[20px] bg-darkColor"
-            ></div>
-        </footer>
+        <x-layout.footer-home />
 
         @livewireScriptConfig
         @stack("scripts")

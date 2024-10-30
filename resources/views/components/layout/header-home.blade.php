@@ -1,6 +1,6 @@
 <header {{ $attributes }}>
     <div class="content-x-padding flex gap-x-10 bg-darkColor py-4">
-        <x-layout.header.home.social />
+        <x-layout.header.home.social class="w-[20%] gap-x-6" />
         <x-layout.header.home.alert-swiper />
         <div class="flex w-[30%] justify-end gap-x-4">
             <x-shared.local-switcher />
