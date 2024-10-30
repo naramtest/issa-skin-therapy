@@ -8,8 +8,7 @@
                 <h2
                     class="w-[60%] px-3 text-[2.75rem] uppercase leading-[48px] text-white"
                 >
-                    shop the collection and
-                    <span class="ms-2 font-bold">save 30%</span>
+                    {{ $content }}
                 </h2>
             </div>
             <div class="">
