@@ -16,30 +16,71 @@ class Nav
     public static function pages(): array
     {
         return [
-            [
-                "name" => "Home",
-                "title" => __("store.Home"),
-                "route" => "home.index",
+            "profile" => [
+                [
+                    "name" => "Home",
+                    "title" => __("store.Home"),
+                    "route" => "storefront.index",
+                ],
+                [
+                    "name" => "Shop",
+                    "title" => __("store.Shop"),
+                    "route" => "shop.index",
+                ],
+                [
+                    "name" => "My Account",
+                    "title" => __("store.My Account"),
+                    "route" => "account.index",
+                ],
+                [
+                    "name" => "Checkout",
+                    "title" => __("store.Checkout"),
+                    "route" => "checkout.index",
+                ],
+                [
+                    "name" => "Order Tracking",
+                    "title" => __("store.Order Tracking"),
+                    "route" => "order.tracking",
+                ],
             ],
-            [
-                "name" => "Shop",
-                "title" => __("store.Shop"),
-                "route" => "shop.index",
+            "customer" => [
+                [
+                    "name" => "Help & Contact us",
+                    "title" => __("store.Help & Contact us"),
+                    "route" => "contact.index",
+                ],
+                [
+                    "name" => "FAQ’s",
+                    "title" => __("store.FAQ’s"),
+                    "route" => "faq.index",
+                ],
+                [
+                    "name" => "Blog",
+                    "title" => __("store.Blog"),
+                    "route" => "blog.index",
+                ],
+                [
+                    "name" => "Refund Returns",
+                    "title" => __("store.Refund Returns"),
+                    "route" => "return.index",
+                ],
             ],
-            [
-                "name" => "My Account",
-                "title" => __("store.My Account"),
-                "route" => "account.index",
-            ],
-            [
-                "name" => "Checkout",
-                "title" => __("store.Checkout"),
-                "route" => "check.index",
-            ],
-            [
-                "name" => "Order Tracking",
-                "title" => __("store.Order Tracking"),
-                "route" => "order.tracking",
+            "info" => [
+                [
+                    "name" => "About Us",
+                    "title" => __("store.About Us"),
+                    "route" => "about.index",
+                ],
+                [
+                    "name" => "Terms & Conditions",
+                    "title" => __("store.Terms & Conditions"),
+                    "route" => "terms.index",
+                ],
+                [
+                    "name" => "Privacy & policy",
+                    "title" => __("store.Privacy & policy"),
+                    "route" => "privacy.index",
+                ],
             ],
         ];
     }
