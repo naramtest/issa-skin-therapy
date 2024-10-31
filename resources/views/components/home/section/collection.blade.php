@@ -1,6 +1,4 @@
-<section
-    {{ $attributes->class(["content-x-padding mt-10 rounded-t-[20px] border-t-[1px] border-[#A6BCC599] py-14"]) }}
->
+<x-home.section-container class="content-x-padding mt-10 py-14">
     <div class="flex items-center justify-between px-3">
         <div class="w-[25%]">
             <x-home.fancy-heading />
@@ -24,4 +22,4 @@
     </div>
     <x-home.collection-row />
     <x-home.collection-row />
-</section>
+</x-home.section-container>

@@ -37,4 +37,15 @@ return [
     "background Image" => "background Image",
     "Shop by collection" => "Shop by collection",
     "Check out all" => "Check out all!",
+    "The ISSA SKIN THERAPY team recognized PET™’s potential in" => 'The ISSA SKIN THERAPY team recognized PET™’s potential in
+                    skincare, leveraging this groundbreaking technology to
+                    deliver nourishing active ingredients deep into the skin,
+                    significantly slowing the aging process and promoting
+                    rejuvenation from within.',
+    "Our Patent Delivery Technology (PET)" =>
+        "Our Patent Delivery Technology (PET)",
+    "Stepwise Skin Therapy Collection Boxes" =>
+        "Stepwise Skin Therapy Collection Boxes",
+    "Each collection is a step towards radiant skin" =>
+        "Each collection is a step towards radiant skin.",
 ];

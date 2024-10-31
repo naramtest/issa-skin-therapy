@@ -6,7 +6,7 @@
             background-size: cover;
             background-position: center center;
         "
-        class="collection-card relative h-[450px] w-[25%] rounded-[20px]"
+        class="card-overlay relative h-[450px] w-[25%] rounded-[20px]"
     >
         <a
             aria-label="{{ __("store.Shop by collection") }}"

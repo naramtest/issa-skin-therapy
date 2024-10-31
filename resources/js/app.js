@@ -5,13 +5,14 @@ import {
 } from "../../vendor/livewire/livewire/dist/livewire.esm";
 
 import Swiper from "swiper";
-import { Autoplay } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 
 import "swiper/css";
-import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 window.Alpine = Alpine;
 window.Autoplay = Autoplay;
+window.Pagination = Pagination;
 
 window.Swiper = Swiper;
 
