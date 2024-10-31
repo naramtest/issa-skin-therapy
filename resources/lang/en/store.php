@@ -27,4 +27,14 @@ return [
     "About Us" => "About Us",
     "Privacy & policy" => "Privacy & policy",
     "Terms & Conditions" => "Terms & Conditions",
+    "1" => [
+        " Crafted by Dr" =>
+            "1. Crafted by Dr. Issa: Dermatologist-Approved Skincare.",
+    ],
+    "Revolutionary Patent Delivery Technology" => '2. Revolutionary Patent Delivery Technology (PET
+                        Delivery).',
+    "Premium Quality, Made in USA" => "3. Premium Quality, Made in USA.",
+    "background Image" => "background Image",
+    "Shop by collection" => "Shop by collection",
+    "Check out all" => "Check out all!",
 ];
