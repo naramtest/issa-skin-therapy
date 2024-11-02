@@ -44,24 +44,44 @@
     <script>
         function swiper() {
             return {
-                topSectionSwiper: new Swiper('.hero-swiper', {
-                    modules: [Autoplay],
-                    slidesPerView: 1.1,
-                    centeredSlides: true,
-                    initialSlide: 2,
-                    loop: true,
-                    spaceBetween: 40,
-                    speed: 1000,
-                    autoplay: {
-                        delay: 3000,
-                    },
-                    grabCursor: true,
-                }),
+                topSectionSwiper: null,
+                init() {
+                    this.topSectionSwiper = new Swiper('.hero-swiper', {
+                        modules: [Autoplay],
+                        slidesPerView: 1.1,
+                        centeredSlides: true,
+                        initialSlide: 2,
+                        loop: true,
+                        spaceBetween: 40,
+                        speed: 1000,
+                        autoplay: {
+                            delay: 3000,
+                            disableOnInteraction: false,
+                        },
+                        grabCursor: true,
+                        on: {
+                            slideChange: function () {
+                                const activeSlide =
+                                    this.slides[this.activeIndex];
+                                const video =
+                                    activeSlide.querySelector('video');
+                                if (video) {
+                                    video.currentTime = 0;
+                                    video.play().catch(() => {
+                                        // Silent catch for autoplay policy
+                                        video.muted = true;
+                                        video.play();
+                                    });
+                                }
+                            },
+                        },
+                    });
+                },
                 nextSlide() {
-                    this.topSectionSwiper.slideNext(1000);
+                    this.topSectionSwiper?.slideNext(1000);
                 },
                 pervSlide() {
-                    this.topSectionSwiper.slidePrev(1000);
+                    this.topSectionSwiper?.slidePrev(1000);
                 },
             };
         }
