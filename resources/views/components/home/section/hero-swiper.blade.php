@@ -48,11 +48,11 @@
                 init() {
                     this.topSectionSwiper = new Swiper('.hero-swiper', {
                         modules: [Autoplay],
-                        slidesPerView: 1.1,
+                        slidesPerView: 1.069,
                         centeredSlides: true,
                         initialSlide: 2,
                         loop: true,
-                        spaceBetween: 40,
+                        spaceBetween: 25,
                         speed: 1000,
                         autoplay: {
                             delay: 3000,

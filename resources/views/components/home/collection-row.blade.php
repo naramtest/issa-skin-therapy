@@ -1,4 +1,4 @@
-<div {{ $attributes->class(["mt-6 flex px-6"]) }}>
+<div {{ $attributes->class(["mt-6 flex "]) }}>
     <div
         style="
             background-image: url({{ asset("storage/test/hero2.webp") }});

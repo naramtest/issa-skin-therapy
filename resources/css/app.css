@@ -45,7 +45,7 @@ body {
 }
 
 .content-x-padding {
-    @apply px-[1.875rem]
+    @apply px-[3.125rem]
 }
 
 .swiper-pagination-bullet-active {
@@ -144,3 +144,5 @@ body {
     transform-origin: right;
     transition: transform 0.3s ease-out;
 }
+
+/*auto / minmax(0, 1.28fr) minmax(0, 0.72fr)*/
