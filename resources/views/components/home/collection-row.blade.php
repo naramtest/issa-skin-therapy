@@ -1,4 +1,4 @@
-<div {{ $attributes->class(["mt-6 flex"]) }}>
+<div {{ $attributes->class(["mt-6 flex px-6"]) }}>
     <div
         style="
             background-image: url({{ asset("storage/test/hero2.webp") }});
@@ -6,19 +6,23 @@
             background-size: cover;
             background-position: center center;
         "
-        class="card-overlay relative h-[450px] w-[25%] rounded-[20px]"
+        class="card-hover-trigger relative h-[450px] w-[25%] rounded-[20px]"
     >
         <a
             aria-label="{{ __("store.Shop by collection") }}"
             href=""
-            class="relative block h-full w-full"
+            class="relative z-10 block h-full w-full"
         >
             <div class="absolute bottom-7 w-full px-7 text-white">
                 <div class="flex items-center justify-between">
-                    <h3 class="text-xl font-bold">
+                    <h3
+                        class="text-underline text-underline-white text-xl font-bold"
+                    >
                         {{ __("store.Shop by collection") }}
                     </h3>
-                    <x-icons.arrow-right class="h-5 w-5 text-white" />
+                    <x-icons.card-arrow-right
+                        class="arrow h-5 w-5 text-white"
+                    />
                 </div>
                 <p class="mt-2">{{ __("store.Check out all") }}</p>
             </div>
@@ -47,7 +51,7 @@
                     spaceBetween: 10,
                     speed: 800,
                     autoplay: {
-                        delay: 5000, // 3 seconds delay
+                        delay: 5000,
                         disableOnInteraction: false,
                     },
                     loop: false,
@@ -55,7 +59,6 @@
                     init() {
                         this.collectionSwiper.init();
 
-                        // Track direction of movement
                         let goingForward = true;
 
                         this.collectionSwiper.on('slideChange', () => {

@@ -48,4 +48,5 @@ return [
         "Stepwise Skin Therapy Collection Boxes",
     "Each collection is a step towards radiant skin" =>
         "Each collection is a step towards radiant skin.",
+    "Our Story" => "Our Story",
 ];

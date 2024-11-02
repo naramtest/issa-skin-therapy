@@ -1,12 +1,12 @@
 <x-home.section-container class="content-x-padding mt-10 py-14">
-    <div class="flex items-center justify-between px-3">
+    <div class="flex items-center justify-between px-14">
         <div class="w-[25%]">
             <x-home.fancy-heading />
             <a
                 class="mt-10 flex w-fit items-center rounded-[50px] border border-[#a5bbc4] px-6 py-4 text-[15px] font-medium transition-colors duration-300 hover:border-transparent hover:bg-lightAccentColor"
                 href=""
             >
-                <span>Our Story</span>
+                <span>{{ __("store.Our Story") }}</span>
                 <x-icons.arrow-right class="ms-3 h-4 w-4 text-black" />
             </a>
         </div>
