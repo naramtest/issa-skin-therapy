@@ -6,6 +6,7 @@
         <x-home.section.best-seller-product />
         <x-home.section.vedio-background />
         <x-home.section.boxes />
+        <x-home.section.image-com />
         <div class="h-[1000px] w-full"></div>
     </main>
 </x-store-main-layout>

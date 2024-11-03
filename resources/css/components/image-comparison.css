@@ -1,0 +1,94 @@
+.image-comparison {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    user-select: none;
+}
+
+.image-comparison img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.before-image {
+    clip-path: inset(0 50% 0 0);
+    z-index: 2;
+}
+
+.text-overlay {
+    position: absolute;
+    bottom: 50px;
+    left: 20px;
+    z-index: 3;
+
+}
+
+.after-image {
+    z-index: 1;
+}
+
+.comparison-slider {
+    inset-block-start: 0;
+    inset-inline-start: 50%;
+    height: 100%;
+    width: 44px;
+    margin-inline-start: -22px;
+    cursor: col-resize;
+    position: absolute;
+    z-index: 4;
+}
+
+/* Rest of the CSS remains the same */
+.comparison-slider:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    inset-block-start: 0;
+    height: 50%;
+    inset-inline-start: 50%;
+    margin-inline-start: -2px;
+    width: 4px;
+    background-color: white;
+    cursor: ew-resize;
+    z-index: -1;
+}
+
+.comparison-slider:after {
+    content: '';
+    position: absolute;
+    inset-block-end: 0;
+    height: 50%;
+    inset-inline-start: 50%;
+    margin-inline-start: -2px;
+    width: 4px;
+    background-color: white;
+    cursor: ew-resize;
+    z-index: -1;
+}
+
+.comparison-slider span {
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    width: 38px;
+    height: 64px;
+    margin-inline-start: -19px;
+    margin-block-start: -32px;
+    border-radius: 999px;
+    background-color: var(--color-light);
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    position: absolute;
+    pointer-events: none;
+    cursor: col-resize;
+}
+
+.comparison-slider svg {
+    width: 12px;
+    stroke-width: 1.5px;
+    height: 1.375rem;
+}

@@ -11,6 +11,7 @@ import { Autoplay, EffectFade, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
+import { initImageComparison } from "./feature/image-comparison";
 
 window.Alpine = Alpine;
 window.Autoplay = Autoplay;
@@ -20,5 +21,10 @@ window.EffectFade = EffectFade;
 window.Swiper = Swiper;
 document.addEventListener("DOMContentLoaded", () => {
     initLightbox();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    initLightbox();
+    initImageComparison(); // Add this line
 });
 Livewire.start();

@@ -1,7 +1,8 @@
+@import "components/image-comparison.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 .rounded-inherit {
     border-radius: inherit;
@@ -173,5 +174,19 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
 }
+
+.gradient-text {
+
+    background: linear-gradient(to right, #4F6359 0%, #A0C9B5 50%, #000000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+
+
+
+
+
 
 
