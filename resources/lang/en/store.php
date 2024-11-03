@@ -52,4 +52,5 @@ return [
     "Add to Card" => "Add to Card",
     "Need help? Contact us" => "Need help? Contact us",
     "Social:" => "Social:",
+    "View full details" => "View full details",
 ];
