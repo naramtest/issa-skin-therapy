@@ -3,13 +3,6 @@
 @tailwind utilities;
 
 
-.no-tailwind * {
-    all: revert;
-    line-height: 2;
-    font-size: 18px;
-    max-width: 100%;
-}
-
 .rounded-inherit {
     border-radius: inherit;
 }
@@ -46,6 +39,34 @@ body {
 
 .content-x-padding {
     @apply px-[3.125rem]
+}
+
+
+.no-tailwind * {
+    all: revert;
+    max-width: 100%;
+    font-family: "Inter", sans-serif;
+}
+
+
+.no-tailwind h2 {
+    font-size: 22px !important;
+    font-weight: 600 !important;
+}
+
+.no-tailwind h2 * {
+    font-size: 22px !important;
+    font-weight: 600 !important;
+}
+
+.no-tailwind h3 {
+    font-size: 22px !important;
+    font-weight: 500 !important;
+}
+
+.no-tailwind h3 * {
+    font-size: 22px !important;
+    font-weight: 500 !important;
 }
 
 .swiper-pagination-bullet-active {
@@ -144,3 +165,13 @@ body {
     transform-origin: right;
     transition: transform 0.3s ease-out;
 }
+
+.rating-star:before {
+    content: "\2605\2605\2605\2605\2605";
+    background: linear-gradient(calc(90deg), rgb(245 158 11) 100%, rgb(23 23 23 / .15) 100%);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+

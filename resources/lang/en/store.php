@@ -49,4 +49,7 @@ return [
     "Each collection is a step towards radiant skin" =>
         "Each collection is a step towards radiant skin.",
     "Our Story" => "Our Story",
+    "Add to Card" => "Add to Card",
+    "Need help? Contact us" => "Need help? Contact us",
+    "Social:" => "Social:",
 ];
