@@ -53,4 +53,8 @@ return [
     "Need help? Contact us" => "Need help? Contact us",
     "Social:" => "Social:",
     "View full details" => "View full details",
+    "A-CLEAR" => "A-CLEAR",
+    "X-AGE" => "X-AGE",
+    "See The Difference" => "See The Difference",
+    "Skin That Defies Times" => "Skin That Defies Times",
 ];

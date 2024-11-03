@@ -14,15 +14,19 @@ export const initImageComparison = () => {
         const startSliding = (e) => {
             isSliding = true;
             container.classList.add("sliding");
-            textOverlay.classList.add("opacity-0");
-            textOverlay.classList.remove("opacity-100");
+            if (textOverlay) {
+                textOverlay.classList.add("opacity-0");
+                textOverlay.classList.remove("opacity-100");
+            }
         };
 
         const stopSliding = (e) => {
             isSliding = false;
             container.classList.remove("sliding");
-            textOverlay.classList.add("opacity-100");
-            textOverlay.classList.remove("opacity-0");
+            if (textOverlay) {
+                textOverlay.classList.add("opacity-100");
+                textOverlay.classList.remove("opacity-0");
+            }
         };
 
         const slide = (e) => {

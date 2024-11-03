@@ -183,6 +183,23 @@ body {
     background-clip: text;
 }
 
+.black-text-stroke {
+    color: white;
+    text-shadow: 1px 1px var(--color-dark),
+    -1px -1px var(--color-dark);
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+@supports (-webkit-text-stroke: 1px var(--color-dark)) {
+    .black-text-stroke {
+        color: transparent;
+        -webkit-text-stroke: 1px var(--color-dark);
+        text-shadow: none;
+        font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+    }
+}
+
 
 
 
