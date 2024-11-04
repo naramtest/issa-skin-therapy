@@ -11,6 +11,8 @@
 
         <x-home.section.blog />
 
+        <x-home.section.shop />
+
         <div class="h-[1000px] w-full"></div>
     </main>
 </x-store-main-layout>

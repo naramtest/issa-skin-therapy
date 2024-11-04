@@ -1,5 +1,5 @@
 <x-home.section-container
-    class="content-x-padding relative z-10 h-[600px] -translate-y-10 bg-lightColor pt-10"
+    class="content-x-padding relative z-10 -translate-y-10 bg-lightColor pt-10"
 >
     <div class="flex h-fit w-full gap-10">
         <div class="relative flex-1">
