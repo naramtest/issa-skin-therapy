@@ -60,10 +60,3 @@
         </nav>
     </div>
 </header>
-
-<!-- Add this immediately after the header -->
-<div
-    x-data="{ height: 0 }"
-    x-init="height = document.getElementById('nav').offsetHeight"
-    :style="{ height: document.getElementById('nav').classList.contains('fixed') ? `${height}px` : '0px' }"
-></div>

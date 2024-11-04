@@ -43,6 +43,10 @@ body {
     @apply px-[3.125rem]
 }
 
+.padding-from-side-menu {
+    @apply px-24
+}
+
 
 .no-tailwind * {
     all: revert;
