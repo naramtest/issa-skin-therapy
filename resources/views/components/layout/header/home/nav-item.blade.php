@@ -5,7 +5,14 @@
 {{-- TODO: add animation for the color --}}
 
 <li
-    {{ $attributes->class(["cursor-pointer rounded-[3.125rem] px-4 py-2 font-medium transition-all duration-300 hover:bg-darkColor hover:text-lightColor"]) }}
+    {{ $attributes->class(["nav-item group relative flex cursor-pointer items-center overflow-hidden px-4 py-2 font-medium"]) }}
 >
-    {{ $title }}
+    <span class="nav-item-transition-opacity relative h-full w-full">
+        {{ $title }}
+    </span>
+    <span
+        class="nav-item-transition absolute left-0 top-0 h-full w-full translate-y-full scale-0 rounded-[3.125rem] bg-darkColor px-4 py-2 text-center text-lightColor group-hover:translate-y-0 group-hover:scale-100 group-hover:text-lightColor"
+    >
+        {{ $title }}
+    </span>
 </li>

@@ -7,7 +7,27 @@
             <x-shared.currency-switcher />
         </div>
     </div>
-    <div class="relative bg-darkColor" x-data="{ open: false }">
+    <div
+        id="nav"
+        class="relative bg-darkColor"
+        x-data="{
+            open: false,
+            sticky: false,
+            scrollPosition: 0,
+            navOffset: 0,
+        }"
+        x-init="
+            navOffset = $el.offsetTop
+            window.addEventListener('scroll', () => {
+                scrollPosition = window.scrollY
+                sticky = scrollPosition > navOffset
+            })
+        "
+        :class="{
+            'fixed top-0 left-0 w-full z-50 shadow-md': sticky,
+            'relative': !sticky
+        }"
+    >
         <nav
             @mouseenter="open = false"
             class="content-x-padding flex gap-x-8 rounded-t-[1.25rem] bg-lightColor"
@@ -19,7 +39,7 @@
                     alt="{{ __("store.Logo") }}"
                 />
             </div>
-            <ul class="flex w-[50%] items-center justify-center gap-x-5">
+            <ul class="flex w-[60%] items-center justify-center gap-x-5">
                 <x-layout.header.home.nav-item :title="__('store.Home')" />
                 <x-layout.header.home.shop-nav-item
                     @click="open = ! open"
@@ -31,7 +51,7 @@
                 />
             </ul>
 
-            <div class="flex w-[30%] items-center justify-end gap-x-5">
+            <div class="flex w-[20%] items-center justify-end gap-x-5">
                 <x-icons.person class="h-7 w-7" />
                 <x-icons.search class="h-6 w-6" />
                 <x-icons.bookmark class="h-7 w-7" />
@@ -40,3 +60,10 @@
         </nav>
     </div>
 </header>
+
+<!-- Add this immediately after the header -->
+<div
+    x-data="{ height: 0 }"
+    x-init="height = document.getElementById('nav').offsetHeight"
+    :style="{ height: document.getElementById('nav').classList.contains('fixed') ? `${height}px` : '0px' }"
+></div>

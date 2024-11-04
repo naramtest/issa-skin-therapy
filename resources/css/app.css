@@ -202,7 +202,40 @@ body {
     }
 }
 
+@keyframes slideDown {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
 
+/* Add this to your app.css */
+#nav {
+    transition: all 0.5s ease-in-out;
+}
+
+#nav.fixed {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.nav-item-transition {
+    transition: transform .5s cubic-bezier(.3, 1, .3, 1);
+}
+
+.nav-item-transition-opacity {
+    transition: .5s cubic-bezier(.3, 1, .3, 1);
+    transition-property: transform, opacity;
+}
+
+.nav-item:hover .nav-item-transition-opacity {
+    opacity: 0;
+    transform: translateY(-10%) scale(.6);
+}
 
 
 
