@@ -14,6 +14,7 @@ export default {
                 lightAccentColor: "var(--color-accent)",
                 footerColor: "var(--footer-bg)",
                 secondaryColor: "var(--color-secondary)",
+                slateDarkColor: "var(--slate-dark)",
             },
         },
     },

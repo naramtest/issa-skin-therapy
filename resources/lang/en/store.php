@@ -57,4 +57,7 @@ return [
     "X-AGE" => "X-AGE",
     "See The Difference" => "See The Difference",
     "Skin That Defies Times" => "Skin That Defies Times",
+    "Featured Image" => "Featured Image",
+    "Calendar" => "Calendar",
+    "Comments" => "Comments",
 ];

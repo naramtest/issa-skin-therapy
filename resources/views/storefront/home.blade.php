@@ -9,6 +9,8 @@
         <x-home.section.image-com />
         <x-home.section.testimonial />
 
+        <x-home.section.blog />
+
         <div class="h-[1000px] w-full"></div>
     </main>
 </x-store-main-layout>
