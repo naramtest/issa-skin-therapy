@@ -1,13 +1,14 @@
 <x-home.section-container
     class="relative flex w-full flex-col items-center gap-16 px-40 py-28 lg:flex-row"
 >
-    <x-general.product-gallery />
+    <x-general.product-gallery class="lg:w-[55%]" />
     <div class="flex w-full flex-col lg:w-[45%]">
-        <p>Our Best Seller</p>
+        <p class="font-[300] leading-[20px] text-darkColor">Our Best Seller</p>
         <h2 class="mb-3 mt-3 text-4xl font-bold">SaliCleanse Cleanser</h2>
         <p class="mb-3 text-lg">€55.22</p>
         <div class="flex">
             <span aria-hidden="true" class="rating-star hidden lg:block"></span>
+            <p class="ms-2 font-[300] text-darkColor">(15 customer reviews)</p>
         </div>
         <div class="no-tailwind my-8">
             <ul class="text-lg">

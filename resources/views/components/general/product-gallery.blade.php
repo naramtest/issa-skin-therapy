@@ -3,7 +3,7 @@
 @endphp
 
 <div
-    {{ $attributes->class(["flex w-full gap-4 lg:w-[55%]"]) }}
+    {{ $attributes->class(["flex w-full gap-4 "]) }}
     x-data="productSwiper()"
 >
     <!-- Thumbnails Column -->

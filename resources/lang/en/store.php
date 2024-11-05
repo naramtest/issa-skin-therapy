@@ -60,4 +60,6 @@ return [
     "Featured Image" => "Featured Image",
     "Calendar" => "Calendar",
     "Comments" => "Comments",
+    "Tabby" => "Tabby",
+    "Check Out" => "Check Out",
 ];

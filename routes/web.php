@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\StoreFront\HomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/", [HomeController::class, "index"])->name("storefront.index");
 Route::get("/shop", [ShopController::class, "index"])->name("shop.index");
+Route::get("/product/1", [ProductController::class, "index"])->name(
+    "product.show"
+);
 Route::get("/account", [HomeController::class, "index"])->name("account.index");
 Route::get("/checkout", [HomeController::class, "index"])->name(
     "checkout.index"
