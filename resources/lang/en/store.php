@@ -62,4 +62,9 @@ return [
     "Comments" => "Comments",
     "Tabby" => "Tabby",
     "Check Out" => "Check Out",
+    "Clients" => "Clients",
+    "Didnt find you answer?" => 'Didn\'t find you answer?',
+    "Email" => "Email",
+    "Name" => "Name",
+    "Send Message" => "Send Message",
 ];

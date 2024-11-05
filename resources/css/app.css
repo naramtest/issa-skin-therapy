@@ -44,7 +44,7 @@ body {
 }
 
 .padding-from-side-menu {
-    @apply px-24
+    @apply px-[5.3rem]
 }
 
 

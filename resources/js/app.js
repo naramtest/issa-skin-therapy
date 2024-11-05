@@ -16,6 +16,7 @@ import gsap from "gsap";
 
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { initTextEffects } from "./feature/text-effects.js";
+import collapse from "@alpinejs/collapse";
 
 // Initialize core GSAP
 gsap.registerPlugin(ScrollTrigger);
@@ -24,6 +25,8 @@ window.ScrollTrigger = ScrollTrigger;
 
 window.Alpine = Alpine;
 window.Autoplay = Autoplay;
+
+Alpine.plugin(collapse);
 window.Pagination = Pagination;
 window.EffectFade = EffectFade;
 
