@@ -51,70 +51,63 @@
     </div>
     <div class="product-swiper swiper mt-8">
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <x-general.product-item-card
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-            </div>
-            <div class="swiper-slide">
-                <x-general.product-item-card
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-            </div>
-            <div class="swiper-slide">
-                <x-general.product-item-card
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-            </div>
-            <div class="swiper-slide">
-                <x-general.product-item-card
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-            </div>
-            <div class="swiper-slide">
-                <x-general.product-item-card
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-            </div>
-            <div class="swiper-slide">
-                <x-general.product-item-card
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-            </div>
-            <div class="swiper-slide">
-                <x-general.product-item-card
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-            </div>
-            <div class="swiper-slide">
-                <x-general.product-item-card
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-            </div>
+            <x-general.product-item-card
+                class="swiper-slide"
+                title="LumiCleanse Cleanser"
+                img="{{asset('storage/test/product/product.webp')}}"
+                subtitle="A-luminate, CLEANSE"
+                price="200.00$"
+            />
+
+            <x-general.product-item-card
+                class="swiper-slide"
+                title="LumiCleanse Cleanser"
+                img="{{asset('storage/test/product/product.webp')}}"
+                subtitle="A-luminate, CLEANSE"
+                price="200.00$"
+            />
+            <x-general.product-item-card
+                class="swiper-slide"
+                title="LumiCleanse Cleanser"
+                img="{{asset('storage/test/product/product.webp')}}"
+                subtitle="A-luminate, CLEANSE"
+                price="200.00$"
+            />
+            <x-general.product-item-card
+                class="swiper-slide"
+                title="LumiCleanse Cleanser"
+                img="{{asset('storage/test/product/product.webp')}}"
+                subtitle="A-luminate, CLEANSE"
+                price="200.00$"
+            />
+            <x-general.product-item-card
+                class="swiper-slide"
+                title="LumiCleanse Cleanser"
+                img="{{asset('storage/test/product/product.webp')}}"
+                subtitle="A-luminate, CLEANSE"
+                price="200.00$"
+            />
+            <x-general.product-item-card
+                class="swiper-slide"
+                title="LumiCleanse Cleanser"
+                img="{{asset('storage/test/product/product.webp')}}"
+                subtitle="A-luminate, CLEANSE"
+                price="200.00$"
+            />
+            <x-general.product-item-card
+                class="swiper-slide"
+                title="LumiCleanse Cleanser"
+                img="{{asset('storage/test/product/product.webp')}}"
+                subtitle="A-luminate, CLEANSE"
+                price="200.00$"
+            />
+            <x-general.product-item-card
+                class="swiper-slide"
+                title="LumiCleanse Cleanser"
+                img="{{asset('storage/test/product/product.webp')}}"
+                subtitle="A-luminate, CLEANSE"
+                price="200.00$"
+            />
         </div>
     </div>
 
