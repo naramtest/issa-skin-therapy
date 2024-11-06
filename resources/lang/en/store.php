@@ -72,4 +72,5 @@ return [
     "Arrow Right" => "Arrow Right",
     "You may also like" => "You may also like",
     "background" => "background",
+    "Add to cart" => "Add to cart",
 ];
