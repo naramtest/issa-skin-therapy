@@ -28,7 +28,7 @@
         <x-layout.header-home />
         <x-layout.fixed-menu />
         {{ $slot }}
-
+        <livewire:cart-component />
         <x-layout.footer-home />
 
         @livewireScriptConfig

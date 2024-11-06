@@ -73,4 +73,9 @@ return [
     "You may also like" => "You may also like",
     "background" => "background",
     "Add to cart" => "Add to cart",
+    "Continue Shopping" => "Continue Shopping",
+    "Subtotal" => "Subtotal",
+    "Got a discount code?" => "Got a discount code?",
+    "Apply" => "Apply",
+    "View Cart" => "View Cart",
 ];
