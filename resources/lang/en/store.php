@@ -78,4 +78,10 @@ return [
     "Got a discount code?" => "Got a discount code?",
     "Apply" => "Apply",
     "View Cart" => "View Cart",
+    "Use english letters" => "Use english letters",
+    " Please type *000* if postcode is unknown" =>
+        " Please type *000* if postcode is unknown",
+    "Information" => "Information",
+    "Ship to a different address?" => "Ship to a different address?",
+    "Create an account?" => "Create an account?",
 ];

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\StoreFront\HomeController;
@@ -11,7 +12,7 @@ Route::get("/product/1", [ProductController::class, "index"])->name(
     "product.show"
 );
 Route::get("/account", [HomeController::class, "index"])->name("account.index");
-Route::get("/checkout", [HomeController::class, "index"])->name(
+Route::get("/checkout", [CheckoutController::class, "index"])->name(
     "checkout.index"
 );
 Route::get("/order-tracking", [HomeController::class, "index"])->name(
