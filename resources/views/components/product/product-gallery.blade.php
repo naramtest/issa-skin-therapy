@@ -8,9 +8,12 @@
         ];
     @endphp
 
-    <div class="flex w-full items-center gap-12" x-data="productSwiper()">
+    <div
+        class="flex w-full items-center gap-12"
+        x-data="productGallerySwiper()"
+    >
         <div class="relative h-full w-[60%]">
-            <div class="product-swiper swiper">
+            <div class="product-gallery-swiper swiper">
                 <div class="swiper-wrapper h-full" id="gallery">
                     @foreach ($images as $image)
                         <div
@@ -97,34 +100,37 @@
 
 @pushonce("scripts")
     <script>
-        function productSwiper() {
+        function productGallerySwiper() {
             return {
                 activeIndex: 0,
-                productSwiper1: null,
+                productGallerySwiper1: null,
                 init() {
-                    this.productSwiper1 = new Swiper('.product-swiper', {
-                        modules: [EffectFade],
-                        slidesPerView: 1,
-                        speed: 800,
-                        effect: 'fade',
-                        on: {
-                            slideChange: () => {
-                                if (this.productSwiper1) {
-                                    this.activeIndex =
-                                        this.productSwiper1.realIndex;
-                                }
+                    this.productGallerySwiper1 = new Swiper(
+                        '.product-gallery-swiper',
+                        {
+                            modules: [EffectFade],
+                            slidesPerView: 1,
+                            speed: 800,
+                            effect: 'fade',
+                            on: {
+                                slideChange: () => {
+                                    if (this.productSwiper1) {
+                                        this.activeIndex =
+                                            this.productSwiper1.realIndex;
+                                    }
+                                },
                             },
                         },
-                    });
+                    );
                 },
                 slideTo(index) {
-                    this.productSwiper1?.slideTo(index, 500);
+                    this.productGallerySwiper1?.slideTo(index, 500);
                 },
                 nextSlide() {
-                    this.productSwiper1?.slideNext(500);
+                    this.productGallerySwiper1?.slideNext(500);
                 },
                 pervSlide() {
-                    this.productSwiper1?.slidePrev(500);
+                    this.productGallerySwiper1?.slidePrev(500);
                 },
             };
         }

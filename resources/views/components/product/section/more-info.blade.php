@@ -1,7 +1,7 @@
 <x-home.section-container
     class="padding-from-side-menu relative z-10 -translate-y-10 bg-lightColor py-12"
 >
-    <h2 class="headline-font">More Info</h2>
+    <h2 class="headline-font">{{ __("store.More Info") }}</h2>
     <div class="mt-10">
         @php
             $faqs = [

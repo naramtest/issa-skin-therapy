@@ -67,4 +67,8 @@ return [
     "Email" => "Email",
     "Name" => "Name",
     "Send Message" => "Send Message",
+    "More Info" => "More Info",
+    "Arrow Left" => "Arrow Left",
+    "Arrow Right" => "Arrow Right",
+    "You may also like" => "You may also like",
 ];
