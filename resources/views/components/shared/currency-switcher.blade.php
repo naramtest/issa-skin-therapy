@@ -2,7 +2,7 @@
     {{-- TODO:add currency and change label and dropdown Items --}}
     <x-slot:button>
         <x-icons.currency class="h-6 w-6 pe-1" />
-        United Arab Emirates dirham
+        <span class="line-clamp-1">United Arab Emirates dirham</span>
         <x-icons.drop-down class="mt-1 h-3 w-3" />
     </x-slot>
     <x-slot:dropdown>

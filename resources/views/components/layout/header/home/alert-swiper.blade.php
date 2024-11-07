@@ -1,21 +1,53 @@
 <div
-    {{ $attributes->class(["flex w-[50%] items-center justify-between gap-x-6"]) }}
+    x-data="alertSwiper()"
+    class="flex w-[50%] items-center justify-between gap-x-6"
 >
     <img
-        class="h-6 w-6"
+        @click="nextSlide()"
+        class="h-6 w-6 cursor-pointer"
         src="{{ asset("storage/icons/icon-left.svg") }}"
         alt="{{ __("store.arrow") }}"
     />
-    <div class="flex items-center gap-x-4 text-white">
-        <img
-            src="{{ asset("storage/icons/truck.svg") }}"
-            alt="{{ __("store.Truck Icon") }}"
-        />
-        <p>Free shipping in UAE over 270 AED and worldwide over $180</p>
+    <div class="swiper alert-swiper">
+        <div class="swiper-wrapper w-full">
+            <x-layout.header.home.alert-swiper-item />
+            <x-layout.header.home.alert-swiper-item />
+            <x-layout.header.home.alert-swiper-item />
+        </div>
     </div>
     <img
-        class="h-6 w-6"
+        @click="pervSlide()"
+        class="h-6 w-6 cursor-pointer"
         src="{{ asset("storage/icons/icon-right.svg") }}"
         alt="{{ __("store.arrow") }}"
     />
 </div>
+
+@pushonce("scripts")
+    <script>
+        function alertSwiper() {
+            return {
+                alertSwiper1: null,
+                init() {
+                    this.alertSwiper1 = new Swiper('.alert-swiper', {
+                        modules: [Autoplay],
+                        slidesPerView: 1,
+                        speed: 800,
+                        loop: true,
+                        spaceBetween: 30,
+                        autoplay: {
+                            delay: 3000,
+                            disableOnInteraction: false,
+                        },
+                    });
+                },
+                nextSlide() {
+                    this.alertSwiper1?.slideNext(1000);
+                },
+                pervSlide() {
+                    this.alertSwiper1?.slidePrev(1000);
+                },
+            };
+        }
+    </script>
+@endpushonce
