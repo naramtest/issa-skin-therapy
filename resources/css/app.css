@@ -40,7 +40,7 @@ body {
 }
 
 .content-x-padding {
-    @apply px-[3.125rem]
+    @apply px-4 md:px-[3.125rem]
 }
 
 .padding-from-side-menu {

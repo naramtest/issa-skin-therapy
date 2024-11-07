@@ -1,10 +1,10 @@
 <div
     x-data="alertSwiper()"
-    class="flex w-[50%] items-center justify-between gap-x-6"
+    class="flex w-full items-center justify-between gap-x-6 md:w-[50%]"
 >
     <img
         @click="nextSlide()"
-        class="h-6 w-6 cursor-pointer"
+        class="hidden h-6 w-6 cursor-pointer md:block"
         src="{{ asset("storage/icons/icon-left.svg") }}"
         alt="{{ __("store.arrow") }}"
     />
@@ -17,7 +17,7 @@
     </div>
     <img
         @click="pervSlide()"
-        class="h-6 w-6 cursor-pointer"
+        class="hidden h-6 w-6 cursor-pointer md:block"
         src="{{ asset("storage/icons/icon-right.svg") }}"
         alt="{{ __("store.arrow") }}"
     />

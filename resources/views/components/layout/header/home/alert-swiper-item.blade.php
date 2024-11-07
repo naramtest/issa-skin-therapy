@@ -1,5 +1,8 @@
-<div class="swiper-slide !flex items-center justify-center gap-x-4 text-white">
+<div
+    class="swiper-slide !flex items-center justify-center gap-x-4 text-xs text-white md:text-base"
+>
     <img
+        class="hidden md:block"
         src="{{ asset("storage/icons/truck.svg") }}"
         alt="{{ __("store.Truck Icon") }}"
     />
