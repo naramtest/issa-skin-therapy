@@ -40,7 +40,7 @@ body {
 }
 
 .content-x-padding {
-    @apply px-4 md:px-[3.125rem]
+    @apply px-4 lg:px-[3.125rem]
 }
 
 .padding-from-side-menu {
@@ -52,17 +52,6 @@ body {
     all: revert;
     max-width: 100%;
     font-family: "Inter", sans-serif;
-}
-
-.marquee-container {
-    width: 100%;
-    overflow-x: clip;
-    position: relative;
-}
-
-.marquee-text {
-    display: inline-block;
-    white-space: nowrap;
 }
 
 .no-tailwind h2 {
@@ -120,6 +109,38 @@ body {
     font-size: 2.75rem;
     font-weight: 800;
     line-height: 48px;
+}
+
+/*Nav Styles*/
+.menu-overlay {
+    opacity: 0;
+    display: none;
+}
+
+.menu-panel {
+    will-change: transform;
+    transform: translateY(100%);
+}
+
+.menu-items li {
+    will-change: transform, opacity;
+}
+
+/* Hide scrollbar but allow scrolling */
+.menu-panel {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.menu-panel::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* Prevent body scroll when menu is open */
+body.menu-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
 }
 
 /*Home Css*/
@@ -254,6 +275,8 @@ body {
     opacity: 0;
     transform: translateY(-10%) scale(.6);
 }
+
+
 
 
 

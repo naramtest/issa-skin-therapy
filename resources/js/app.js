@@ -12,6 +12,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import { initImageComparison } from "./feature/image-comparison";
+import { initHeaderAnimations } from "./components/headerAnimations";
+import { initSelectAnimations } from "./components/selectAnimations";
+
 import gsap from "gsap";
 
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -31,6 +34,9 @@ window.Pagination = Pagination;
 window.EffectFade = EffectFade;
 
 window.Swiper = Swiper;
+Alpine.data("headerAnimations", initHeaderAnimations);
+Alpine.data("selectAnimations", initSelectAnimations);
+
 document.addEventListener("DOMContentLoaded", () => {
     initLightbox();
 });

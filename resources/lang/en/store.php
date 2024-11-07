@@ -88,4 +88,5 @@ return [
     "Explore Sales" => "Explore Sales",
     "Our Blogs" => "Our Blogs",
     "View All" => "View All",
+    "Login" => "Login",
 ];

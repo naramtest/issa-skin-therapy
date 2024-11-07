@@ -1,6 +1,6 @@
 <div
     x-data="alertSwiper()"
-    class="flex w-full items-center justify-between gap-x-6 md:w-[50%]"
+    class="flex w-full flex-nowrap items-center md:hidden lg:flex lg:w-[50%] lg:gap-x-4 xl:gap-x-6"
 >
     <img
         @click="nextSlide()"
@@ -9,7 +9,7 @@
         alt="{{ __("store.arrow") }}"
     />
     <div class="swiper alert-swiper">
-        <div class="swiper-wrapper w-full">
+        <div class="swiper-wrapper">
             <x-layout.header.home.alert-swiper-item />
             <x-layout.header.home.alert-swiper-item />
             <x-layout.header.home.alert-swiper-item />
