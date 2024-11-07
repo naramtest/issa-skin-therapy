@@ -114,9 +114,9 @@
                             effect: 'fade',
                             on: {
                                 slideChange: () => {
-                                    if (this.productSwiper1) {
+                                    if (this.productGallerySwiper1) {
                                         this.activeIndex =
-                                            this.productSwiper1.realIndex;
+                                            this.productGallerySwiper1.realIndex;
                                     }
                                 },
                             },
