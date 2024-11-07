@@ -1,7 +1,17 @@
 <x-home.section-container
     class="content-x-padding relative z-10 -translate-y-10 bg-lightColor pt-20"
 >
-    <div class="flex h-fit w-full gap-10">
+    <div class="flex items-center justify-between">
+        <h2 class="headline-font px-9">{{ __("store.Our Blogs") }}</h2>
+        <a
+            class="flex items-center rounded-3xl border border-gray-300 px-5 py-3"
+            href=""
+        >
+            <img src="{{ asset("storage/icons/blog-date.svg") }}" alt="" />
+            <span class="ms-2 text-sm">{{ __("store.View All") }}</span>
+        </a>
+    </div>
+    <div class="mt-10 flex h-fit w-full gap-10">
         <div class="relative flex-1">
             <img
                 class="h-full w-full rounded-[20px] object-cover"

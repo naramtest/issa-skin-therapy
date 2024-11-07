@@ -86,4 +86,6 @@ return [
     "Create an account?" => "Create an account?",
     "Know More" => "Know More",
     "Explore Sales" => "Explore Sales",
+    "Our Blogs" => "Our Blogs",
+    "View All" => "View All",
 ];
