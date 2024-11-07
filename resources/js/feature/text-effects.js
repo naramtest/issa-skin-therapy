@@ -1,5 +1,5 @@
-import marqueeText from "../components/marqueeText";
+import marquee from "../components/marqueeText.js";
 
 export const initTextEffects = () => {
-    Alpine.data("marqueeText", marqueeText);
+    Alpine.data("marquee", marquee);
 };

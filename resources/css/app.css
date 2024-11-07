@@ -54,6 +54,16 @@ body {
     font-family: "Inter", sans-serif;
 }
 
+.marquee-container {
+    width: 100%;
+    overflow-x: clip;
+    position: relative;
+}
+
+.marquee-text {
+    display: inline-block;
+    white-space: nowrap;
+}
 
 .no-tailwind h2 {
     font-size: 22px !important;
@@ -100,6 +110,10 @@ body {
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     z-index: 5;
+}
+
+.full-rounded.card-overlay:before {
+    border-radius: 20px;
 }
 
 .headline-font {

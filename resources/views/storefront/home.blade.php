@@ -13,6 +13,6 @@
 
         <x-home.section.shop />
 
-        <div class="h-[1000px] w-full"></div>
+        <x-home.section.marquee-logos />
     </main>
 </x-store-main-layout>

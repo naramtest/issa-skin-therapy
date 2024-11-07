@@ -84,4 +84,6 @@ return [
     "Information" => "Information",
     "Ship to a different address?" => "Ship to a different address?",
     "Create an account?" => "Create an account?",
+    "Know More" => "Know More",
+    "Explore Sales" => "Explore Sales",
 ];

@@ -1,20 +1,38 @@
-export default () => ({
-    async init() {
-        // Now using the globally available GSAP from app.js
-        const marqueeText = this.$refs.marqueeText;
-        const originalContent = marqueeText.innerHTML;
-        const isRTL = document.documentElement.getAttribute("dir") === "rtl";
+export default function marquee({ speed = 50, gap = 24 }) {
+    return {
+        init() {
+            this.setupMarquee();
+        },
 
-        // Clone the text
-        marqueeText.innerHTML =
-            originalContent + originalContent + originalContent;
+        setupMarquee() {
+            const content = this.$refs.marqueeContent;
+            const contentWidth = content.offsetWidth;
+            const duration = contentWidth / speed;
 
-        // Create the animation
-        gsap.to(marqueeText, {
-            x: isRTL ? "33.33%" : "-33.33%",
-            duration: 5,
-            ease: "none",
-            repeat: -1,
-        });
-    },
-});
+            // Create GSAP timeline for smooth infinite animation
+            const tl = gsap.timeline({ repeat: -1 });
+
+            tl.to(content, {
+                x: -contentWidth / 2,
+                duration: duration,
+                ease: "none",
+            });
+
+            // Pause animation when not in viewport for performance
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            tl.play();
+                        } else {
+                            tl.pause();
+                        }
+                    });
+                },
+                { threshold: 0 },
+            );
+
+            observer.observe(content);
+        },
+    };
+}

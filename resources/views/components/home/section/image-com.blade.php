@@ -14,28 +14,20 @@
         after-alt="Product after modification"
         class="mt-9 h-[750px]"
     />
-    <div class="mt-12">
-        <div x-data="marqueeText">
-            <div class="marquee-container overflow-hidden">
-                <div x-ref="marqueeText" class="flex items-center gap-x-6">
-                    <span>
-                        <x-icons.bigger-sign />
-                    </span>
-                    <span
-                        class="black-text-stroke text-nowrap text-[130px] font-bold"
-                    >
-                        {{ __("store.A-CLEAR") }}
-                    </span>
-                    <span>
-                        <x-icons.bigger-sign />
-                    </span>
-                    <span
-                        class="black-text-stroke text-nowrap text-[130px] font-bold"
-                    >
-                        {{ __("store.X-AGE") }}
-                    </span>
-                </div>
-            </div>
-        </div>
+    <div class="mt-8">
+        <x-marquee :repeat="15" :speed="50" :gap="50">
+            <span>
+                <x-icons.bigger-sign />
+            </span>
+            <span class="black-text-stroke text-nowrap text-[130px] font-bold">
+                {{ __("store.A-CLEAR") }}
+            </span>
+            <span>
+                <x-icons.bigger-sign />
+            </span>
+            <span class="black-text-stroke text-nowrap text-[130px] font-bold">
+                {{ __("store.X-AGE") }}
+            </span>
+        </x-marquee>
     </div>
 </x-home.section-container>
