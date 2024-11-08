@@ -1,4 +1,4 @@
-<div class="rounded-lg border bg-white p-8">
+<div class="rounded-2xl border bg-white p-8">
     <h2 class="mb-6 text-xl font-semibold">
         {{ __("store.Information") }}
     </h2>

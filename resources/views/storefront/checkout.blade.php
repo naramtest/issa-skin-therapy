@@ -6,67 +6,103 @@
                 <x-checkout.sections.form />
 
                 <!-- Right Column - Order Summary -->
-                <div class="rounded-lg bg-white p-8 shadow-sm">
-                    <h2 class="mb-6 text-xl font-semibold">Order Summary</h2>
-
-                    <!-- Products List -->
-                    <div class="space-y-4">
-                        @foreach ($cartItems as $item)
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <h4 class="font-medium">
-                                        {{ $item["name"] }}
-                                    </h4>
-                                    <p class="text-sm text-gray-500">
-                                        × {{ $item["quantity"] }}
-                                    </p>
-                                </div>
-                                <p class="font-medium">
-                                    €{{ number_format($item["price"], 2) }}
-                                </p>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Totals -->
-                    <div class="mt-6 space-y-2 border-t pt-4">
-                        <div class="flex justify-between">
-                            <p>Subtotal</p>
-                            <p>€582.68</p>
-                        </div>
-                        <div class="flex justify-between">
-                            <p>Shipping</p>
-                            <p class="text-green-600">Free shipping</p>
-                        </div>
-                        <div
-                            class="flex justify-between border-t pt-2 font-medium"
-                        >
-                            <p>Total</p>
-                            <p>€582.68</p>
-                        </div>
+                <div class="rounded-lg">
+                    <div class="rounded-2xl bg-[#F5F5F5] p-8">
+                        <h2 class="mb-6 text-lg font-semibold">
+                            {{ __("store. Order Summary") }}
+                        </h2>
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-lg">
+                                    <th
+                                        class="pb-4 text-start font-normal text-[#69727d]"
+                                    >
+                                        {{ __("store.Products") }}
+                                    </th>
+                                    <th
+                                        class="pb-4 text-end font-normal text-[#69727d]"
+                                    >
+                                        {{ __("store.Subtotal") }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="">
+                                @foreach ($cartItems as $item)
+                                    <tr class="text-sm">
+                                        <td class="py-2">
+                                            <div class="flex items-center">
+                                                <h4>
+                                                    {{ $item["name"] }}
+                                                </h4>
+                                                <p class="ms-3 text-gray-700">
+                                                    × {{ $item["quantity"] }}
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <td class="py-2 text-end">
+                                            <bdi>
+                                                €{{ number_format($item["price"], 2) }}
+                                            </bdi>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot class="divide-y text-[#69727d]">
+                                <tr>
+                                    <td class="py-4">
+                                        {{ __("store.Subtotal") }}
+                                    </td>
+                                    <td class="py-4 text-right">
+                                        <bdi>€582.68</bdi>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-4">
+                                        {{ __("store.Shipping") }}
+                                    </td>
+                                    <td class="py-4 text-right text-darkColor">
+                                        {{ __("store.Free shipping") }}
+                                    </td>
+                                </tr>
+                                <tr class="font-medium">
+                                    <td class="py-4">
+                                        {{ __("store.Total") }}
+                                    </td>
+                                    <td class="py-4 text-right">
+                                        <bdi>€582.68</bdi>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
 
                     <!-- Coupon Code -->
-                    <div class="mt-8">
-                        <p class="mb-3 text-sm">
-                            If you have a coupon code, please apply it below.
+                    <div class="mt-4 rounded-[15px] border p-8">
+                        <p class="mb-6">
+                            {{ __("store. If you have a coupon code") }}
                         </p>
                         <div class="flex gap-2">
+                            <label for="coupon" class="sr-only">
+                                {{ __("store.Coupon Code") }}
+                            </label>
+
                             <input
-                                type="text"
-                                class="flex-1 rounded-lg border border-gray-200 p-3 text-sm focus:border-gray-300 focus:outline-none"
-                                placeholder="Coupon code"
+                                class="w-full rounded-[11px] border-none bg-[#F4F4F4] px-7 py-5 text-sm text-[#69727d] focus:outline-none"
+                                name="coupon"
+                                id="coupon"
+                                placeholder="{{ __("store.Coupon Code") }}"
+                                value="{{ old("coupon") }}"
                             />
                             <button
-                                class="rounded-lg bg-[#1f1f1f] px-6 py-3 text-sm text-white hover:bg-[#2f2f2f]"
+                                class="rounded-3xl bg-[#1f1f1f] px-6 py-3 text-sm text-white hover:bg-[#2f2f2f]"
                             >
-                                Apply
+                                {{ __("store.Apply") }}
                             </button>
                         </div>
                     </div>
 
                     <!-- Payment -->
-                    <div class="mt-8">
+                    <div class="mt-8 rounded-[15px] border p-8">
                         <div class="mb-4 flex items-center gap-2">
                             <input type="radio" name="payment" checked />
                             <label>Credit/Debit Cards</label>
@@ -107,43 +143,44 @@
                                 placeholder="CVC"
                             />
                         </div>
-                    </div>
 
-                    <!-- Terms -->
-                    <div class="mt-8">
-                        <p class="text-sm text-gray-600">
-                            Your personal data will be used to process your
-                            order, support your experience throughout this
-                            website, and for other purposes described in our
-                            <a href="#" class="text-blue-600 hover:underline">
-                                privacy policy
-                            </a>
-                            .
-                        </p>
-                        <label class="mt-4 flex items-center gap-2">
-                            <input
-                                type="checkbox"
-                                class="rounded border-gray-300"
-                            />
-                            <span class="text-sm">
-                                I have read and agree to the website
+                        <!-- Terms -->
+                        <div class="mt-16">
+                            <p class="text-sm text-gray-600">
+                                {{ __("store.Your personal data will be used to process your                                 order, support your experience throughout this                                 website, and for other purposes described in our") }}
                                 <a
                                     href="#"
                                     class="text-blue-600 hover:underline"
                                 >
-                                    terms and conditions
+                                    {{ __("store.privacy policy") }}
                                 </a>
-                                <span class="text-red-500">*</span>
-                            </span>
-                        </label>
-                    </div>
+                                .
+                            </p>
+                            <label class="mt-4 flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    class="rounded border-gray-300"
+                                />
+                                <span class="text-sm">
+                                    {{ __("store. I have read and agree to the website") }}
+                                    <a
+                                        href="#"
+                                        class="text-blue-600 hover:underline"
+                                    >
+                                        {{ __("store.terms and conditions") }}
+                                    </a>
+                                    <span class="text-red-500">*</span>
+                                </span>
+                            </label>
+                        </div>
 
-                    <!-- Place Order Button -->
-                    <button
-                        class="mt-6 w-full rounded-lg bg-[#1f1f1f] py-4 text-center text-white hover:bg-[#2f2f2f]"
-                    >
-                        Place order
-                    </button>
+                        <!-- Place Order Button -->
+                        <button
+                            class="mt-6 w-full rounded-lg bg-[#1f1f1f] py-4 text-center text-white hover:bg-[#2f2f2f]"
+                        >
+                            {{ __("store.Place order") }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

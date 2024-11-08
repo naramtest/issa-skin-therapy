@@ -20,6 +20,6 @@
         id="{{ $field }}"
         required="{{ $required }}"
         placeholder="{{ $placeHolder }}"
-        value="{{ $field }}"
+        value="{{ old($field) }}"
     />
 </div>

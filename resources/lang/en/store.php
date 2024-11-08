@@ -89,4 +89,20 @@ return [
     "Our Blogs" => "Our Blogs",
     "View All" => "View All",
     "Login" => "Login",
+    " Order Summary" => " Order Summary",
+    " If you have a coupon code" =>
+        " If you have a coupon code, please apply it below.",
+    "Products" => "Products",
+    "Shipping" => "Shipping",
+    "Free shipping" => "Free shipping",
+    "Total" => "Total",
+    "Coupon Code" => "Coupon Code",
+    "privacy policy" => "privacy policy",
+    " I have read and agree to the website" =>
+        " I have read and agree to the website",
+    "terms and conditions" => "terms and conditions",
+    "Place order" => "Place order",
+    "Your personal data will be used to process your                                 order, support your experience throughout this                                 website, and for other purposes described in our" => 'Your personal data will be used to process your
+                                order, support your experience throughout this
+                                website, and for other purposes described in our',
 ];
