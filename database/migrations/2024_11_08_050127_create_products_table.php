@@ -50,8 +50,18 @@ return new class extends Migration {
 
             // Shipping & International Trade
             $table->string("hs_code")->nullable();
-            $table->string("country_of_origin", 2)->nullable(); // ISO 2 country code
+            $table->string("country_of_origin", 50)->nullable(); // ISO
 
+            //More Info
+            $table->json("quick_facts_label")->nullable();
+            $table->json("quick_facts_content")->nullable();
+            $table->json("details")->nullable();
+            $table->json("how_to_use")->nullable();
+            $table->json("key_ingredients")->nullable();
+            $table->json("full_ingredients")->nullable();
+            $table->json("caution")->nullable();
+            $table->json("how_to_store")->nullable();
+            //
             $table->timestamps();
             $table->softDeletes();
 

@@ -32,6 +32,14 @@ class Product extends Model
         "height",
         "hs_code",
         "country_of_origin",
+        "quick_facts_label",
+        "quick_facts_content",
+        "details",
+        "how_to_use",
+        "key_ingredients",
+        "full_ingredients",
+        "caution",
+        "how_to_store",
     ];
 
     protected $casts = [
