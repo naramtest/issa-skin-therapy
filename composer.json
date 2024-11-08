@@ -12,7 +12,8 @@
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
-        "spatie/laravel-google-fonts": "^1.4"
+        "spatie/laravel-google-fonts": "^1.4",
+        "statikbe/laravel-filament-chained-translation-manager": "^3.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
