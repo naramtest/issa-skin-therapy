@@ -26,231 +26,199 @@ class ProductResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form->schema([
-            Tabs::make("Product")
-                ->tabs([
-                    // Basic Information Tab
-                    Tabs\Tab::make("Basic Information")
-                        ->columns()
-                        ->schema([
-                            Forms\Components\TextInput::make("name")
-                                ->label("Product Name")
-                                ->required()
-                                ->live(onBlur: true)
-                                ->columnSpan(1)
-                                ->afterStateUpdated(function (
-                                    string $operation,
-                                    $state,
-                                    Forms\Set $set
-                                ) {
-                                    if ($operation === "create") {
-                                        $set("slug", Str::slug($state));
-                                    }
-                                }),
+        return $form->columns(3)->schema([
+            Forms\Components\Group::make()
+                ->schema([
+                    Tabs::make("Product")->tabs([
+                        // Basic Information Tab
+                        Tabs\Tab::make("Basic Information")
+                            ->columns()
+                            ->schema([
+                                Forms\Components\TextInput::make("name")
+                                    ->label("Product Name")
+                                    ->required()
+                                    ->live(onBlur: true)
+                                    ->columnSpan(1)
+                                    ->afterStateUpdated(function (
+                                        string $operation,
+                                        $state,
+                                        Forms\Set $set
+                                    ) {
+                                        if ($operation === "create") {
+                                            $set("slug", Str::slug($state));
+                                        }
+                                    }),
 
-                            Forms\Components\TextInput::make("slug")
-                                ->required()
-                                ->columnSpan(1)
-                                ->unique(ignoreRecord: true),
+                                Forms\Components\TextInput::make("slug")
+                                    ->required()
+                                    ->columnSpan(1)
+                                    ->unique(ignoreRecord: true),
 
-                            Forms\Components\TextInput::make("sku")
-                                ->label("SKU")
-                                ->unique(ignoreRecord: true)
-                                ->placeholder(
-                                    "Will be generated automatically if left empty"
-                                ),
+                                Forms\Components\TextInput::make("sku")
+                                    ->label("SKU")
+                                    ->unique(ignoreRecord: true)
+                                    ->placeholder(
+                                        "Will be generated automatically if left empty"
+                                    ),
 
-                            Forms\Components\RichEditor::make("description")
-                                ->required()
-                                ->columnSpanFull(),
+                                Forms\Components\RichEditor::make("description")
+                                    ->required()
+                                    ->columnSpanFull(),
+                            ]),
+                        // Inventory Tab
+
+                        // Shipping Tab
+                        Tabs\Tab::make("Shipping")->schema([
+                            Section::make()
+                                ->schema([
+                                    Forms\Components\TextInput::make("weight")
+                                        ->numeric()
+                                        ->step(0.001)
+                                        ->suffix("kg"),
+
+                                    Forms\Components\TextInput::make("length")
+                                        ->numeric()
+                                        ->step(0.01)
+                                        ->suffix("cm"),
+
+                                    Forms\Components\TextInput::make("width")
+                                        ->numeric()
+                                        ->step(0.01)
+                                        ->suffix("cm"),
+
+                                    Forms\Components\TextInput::make("height")
+                                        ->numeric()
+                                        ->step(0.01)
+                                        ->suffix("cm"),
+
+                                    Forms\Components\TextInput::make(
+                                        "hs_code"
+                                    )->label("HS Code"),
+
+                                    Forms\Components\Select::make(
+                                        "country_of_origin"
+                                    )
+                                        ->searchable()
+                                        ->options(function () {
+                                            // You'll need to implement this with a proper country list
+                                            return [
+                                                "AE" => "United Arab Emirates",
+                                                "US" => "United States",
+                                                // Add more countries
+                                            ];
+                                        }),
+                                ])
+                                ->columns(2),
                         ]),
 
-                    // Pricing Tab
-                    Tabs\Tab::make("Pricing")->schema([
-                        Section::make()
-                            ->schema([
-                                Forms\Components\TextInput::make(
-                                    "regular_price"
-                                )
-                                    ->numeric()
-                                    ->required()
-                                    ->prefix('$')
-                                    ->minValue(0.01)
-                                    ->step(0.01),
+                        // Additional Information Tab
+                        Tabs\Tab::make("Additional Information")->schema([
+                            Section::make()->schema([
+                                Forms\Components\Repeater::make("quick_facts")
+                                    ->schema([
+                                        Forms\Components\TextInput::make(
+                                            "label"
+                                        )->required(),
+                                        Forms\Components\TextInput::make(
+                                            "content"
+                                        )->required(),
+                                    ])
+                                    ->columnSpanFull(),
 
-                                Forms\Components\TextInput::make("sale_price")
-                                    ->numeric()
-                                    ->prefix('$')
-                                    ->minValue(0.01)
-                                    ->step(0.01)
-                                    ->lt("regular_price"),
+                                Forms\Components\RichEditor::make(
+                                    "details"
+                                )->columnSpanFull(),
 
-                                Forms\Components\Toggle::make(
-                                    "is_sale_scheduled"
-                                )
-                                    ->label("Schedule Sale")
-                                    ->reactive(),
+                                Forms\Components\RichEditor::make(
+                                    "how_to_use"
+                                )->columnSpanFull(),
 
-                                Forms\Components\DateTimePicker::make(
-                                    "sale_starts_at"
-                                )
-                                    ->label("Sale Start Date")
-                                    ->visible(
-                                        fn(callable $get) => $get(
-                                            "is_sale_scheduled"
-                                        )
-                                    ),
+                                Forms\Components\RichEditor::make(
+                                    "key_ingredients"
+                                )->columnSpanFull(),
 
-                                Forms\Components\DateTimePicker::make(
-                                    "sale_ends_at"
-                                )
-                                    ->label("Sale End Date")
-                                    ->visible(
-                                        fn(callable $get) => $get(
-                                            "is_sale_scheduled"
-                                        )
-                                    )
-                                    ->after("sale_starts_at"),
-                            ])
-                            ->columns(2),
-                    ]),
+                                Forms\Components\RichEditor::make(
+                                    "full_ingredients"
+                                )->columnSpanFull(),
 
-                    // Inventory Tab
-                    Tabs\Tab::make("Inventory")->schema([
-                        Section::make()
-                            ->schema([
-                                Forms\Components\Toggle::make("track_quantity")
-                                    ->label("Track Quantity")
-                                    ->default(true)
-                                    ->reactive(),
+                                Forms\Components\RichEditor::make(
+                                    "caution"
+                                )->columnSpanFull(),
 
-                                Forms\Components\TextInput::make("quantity")
-                                    ->numeric()
-                                    ->default(0)
-                                    ->visible(
-                                        fn(callable $get) => $get(
-                                            "track_quantity"
-                                        )
-                                    ),
-
-                                Forms\Components\TextInput::make(
-                                    "low_stock_threshold"
-                                )
-                                    ->numeric()
-                                    ->default(5)
-                                    ->visible(
-                                        fn(callable $get) => $get(
-                                            "track_quantity"
-                                        )
-                                    ),
-
-                                Forms\Components\Toggle::make(
-                                    "allow_backorders"
-                                )
-                                    ->label("Allow Backorders")
-                                    ->visible(
-                                        fn(callable $get) => $get(
-                                            "track_quantity"
-                                        )
-                                    ),
-
-                                Forms\Components\Select::make("stock_status")
-                                    ->options(StockStatus::class)
-                                    ->default(StockStatus::IN_STOCK)
-                                    ->disabled(
-                                        fn(callable $get) => $get(
-                                            "track_quantity"
-                                        )
-                                    ),
-                            ])
-                            ->columns(2),
-                    ]),
-
-                    // Shipping Tab
-                    Tabs\Tab::make("Shipping")->schema([
-                        Section::make()
-                            ->schema([
-                                Forms\Components\TextInput::make("weight")
-                                    ->numeric()
-                                    ->step(0.001)
-                                    ->suffix("kg"),
-
-                                Forms\Components\TextInput::make("length")
-                                    ->numeric()
-                                    ->step(0.01)
-                                    ->suffix("cm"),
-
-                                Forms\Components\TextInput::make("width")
-                                    ->numeric()
-                                    ->step(0.01)
-                                    ->suffix("cm"),
-
-                                Forms\Components\TextInput::make("height")
-                                    ->numeric()
-                                    ->step(0.01)
-                                    ->suffix("cm"),
-
-                                Forms\Components\TextInput::make(
-                                    "hs_code"
-                                )->label("HS Code"),
-
-                                Forms\Components\Select::make(
-                                    "country_of_origin"
-                                )
-                                    ->searchable()
-                                    ->options(function () {
-                                        // You'll need to implement this with a proper country list
-                                        return [
-                                            "AE" => "United Arab Emirates",
-                                            "US" => "United States",
-                                            // Add more countries
-                                        ];
-                                    }),
-                            ])
-                            ->columns(2),
-                    ]),
-
-                    // Additional Information Tab
-                    Tabs\Tab::make("Additional Information")->schema([
-                        Section::make()->schema([
-                            Forms\Components\Repeater::make("quick_facts")
-                                ->schema([
-                                    Forms\Components\TextInput::make(
-                                        "label"
-                                    )->required(),
-                                    Forms\Components\TextInput::make(
-                                        "content"
-                                    )->required(),
-                                ])
-                                ->columnSpanFull(),
-
-                            Forms\Components\RichEditor::make(
-                                "details"
-                            )->columnSpanFull(),
-
-                            Forms\Components\RichEditor::make(
-                                "how_to_use"
-                            )->columnSpanFull(),
-
-                            Forms\Components\RichEditor::make(
-                                "key_ingredients"
-                            )->columnSpanFull(),
-
-                            Forms\Components\RichEditor::make(
-                                "full_ingredients"
-                            )->columnSpanFull(),
-
-                            Forms\Components\RichEditor::make(
-                                "caution"
-                            )->columnSpanFull(),
-
-                            Forms\Components\RichEditor::make(
-                                "how_to_store"
-                            )->columnSpanFull(),
+                                Forms\Components\RichEditor::make(
+                                    "how_to_store"
+                                )->columnSpanFull(),
+                            ]),
                         ]),
                     ]),
                 ])
-                ->columnSpanFull(),
+                ->columnSpan(2),
+            Forms\Components\Group::make()
+                ->schema([
+                    Section::make(__("dashboard.Prices"))->schema([
+                        Forms\Components\TextInput::make("regular_price")
+                            ->numeric()
+                            ->required()
+                            ->prefix('$')
+                            ->minValue(0.01)
+                            ->step(0.01),
+
+                        Forms\Components\TextInput::make("sale_price")
+                            ->numeric()
+                            ->prefix('$')
+                            ->minValue(0.01)
+                            ->step(0.01)
+                            ->lt("regular_price"),
+
+                        Forms\Components\Toggle::make("is_sale_scheduled")
+                            ->label(__("dashboard.Schedule Sale"))
+                            ->reactive(),
+
+                        Forms\Components\DateTimePicker::make("sale_starts_at")
+                            ->label(__("dashboard.Sale Start Date"))
+                            ->visible(
+                                fn(callable $get) => $get("is_sale_scheduled")
+                            ),
+
+                        Forms\Components\DateTimePicker::make("sale_ends_at")
+                            ->label(__("dashboard.Sale End Date"))
+                            ->visible(
+                                fn(callable $get) => $get("is_sale_scheduled")
+                            )
+                            ->after("sale_starts_at"),
+                    ]),
+                    Section::make(__("dashboard.Inventory"))->schema([
+                        Forms\Components\Toggle::make("track_quantity")
+                            ->label("Stock management")
+                            ->helperText(
+                                "Track stock quantity for this product"
+                            )
+                            ->default(true)
+                            ->reactive(),
+
+                        Forms\Components\TextInput::make("quantity")
+                            ->numeric()
+                            ->default(0)
+                            ->visible(
+                                fn(callable $get) => $get("track_quantity")
+                            ),
+
+                        Forms\Components\TextInput::make("low_stock_threshold")
+                            ->numeric()
+                            ->default(5)
+                            ->visible(
+                                fn(callable $get) => $get("track_quantity")
+                            ),
+
+                        Forms\Components\Select::make("stock_status")
+                            ->options(StockStatus::class)
+                            ->default(StockStatus::IN_STOCK)
+                            ->disabled(
+                                fn(callable $get) => $get("track_quantity")
+                            ),
+                    ]),
+                ])
+                ->columnSpan(1),
         ]);
     }
 

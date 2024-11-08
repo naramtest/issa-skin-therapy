@@ -7,12 +7,16 @@ use App\Traits\HasInventory;
 use App\Traits\HasPricing;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Translatable\HasTranslations;
 
-class Product extends Model
+class Product extends Model implements HasMedia
 {
     use SoftDeletes, HasPricing, HasInventory;
     use HasTranslations;
+    use InteractsWithMedia;
 
     public array $translatable = [
         "name",
@@ -100,5 +104,27 @@ class Product extends Model
     public function isAvailableForPurchase(): bool
     {
         return $this->stock_status->isAvailableForPurchase();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion(config("const.media.thumbnail"))
+            ->format("webp")
+            ->performOnCollections(config("const.media.featured"))
+            ->width(400)
+            ->height(400)
+            ->optimize()
+            ->quality(70);
+        $this->addMediaConversion(config("const.media.optimized"))
+            ->format("webp")
+            ->optimize()
+            ->withResponsiveImages();
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection(config("const.media.featured"))->singleFile();
+
+        $this->addMediaCollection(config("const.media.gallery"));
     }
 }

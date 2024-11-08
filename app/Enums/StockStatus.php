@@ -2,7 +2,10 @@
 
 namespace App\Enums;
 
-enum StockStatus: string
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasLabel;
+
+enum StockStatus: string implements HasLabel, HasColor
 {
     case IN_STOCK = "in_stock";
     case OUT_OF_STOCK = "out_of_stock";
@@ -12,32 +15,17 @@ enum StockStatus: string
     case DISCONTINUED = "discontinued";
 
     /**
-     * Get available status options for admin selection
-     */
-    public static function getAdminOptions(): array
-    {
-        return [
-            self::IN_STOCK->value => self::IN_STOCK->getLabel(),
-            self::OUT_OF_STOCK->value => self::OUT_OF_STOCK->getLabel(),
-            self::LOW_STOCK->value => self::LOW_STOCK->getLabel(),
-            self::BACKORDER->value => self::BACKORDER->getLabel(),
-            self::PREORDER->value => self::PREORDER->getLabel(),
-            self::DISCONTINUED->value => self::DISCONTINUED->getLabel(),
-        ];
-    }
-
-    /**
      * Get the display name for the stock status
      */
     public function getLabel(): string
     {
         return match ($this) {
-            self::IN_STOCK => "In Stock",
-            self::OUT_OF_STOCK => "Out of Stock",
-            self::LOW_STOCK => "Low Stock",
-            self::BACKORDER => "Available for Backorder",
-            self::PREORDER => "Available for Pre-order",
-            self::DISCONTINUED => "Discontinued",
+            self::IN_STOCK => __("dashboard.In Stock"),
+            self::OUT_OF_STOCK => __("dashboard.Out of Stock"),
+            self::LOW_STOCK => __("dashboard.Low Stock"),
+            self::BACKORDER => __("dashboard.Available for Backorder"),
+            self::PREORDER => __("dashboard.Available for Pre-order"),
+            self::DISCONTINUED => __("dashboard.Discontinued"),
         };
     }
 
