@@ -10,24 +10,27 @@ return [
     |
     */
 
-    'profiles' => [
-
-        'default' => [
-            'plugins' => 'advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount',
-            'toolbar' => 'undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | forecolor backcolor | blockquote table toc hr | image link media codesample emoticons | wordcount fullscreen',
-            'upload_directory' => null,
+    "profiles" => [
+        "default" => [
+            "plugins" =>
+                "advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount",
+            "toolbar" =>
+                "undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | forecolor backcolor | blockquote table toc hr | image link media codesample emoticons | wordcount fullscreen",
+            "upload_directory" => null,
         ],
 
-        'simple' => [
-            'plugins' => 'autoresize directionality emoticons link wordcount',
-            'toolbar' => 'removeformat | bold italic | rtl ltr | link emoticons',
-            'upload_directory' => null,
+        "simple" => [
+            "plugins" =>
+                "autoresize directionality fullscreen hr lists link wordcount",
+            "toolbar" =>
+                "removeformat | bold italic | rtl ltr | link emoticons",
+            "upload_directory" => null,
         ],
 
-        'template' => [
-            'plugins' => 'autoresize template',
-            'toolbar' => 'template',
-            'upload_directory' => null,
+        "template" => [
+            "plugins" => "autoresize template",
+            "toolbar" => "template",
+            "upload_directory" => null,
         ],
         /*
         |--------------------------------------------------------------------------
@@ -61,7 +64,6 @@ return [
             ]
         ],
         */
-
     ],
 
     /*
@@ -76,14 +78,20 @@ return [
     | ex: TinyEditor::make('content')->profiles('template')->template('example')
     */
 
-    'templates' => [
-
-        'example' => [
+    "templates" => [
+        "example" => [
             // content
-            ['title' => 'Some title 1', 'description' => 'Some desc 1', 'content' => 'My content'],
+            [
+                "title" => "Some title 1",
+                "description" => "Some desc 1",
+                "content" => "My content",
+            ],
             // url
-            ['title' => 'Some title 2', 'description' => 'Some desc 2', 'url' => 'http://localhost'],
+            [
+                "title" => "Some title 2",
+                "description" => "Some desc 2",
+                "url" => "http://localhost",
+            ],
         ],
-
     ],
 ];

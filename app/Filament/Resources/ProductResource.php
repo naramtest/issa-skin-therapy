@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\PostStatus;
 use App\Enums\StockStatus;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
+use App\Services\Filament\Component\CustomNameSlugField;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs;
@@ -13,7 +15,6 @@ use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
 
 class ProductResource extends Resource
 {
@@ -31,124 +32,121 @@ class ProductResource extends Resource
                 ->schema([
                     Tabs::make("Product")->tabs([
                         // Basic Information Tab
-                        Tabs\Tab::make("Basic Information")
-                            ->columns()
-                            ->schema([
-                                Forms\Components\TextInput::make("name")
-                                    ->label("Product Name")
-                                    ->required()
-                                    ->live(onBlur: true)
-                                    ->columnSpan(1)
-                                    ->afterStateUpdated(function (
-                                        string $operation,
-                                        $state,
-                                        Forms\Set $set
-                                    ) {
-                                        if ($operation === "create") {
-                                            $set("slug", Str::slug($state));
-                                        }
-                                    }),
+                        Tabs\Tab::make("Basic Information")->schema([
+                            CustomNameSlugField::getCustomTitleField(
+                                label: __("store.Name"),
+                                fieldName: "name"
+                            )
+                                ->translate(true)
+                                ->inlineLabel(),
+                            CustomNameSlugField::getCustomSlugField()
+                                ->helperText(
+                                    "https://" .
+                                        request()->getHost() .
+                                        "/product/"
+                                )
+                                ->inlineLabel()
+                                ->label("Permalink"),
 
-                                Forms\Components\TextInput::make("slug")
-                                    ->required()
-                                    ->columnSpan(1)
-                                    ->unique(ignoreRecord: true),
+                            Forms\Components\TextInput::make("sku")
+                                ->label("SKU")
+                                ->unique(ignoreRecord: true)
+                                ->inlineLabel()
+                                ->placeholder(
+                                    "Will be generated automatically if left empty"
+                                ),
 
-                                Forms\Components\TextInput::make("sku")
-                                    ->label("SKU")
-                                    ->unique(ignoreRecord: true)
-                                    ->placeholder(
-                                        "Will be generated automatically if left empty"
-                                    ),
-
-                                Forms\Components\RichEditor::make("description")
-                                    ->required()
-                                    ->columnSpanFull(),
-                            ]),
-                        // Inventory Tab
-
-                        // Shipping Tab
-                        Tabs\Tab::make("Shipping")->schema([
-                            Section::make()
-                                ->schema([
-                                    Forms\Components\TextInput::make("weight")
-                                        ->numeric()
-                                        ->step(0.001)
-                                        ->suffix("kg"),
-
-                                    Forms\Components\TextInput::make("length")
-                                        ->numeric()
-                                        ->step(0.01)
-                                        ->suffix("cm"),
-
-                                    Forms\Components\TextInput::make("width")
-                                        ->numeric()
-                                        ->step(0.01)
-                                        ->suffix("cm"),
-
-                                    Forms\Components\TextInput::make("height")
-                                        ->numeric()
-                                        ->step(0.01)
-                                        ->suffix("cm"),
-
-                                    Forms\Components\TextInput::make(
-                                        "hs_code"
-                                    )->label("HS Code"),
-
-                                    Forms\Components\Select::make(
-                                        "country_of_origin"
-                                    )
-                                        ->searchable()
-                                        ->options(function () {
-                                            // You'll need to implement this with a proper country list
-                                            return [
-                                                "AE" => "United Arab Emirates",
-                                                "US" => "United States",
-                                                // Add more countries
-                                            ];
-                                        }),
-                                ])
-                                ->columns(2),
+                            Forms\Components\RichEditor::make("description")
+                                ->required()
+                                ->columnSpanFull(),
                         ]),
 
-                        // Additional Information Tab
-                        Tabs\Tab::make("Additional Information")->schema([
-                            Section::make()->schema([
-                                Forms\Components\Repeater::make("quick_facts")
-                                    ->schema([
-                                        Forms\Components\TextInput::make(
-                                            "label"
-                                        )->required(),
-                                        Forms\Components\TextInput::make(
-                                            "content"
-                                        )->required(),
-                                    ])
-                                    ->columnSpanFull(),
+                        // Shipping Tab
+                        Tabs\Tab::make(__("store.Shipping"))
+                            ->columns()
+                            ->schema([
+                                Forms\Components\TextInput::make("weight")
+                                    ->numeric()
+                                    ->step(0.001)
+                                    ->suffix("kg"),
 
-                                Forms\Components\RichEditor::make(
-                                    "details"
-                                )->columnSpanFull(),
+                                Forms\Components\TextInput::make("length")
+                                    ->numeric()
+                                    ->step(0.01)
+                                    ->suffix("cm"),
 
-                                Forms\Components\RichEditor::make(
-                                    "how_to_use"
-                                )->columnSpanFull(),
+                                Forms\Components\TextInput::make("width")
+                                    ->numeric()
+                                    ->step(0.01)
+                                    ->suffix("cm"),
 
-                                Forms\Components\RichEditor::make(
-                                    "key_ingredients"
-                                )->columnSpanFull(),
+                                Forms\Components\TextInput::make("height")
+                                    ->numeric()
+                                    ->step(0.01)
+                                    ->suffix("cm"),
 
-                                Forms\Components\RichEditor::make(
-                                    "full_ingredients"
-                                )->columnSpanFull(),
+                                Forms\Components\TextInput::make(
+                                    "hs_code"
+                                )->label("HS Code"),
 
-                                Forms\Components\RichEditor::make(
-                                    "caution"
-                                )->columnSpanFull(),
-
-                                Forms\Components\RichEditor::make(
-                                    "how_to_store"
-                                )->columnSpanFull(),
+                                Forms\Components\Select::make(
+                                    "country_of_origin"
+                                )
+                                    ->searchable()
+                                    ->options(function () {
+                                        // You'll need to implement this with a proper country list
+                                        return [
+                                            "AE" => "United Arab Emirates",
+                                            "US" => "United States",
+                                            // Add more countries
+                                        ];
+                                    }),
                             ]),
+
+                        // Additional Information Tab
+                        Tabs\Tab::make(
+                            __("dashboard.Additional Information")
+                        )->schema([
+                            Forms\Components\Fieldset::make(
+                                __("dashboard.Quick Facts")
+                            )
+                                ->columns(1)
+                                ->schema([
+                                    Forms\Components\TextInput::make(
+                                        "quick_facts_label"
+                                    )
+                                        ->label(__("dashboard.Label"))
+                                        ->required(),
+                                    Forms\Components\RichEditor::make(
+                                        "quick_facts_content"
+                                    )
+                                        ->label(__("dashboard.Content"))
+                                        ->required(),
+                                ]),
+
+                            Forms\Components\RichEditor::make(
+                                "details"
+                            )->columnSpanFull(),
+
+                            Forms\Components\RichEditor::make(
+                                "how_to_use"
+                            )->columnSpanFull(),
+
+                            Forms\Components\RichEditor::make(
+                                "key_ingredients"
+                            )->columnSpanFull(),
+
+                            Forms\Components\RichEditor::make(
+                                "full_ingredients"
+                            )->columnSpanFull(),
+
+                            Forms\Components\RichEditor::make(
+                                "caution"
+                            )->columnSpanFull(),
+
+                            Forms\Components\RichEditor::make(
+                                "how_to_store"
+                            )->columnSpanFull(),
                         ]),
                     ]),
                 ])

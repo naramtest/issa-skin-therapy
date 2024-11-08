@@ -18,4 +18,8 @@ return [
     "Available for Backorder" => "Available for Backorder",
     "Available for Pre-order" => "Available for Pre-order",
     "Discontinued" => "Discontinued",
+    "Quick Facts" => "Quick Facts",
+    "Label" => "Label",
+    "Content" => "Content",
+    "Additional Information" => "Additional Information",
 ];
