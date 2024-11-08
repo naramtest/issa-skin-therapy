@@ -12,7 +12,7 @@
     }"
     x-show="mobileMenu"
     x-cloak
-    class="menu-panel fixed inset-x-0 bottom-0 z-50 h-[90vh] translate-y-full transform rounded-t-[20px] bg-white shadow-lg"
+    class="menu-panel fixed inset-x-0 bottom-0 z-50 h-[91vh] translate-y-full transform rounded-t-[20px] bg-white shadow-lg"
     @click.self.away="console.log(mobileMenu = false)"
 >
     <div class="relative h-full overflow-y-auto px-6 pt-6">

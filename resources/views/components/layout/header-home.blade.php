@@ -44,7 +44,7 @@
             <div
                 x-show="mobileMenu"
                 x-cloak
-                class="menu-overlay fixed inset-0 z-40 bg-black bg-opacity-50"
+                class="menu-overlay fixed inset-0 z-40 bg-black bg-opacity-70"
                 @click="mobileMenu = false"
             ></div>
 
