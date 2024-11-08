@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\PostStatus;
 use App\Enums\StockStatus;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
@@ -220,6 +219,9 @@ class ProductResource extends Resource
         ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function table(Table $table): Table
     {
         return $table
