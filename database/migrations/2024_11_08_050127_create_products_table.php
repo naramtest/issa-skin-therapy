@@ -16,7 +16,6 @@ return new class extends Migration {
             $table->json("name");
             $table->string("slug")->unique();
             $table->json("description");
-
             $table->string("sku")->unique();
 
             // Pricing

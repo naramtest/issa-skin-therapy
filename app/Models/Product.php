@@ -7,11 +7,25 @@ use App\Traits\HasInventory;
 use App\Traits\HasPricing;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Translatable\HasTranslations;
 
 class Product extends Model
 {
     use SoftDeletes, HasPricing, HasInventory;
+    use HasTranslations;
 
+    public array $translatable = [
+        "name",
+        "description",
+        "quick_facts_label",
+        "quick_facts_content",
+        "details",
+        "how_to_use",
+        "key_ingredients",
+        "full_ingredients",
+        "caution",
+        "how_to_store",
+    ];
     protected $fillable = [
         "name",
         "slug",
@@ -59,8 +73,7 @@ class Product extends Model
         "stock_status" => StockStatus::class,
     ];
 
-    // Add this to your existing model
-    protected static function booted()
+    protected static function booted(): void
     {
         static::creating(function ($product) {
             if (empty($product->sku)) {

@@ -10,10 +10,10 @@ class EditProduct extends EditRecord
 {
     protected static string $resource = ProductResource::class;
 
+    use EditRecord\Concerns\Translatable;
+
     protected function getHeaderActions(): array
     {
-        return [
-            Actions\DeleteAction::make(),
-        ];
+        return [Actions\LocaleSwitcher::make(), Actions\DeleteAction::make()];
     }
 }
