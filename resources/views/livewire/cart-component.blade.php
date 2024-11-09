@@ -3,6 +3,7 @@
     <div
         x-data="{ open: $wire.entangle('isOpen') }"
         x-show="open"
+        x-cloak
         @keydown.escape.window="open = false"
         class="relative z-50"
         role="dialog"

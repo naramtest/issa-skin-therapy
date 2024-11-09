@@ -1,5 +1,6 @@
 <div
     x-data="alertSwiper()"
+    x-cloak
     class="flex w-full flex-nowrap items-center md:hidden lg:flex lg:w-[50%] lg:gap-x-4 xl:gap-x-6"
 >
     <img
@@ -23,7 +24,7 @@
     />
 </div>
 
-@pushonce("scripts")
+@push("scripts")
     <script>
         function alertSwiper() {
             return {
@@ -50,4 +51,4 @@
             };
         }
     </script>
-@endpushonce
+@endpush
