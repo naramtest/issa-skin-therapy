@@ -69,6 +69,8 @@ return new class extends Migration {
             $table->index("stock_status");
             $table->index(["sale_starts_at", "sale_ends_at"]);
             $table->index("is_sale_scheduled");
+
+            $table->json("short_description")->after("description");
         });
 
         // Add check constraint for valid stock status values

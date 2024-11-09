@@ -29,6 +29,7 @@ class Product extends Model implements HasMedia
         "full_ingredients",
         "caution",
         "how_to_store",
+        "short_description",
     ];
     protected $fillable = [
         "name",
@@ -40,6 +41,7 @@ class Product extends Model implements HasMedia
         "sale_ends_at",
         "is_sale_scheduled",
         "quantity",
+        "short_description",
         "low_stock_threshold",
         "track_quantity",
         "allow_backorders",

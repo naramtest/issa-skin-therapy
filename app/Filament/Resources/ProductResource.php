@@ -20,6 +20,14 @@ use Filament\Tables\Table;
 
 class ProductResource extends Resource
 {
+    //    TODO: add featured (only one item )
+    //    TODO: order
+    //    TODO: publish and draft
+    //    TODO: Categories
+    //    TODO: tags
+    //    TODO: reviews
+    //    TODO: short description
+
     use Translatable;
 
     protected static ?string $model = Product::class;
@@ -61,6 +69,11 @@ class ProductResource extends Resource
                                     ),
 
                                 Forms\Components\RichEditor::make("description")
+                                    ->required()
+                                    ->columnSpanFull(),
+                                Forms\Components\RichEditor::make(
+                                    "short_description"
+                                )
                                     ->required()
                                     ->columnSpanFull(),
                             ]),
