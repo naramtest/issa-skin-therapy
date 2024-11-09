@@ -37,7 +37,7 @@ return [
     "background Image" => "background Image",
     "Shop by collection" => "Shop by collection",
     "Check out all" => "Check out all!",
-    "Check out  all our products" => "Check out all our products",
+    "Check out all our products" => "Check out all our products",
     "The ISSA SKIN THERAPY team recognized PET™’s potential in" => 'The ISSA SKIN THERAPY team recognized PET™’s potential in
                     skincare, leveraging this groundbreaking technology to
                     deliver nourishing active ingredients deep into the skin,
@@ -107,4 +107,5 @@ return [
                                 order, support your experience throughout this
                                 website, and for other purposes described in our',
     "All Products" => "All Products",
+    "Visit Shop" => "Visit shop",
 ];
