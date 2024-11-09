@@ -22,4 +22,6 @@ return [
     "Label" => "Label",
     "Content" => "Content",
     "Additional Information" => "Additional Information",
+    "Media" => "Media",
+    "Featured" => "Featured",
 ];

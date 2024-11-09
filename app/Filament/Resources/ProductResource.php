@@ -6,8 +6,11 @@ use App\Enums\StockStatus;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
 use App\Services\Filament\Component\CustomNameSlugField;
+use App\Services\Filament\Component\FullImageSectionUpload;
 use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
@@ -31,37 +34,40 @@ class ProductResource extends Resource
                 ->schema([
                     Tabs::make("Product")->tabs([
                         // Basic Information Tab
-                        Tabs\Tab::make("Basic Information")->schema([
-                            CustomNameSlugField::getCustomTitleField(
-                                label: __("store.Name"),
-                                fieldName: "name"
-                            )
-                                ->translate(true)
-                                ->inlineLabel(),
-                            CustomNameSlugField::getCustomSlugField()
-                                ->helperText(
-                                    "https://" .
-                                        request()->getHost() .
-                                        "/product/"
+                        Tabs\Tab::make("Basic Information")
+                            ->icon("gmdi-inventory-2-o")
+                            ->schema([
+                                CustomNameSlugField::getCustomTitleField(
+                                    label: __("store.Name"),
+                                    fieldName: "name"
                                 )
-                                ->inlineLabel()
-                                ->label("Permalink"),
+                                    ->translate(true)
+                                    ->inlineLabel(),
+                                CustomNameSlugField::getCustomSlugField()
+                                    ->helperText(
+                                        "https://" .
+                                            request()->getHost() .
+                                            "/product/"
+                                    )
+                                    ->inlineLabel()
+                                    ->label("Permalink"),
 
-                            Forms\Components\TextInput::make("sku")
-                                ->label("SKU")
-                                ->unique(ignoreRecord: true)
-                                ->inlineLabel()
-                                ->placeholder(
-                                    "Will be generated automatically if left empty"
-                                ),
+                                Forms\Components\TextInput::make("sku")
+                                    ->label("SKU")
+                                    ->unique(ignoreRecord: true)
+                                    ->inlineLabel()
+                                    ->placeholder(
+                                        "Will be generated automatically if left empty"
+                                    ),
 
-                            Forms\Components\RichEditor::make("description")
-                                ->required()
-                                ->columnSpanFull(),
-                        ]),
+                                Forms\Components\RichEditor::make("description")
+                                    ->required()
+                                    ->columnSpanFull(),
+                            ]),
 
                         // Shipping Tab
                         Tabs\Tab::make(__("store.Shipping"))
+                            ->icon("gmdi-shopping-cart-o")
                             ->columns()
                             ->schema([
                                 Forms\Components\TextInput::make("weight")
@@ -103,50 +109,88 @@ class ProductResource extends Resource
                             ]),
 
                         // Additional Information Tab
-                        Tabs\Tab::make(
-                            __("dashboard.Additional Information")
-                        )->schema([
-                            Forms\Components\Fieldset::make(
-                                __("dashboard.Quick Facts")
-                            )
-                                ->columns(1)
-                                ->schema([
-                                    Forms\Components\TextInput::make(
-                                        "quick_facts_label"
+                        Tabs\Tab::make(__("dashboard.Additional Information"))
+                            ->icon("gmdi-info-o")
+                            ->schema([
+                                Forms\Components\Fieldset::make(
+                                    __("dashboard.Quick Facts")
+                                )
+                                    ->columns(1)
+                                    ->schema([
+                                        Forms\Components\TextInput::make(
+                                            "quick_facts_label"
+                                        )
+                                            ->label(__("dashboard.Label"))
+                                            ->required(),
+                                        Forms\Components\RichEditor::make(
+                                            "quick_facts_content"
+                                        )
+                                            ->label(__("dashboard.Content"))
+                                            ->required(),
+                                    ]),
+
+                                Forms\Components\RichEditor::make(
+                                    "details"
+                                )->columnSpanFull(),
+
+                                Forms\Components\RichEditor::make(
+                                    "how_to_use"
+                                )->columnSpanFull(),
+
+                                Forms\Components\RichEditor::make(
+                                    "key_ingredients"
+                                )->columnSpanFull(),
+
+                                Forms\Components\RichEditor::make(
+                                    "full_ingredients"
+                                )->columnSpanFull(),
+
+                                Forms\Components\RichEditor::make(
+                                    "caution"
+                                )->columnSpanFull(),
+
+                                Forms\Components\RichEditor::make(
+                                    "how_to_store"
+                                )->columnSpanFull(),
+                            ]),
+
+                        Tabs\Tab::make(__("dashboard.Media"))
+                            ->icon("gmdi-image-o")
+                            ->columns()
+                            ->schema([
+                                Fieldset::make(
+                                    __("dashboard.Featured")
+                                )->schema(
+                                    FullImageSectionUpload::make(
+                                        config("const.media.featured"),
+                                        __("dashboard.Featured"),
+                                        config("const.media.featured")
                                     )
-                                        ->label(__("dashboard.Label"))
-                                        ->required(),
-                                    Forms\Components\RichEditor::make(
-                                        "quick_facts_content"
+                                ),
+
+                                Fieldset::make("Gallery")->schema([
+                                    SpatieMediaLibraryFileUpload::make(
+                                        config("const.media.gallery")
                                     )
-                                        ->label(__("dashboard.Content"))
-                                        ->required(),
+                                        ->hiddenLabel()
+                                        ->collection(
+                                            config("const.media.gallery")
+                                        )
+                                        ->columnSpan(1)
+                                        ->imageEditor()
+                                        ->image()
+                                        ->multiple()
+                                        ->live()
+                                        ->downloadable()
+                                        ->maxSize(5120)
+                                        ->imageEditorAspectRatios([
+                                            null,
+                                            "16:9",
+                                            "4:3",
+                                            "1:1",
+                                        ]),
                                 ]),
-
-                            Forms\Components\RichEditor::make(
-                                "details"
-                            )->columnSpanFull(),
-
-                            Forms\Components\RichEditor::make(
-                                "how_to_use"
-                            )->columnSpanFull(),
-
-                            Forms\Components\RichEditor::make(
-                                "key_ingredients"
-                            )->columnSpanFull(),
-
-                            Forms\Components\RichEditor::make(
-                                "full_ingredients"
-                            )->columnSpanFull(),
-
-                            Forms\Components\RichEditor::make(
-                                "caution"
-                            )->columnSpanFull(),
-
-                            Forms\Components\RichEditor::make(
-                                "how_to_store"
-                            )->columnSpanFull(),
-                        ]),
+                            ]),
                     ]),
                 ])
                 ->columnSpan(2),
