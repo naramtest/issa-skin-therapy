@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Tags\HasTags;
 use Spatie\Translatable\HasTranslations;
 
 class Product extends Model implements HasMedia
@@ -18,6 +19,7 @@ class Product extends Model implements HasMedia
     use SoftDeletes, HasPricing, HasInventory;
     use HasTranslations;
     use InteractsWithMedia;
+    use HasTags;
 
     public array $translatable = [
         "name",

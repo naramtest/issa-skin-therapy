@@ -37,4 +37,5 @@ return [
     "Delete Category" => "Delete Category",
     "Move & Delete" => "Move & Delete",
     "Delete" => "Delete",
+    "Tags" => "Tags",
 ];

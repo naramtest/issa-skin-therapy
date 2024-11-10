@@ -11,6 +11,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
@@ -23,8 +24,6 @@ class ProductResource extends Resource
     //    TODO: add featured (only one item )
     //    TODO: order
     //    TODO: publish and draft
-    //    TODO: Categories
-    //    TODO: tags
     //    TODO: reviews
 
     use Translatable;
@@ -239,6 +238,11 @@ class ProductResource extends Resource
                                 fn(callable $get) => $get("is_sale_scheduled")
                             )
                             ->after("sale_starts_at"),
+                    ]),
+                    Section::make("Associations")->schema([
+                        SpatieTagsInput::make("tags")->label(
+                            __("dashboard.Tags")
+                        ),
                     ]),
                     Section::make(__("dashboard.Inventory"))->schema([
                         Forms\Components\Toggle::make("track_quantity")
