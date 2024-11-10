@@ -38,4 +38,6 @@ return [
     "Move & Delete" => "Move & Delete",
     "Delete" => "Delete",
     "Tags" => "Tags",
+    "Draft" => "Draft",
+    "Published At" => "Published At",
 ];

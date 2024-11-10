@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
 use App\Traits\HasInventory;
 use App\Traits\HasPricing;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,6 +22,10 @@ class Product extends Model implements HasMedia
     use HasTranslations;
     use InteractsWithMedia;
     use HasTags;
+
+    public array $sortable = [
+        "order_column_name" => "order",
+    ];
 
     public array $translatable = [
         "name",
@@ -63,6 +69,10 @@ class Product extends Model implements HasMedia
         "full_ingredients",
         "caution",
         "how_to_store",
+        "is_featured",
+        "status",
+        "order",
+        "published_at",
     ];
 
     protected $casts = [
@@ -80,6 +90,9 @@ class Product extends Model implements HasMedia
         "width" => "decimal:2",
         "height" => "decimal:2",
         "stock_status" => StockStatus::class,
+        "is_featured" => "boolean",
+        "status" => ProductStatus::class,
+        "published_at" => "datetime",
     ];
 
     protected static function booted(): void
@@ -87,6 +100,29 @@ class Product extends Model implements HasMedia
         static::creating(function ($product) {
             if (empty($product->sku)) {
                 $product->sku = static::generateSKU();
+            }
+        });
+        static::saving(function ($product) {
+            if ($product->is_featured) {
+                static::where("id", "!=", $product->id)
+                    ->where("is_featured", true)
+                    ->update(["is_featured" => false]);
+            }
+            // Set published_at timestamp when status changes to published
+            if (
+                $product->status === ProductStatus::PUBLISHED &&
+                empty($product->published_at)
+            ) {
+                $product->published_at = Carbon::now();
+            }
+
+            // Clear published_at when status changes to draft
+            if (
+                $product->status === ProductStatus::DRAFT &&
+                $product->getOriginal("status") ===
+                    ProductStatus::PUBLISHED->value
+            ) {
+                $product->published_at = null;
             }
         });
     }
@@ -136,5 +172,40 @@ class Product extends Model implements HasMedia
     public function categories(): morphToMany
     {
         return $this->morphToMany(Category::class, "model", "categorizables");
+    }
+
+    public function scopePublished($query)
+    {
+        return $query
+            ->where("status", ProductStatus::PUBLISHED)
+            ->whereNotNull("published_at")
+            ->where("published_at", "<=", now());
+    }
+
+    public function scopeDraft($query)
+    {
+        return $query->where("status", ProductStatus::DRAFT);
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where("is_featured", true);
+    }
+
+    public function isPublished(): bool
+    {
+        return $this->status === ProductStatus::PUBLISHED;
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->status === ProductStatus::DRAFT;
+    }
+
+    public function isScheduled(): bool
+    {
+        return $this->status === ProductStatus::PUBLISHED &&
+            $this->published_at &&
+            $this->published_at->isFuture();
     }
 }

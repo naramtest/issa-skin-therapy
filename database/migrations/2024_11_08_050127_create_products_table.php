@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string("slug")->unique();
             $table->json("description");
             $table->string("sku")->unique();
+            $table->integer("order")->default(0)->index();
 
             // Pricing
             $table->decimal("regular_price", 10, 2);
@@ -60,6 +61,19 @@ return new class extends Migration {
             $table->json("full_ingredients")->nullable();
             $table->json("caution")->nullable();
             $table->json("how_to_store")->nullable();
+
+            //Status
+            $table
+                ->boolean("is_featured")
+                ->default(false)
+                ->after("order")
+                ->index();
+            $table
+                ->string("status", 50)
+                ->default("draft")
+                ->after("is_featured")
+                ->index();
+
             //
             $table->timestamps();
             $table->softDeletes();

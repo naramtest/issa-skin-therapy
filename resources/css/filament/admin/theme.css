@@ -3,7 +3,7 @@
 @config 'tailwind.config.js';
 
 
-.w-max:has(.naram) {
+.w-max:has(.toggle-button) {
     width: 100%;
 }
 

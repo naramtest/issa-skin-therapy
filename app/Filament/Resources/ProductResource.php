@@ -2,17 +2,25 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\CategoryType;
+use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
+use App\Services\Filament\Component\CategoryFilament;
 use App\Services\Filament\Component\CustomNameSlugField;
 use App\Services\Filament\Component\FullImageSectionUpload;
+use Carbon\Carbon;
+use Exception;
 use Filament\Forms;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
@@ -21,10 +29,9 @@ use Filament\Tables\Table;
 
 class ProductResource extends Resource
 {
-    //    TODO: add featured (only one item )
-    //    TODO: order
-    //    TODO: publish and draft
     //    TODO: reviews
+    //    TODO: add Preview Button
+    //    TODO: refactor form and table
 
     use Translatable;
 
@@ -207,6 +214,42 @@ class ProductResource extends Resource
                 ->columnSpan(2),
             Forms\Components\Group::make()
                 ->schema([
+                    Section::make("Status")->schema([
+                        ToggleButtons::make("status")
+                            ->options(ProductStatus::class)
+                            ->inline()
+                            ->default(ProductStatus::PUBLISHED)
+                            ->extraInputAttributes([
+                                "class" => "toggle-button",
+                            ])
+                            ->live()
+                            ->hiddenLabel()
+                            ->grouped(),
+                        DateTimePicker::make("published_at")
+                            ->maxDate(now()->addDay())
+                            ->label(__("dashboard.Published At"))
+                            ->live()
+                            ->default(function ($operation) {
+                                if ($operation == "create") {
+                                    return now();
+                                }
+
+                                return null;
+                            })
+                            ->minDate(fn() => Carbon::today())
+                            ->visible(
+                                fn(callable $get) => $get("status") ===
+                                    ProductStatus::PUBLISHED->value
+                            )
+                            ->displayFormat("d-m-Y-H-i-s"),
+
+                        Toggle::make("is_featured")
+                            ->label("Featured Product")
+                            ->helperText(
+                                "Only one product can be featured at a time"
+                            )
+                            ->default(false),
+                    ]),
                     Section::make(__("dashboard.Prices"))->schema([
                         Forms\Components\TextInput::make("regular_price")
                             ->numeric()
@@ -239,10 +282,15 @@ class ProductResource extends Resource
                             )
                             ->after("sale_starts_at"),
                     ]),
+
                     Section::make("Associations")->schema([
                         SpatieTagsInput::make("tags")->label(
                             __("dashboard.Tags")
                         ),
+                        CategoryFilament::Select(
+                            CategoryType::PRODUCT,
+                            false
+                        )->required(),
                     ]),
                     Section::make(__("dashboard.Inventory"))->schema([
                         Forms\Components\Toggle::make("track_quantity")
@@ -255,13 +303,16 @@ class ProductResource extends Resource
 
                         Forms\Components\TextInput::make("quantity")
                             ->numeric()
+                            ->inlineLabel()
                             ->default(0)
                             ->visible(
                                 fn(callable $get) => $get("track_quantity")
                             ),
 
                         Forms\Components\TextInput::make("low_stock_threshold")
+                            ->label("Low Stock")
                             ->numeric()
+                            ->inlineLabel()
                             ->default(5)
                             ->visible(
                                 fn(callable $get) => $get("track_quantity")
@@ -280,7 +331,7 @@ class ProductResource extends Resource
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function table(Table $table): Table
     {
@@ -331,6 +382,8 @@ class ProductResource extends Resource
                     "On Sale"
                 ),
             ])
+            ->defaultSort("order")
+            ->reorderable("order")
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
