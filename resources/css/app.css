@@ -276,6 +276,11 @@ body.menu-open {
     transform: translateY(-10%) scale(.6);
 }
 
+/* Modal Container */
+.modal-container {
+    transform: translateX(100%);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
 
 
 
