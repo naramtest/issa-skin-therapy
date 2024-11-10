@@ -16,6 +16,7 @@ use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\Tabs;
@@ -48,7 +49,7 @@ class ProductResource extends Resource
                 ->schema([
                     Tabs::make("Product")->tabs([
                         // Basic Information Tab
-                        Tabs\Tab::make("Basic Information")
+                        Tabs\Tab::make(__("dashboard.Basic Information"))
                             ->icon("gmdi-inventory-2-o")
                             ->schema([
                                 CustomNameSlugField::getCustomTitleField(
@@ -64,7 +65,7 @@ class ProductResource extends Resource
                                             "/product/"
                                     )
                                     ->inlineLabel()
-                                    ->label("Permalink"),
+                                    ->label(__("dashboard.Permalink")),
 
                                 Forms\Components\TextInput::make("sku")
                                     ->label("SKU")
@@ -76,10 +77,12 @@ class ProductResource extends Resource
 
                                 Forms\Components\RichEditor::make("description")
                                     ->required()
+                                    ->label(__("dashboard.Description"))
                                     ->columnSpanFull(),
                                 Forms\Components\RichEditor::make(
                                     "short_description"
                                 )
+                                    ->label(__("dashboard.Short Description"))
                                     ->required()
                                     ->columnSpanFull(),
                             ]),
@@ -90,21 +93,25 @@ class ProductResource extends Resource
                             ->columns()
                             ->schema([
                                 Forms\Components\TextInput::make("weight")
+                                    ->label(__("dashboard.Weight"))
                                     ->numeric()
                                     ->step(0.001)
                                     ->suffix("kg"),
 
                                 Forms\Components\TextInput::make("length")
+                                    ->label(__("dashboard.Length"))
                                     ->numeric()
                                     ->step(0.01)
                                     ->suffix("cm"),
 
                                 Forms\Components\TextInput::make("width")
+                                    ->label(__("dashboard.Width"))
                                     ->numeric()
                                     ->step(0.01)
                                     ->suffix("cm"),
 
                                 Forms\Components\TextInput::make("height")
+                                    ->label(__("dashboard.Height"))
                                     ->numeric()
                                     ->step(0.01)
                                     ->suffix("cm"),
@@ -117,8 +124,9 @@ class ProductResource extends Resource
                                     "country_of_origin"
                                 )
                                     ->searchable()
+                                    ->label(__("dashboard.Country Of Origin"))
                                     ->options(function () {
-                                        // You'll need to implement this with a proper country list
+                                        // TODO:You'll need to implement this with a proper country list
                                         return [
                                             "AE" => "United Arab Emirates",
                                             "US" => "United States",
@@ -245,16 +253,22 @@ class ProductResource extends Resource
                             ->displayFormat("d-m-Y-H-i-s"),
 
                         Toggle::make("is_featured")
-                            ->label("Featured Product")
+                            ->label(__("dashboard.Featured Product"))
                             ->helperText(
-                                "Only one product can be featured at a time"
+                                __(
+                                    "dashboard.Only one product can be featured at a time"
+                                )
                             )
                             ->default(false),
                     ]),
                     Section::make(__("dashboard.Prices"))->schema([
-                        //                        TODO: add why to currency conversion
-                        MoneyInput::make("regular_price")->required(),
-                        MoneyInput::make("sale_price")->nullable(),
+                        //TODO: add why to currency conversion
+                        MoneyInput::make("regular_price")
+                            ->label(__("dashboard.Regular Price"))
+                            ->required(),
+                        MoneyInput::make("sale_price")
+                            ->label(__("dashboard.Sale Price"))
+                            ->nullable(),
 
                         Forms\Components\Toggle::make("is_sale_scheduled")
                             ->label(__("dashboard.Schedule Sale"))
@@ -274,7 +288,7 @@ class ProductResource extends Resource
                             ->after("sale_starts_at"),
                     ]),
 
-                    Section::make("Associations")->schema([
+                    Section::make(__("dashboard.Associations"))->schema([
                         SpatieTagsInput::make("tags")->label(
                             __("dashboard.Tags")
                         ),
@@ -282,6 +296,19 @@ class ProductResource extends Resource
                             CategoryType::PRODUCT,
                             false
                         )->required(),
+                        Select::make("product_type")
+                            ->multiple()
+                            ->createOptionForm([
+                                CustomNameSlugField::getCustomTitleField(
+                                    label: __("store.Name"),
+                                    fieldName: "name"
+                                ),
+                                CustomNameSlugField::getCustomSlugField(),
+                            ])
+                            ->required()
+                            ->label(__("dashboard.Type"))
+                            ->relationship("types", "name")
+                            ->preload(),
                     ]),
                     Section::make(__("dashboard.Inventory"))->schema([
                         Forms\Components\Toggle::make("track_quantity")
@@ -301,7 +328,7 @@ class ProductResource extends Resource
                             ),
 
                         Forms\Components\TextInput::make("low_stock_threshold")
-                            ->label("Low Stock")
+                            ->label(__("dashboard.Low Stock"))
                             ->numeric()
                             ->inlineLabel()
                             ->default(5)

@@ -8,6 +8,7 @@ use App\Traits\HasInventory;
 use App\Traits\HasPricing;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
@@ -140,6 +141,11 @@ class Product extends Model implements HasMedia
         };
 
         $this->update(["stock_status" => $newStatus]);
+    }
+
+    public function types(): BelongsToMany
+    {
+        return $this->belongsToMany(ProductType::class);
     }
 
     public function isAvailableForPurchase(): bool
