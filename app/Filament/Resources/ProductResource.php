@@ -26,6 +26,7 @@ use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Pelmered\FilamentMoneyField\Forms\Components\MoneyInput;
 
 class ProductResource extends Resource
 {
@@ -251,19 +252,9 @@ class ProductResource extends Resource
                             ->default(false),
                     ]),
                     Section::make(__("dashboard.Prices"))->schema([
-                        Forms\Components\TextInput::make("regular_price")
-                            ->numeric()
-                            ->required()
-                            ->prefix('$')
-                            ->minValue(0.01)
-                            ->step(0.01),
-
-                        Forms\Components\TextInput::make("sale_price")
-                            ->numeric()
-                            ->prefix('$')
-                            ->minValue(0.01)
-                            ->step(0.01)
-                            ->lt("regular_price"),
+                        //                        TODO: add why to currency conversion
+                        MoneyInput::make("regular_price")->required(),
+                        MoneyInput::make("sale_price")->nullable(),
 
                         Forms\Components\Toggle::make("is_sale_scheduled")
                             ->label(__("dashboard.Schedule Sale"))

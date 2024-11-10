@@ -20,8 +20,8 @@ return new class extends Migration {
             $table->integer("order")->default(0)->index();
 
             // Pricing
-            $table->decimal("regular_price", 10, 2);
-            $table->decimal("sale_price", 10, 2)->nullable();
+            $table->integer("regular_price");
+            $table->integer("sale_price")->nullable();
             $table->timestamp("sale_starts_at")->nullable();
             $table->timestamp("sale_ends_at")->nullable();
             $table->boolean("is_sale_scheduled")->default(false);

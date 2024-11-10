@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
         "mohamedsabil83/filament-forms-tinyeditor": "^2.3",
+        "pelmered/filament-money-field": "^1.4",
         "spatie/laravel-google-fonts": "^1.4",
         "statikbe/laravel-filament-chained-translation-manager": "^3.2"
     },
