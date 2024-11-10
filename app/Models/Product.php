@@ -6,6 +6,7 @@ use App\Enums\StockStatus;
 use App\Traits\HasInventory;
 use App\Traits\HasPricing;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -128,5 +129,10 @@ class Product extends Model implements HasMedia
         $this->addMediaCollection(config("const.media.featured"))->singleFile();
 
         $this->addMediaCollection(config("const.media.gallery"));
+    }
+
+    public function categories(): morphToMany
+    {
+        return $this->morphToMany(Category::class, "model", "categorizables");
     }
 }

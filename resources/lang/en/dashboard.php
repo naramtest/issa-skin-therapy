@@ -24,4 +24,17 @@ return [
     "Additional Information" => "Additional Information",
     "Media" => "Media",
     "Featured" => "Featured",
+    "Category" => "Category",
+    "Order" => "Order",
+    "Published" => "Published",
+    "Created At" => "Created At",
+    "Store" => "Store",
+    "Product" => "Product",
+    "This Category Has Items" => [
+        " Please Select a Category From the Dropdown to Move Them" =>
+            "This Category Has Items. Please Select a Category From the Dropdown to Move Them.",
+    ],
+    "Delete Category" => "Delete Category",
+    "Move & Delete" => "Move & Delete",
+    "Delete" => "Delete",
 ];

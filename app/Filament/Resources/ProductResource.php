@@ -26,7 +26,6 @@ class ProductResource extends Resource
     //    TODO: Categories
     //    TODO: tags
     //    TODO: reviews
-    //    TODO: short description
 
     use Translatable;
 
@@ -358,5 +357,35 @@ class ProductResource extends Resource
     public static function getGloballySearchableAttributes(): array
     {
         return ["name", "sku"];
+    }
+
+    public static function getLabel(): ?string
+    {
+        return __("dashboard.Product");
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __("dashboard.Product");
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __("store.Products");
+    }
+
+    public static function getPluralLabel(): ?string
+    {
+        return __("store.Products");
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __("store.Products");
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __("store.Shop");
     }
 }
