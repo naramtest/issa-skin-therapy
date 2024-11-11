@@ -9,7 +9,8 @@ class Marquee extends Component
     public function __construct(
         public int $speed = 50,
         public int $gap = 24,
-        public int $repeat = 15
+        public int $repeat = 15,
+        public string $direction = "left"
     ) {
     }
 

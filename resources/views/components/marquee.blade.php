@@ -1,6 +1,10 @@
 <div
     {{ $attributes->class(["overflow-hidden"]) }}
-    x-data="marquee({ speed: {{ $speed }}, gap: {{ $gap }} })"
+    x-data="marquee({
+                speed: {{ $speed }},
+                gap: {{ $gap }},
+                direction: '{{ $direction }}',
+            })"
 >
     <div
         x-ref="marqueeContent"

@@ -17,6 +17,7 @@
         :repeat="10"
         :speed="50"
         :gap="50"
+        direction="right"
     >
         <img
             src="{{ asset("storage/images/issa-logo.webp") }}"

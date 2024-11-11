@@ -1,4 +1,4 @@
-export default function marquee({ speed = 50, gap = 24 }) {
+export default function marquee({ speed = 50, gap = 24, direction = "left" }) {
     return {
         init() {
             this.setupMarquee();
@@ -9,11 +9,18 @@ export default function marquee({ speed = 50, gap = 24 }) {
             const contentWidth = content.offsetWidth;
             const duration = contentWidth / speed;
 
+            // Set initial position based on direction
+            const startX = direction === "left" ? 0 : -contentWidth / 2;
+            const endX = direction === "left" ? -contentWidth / 2 : 0;
+
+            // Reset position
+            gsap.set(content, { x: startX });
+
             // Create GSAP timeline for smooth infinite animation
             const tl = gsap.timeline({ repeat: -1 });
 
             tl.to(content, {
-                x: -contentWidth / 2,
+                x: endX,
                 duration: duration,
                 ease: "none",
             });
@@ -33,6 +40,12 @@ export default function marquee({ speed = 50, gap = 24 }) {
             );
 
             observer.observe(content);
+
+            // Cleanup
+            return () => {
+                observer.disconnect();
+                tl.kill();
+            };
         },
     };
 }
