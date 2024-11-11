@@ -6,9 +6,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create("products", function (Blueprint $table) {
@@ -16,8 +13,12 @@ return new class extends Migration {
             $table->json("name");
             $table->string("slug")->unique();
             $table->json("description");
+            $table->json("short_description"); // Moved up in order
             $table->string("sku")->unique();
             $table->integer("order")->default(0)->index();
+            $table->boolean("is_featured")->default(false)->index(); // Moved up in order
+            $table->string("status", 50)->default("draft")->index(); // Moved up in order
+            $table->timestamp("published_at")->nullable(); // Moved up in order
 
             // Pricing
             $table->integer("regular_price");
@@ -52,7 +53,7 @@ return new class extends Migration {
             $table->string("hs_code")->nullable();
             $table->string("country_of_origin", 50)->nullable(); // ISO
 
-            //More Info
+            // More Info
             $table->json("quick_facts_label")->nullable();
             $table->json("quick_facts_content")->nullable();
             $table->json("details")->nullable();
@@ -62,19 +63,7 @@ return new class extends Migration {
             $table->json("caution")->nullable();
             $table->json("how_to_store")->nullable();
 
-            //Status
-            $table
-                ->boolean("is_featured")
-                ->default(false)
-                ->after("order")
-                ->index();
-            $table
-                ->string("status", 50)
-                ->default("draft")
-                ->after("is_featured")
-                ->index();
-
-            //
+            // Timestamps
             $table->timestamps();
             $table->softDeletes();
 
@@ -83,24 +72,22 @@ return new class extends Migration {
             $table->index("stock_status");
             $table->index(["sale_starts_at", "sale_ends_at"]);
             $table->index("is_sale_scheduled");
-
-            $table->json("short_description")->after("description");
         });
 
         // Add check constraint for valid stock status values
-        DB::statement(
-            "
-            ALTER TABLE products ADD CONSTRAINT check_valid_stock_status
-            CHECK (stock_status IN ('" .
-                implode("','", array_column(StockStatus::cases(), "value")) .
-                "'))
-        "
-        );
+        if (config("database.default") === "mysql") {
+            DB::statement(
+                "ALTER TABLE products ADD CONSTRAINT check_valid_stock_status
+                CHECK (stock_status IN ('" .
+                    implode(
+                        "','",
+                        array_column(StockStatus::cases(), "value")
+                    ) .
+                    "'))"
+            );
+        }
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists("products");

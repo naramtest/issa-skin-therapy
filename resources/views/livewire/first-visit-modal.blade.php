@@ -7,7 +7,6 @@
                 this.show = @entangle("showModal")
 
                 if (this.show) {
-                    // Opening animation remains the same
                     gsap.fromTo(
                         '.modal-content',
                         {
@@ -140,40 +139,76 @@
 
             <!-- Right side - Content -->
             <div
-                class="modal-content flex w-[60%] flex-col rounded-e-[20px] bg-white p-8 shadow-xl"
+                class="modal-content flex w-[60%] flex-col justify-between rounded-e-[20px] bg-white p-8 shadow-xl"
             >
-                <div class="mb-auto">
-                    <h2 class="mb-4 text-3xl font-bold">
-                        Share your before and after and get a nice gift!
-                    </h2>
-                </div>
-
+                <button
+                    @click="close()"
+                    class="absolute end-4 top-4 z-10 flex h-12 w-12 items-center justify-center rounded-full border border-gray-400 bg-white transition-transform hover:scale-110"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+                <h2 class="mt-2 w-[95%] text-3xl font-bold">
+                    Share your before and after
+                    <br />
+                    and get
+                    <span
+                        x-data="{
+                            startAnimation: false,
+                            init() {
+                                this.startAnimation = true
+                                setInterval(() => {
+                                    this.startAnimation = false
+                                    setTimeout(() => (this.startAnimation = true), 100)
+                                }, 8000)
+                            },
+                        }"
+                        class="relative inline-block"
+                    >
+                        a nice gift!
+                        <svg
+                            x-show="startAnimation"
+                            x-transition:enter="transition duration-100 ease-out"
+                            class="animated-underline absolute -bottom-5 left-0 w-full"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 500 150"
+                            preserveAspectRatio="none"
+                            style="height: 40px"
+                        >
+                            <path
+                                d="M0,75 Q125,75 250,75 T500,85"
+                                stroke="#D5E1D1"
+                                stroke-width="12"
+                                fill="none"
+                                stroke-linecap="round"
+                            ></path>
+                        </svg>
+                    </span>
+                </h2>
                 <!-- Form -->
-                <div class="mt-6">
+                <div>
                     <div class="relative">
                         <input
                             wire:model="email"
                             type="email"
-                            placeholder="Enter your email"
-                            class="w-full rounded-none border-gray-300 bg-gray-100 py-3 pl-4 pr-12 text-sm placeholder:text-gray-500 focus:border-gray-300 focus:ring-0"
+                            placeholder="{{ __("store.Enter your email") }}"
+                            class="w-full rounded-lg border-gray-300 bg-gray-100 py-5 pe-12 ps-6 placeholder:text-gray-500 focus:border-gray-300 focus:ring-0"
                         />
                         <button
                             wire:click="subscribe"
-                            class="absolute inset-y-0 right-0 flex items-center px-4 hover:text-gray-600"
+                            class="absolute end-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-darkColor"
                         >
-                            <svg
-                                class="h-5 w-5 text-black"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                            >
-                                <path
-                                    d="M5 12H19M19 12L12 5M19 12L12 19"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
+                            <x-icons.arrow-right class="h-5 w-5 text-white" />
                         </button>
                     </div>
                     @error("email")
@@ -182,13 +217,16 @@
                 </div>
 
                 <p class="text-sm text-gray-600">
-                    Subscribe to our newsletter and be the first to hear about
-                    our new arrivals, special promotions and online exclusives.
+                    {{ __("store.Subscribe to our newslet") }}
                 </p>
 
                 <!-- Social Links -->
-                <div class="mt-6 flex items-center space-x-4">
+                <div class="flex items-center space-x-4">
                     <!-- Social icons remain the same -->
+                    <x-layout.header.home.social
+                        class="flex gap-x-6"
+                        color="text-black"
+                    />
                 </div>
             </div>
         </div>

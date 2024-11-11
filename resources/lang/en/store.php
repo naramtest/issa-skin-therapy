@@ -108,4 +108,7 @@ return [
                                 website, and for other purposes described in our',
     "All Products" => "All Products",
     "Visit Shop" => "Visit shop",
+    "Enter your email" => "Enter your email",
+    "Subscribe to our newslet" => 'Subscribe to our newsletter and be the first to hear about
+                    our new arrivals, special promotions and online exclusives.',
 ];
