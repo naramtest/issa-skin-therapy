@@ -15,4 +15,5 @@
 
         <x-home.section.marquee-logos />
     </main>
+    <livewire:first-visit-modal />
 </x-store-main-layout>

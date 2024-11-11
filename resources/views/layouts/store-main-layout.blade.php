@@ -29,7 +29,6 @@
         <x-layout.fixed-menu />
         {{ $slot }}
         <livewire:cart-component />
-        <livewire:first-visit-modal />
         <x-layout.footer-home />
 
         @livewireScriptConfig

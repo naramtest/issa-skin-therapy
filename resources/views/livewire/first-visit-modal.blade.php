@@ -1,5 +1,5 @@
+{{-- TODO:  design  ,setup the newsletter backend  , --}}
 <div
-    {{-- TODO: fix animaton when close , design , only show on homepage  ,setup the newsletter backend  , --}}
     x-data="{
         show: false,
         init() {
@@ -7,12 +7,12 @@
                 this.show = @entangle("showModal")
 
                 if (this.show) {
-                    // First animate the content
+                    // Opening animation remains the same
                     gsap.fromTo(
                         '.modal-content',
                         {
                             opacity: 0,
-                            scale: 0.5,
+                            scale: 0.9,
                         },
                         {
                             opacity: 1,
@@ -21,9 +21,7 @@
                             ease: 'power2.out',
                             delay: 0.3,
                             onComplete: () => {
-                                // Create a more dynamic fold animation
                                 gsap.timeline()
-                                    // First slightly rotate and scale the container
                                     .fromTo(
                                         '.modal-image',
                                         {
@@ -39,7 +37,6 @@
                                             ease: 'power3.inOut',
                                         },
                                     )
-                                    // Animate the image inside with a subtle perspective effect
                                     .fromTo(
                                         '.modal-image img',
                                         {
@@ -54,9 +51,8 @@
                                             duration: 0.5,
                                             ease: 'power2.out',
                                         },
-                                        '-=0.4', // Start before the container animation ends
+                                        '-=0.4',
                                     )
-                                    // Add a subtle shadow animation
                                     .fromTo(
                                         '.modal-image',
                                         {
@@ -77,36 +73,46 @@
             }, 1000)
         },
         close() {
-            // Enhanced reverse animation
-            gsap.timeline()
-                .to('.modal-image', {
-                    boxShadow: 'none',
-                    duration: 0.3,
-                })
+            // Create a master timeline for closing
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    this.show = false
+                    $wire.closeModal()
+                },
+            })
+
+            // Add all animations to the timeline
+            tl.to('.modal-image', {
+                boxShadow: 'none',
+                duration: 0.2,
+            })
                 .to('.modal-image img', {
                     scaleX: 1.5,
                     opacity: 0,
                     rotateY: 5,
-                    duration: 0.4,
+                    duration: 0.3,
                     ease: 'power2.in',
                 })
-                .to('.modal-image', {
-                    scaleX: 0,
-                    rotateY: -15,
-                    duration: 0.5,
-                    ease: 'power3.inOut',
-                    onComplete: () => {
-                        gsap.to('.modal-content', {
-                            opacity: 0,
-                            scale: 0.9,
-                            duration: 0.4,
-                            ease: 'power2.in',
-                            onComplete: () => {
-                                $wire.closeModal()
-                            },
-                        })
+                .to(
+                    '.modal-image',
+                    {
+                        scaleX: 0,
+                        rotateY: -15,
+                        duration: 0.4,
+                        ease: 'power3.inOut',
                     },
-                })
+                    '-=0.2',
+                )
+                .to(
+                    '.modal-content',
+                    {
+                        opacity: 0,
+                        scale: 0.9,
+                        duration: 0.3,
+                        ease: 'power2.in',
+                    },
+                    '-=0.3',
+                )
         },
     }"
     x-show="show"
