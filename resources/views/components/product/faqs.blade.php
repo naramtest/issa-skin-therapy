@@ -1,55 +1,54 @@
-<div {{ $attributes->class(["mt-10 text-lightColor"]) }}>
-    @php
-        $faqs = [
-            [
-                "question" => "What is Flowbite?",
-                "answer" => "Flowbite is an open-source library of interactive components built on top of Tailwind CSS including buttons, dropdowns, modals, navbars, and more.",
-            ],
-            [
-                "question" => "Is there a Figma file available?",
-                "answer" => "Yes, there is a Figma file available that includes all components and variations.",
-            ],
-            [
-                "question" => "What are the differences between Flowbite and Tailwind UI?",
-                "answer" => "While both are built on Tailwind CSS, Flowbite is open-source and includes more components. Tailwind UI is a premium product with more polished design.",
-            ],
-        ];
-    @endphp
+<div class="mt-10 w-full overflow-hidden text-lightColor">
+    <div
+        x-data="{ isExpanded: false }"
+        class="border-b-[1px] border-[#DBDBDB33]"
+    >
+        <button
+            id="controlsAccordionItemOne"
+            type="button"
+            class="flex w-full items-center justify-between gap-4 px-4 py-6"
+            aria-controls="accordionItemOne"
+            @click="isExpanded = ! isExpanded"
+            :class="isExpanded ? '  font-bold'  : ' font-medium'"
+            :aria-expanded="isExpanded ? 'true' : 'false'"
+        >
+            <span class="text-[17px] font-medium">
+                What browsers are supported?
+            </span>
 
-    <div class="w-full gap-y-4">
-        @foreach ($faqs as $faq)
-            <div
-                x-data="{ open: false }"
-                class="border-b-[1px] border-[#DBDBDB33]"
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke-width="2"
+                stroke="currentColor"
+                class="size-5 shrink-0 transition"
+                aria-hidden="true"
+                :class="isExpanded  ?  'rotate-180'  :  ''"
             >
-                <button
-                    @click="open = !open"
-                    class="flex w-full items-center justify-between px-4 py-6"
-                >
-                    <span class="text-[17px] font-medium">
-                        {{ $faq["question"] }}
-                    </span>
-                    <x-gmdi-add
-                        x-transition=""
-                        x-show="!open"
-                        class="h-5 w-5 transform transition-transform duration-300"
-                    />
-                    <x-gmdi-close
-                        x-show="open"
-                        class="h-5 w-5 transform transition-transform duration-300"
-                    />
-                </button>
-
-                <div
-                    x-show="open"
-                    x-collapse.duration.500ms
-                    class="p-4 pt-0"
-                >
-                    <p class="">
-                        {{ $faq["answer"] }}
-                    </p>
-                </div>
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                />
+            </svg>
+        </button>
+        <div
+            x-cloak
+            x-show="isExpanded"
+            id="accordionItemOne"
+            role="region"
+            aria-labelledby="controlsAccordionItemOne"
+            x-collapse.duration.500ms
+        >
+            <div class="text-pretty p-4 text-sm sm:text-base">
+                Our website is optimized for the latest versions of Chrome,
+                Firefox, Safari, and Edge. Check our
+                <a href="#" class="text-black underline underline-offset-2">
+                    documentation
+                </a>
+                for additional information.
             </div>
-        @endforeach
+        </div>
     </div>
 </div>
