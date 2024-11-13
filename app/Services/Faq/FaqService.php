@@ -10,9 +10,8 @@ class FaqService
 {
     /**
      * Cache duration in seconds (1 week)
-     * TODO: edit duration
      */
-    const CACHE_DURATION = 604800;
+    const CACHE_DURATION = 2628000;
 
     /**
      * Cache keys

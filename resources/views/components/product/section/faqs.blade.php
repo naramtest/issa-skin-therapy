@@ -6,14 +6,18 @@
     <div class="flex h-fit w-full overflow-hidden rounded-t-3xl">
         <div class="h-auto w-[70%] bg-darkColor px-8 py-12">
             <div class="flex items-center justify-between">
-                <h2 class="text-6xl font-[800] text-lightColor">FAQs</h2>
+                <h2 class="text-6xl font-[800] text-lightColor">
+                    {{ __("store.FAQs") }}
+                </h2>
                 <div
                     class="rounded-xl bg-[#2D2D2D] px-6 py-4 font-light text-[#8C92A4]"
                 >
                     <p>
-                        Please read our
-                        <a class="text-lightColor underline" href="/">FAQs</a>
-                        page to find out more.
+                        {{ __("store.Please read our") }}
+                        <a class="text-lightColor underline" href="/">
+                            {{ __("store.FAQs") }}
+                        </a>
+                        {{ __("store.page to find out more.") }}
                     </p>
                 </div>
             </div>
@@ -30,7 +34,7 @@
                 class="mt-10 w-full overflow-hidden px-3 text-lightColor"
             >
                 @foreach ($faqs as $faq)
-                    <x-product.faqs :index="$loop->index" :faq="$faq" />
+                    <x-product.faqs-item :index="$loop->index" :faq="$faq" />
                 @endforeach
             </div>
         </div>

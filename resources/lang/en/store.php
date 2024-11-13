@@ -111,4 +111,16 @@ return [
     "Enter your email" => "Enter your email",
     "Subscribe to our newslet" => 'Subscribe to our newsletter and be the first to hear about
                     our new arrivals, special promotions and online exclusives.',
+    "Please read our" => "Please read our",
+    "FAQs" => "FAQs",
+    "page to find out more" => "page to find out more.",
+    "Welcome to our FAQ" => 'Welcome to our FAQ, we are so happy to have you here and as a
+            client, We have tried to answer the most common questions.',
+    "Don’t hesitate to contact us" => "Don’t hesitate to contact us",
+    "Didn’t find your answer?" => "Didn’t find your answer?",
+    "Message" => "Message",
+    "Your Message" => "Your Message",
+    "Your Name" => "Your Name",
+    "name" => "name",
+    "Enter Your Email" => "Enter Your Email ...",
 ];
