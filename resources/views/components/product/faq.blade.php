@@ -1,3 +1,7 @@
+@props([
+    "faqs",
+])
+
 <x-home.section-container class="content-x-padding pt-12">
     <div class="flex h-fit w-full overflow-hidden rounded-t-3xl">
         <div class="h-auto w-[70%] bg-darkColor px-8 py-12">
@@ -13,7 +17,22 @@
                     </p>
                 </div>
             </div>
-            <x-product.faqs />
+            <div
+                x-data="{
+                    activeIndex: -1,
+                    selectActive(index) {
+                        this.activeIndex = this.activeIndex != index ? index : -1
+                    },
+                    isActive(index) {
+                        return this.activeIndex == index
+                    },
+                }"
+                class="mt-10 w-full overflow-hidden px-3 text-lightColor"
+            >
+                @foreach ($faqs as $faq)
+                    <x-product.faqs :index="$loop->index" :faq="$faq" />
+                @endforeach
+            </div>
         </div>
         <div class="h-auto w-[30%] bg-[#2D2D2D] px-8 py-12 text-lightColor">
             <div class="flex items-center justify-between gap-x-4">

@@ -9,6 +9,6 @@ class ProductController extends Controller
     public function index(FaqService $faqService)
     {
         $productFaqs = $faqService->getProductFaqs();
-        return view("storefront.product.show");
+        return view("storefront.product.show", ["faqs" => $productFaqs]);
     }
 }
