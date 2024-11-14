@@ -24,13 +24,12 @@ class FaqSectionResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form->schema([
-            Forms\Components\Tabs::make("Sections")
-                ->tabs([
-                    Forms\Components\Tabs\Tab::make(
-                        "General Information"
-                    )->schema([
-                        Forms\Components\Grid::make()->schema([
+        return $form
+            ->schema([
+                Forms\Components\Group::make()
+                    ->columnSpan(2)
+                    ->schema([
+                        Forms\Components\Section::make("FAQ Section")->schema([
                             Forms\Components\TextInput::make("title")
                                 ->translateLabel()
                                 ->required()
@@ -38,6 +37,35 @@ class FaqSectionResource extends Resource
                             Forms\Components\Textarea::make("description")
                                 ->translateLabel()
                                 ->columnSpan(1),
+                        ]),
+                        Forms\Components\Section::make("FAQs")->schema([
+                            Forms\Components\Repeater::make("faqs")
+                                ->hiddenLabel()
+                                ->relationship()
+                                ->schema([
+                                    Forms\Components\TextInput::make("question")
+                                        ->hiddenLabel()
+                                        ->placeholder("Question")
+                                        ->required()
+                                        ->columnSpan("full"),
+                                    Forms\Components\Textarea::make("answer")
+                                        ->hiddenLabel()
+                                        ->placeholder("Answer")
+                                        ->required()
+                                        ->autosize()
+                                        ->columnSpan("full"),
+                                ])
+                                ->orderColumn("sort_order")
+                                ->defaultItems(0)
+                                ->reorderable()
+                                ->cloneable()
+                                ->collapsible(),
+                        ]),
+                    ]),
+                Forms\Components\Group::make()
+                    ->columnSpan(1)
+                    ->schema([
+                        Forms\Components\Section::make()->schema([
                             Forms\Components\Toggle::make("is_active")
                                 ->label("Active")
                                 ->default(true)
@@ -59,32 +87,8 @@ class FaqSectionResource extends Resource
                                 ),
                         ]),
                     ]),
-                    Forms\Components\Tabs\Tab::make("FAQs")->schema([
-                        Forms\Components\Repeater::make("faqs")
-                            ->hiddenLabel()
-                            ->relationship()
-                            ->schema([
-                                Forms\Components\TextInput::make("question")
-                                    ->hiddenLabel()
-                                    ->placeholder("Question")
-                                    ->required()
-                                    ->columnSpan("full"),
-                                Forms\Components\Textarea::make("answer")
-                                    ->hiddenLabel()
-                                    ->placeholder("Answer")
-                                    ->required()
-                                    ->autosize()
-                                    ->columnSpan("full"),
-                            ])
-                            ->orderColumn("sort_order")
-                            ->defaultItems(0)
-                            ->reorderable()
-                            ->cloneable()
-                            ->collapsible(),
-                    ]),
-                ])
-                ->columnSpan("full"),
-        ]);
+            ])
+            ->columns(3);
     }
 
     /**
