@@ -81,7 +81,7 @@ class BundleResource extends Resource
                         Tabs\Tab::make(__("dashboard.Bundle Items"))->schema([
                             Repeater::make("items")
                                 ->hiddenLabel()
-                                ->relationship()
+                                ->relationship("items")
                                 ->schema([
                                     Select::make("product_id")
                                         ->label(__("dashboard.Product"))
@@ -113,6 +113,34 @@ class BundleResource extends Resource
                                         : null
                                 ),
                         ]),
+                        Tabs\Tab::make(__("store.Shipping"))
+                            ->icon("gmdi-shopping-cart-o")
+                            ->columns()
+                            ->schema([
+                                Forms\Components\TextInput::make("weight")
+                                    ->label(__("dashboard.Weight"))
+                                    ->numeric()
+                                    ->step(0.001)
+                                    ->suffix("kg"),
+
+                                Forms\Components\TextInput::make("length")
+                                    ->label(__("dashboard.Length"))
+                                    ->numeric()
+                                    ->step(0.01)
+                                    ->suffix("cm"),
+
+                                Forms\Components\TextInput::make("width")
+                                    ->label(__("dashboard.Width"))
+                                    ->numeric()
+                                    ->step(0.01)
+                                    ->suffix("cm"),
+
+                                Forms\Components\TextInput::make("height")
+                                    ->label(__("dashboard.Height"))
+                                    ->numeric()
+                                    ->step(0.01)
+                                    ->suffix("cm"),
+                            ]),
 
                         Tabs\Tab::make(__("dashboard.Media"))
                             ->icon("gmdi-image-o")

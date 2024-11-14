@@ -37,13 +37,6 @@ class BundleObserver
             );
         }
 
-        // Ensure bundle has items
-        if ($bundle->items()->count() === 0) {
-            throw new InvalidArgumentException(
-                "Bundle must contain at least one product"
-            );
-        }
-
         // Validate total weight if shipping is required
         if ($bundle->requires_shipping && !$bundle->weight) {
             // Auto-calculate weight from items if not set
