@@ -63,4 +63,5 @@ return [
     "Track Quantity" => "Track Quantity",
     "Bundle Items" => "Bundle Items",
     "Quantity" => "Quantity",
+    "Image" => "Image",
 ];

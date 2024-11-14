@@ -106,11 +106,7 @@ class FaqSectionResource extends Resource
                     ->label("Active")
                     ->boolean()
                     ->sortable(),
-                Tables\Columns\IconColumn::make("is_product_section")
-                    ->label("Product Section")
-                    ->boolean()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make("sort_order")->sortable(),
+
                 Tables\Columns\TextColumn::make("faqs_count")
                     ->label("FAQs")
                     ->counts("faqs")
@@ -143,6 +139,7 @@ class FaqSectionResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
+            ->reorderable("sort_order")
             ->defaultSort("sort_order");
     }
 

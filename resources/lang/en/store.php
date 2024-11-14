@@ -125,4 +125,11 @@ return [
     "Enter Your Email" => "Enter Your Email ...",
     "Bundles" => "Bundles",
     "Bundle" => "Bundle",
+    "Patented P" => [
+        "E" => [
+            "T" => [
+                "® Technology" => "Patented P.E.T.® Technology",
+            ],
+        ],
+    ],
 ];

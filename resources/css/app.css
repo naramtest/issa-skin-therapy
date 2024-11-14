@@ -54,6 +54,10 @@ body {
     font-family: "Inter", sans-serif;
 }
 
+.no-tailwind ul {
+    padding: 0;
+}
+
 .no-tailwind h2 {
     font-size: 22px !important;
     font-weight: 600 !important;

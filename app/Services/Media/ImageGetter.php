@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Services\Media;
+
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+
+class ImageGetter
+{
+    public static function responsiveImgElement(
+        Media $image,
+        ?string $conversion = null,
+        string $class = "",
+        ?int $width = null,
+        ?int $height = null,
+        bool $lazy = false
+    ): string {
+        $extraAttributes = [
+            "alt" => $image->getCustomProperty("alt") ?? __("views.Image"),
+            "class" => $class,
+        ];
+
+        if ($lazy) {
+            $extraAttributes["loading"] = "lazy";
+        }
+
+        if ($width) {
+            $extraAttributes["width"] = $width;
+        }
+
+        if ($height) {
+            $extraAttributes["height"] = $height;
+        }
+
+        return $image
+            ->img(
+                $conversion && $image->hasGeneratedConversion($conversion)
+                    ? $conversion
+                    : "",
+                $extraAttributes
+            )
+            ->toHtml();
+    }
+}

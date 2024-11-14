@@ -1,6 +1,6 @@
 <x-store-main-layout>
     <main>
-        <x-product.section.detials />
+        <x-product.section.details :product="$product" :media="$media" />
 
         <x-product.section.video />
 

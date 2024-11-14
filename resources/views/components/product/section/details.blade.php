@@ -1,27 +1,29 @@
+@props([
+    /**@var\App\Models\Product$product*/"product",
+    "media",
+])
+
 <x-home.section-container
-    class="padding-from-side-menu flex justify-between py-12"
+    class="padding-from-side-menu flex justify-between pb-10 pt-14"
 >
-    <x-product.product-gallery />
+    <x-product.product-gallery :media="$media" />
     <div class="flex w-[36%] flex-col">
         <p class="text-sm font-[300] leading-[20px] text-darkColor">
-            Patented P.E.T.® Technology
+            {{ __("store.Patented P.E.T.® Technology") }}
         </p>
-        <h2 class="mb-3 mt-3 text-4xl font-bold">SaliCleanse Cleanser</h2>
+        <h2 class="mb-3 mt-3 text-3xl font-bold">{{ $product->name }}</h2>
+        {{-- TODO: Price and currency and sale price --}}
         <p class="mb-3 text-lg">€55.22</p>
         <div class="flex">
             <span aria-hidden="true" class="rating-star hidden lg:block"></span>
             <p class="ms-2 font-[300] text-darkColor">(15 customer reviews)</p>
         </div>
-        <div class="no-tailwind my-6">
-            <ul class="text-darkColor">
-                <li>Suitable for acne prone or oily skin</li>
-                <li>Helps unclog pores</li>
-                <li>
-                    Gently exfoliates with
-                    <strong>2% salicylic acid</strong>
-                </li>
-            </ul>
+        <div class="no-tailwind my-5">
+            <div class="!ps-10 text-darkColor">
+                {!! $product->short_description !!}
+            </div>
         </div>
+        {{-- TODO: tabby payment --}}
         <div
             class="flex gap-x-8 rounded-[10px] border-[1px] border-[#D1D5DB] px-5 py-5"
         >
@@ -38,6 +40,7 @@
             />
         </div>
         <div class="my-4 flex items-center">
+            {{-- TODO: add to cart --}}
             <label for="quantity">
                 <input
                     class="rounded-[50px] border-[1px] border-[#D1D5DB] px-2 py-2 text-center focus-visible:outline-0"
@@ -55,11 +58,13 @@
                 {{ __("store.Add to Card") }}
             </button>
         </div>
-        <button
+        {{-- TODO: button animation --}}
+        <a
+            href="{{ route("checkout.index") }}"
             class="rounded-3xl border border-darkColor py-2 transition-colors duration-300 hover:bg-darkColor hover:text-lightColor"
         >
-            {{ __("store.Check Out") }}
-        </button>
+            <p class="text-center">{{ __("store.Check Out") }}</p>
+        </a>
         <div class="mt-6 flex justify-between px-2">
             <div class="flex gap-x-2">
                 <span>{{ __("store.Social:") }}</span>
@@ -70,20 +75,10 @@
                     class="gap-x-2"
                 />
             </div>
-            <div class="flex gap-x-2">
+            <a href="{{ route("contact.index") }}" class="flex gap-x-2">
                 <x-icons.qustion-mark />
                 <span>{{ __("store.Need help? Contact us") }}</span>
-            </div>
+            </a>
         </div>
-
-        <a
-            href="/"
-            class="mt-6 flex items-center justify-between border-t-[1px] border-[#A5BBC4] pt-6"
-        >
-            <p class="text-sm font-semibold">
-                {{ __("store.View full details") }}
-            </p>
-            <x-icons.arrow-right class="h-5 w-5" />
-        </a>
     </div>
 </x-home.section-container>
