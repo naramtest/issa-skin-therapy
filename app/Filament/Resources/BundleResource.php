@@ -44,7 +44,6 @@ class BundleResource extends Resource
             Forms\Components\Group::make()
                 ->schema([
                     Tabs::make("Bundle")->tabs([
-                        // Basic Information Tab
                         Tabs\Tab::make(
                             __("dashboard.Basic Information")
                         )->schema([

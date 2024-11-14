@@ -103,6 +103,7 @@ class Product extends Model implements HasMedia
                 $product->sku = static::generateSKU();
             }
         });
+
         static::saving(function ($product) {
             if ($product->is_featured) {
                 static::where("id", "!=", $product->id)
@@ -126,6 +127,27 @@ class Product extends Model implements HasMedia
                 $product->published_at = null;
             }
         });
+    }
+
+    /**
+     * Update prices of associated auto-calculated bundles
+     */
+    public function updateBundlePrices(): void
+    {
+        $bundles = $this->autoCalculatedBundles()->get();
+
+        foreach ($bundles as $bundle) {
+            $bundle->calculateTotalPrice();
+            $bundle->save();
+        }
+    }
+
+    /**
+     * Get bundles with auto-calculate price enabled
+     */
+    public function autoCalculatedBundles(): BelongsToMany
+    {
+        return $this->bundles()->where("auto_calculate_price", true);
     }
 
     public function updateStockStatus(): void
