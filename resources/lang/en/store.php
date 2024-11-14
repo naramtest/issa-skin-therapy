@@ -123,4 +123,6 @@ return [
     "Your Name" => "Your Name",
     "name" => "name",
     "Enter Your Email" => "Enter Your Email ...",
+    "Bundles" => "Bundles",
+    "Bundle" => "Bundle",
 ];

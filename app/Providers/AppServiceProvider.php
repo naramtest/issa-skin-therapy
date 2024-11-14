@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Bundle;
 use App\Models\Faq;
 use App\Models\FaqSection;
 use App\Models\Product;
+use App\Observers\BundleObserver;
 use App\Observers\FaqObserver;
 use App\Observers\FaqSectionObserver;
 use App\Observers\ProductObserver;
@@ -21,5 +23,6 @@ class AppServiceProvider extends ServiceProvider
         Product::observe(ProductObserver::class);
         Faq::observe(FaqObserver::class);
         FaqSection::observe(FaqSectionObserver::class);
+        Bundle::observe(BundleObserver::class);
     }
 }

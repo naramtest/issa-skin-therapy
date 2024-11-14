@@ -55,4 +55,12 @@ return [
     "Sale Price" => "Sale Price",
     "Associations" => "Associations",
     "Type" => "Type",
+    "Pricing" => "Pricing",
+    "Auto Calculate Price" => "Auto Calculate Price",
+    "Enable Bundle Level Stock" => "Enable Bundle Level Stock",
+    'Manage stock at bundle level instead of using product stocks"' =>
+        "Manage stock at bundle level instead of using product stocks",
+    "Track Quantity" => "Track Quantity",
+    "Bundle Items" => "Bundle Items",
+    "Quantity" => "Quantity",
 ];
