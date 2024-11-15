@@ -133,4 +133,10 @@ return [
         ],
     ],
     "Shop Now" => "Shop Now",
+    "Details" => "Details",
+    "How to store" => "How to store",
+    "Caution" => "Caution",
+    "Full ingredients" => "Full ingredients",
+    "Key Ingredients" => "Key Ingredients",
+    "How to use" => "How to use",
 ];

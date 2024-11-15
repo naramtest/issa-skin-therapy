@@ -20,7 +20,7 @@
         </div>
         <div class="no-tailwind my-5">
             <div class="!ps-10 text-darkColor">
-                {!! $product->short_description !!}
+                {!! $product->description !!}
             </div>
         </div>
         {{-- TODO: tabby payment --}}
