@@ -1,5 +1,5 @@
 <section class="relative w-full" x-data="swiper()">
-    <div class="hero-swiper swiper mt-4 h-[100dvh] w-full">
+    <div class="hero-swiper swiper mt-4 h-[97dvh] w-full">
         <div class="swiper-wrapper h-full w-full">
             <x-home.slider.image-hero-slide
                 img-url="{{asset('storage/test/hero1.webp')}}"
@@ -61,6 +61,7 @@
                         grabCursor: true,
                         on: {
                             slideChange: function () {
+                                // Handle video if exists
                                 const activeSlide =
                                     this.slides[this.activeIndex];
                                 const video =
@@ -68,11 +69,35 @@
                                 if (video) {
                                     video.currentTime = 0;
                                     video.play().catch(() => {
-                                        // Silent catch for autoplay policy
                                         video.muted = true;
                                         video.play();
                                     });
                                 }
+
+                                // Reset all slides' content
+                                this.slides.forEach((slide) => {
+                                    const wrapper = slide.querySelector(
+                                        '[data-slide="content-wrapper"]',
+                                    );
+                                    if (wrapper && wrapper._x_dataStack) {
+                                        Alpine.$data(wrapper).isActive = false;
+                                    }
+                                });
+
+                                // Activate current slide content
+                                setTimeout(() => {
+                                    const activeWrapper =
+                                        activeSlide.querySelector(
+                                            '[data-slide="content-wrapper"]',
+                                        );
+                                    if (
+                                        activeWrapper &&
+                                        activeWrapper._x_dataStack
+                                    ) {
+                                        Alpine.$data(activeWrapper).isActive =
+                                            true;
+                                    }
+                                }, 50);
                             },
                         },
                     });

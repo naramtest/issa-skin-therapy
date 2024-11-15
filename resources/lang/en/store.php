@@ -132,4 +132,5 @@ return [
             ],
         ],
     ],
+    "Shop Now" => "Shop Now",
 ];
