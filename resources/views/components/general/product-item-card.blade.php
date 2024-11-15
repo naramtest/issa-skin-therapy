@@ -3,9 +3,11 @@
     "img",
     "subtitle",
     "price",
+    "product",
 ])
 
 <div
+    wire:key="{{ $product->id }}"
     x-data="{ isModalOpen: false }"
     {{ $attributes->class(["!flex flex-col rounded-[15px] bg-[#F4F4F4] p-2"]) }}
 >

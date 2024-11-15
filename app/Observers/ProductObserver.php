@@ -3,9 +3,15 @@
 namespace App\Observers;
 
 use App\Models\Product;
+use App\Services\Product\ProductCacheService;
 
-class ProductObserver
+readonly class ProductObserver
 {
+    public function __construct(
+        private ProductCacheService $productCacheService
+    ) {
+    }
+
     public function saving(Product $product): void
     {
         // Ensure regular price is greater than 0
@@ -62,5 +68,15 @@ class ProductObserver
             //            \Notification::route('mail', config('shop.admin_email'))
             //                ->notify(new LowStockNotification($product));
         }
+    }
+
+    public function saved(Product $product): void
+    {
+        $this->productCacheService->clearCache();
+    }
+
+    public function deleted(Product $product): void
+    {
+        $this->productCacheService->clearCache();
     }
 }

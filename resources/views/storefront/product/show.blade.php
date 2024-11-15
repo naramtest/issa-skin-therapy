@@ -7,6 +7,6 @@
         <x-product.section.more-info :product="$product" />
         {{-- <x-product.section.image-w-details /> --}}
         <x-product.section.faqs :faqs="$faqs" />
-        <x-product.other-products />
+        <livewire:more-product :current-product="$product->id" />
     </main>
 </x-store-main-layout>

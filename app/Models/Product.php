@@ -236,4 +236,9 @@ class Product extends Model implements HasMedia
             $this->published_at &&
             $this->published_at->isFuture();
     }
+
+    public function scopeByOrder($query)
+    {
+        return $query->orderBy("order");
+    }
 }
