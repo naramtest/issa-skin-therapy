@@ -2,7 +2,6 @@
     "title",
     "img",
     "subtitle",
-    "price",
     "product",
 ])
 
@@ -39,7 +38,7 @@
                     {{ $title }}
                 </h3>
             </div>
-            <p>{{ $price }}</p>
+            <p>{{ $product->money_regular_price }}</p>
         </div>
     </div>
 
@@ -107,7 +106,7 @@
                                 {{ $title }}
                             </h2>
                             <p class="mt-4 text-xl font-medium">
-                                {{ $price }}
+                                {{ $product->money_regular_price }}
                             </p>
 
                             <div class="no-tailwind mt-6">

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Product;
+namespace App\Services\Store;
 
 use App\Enums\StockStatus;
 use App\Models\Bundle;

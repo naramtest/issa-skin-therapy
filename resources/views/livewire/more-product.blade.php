@@ -64,7 +64,6 @@
                     title="{{$product->name}}"
                     img="{{asset('storage/test/product/product.webp')}}"
                     subtitle="A-luminate, CLEANSE"
-                    price="{{$product->regular_price}}"
                 />
             @endforeach
         </div>

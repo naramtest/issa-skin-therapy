@@ -28,6 +28,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Pelmered\FilamentMoneyField\Forms\Components\MoneyInput;
+use Pelmered\FilamentMoneyField\Tables\Columns\MoneyColumn;
 
 class BundleResource extends Resource
 {
@@ -331,10 +332,12 @@ class BundleResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make("regular_price")
-                    ->money()
-                    ->sortable(),
-
+                MoneyColumn::make("regular_price")->label(
+                    __("dashboard.Regular Price")
+                ),
+                MoneyColumn::make("sale_price")->label(
+                    __("dashboard.Sale Price")
+                ),
                 Tables\Columns\TextColumn::make("stock_status")->badge()->color(
                     fn(StockStatus $state): string => match ($state) {
                         StockStatus::IN_STOCK => "success",
@@ -345,7 +348,7 @@ class BundleResource extends Resource
                     }
                 ),
 
-                Tables\Columns\TextColumn::make("updated_at")
+                Tables\Columns\TextColumn::make("created_at")
                     ->dateTime()
                     ->sortable(),
             ])

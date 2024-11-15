@@ -28,6 +28,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Pelmered\FilamentMoneyField\Forms\Components\MoneyInput;
+use Pelmered\FilamentMoneyField\Tables\Columns\MoneyColumn;
 
 class ProductResource extends Resource
 {
@@ -363,15 +364,12 @@ class ProductResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make("regular_price")
-                    ->money()
-                    ->sortable(),
-
-                Tables\Columns\TextColumn::make("sale_price")
-                    ->money()
-                    ->sortable(),
-
-                Tables\Columns\IconColumn::make("track_quantity")->boolean(),
+                MoneyColumn::make("regular_price")->label(
+                    __("dashboard.Regular Price")
+                ),
+                MoneyColumn::make("sale_price")->label(
+                    __("dashboard.Sale Price")
+                ),
 
                 Tables\Columns\TextColumn::make("quantity")->sortable(),
 
