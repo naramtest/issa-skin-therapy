@@ -12,8 +12,19 @@
             {{ __("store.Patented P.E.T.® Technology") }}
         </p>
         <h2 class="mb-3 mt-3 text-3xl font-bold">{{ $product->name }}</h2>
-        {{-- TODO: Price and currency and sale price --}}
-        <p class="mb-3 text-lg">€55.22</p>
+        <p class="mb-3 text-lg">
+            <bdi
+                @class(["text-gray-400 line-through" => $product->isOnSale()])
+            >
+                {{ $product->money_regular_price }}
+            </bdi>
+
+            @if ($product->isOnSale())
+                <bdi class="ms-3">
+                    {{ $product->money_sale_price }}
+                </bdi>
+            @endif
+        </p>
         <div class="flex">
             <span aria-hidden="true" class="rating-star hidden lg:block"></span>
             <p class="ms-2 font-[300] text-darkColor">(15 customer reviews)</p>
