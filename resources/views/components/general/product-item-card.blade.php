@@ -31,14 +31,30 @@
         </button>
     </div>
     <div class="px-2 pb-3 pt-5">
-        <div class="flex items-center justify-between gap-x-3">
-            <div>
-                <p class="text-xs text-[#8C92A4]">{{ $subtitle }}</p>
-                <h3 class="mt-3 text-lg font-semibold">
+        <div>
+            <p class="text-xs text-[#8C92A4]">{{ $subtitle }}</p>
+
+            <div
+                class="mt-3 flex items-center justify-between gap-x-2 text-darkColor"
+            >
+                <h3 class="flex-1 text-[17px] font-semibold">
                     {{ $title }}
                 </h3>
+                <p
+                    @class(["-translate-y-4 text-center" => $product->isOnSale()])
+                >
+                    <bdi
+                        @class(["text-[14px]" => ! $product->isOnSale(), "text-xs text-gray-400 line-through" => $product->isOnSale()])
+                    >
+                        {{ $product->money_regular_price }}
+                    </bdi>
+                    @if ($product->isOnSale())
+                        <bdi class="block text-[14px]">
+                            {{ $product->money_sale_price }}
+                        </bdi>
+                    @endif
+                </p>
             </div>
-            <p>{{ $product->money_regular_price }}</p>
         </div>
     </div>
 

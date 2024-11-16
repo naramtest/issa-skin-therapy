@@ -246,7 +246,13 @@ class ProductResource extends Resource
 
                                 return null;
                             })
-                            ->minDate(fn() => Carbon::today())
+                            ->minDate(function ($operation) {
+                                if ($operation == "create") {
+                                    return Carbon::today();
+                                }
+
+                                return null;
+                            })
                             ->visible(
                                 fn(callable $get) => $get("status") ===
                                     ProductStatus::PUBLISHED->value

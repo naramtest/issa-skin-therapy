@@ -65,7 +65,6 @@ class ProductCacheService
                 },
             ])
             ->get();
-
         if (App::isLocal()) {
             return $query;
         }
