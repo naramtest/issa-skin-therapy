@@ -30,13 +30,13 @@
 
     <ul
         x-ref="dropdownList"
-        class="dark-35-tr-tl dark-35-tl-tr dark-35-tl-tr absolute right-0 top-full z-[1000] flex w-[max-content] flex-col gap-y-[1px] rounded-b-lg bg-darkColor p-3 text-lightColor shadow [&[x-cloak]]:hidden"
+        class="absolute right-0 top-0 z-[1000] flex w-[max-content] -translate-y-[98%] flex-col gap-y-[1px] rounded-t-lg bg-darkColor p-3 text-lightColor shadow [&[x-cloak]]:hidden"
         x-transition:enter="transition duration-200 ease-out"
-        x-transition:enter-start="-translate-y-1 opacity-0"
-        x-transition:enter-end="translate-y-0 opacity-100"
+        x-transition:enter-start="translate-y-0 opacity-0"
+        x-transition:enter-end="-translate-y-[98%] opacity-100"
         x-transition:leave="transition duration-150 ease-in"
-        x-transition:leave-start="translate-y-0 opacity-100"
-        x-transition:leave-end="-translate-y-1 opacity-0"
+        x-transition:leave-start="-translate-y-[98%] opacity-100"
+        x-transition:leave-end="translate-y-0 opacity-0"
         x-show="open"
         x-cloak
     >

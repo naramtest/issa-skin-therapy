@@ -1,4 +1,4 @@
-<x-shared.dropdown>
+<x-dynamic-component :component="'shared.' . $location . '-dropdown'">
     {{-- TODO:add locale package and change label and dropdown Items --}}
     <x-slot:button>
         <x-icons.local class="h-6 w-6 pe-1" />
@@ -10,4 +10,4 @@
             First Menu
         </li>
     </x-slot>
-</x-shared.dropdown>
+</x-dynamic-component>

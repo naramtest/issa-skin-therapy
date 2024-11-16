@@ -1,4 +1,4 @@
-<x-shared.dropdown>
+<x-dynamic-component :component="'shared.' . $location . '-dropdown'">
     {{-- TODO:add currency and change label and dropdown Items --}}
     <x-slot:button>
         <x-icons.currency class="h-6 w-6 pe-1" />
@@ -14,4 +14,4 @@
             </li>
         @endforeach
     </x-slot>
-</x-shared.dropdown>
+</x-dynamic-component>
