@@ -1,0 +1,76 @@
+app/
+├── Http/
+│   ├── Controllers/
+│   │     ├── CheckoutController.php
+│   │     └── WebhookController.php
+│   │
+│   ├── Livewire/
+│   │   ├── Shop/
+│   │   │   ├── ProductList.php
+│   │   │   ├── ProductDetail.php
+│   │   │   ├── Cart.php
+│   │   │   └── Checkout.php
+│   │   └── Customer/
+│   │       ├── Dashboard.php
+│   │       └── OrderHistory.php
+│   │
+│   └── Middleware/
+│       └── VerifyCheckoutSession.php
+│
+├── Models/
+│   ├── Product.php
+│   ├── Order.php
+│   ├── Customer.php
+│   ├── Category.php
+│   └── Traits/
+│       ├── HasPrice.php
+│       └── Searchable.php
+│
+├── Services/
+│   ├── Cart/
+│   │   ├── CartService.php
+│   │   └── CartCalculator.php
+│   ├── Order/
+│   │   ├── OrderService.php
+│   │   └── OrderProcessor.php
+│   ├── Payment/
+│   │   ├── PaymentService.php
+│   └── Inventory/
+│       └── InventoryService.php
+├── Helpers/
+│   ├── PriceHelper.php
+│   └── CurrencyHelper.php
+│
+├── Events/
+│   ├── OrderCreated.php
+│   └── PaymentProcessed.php
+│
+├── Listeners/
+│   ├── SendOrderConfirmation.php
+│   └── UpdateInventoryAfterOrder.php
+│
+├── Notifications/
+│   ├── OrderConfirmation.php
+│   └── LowStockAlert.php
+│
+├── Filament/
+│   ├── Resources/
+│   │   ├── ProductResource.php
+│   │   ├── OrderResource.php
+│   │   └── CustomerResource.php
+│   └── Widgets/
+│       ├── SalesOverview.php
+│       └── LowStockProducts.php
+│
+└── Providers/
+    ├── CartServiceProvider.php
+    └── PaymentServiceProvider.php
+
+resources/
+└── views/
+    └── livewire/
+        ├── shop/
+        │   ├── product-list.blade.php
+        │   └── cart.blade.php
+        └── customer/
+            └── dashboard.blade.php
