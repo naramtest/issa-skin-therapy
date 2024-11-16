@@ -152,6 +152,29 @@ body.menu-open {
     @apply py-5;
 }
 
+.dark-35-tl-tr:after,
+.dark-35-tr-tl:before {
+    content: "";
+    position: absolute;
+    background-color: transparent;
+    height: 35px;
+    width: 35px;
+}
+
+.dark-35-tl-tr:after {
+    top: 0;
+    right: -35px;
+    border-top-left-radius: 1.4rem;
+    box-shadow: -15px -14px 0 var(--color-dark);
+}
+
+.dark-35-tr-tl:before {
+    top: 0;
+    left: -35px;
+    border-top-right-radius: 1.4rem;
+    box-shadow: 10px -7px 0 var(--color-dark);
+}
+
 @keyframes drawUnderline {
     0% {
         stroke-dashoffset: 500;

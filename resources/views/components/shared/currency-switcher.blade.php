@@ -6,8 +6,12 @@
         <x-icons.drop-down class="mt-1 h-3 w-3" />
     </x-slot>
     <x-slot:dropdown>
-        <li class="cursor-pointer rounded-md px-2 py-1 hover:bg-gray-100">
-            First Menu
-        </li>
+        @foreach (\App\Helpers\Money\UserCurrency::$currencies as $currency)
+            <li
+                class="cursor-pointer rounded px-2 py-1 text-sm hover:bg-gray-700"
+            >
+                {{ $currency["name"] }} - {{ $currency["symbol"] }}
+            </li>
+        @endforeach
     </x-slot>
 </x-shared.dropdown>
