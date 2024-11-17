@@ -2,24 +2,33 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-intl": "*",
         "bezhansalleh/filament-shield": "*",
         "codeat3/blade-google-material-design-icons": "^1.19",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-media-library-plugin": "^3.2",
         "filament/spatie-laravel-tags-plugin": "^3.2",
         "filament/spatie-laravel-translatable-plugin": "^3.2",
+        "florianv/swap": "^4.3",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
         "mohamedsabil83/filament-forms-tinyeditor": "^2.3",
+        "nyholm/psr7": "^1.8",
         "pelmered/filament-money-field": "^1.4",
+        "php-http/curl-client": "^2.3",
+        "php-http/guzzle7-adapter": "^1.0",
+        "php-http/message": "^1.16",
+        "php-http/message-factory": "^1.1",
         "spatie/laravel-google-fonts": "^1.4",
-        "statikbe/laravel-filament-chained-translation-manager": "^3.2",
-        "ext-intl": "*"
+        "statikbe/laravel-filament-chained-translation-manager": "^3.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

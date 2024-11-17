@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\CategoryType;
-use App\Filament\Resources\PostCategoryResource\Pages;
+use App\Filament\Resources\ProductCategoryResource\Pages\ManageProductCategories;
 use App\Models\Category;
 use App\Services\Filament\Component\CategoryMoveAndDeleteButton;
 use App\Services\Filament\Component\CustomNameSlugField;
@@ -90,7 +90,7 @@ class ProductCategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            "index" => Pages\ManagePostCategories::route("/"),
+            "index" => ManageProductCategories::route("/"),
         ];
     }
 

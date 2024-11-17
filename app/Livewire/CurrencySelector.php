@@ -2,11 +2,9 @@
 
 namespace App\Livewire;
 
-use App\Helpers\Money\UserCurrency;
+use App\Services\Store\Currency\CurrencyHelper;
 use Illuminate\Support\Collection;
 use Livewire\Component;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 class CurrencySelector extends Component
 {
@@ -14,14 +12,10 @@ class CurrencySelector extends Component
     public Collection $currencies;
     public string $selectedCurrency;
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
     public function mount()
     {
-        $this->currencies = collect(UserCurrency::$currencies);
-        $this->selectedCurrency = UserCurrency::get();
+        $this->currencies = collect(CurrencyHelper::getAvailableCurrencies());
+        $this->selectedCurrency = CurrencyHelper::getUserCurrency();
     }
 
     public function render()
@@ -34,7 +28,7 @@ class CurrencySelector extends Component
         $this->selectedCurrency = $this->currencies->firstWhere("code", $code)[
             "code"
         ];
-        UserCurrency::set($this->selectedCurrency);
+        CurrencyHelper::setUserCurrency($this->selectedCurrency);
         $this->redirect(request()->header("Referer"));
     }
 }

@@ -16,7 +16,7 @@
             <bdi
                 @class(["text-gray-400 line-through" => $product->isOnSale()])
             >
-                {{ $product->money_regular_price }}
+                {{ \App\Services\Store\Currency\Currency::convertToUserCurrency($product->money_regular_price) }}
             </bdi>
 
             @if ($product->isOnSale())

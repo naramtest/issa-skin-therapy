@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\PostCategoryResource\Pages;
+namespace App\Filament\Resources\ProductCategoryResource\Pages;
 
-use App\Filament\Resources\PostCategoryResource;
 use App\Filament\Resources\ProductCategoryResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ManageRecords;
 
-class ManagePostCategories extends ManageRecords
+class ManageProductCategories extends ManageRecords
 {
     use ManageRecords\Concerns\Translatable;
 
