@@ -5,7 +5,7 @@
     <div>© {{ now()->year }} Issa Skin Therapy.</div>
     <div class="flex justify-end gap-x-4">
         <x-shared.local-switcher location="bottom" />
-        <x-shared.currency-switcher location="bottom" />
+        <livewire:currency-selector location="bottom" />
     </div>
     <img
         class="block w-[200px]"

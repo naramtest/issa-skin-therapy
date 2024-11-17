@@ -102,7 +102,7 @@ class UserCurrency
 
     public static function set(string $currency): void
     {
-        session()->set("currency", $currency);
+        session()->put("currency", $currency);
     }
 
     /**

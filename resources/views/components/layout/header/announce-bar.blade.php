@@ -5,6 +5,6 @@
     <x-layout.header.home.alert-swiper />
     <div class="hidden justify-end gap-x-2 md:flex lg:w-[20%]">
         <x-shared.local-switcher location="top" />
-        <x-shared.currency-switcher location="top" />
+        <livewire:currency-selector location="top" />
     </div>
 </div>
