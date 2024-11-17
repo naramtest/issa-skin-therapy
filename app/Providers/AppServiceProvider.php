@@ -17,20 +17,30 @@ use Blade;
 use Illuminate\Support\ServiceProvider;
 use Money\Money;
 use Swap\Builder;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Psr16Cache;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        //        TODO: use Redis
+        //        $redis = new \Redis();
+        //        $redis->connect('127.0.0.1', 6379);
+        //
+        //        $cacheAdapter = new RedisAdapter($redis);
+        //        $simpleCache = new Psr16Cache($cacheAdapter);
         $this->app->singleton("currency", function ($app) {
-            // Create cache pool for Swap
-            $store = $app["cache"]->store();
-
-            $builder = new Builder();
-
+            $builder = new Builder([
+                "cache_ttl" => 3600,
+                "cache_key_prefix" => "currency-",
+            ]);
+            $cacheAdapter = new FilesystemAdapter();
+            $simpleCache = new Psr16Cache($cacheAdapter);
             $builder
+                ->useSimpleCache($simpleCache)
                 ->add("apilayer_fixer", [
-                    "api_key" => config("services.fixer.api_key"),
+                    "api_key" => config("services.fixer"),
                 ])
                 ->add("apilayer_currency_data", [
                     "api_key" => config("services.currency_layer"),
