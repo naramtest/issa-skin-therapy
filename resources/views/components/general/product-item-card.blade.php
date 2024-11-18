@@ -20,15 +20,15 @@
             <x-gmdi-visibility-o class="h-5 w-5 text-gray-500" />
         </button>
         <button
-            @click="Livewire.dispatch('toggle-cart')"
+            @click="Livewire.dispatch('add-to-cart' , { product: {{ $product->id }} , quantity : 1 })"
             class="absolute bottom-16 start-1/2 -translate-x-1/2 translate-y-full scale-0 rounded-[50px] bg-darkColor px-5 py-2 text-sm text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100"
             href="/"
         >
             {{ __("store.Add to cart") }}
         </button>
     </div>
-    <div class="px-2 pb-3 pt-5">
-        <div>
+    <div class="h-full px-2 pb-3 pt-5">
+        <div class="flex h-full flex-col justify-between">
             <p class="text-xs text-[#8C92A4]">
                 @if (count($product->categories))
                     <span class="hover:text-gray-500">
@@ -54,23 +54,22 @@
 
             <a
                 href="{{ route("product.show", ["product" => $product->slug]) }}"
-                class="mt-3 flex items-center justify-between gap-x-2 text-darkColor"
+                class="mt-3 flex items-end justify-between gap-x-2 text-darkColor"
             >
                 <h3 class="flex-1 text-[17px] font-semibold">
                     {{ $product->name }}
                 </h3>
-                <p
-                    @class(["-translate-y-2 text-center" => $product->isOnSale()])
-                >
-                    <bdi
+                <p @class([" text-center" => $product->isOnSale()])>
+                    <x-price
                         @class(["text-[14px]" => ! $product->isOnSale(), "text-xs text-gray-400 line-through" => $product->isOnSale()])
-                    >
-                        {{ userPrice($product->money_regular_price) }}
-                    </bdi>
+                        :money="$product->money_regular_price"
+                    />
+
                     @if ($product->isOnSale())
-                        <bdi class="block text-[14px]">
-                            {{ userPrice($product->money_sale_price) }}
-                        </bdi>
+                        <x-price
+                            class="block text-[14px]"
+                            :money="$product->money_sale_price"
+                        />
                     @endif
                 </p>
             </a>
@@ -154,9 +153,18 @@
                             <h2 class="mt-2 text-2xl font-semibold">
                                 {{ $product->name }}
                             </h2>
-                            {{-- TODO:sale price --}}
-                            <p class="mt-4 text-xl font-medium">
-                                {{ userPrice($product->money_regular_price) }}
+                            <p class="mb-3 text-lg">
+                                <x-price
+                                    @class(["text-gray-400 line-through" => $product->isOnSale()])
+                                    :money="$product->money_regular_price"
+                                />
+
+                                @if ($product->isOnSale())
+                                    <x-price
+                                        class="ms-3"
+                                        :money="$product->money_sale_price"
+                                    />
+                                @endif
                             </p>
 
                             <div class="no-tailwind my-5">

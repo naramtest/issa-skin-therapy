@@ -1,4 +1,4 @@
-<x-dynamic-component :component="'shared.' . $location . '-dropdown'">
+<x-dynamic-component :component="'general.' . $location . '-dropdown'">
     <x-slot:button>
         <x-icons.currency class="h-6 w-6 pe-1" />
         <span class="line-clamp-1">{{ $selectedCurrency }}</span>

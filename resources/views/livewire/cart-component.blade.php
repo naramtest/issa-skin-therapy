@@ -25,10 +25,10 @@
         <!-- Cart panel -->
         <div
             x-show="open"
-            x-transition:enter="transform transition duration-300 ease-in-out"
+            x-transition:enter="transform transition duration-500 ease-in-out"
             x-transition:enter-start="translate-x-full"
             x-transition:enter-end="translate-x-0"
-            x-transition:leave="transform transition duration-300 ease-in-out"
+            x-transition:leave="transform transition duration-500 ease-in-out"
             x-transition:leave-start="translate-x-0"
             x-transition:leave-end="translate-x-full"
             class="fixed inset-y-0 end-0 flex max-w-full"

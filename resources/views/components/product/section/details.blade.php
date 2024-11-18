@@ -47,10 +47,22 @@
                 alt="{{ __("store.Tabby") }}"
             />
         </div>
-        <div class="my-4 flex items-center">
+        <div
+            x-data="{
+                quantity: 1,
+                addToCart() {
+                    Livewire.dispatch('add-to-cart', {
+                        product: {{ $product->id }},
+                        quantity: this.quantity,
+                    })
+                },
+            }"
+            class="my-4 flex items-center"
+        >
             {{-- TODO: add to cart --}}
             <label for="quantity">
                 <input
+                    x-model="quantity"
                     class="rounded-[50px] border-[1px] border-[#D1D5DB] px-2 py-2 text-center focus-visible:outline-0"
                     type="number"
                     name="quantity"
@@ -61,6 +73,7 @@
                 />
             </label>
             <button
+                @click="addToCart()"
                 class="ms-4 flex-1 rounded-3xl bg-darkColor py-2 text-lightColor hover:bg-[#333F43]"
             >
                 {{ __("store.Add to Card") }}

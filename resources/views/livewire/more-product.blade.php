@@ -130,7 +130,7 @@
                     productSwiper: null,
                     show: true,
                     selectCategory(id) {
-                        Livewire.dispatch('post-created', {
+                        Livewire.dispatch('select-category', {
                             selectedCategory: id,
                         });
                     },

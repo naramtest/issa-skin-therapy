@@ -24,7 +24,7 @@ class MoreProduct extends Component
         return view("livewire.more-product");
     }
 
-    #[On("post-created")]
+    #[On("select-category")]
     public function selectCategory(int $selectedCategory): void
     {
         $this->selectedCategory = $selectedCategory;

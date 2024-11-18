@@ -72,9 +72,11 @@ class CartComponent extends Component
     }
 
     #[On("add-to-cart")]
-    public function addToCart($product)
+    public function addToCart($product, $quantity = 1): void
     {
         // Add your cart logic here
+        $this->isOpen = !$this->isOpen;
+
         $this->dispatch("cart-updated");
     }
 
