@@ -8,6 +8,6 @@ class Currency extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return "currency";
+        return CurrencyService::class;
     }
 }

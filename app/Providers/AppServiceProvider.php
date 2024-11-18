@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
         //
         //        $cacheAdapter = new RedisAdapter($redis);
         //        $simpleCache = new Psr16Cache($cacheAdapter);
-        $this->app->singleton("currency", function ($app) {
+        $this->app->singleton(CurrencyService::class, function ($app) {
             $builder = new Builder([
                 "cache_ttl" => 3600,
                 "cache_key_prefix" => "currency-",
