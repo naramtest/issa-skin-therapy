@@ -4,12 +4,15 @@
 ])
 
 <div
+    href="/"
     wire:key="{{ $product->id }}"
     x-data="{ isModalOpen: false }"
-    {{ $attributes->class(["!flex flex-col rounded-[15px] bg-[#F4F4F4] p-2"]) }}
+    {{ $attributes->class(["block !flex flex-col rounded-[15px] bg-[#F4F4F4] p-2"]) }}
 >
     <div class="group relative">
-        {!! \App\Services\Media\ImageGetter::responsiveFeaturedImg($product, class: "h-[400px] w-full rounded-[10px] object-cover") !!}
+        <a href="{{ route("product.show", ["product" => $product->slug]) }}">
+            {!! \App\Services\Media\ImageGetter::responsiveFeaturedImg($product, class: "h-[400px] w-full rounded-[10px] object-cover") !!}
+        </a>
         <button
             @click="isModalOpen = true"
             class="absolute end-3 top-4 rounded-full border p-3 transition-colors hover:bg-white/80"
@@ -28,7 +31,7 @@
         <div>
             <p class="text-xs text-[#8C92A4]">
                 @if (count($product->categories))
-                    <span>
+                    <span class="hover:text-gray-500">
                         <a
                             href="{{ route("product-category.index", ["slug" => $product->categories[0]->slug]) }}"
                         >
@@ -38,6 +41,7 @@
                 @endif
 
                 @if (count($product->types))
+                    <span>-</span>
                     <span>
                         <a
                             href=" {{ route("product-category.index", ["slug" => $product->types[0]->slug]) }}"
@@ -48,14 +52,15 @@
                 @endif
             </p>
 
-            <div
+            <a
+                href="{{ route("product.show", ["product" => $product->slug]) }}"
                 class="mt-3 flex items-center justify-between gap-x-2 text-darkColor"
             >
                 <h3 class="flex-1 text-[17px] font-semibold">
                     {{ $product->name }}
                 </h3>
                 <p
-                    @class(["-translate-y-4 text-center" => $product->isOnSale()])
+                    @class(["-translate-y-2 text-center" => $product->isOnSale()])
                 >
                     <bdi
                         @class(["text-[14px]" => ! $product->isOnSale(), "text-xs text-gray-400 line-through" => $product->isOnSale()])
@@ -68,7 +73,7 @@
                         </bdi>
                     @endif
                 </p>
-            </div>
+            </a>
         </div>
     </div>
 

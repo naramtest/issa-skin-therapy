@@ -42,3 +42,8 @@ Route::get("/shop", [ShopController::class, "index"])->name("shop.index");
 Route::get("/product/{product:slug}", [ProductController::class, "show"])->name(
     "product.show"
 );
+
+Route::get("/collection/{bundle:slug}", [
+    ProductController::class,
+    "showBundle",
+])->name("product.bundle");

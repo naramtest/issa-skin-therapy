@@ -5,10 +5,13 @@
     "bundle",
 ])
 
-<div
-    {{ $attributes->class([" card-hover-trigger !flex flex-col rounded-[15px] bg-[#FAFAFA]"]) }}
+<a
+    href="{{ route("product.bundle", ["bundle" => $bundle->slug]) }}"
+    {{ $attributes->class(["card-hover-trigger block !flex flex-col rounded-[15px] bg-[#FAFAFA]"]) }}
 >
-    {!! \App\Services\Media\ImageGetter::responsiveFeaturedImg($bundle, class: "rounded-inherit h-[360px] w-full object-cover") !!}
+    <div class="rounded-inherit h-[360px] w-full overflow-hidden">
+        {!! \App\Services\Media\ImageGetter::responsiveFeaturedImg($bundle, class: "rounded-inherit h-[360px] w-full object-cover hover:scale-105  transition-transform duration-300") !!}
+    </div>
     <div class="px-7 py-5">
         <div class="flex items-center justify-between">
             <h3 class="text-underline text-underline-black text-xl font-bold">
@@ -18,4 +21,4 @@
         </div>
         <p class="mt-2">{{ $subtitle }}</p>
     </div>
-</div>
+</a>
