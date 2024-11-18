@@ -2,10 +2,22 @@
 
 namespace App\Services\Media;
 
+use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ImageGetter
 {
+    public static function responsiveFeaturedImg(
+        Model&HasMedia $model,
+        ?string $conversion = null,
+        string $class = "",
+        ?int $width = null,
+        ?int $height = null,
+        bool $lazy = false
+    ) {
+    }
+
     public static function responsiveImgElement(
         Media $image,
         ?string $conversion = null,
@@ -31,6 +43,7 @@ class ImageGetter
             $extraAttributes["height"] = $height;
         }
 
+        $conversion = $conversion ?? config("const.media.optimized");
         return $image
             ->img(
                 $conversion && $image->hasGeneratedConversion($conversion)

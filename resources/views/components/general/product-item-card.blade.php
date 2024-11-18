@@ -38,7 +38,7 @@
                 class="mt-3 flex items-center justify-between gap-x-2 text-darkColor"
             >
                 <h3 class="flex-1 text-[17px] font-semibold">
-                    {{ $title }}
+                    {{ $product->name }}
                 </h3>
                 <p
                     @class(["-translate-y-4 text-center" => $product->isOnSale()])
@@ -46,11 +46,11 @@
                     <bdi
                         @class(["text-[14px]" => ! $product->isOnSale(), "text-xs text-gray-400 line-through" => $product->isOnSale()])
                     >
-                        {{ $product->money_regular_price }}
+                        {{ userPrice($product->money_regular_price) }}
                     </bdi>
                     @if ($product->isOnSale())
                         <bdi class="block text-[14px]">
-                            {{ $product->money_sale_price }}
+                            {{ userPrice($product->money_sale_price) }}
                         </bdi>
                     @endif
                 </p>
@@ -109,7 +109,7 @@
                             <img
                                 class="h-[400px] w-full rounded-lg object-cover"
                                 src="{{ $img }}"
-                                alt="{{ $title }}"
+                                alt="{{ $product->name }}"
                             />
                         </div>
 
@@ -119,10 +119,11 @@
                                 {{ $subtitle }}
                             </span>
                             <h2 class="mt-2 text-2xl font-semibold">
-                                {{ $title }}
+                                {{ $product->name }}
                             </h2>
+                            {{-- TODO:sale price --}}
                             <p class="mt-4 text-xl font-medium">
-                                {{ $product->money_regular_price }}
+                                {{ userPrice($product->money_regular_price) }}
                             </p>
 
                             <div class="no-tailwind mt-6">

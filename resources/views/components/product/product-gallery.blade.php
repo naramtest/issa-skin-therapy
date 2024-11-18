@@ -14,12 +14,15 @@
                         <div
                             class="swiper-slide aspect-square min-h-[600px] overflow-hidden rounded-xl bg-gray-100"
                         >
-                            {{-- TODO: make the width and hieght dynamic --}}
+                            {{-- TODO:save those in the image table as custom attributes --}}
+                            @php
+                                [$width, $height] = getimagesize($image->getPath());
+                            @endphp
 
                             <a
                                 href="{{ $image->getAvailableUrl([config("const.media.optimized")]) }}"
-                                data-pswp-width="2600"
-                                data-pswp-height="1600"
+                                data-pswp-width="{{ $width }}"
+                                data-pswp-height="{{ $height }}"
                             >
                                 {!! \App\Services\Media\ImageGetter::responsiveImgElement($image, class: "h-full w-full object-cover") !!}
                             </a>

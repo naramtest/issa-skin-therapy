@@ -16,12 +16,12 @@
             <bdi
                 @class(["text-gray-400 line-through" => $product->isOnSale()])
             >
-                {{ \App\Services\Store\Currency\Currency::convertToUserCurrencyWithCache($product->money_regular_price) }}
+                {{ userPrice($product->money_regular_price) }}
             </bdi>
 
             @if ($product->isOnSale())
                 <bdi class="ms-3">
-                    {{ $product->money_sale_price }}
+                    {{ userPrice($product->money_sale_price) }}
                 </bdi>
             @endif
         </p>
