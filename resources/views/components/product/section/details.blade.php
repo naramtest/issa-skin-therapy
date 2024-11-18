@@ -13,16 +13,13 @@
         </p>
         <h2 class="mb-3 mt-3 text-3xl font-bold">{{ $product->name }}</h2>
         <p class="mb-3 text-lg">
-            <bdi
+            <x-price
                 @class(["text-gray-400 line-through" => $product->isOnSale()])
-            >
-                {{ userPrice($product->money_regular_price) }}
-            </bdi>
+                :money="$product->money_regular_price"
+            />
 
             @if ($product->isOnSale())
-                <bdi class="ms-3">
-                    {{ userPrice($product->money_sale_price) }}
-                </bdi>
+                <x-price class="ms-3" :money="$product->money_sale_price" />
             @endif
         </p>
         <div class="flex">

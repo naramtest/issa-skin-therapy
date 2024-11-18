@@ -13,7 +13,7 @@
 
         <x-home.section.shop />
 
-        <x-home.section.marquee-logos />
+        <x-home.section.logos />
     </main>
     <livewire:first-visit-modal />
 </x-store-main-layout>

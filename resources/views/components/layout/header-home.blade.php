@@ -1,9 +1,10 @@
 <header {{ $attributes }}>
-    <x-layout.header.announce-bar />
+    <x-layout.header.announcement-bar />
+
     {{-- Main Navigation --}}
     <x-layout.header.menu-container>
         {{-- Desktop Navigation --}}
-        <x-layout.header.main-nav-desktop />
+        <x-layout.header.desktop-nav />
 
         <nav
             class="flex items-center justify-between rounded-t-[1.25rem] bg-white px-4 py-4 lg:hidden"
@@ -13,7 +14,7 @@
                 @click="mobileMenu = !mobileMenu"
                 class="relative z-50 h-6 w-8"
             >
-                <x-icons.menu-icon />
+                <x-icons.menu />
             </button>
 
             <!-- Logo -->

@@ -29,7 +29,7 @@
         class="w-full appearance-none rounded-lg bg-white px-4 py-2.5 pr-8 text-left text-sm"
     >
         <span x-text="selectedOption?.label ?? placeholder"></span>
-        <x-icons.select-arrow-down />
+        <x-icons.arrow-down />
     </button>
 
     <!-- Overlay -->
