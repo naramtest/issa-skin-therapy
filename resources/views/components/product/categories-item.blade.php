@@ -13,5 +13,5 @@
         "bg-darkColor text-white" => $isActive,
     ])
 >
-    {{ $name }}
+    {{ htmlspecialchars_decode($name, ENT_QUOTES) }}
 </li>

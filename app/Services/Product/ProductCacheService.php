@@ -19,32 +19,33 @@ class ProductCacheService
      */
 
     const CACHE_KEY_ALL_PRODUCTS = "all_products";
+    const CACHE_KEY_ALL_BUNDLES = "all_bundles";
+    const COLUMNS = [
+        "id",
+        "name",
+        "order",
+        "status",
+        "published_at",
+        "created_at",
+        "updated_at",
+        "deleted_at",
+        "is_sale_scheduled",
+        "sale_starts_at",
+        "sale_ends_at",
+        "slug",
+        "description",
+        "regular_price",
+        "sale_price",
+        "quantity",
+        "stock_status",
+    ];
 
     /**
      * Get product FAQs (cached)
      */
-    public function all(): Collection
+    public function allProducts(): Collection
     {
-        $query = Product::select([
-            "id",
-            "name",
-            "order",
-            "status",
-            "published_at",
-            "created_at",
-            "updated_at",
-            "deleted_at",
-            "is_sale_scheduled",
-            "sale_starts_at",
-            "sale_ends_at",
-            "slug",
-            "description",
-            "short_description",
-            "regular_price",
-            "sale_price",
-            "quantity",
-            "stock_status",
-        ])
+        $query = Product::select(self::COLUMNS)
             ->published()
             ->byOrder()
             ->with([
@@ -70,6 +71,21 @@ class ProductCacheService
         }
         return Cache::remember(
             self::CACHE_KEY_ALL_PRODUCTS,
+            self::CACHE_DURATION,
+            fn() => $query ?? Collection::make()
+        );
+    }
+
+    public function allBundles(): Collection
+    {
+        $query = App\Models\Bundle::select(self::COLUMNS)->get();
+
+        if (App::isLocal()) {
+            return $query;
+        }
+
+        return Cache::remember(
+            self::CACHE_KEY_ALL_BUNDLES,
             self::CACHE_DURATION,
             fn() => $query ?? Collection::make()
         );

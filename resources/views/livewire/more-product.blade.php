@@ -8,25 +8,18 @@
     <h2 class="headline-font">{{ __("store.You may also like") }}</h2>
     <div class="mt-12 flex items-center justify-between">
         <ul class="flex flex-1 items-center gap-x-4">
+            @foreach (\App\Models\Category::all() as $category)
+                <x-product.categories-item
+                    id="{{$category->id}}"
+                    name="{{$category->name}}"
+                    :is-active="$selectedCategory === $category->id"
+                />
+            @endforeach
+
             <x-product.categories-item
                 id="-1"
-                name="Cleansers"
-                :is-active="$selectedCategory === -1"
-            />
-            <x-product.categories-item
-                id="1"
-                name="Hydrate & Protect"
-                :is-active="$selectedCategory === 1"
-            />
-            <x-product.categories-item
-                id="2"
-                name="Treat"
-                :is-active="$selectedCategory === 2"
-            />
-            <x-product.categories-item
-                id="3"
                 name="The Collections"
-                :is-active="$selectedCategory === 3"
+                :is-active="$selectedCategory === -1"
             />
         </ul>
         <div class="flex items-center">
@@ -56,14 +49,23 @@
         class="product-swiper swiper mt-8 transition-all duration-500 ease-in-out"
     >
         <div class="swiper-wrapper">
-            @foreach ($this->products as $product)
-                {{-- TODO: price and sale , type , category , img --}}
-                <x-general.product-item-card
-                    :product="$product"
-                    class="swiper-slide !h-auto"
-                    subtitle="A-luminate, CLEANSE"
-                />
-            @endforeach
+            @if ($isProducts)
+                @foreach ($this->products as $product)
+                    <x-general.product-item-card
+                        :product="$product"
+                        class="swiper-slide !h-auto"
+                    />
+                @endforeach
+            @else
+                @foreach ($this->products as $product)
+                    <x-shop.shop-collection
+                        :bundle="$product"
+                        class="swiper-slide !h-auto"
+                        subtitle="For Anti-Wrinkles and Anti-Aging"
+                        img="{{asset('storage/test/collection4.webp')}}"
+                    />
+                @endforeach
+            @endif
         </div>
     </div>
     <div

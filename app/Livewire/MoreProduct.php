@@ -10,9 +10,8 @@ use Livewire\Component;
 
 class MoreProduct extends Component
 {
-    public int $currentProduct = -1;
-
     public int $selectedCategory = 1;
+    public bool $isProducts = true;
     protected ProductCacheService $productCacheService;
 
     public function boot(ProductCacheService $productCacheService)
@@ -29,17 +28,23 @@ class MoreProduct extends Component
     public function selectCategory(int $selectedCategory): void
     {
         $this->selectedCategory = $selectedCategory;
+        $this->isProducts = $this->selectedCategory !== -1;
         $this->dispatch("product-filtered");
     }
 
     #[Computed]
     public function products(): Collection
     {
-        return $this->productCacheService->all()->filter(function ($product) {
-            return $product->categories->contains(
-                "id",
-                $this->selectedCategory
-            );
-        });
+        if ($this->selectedCategory === -1) {
+            return $this->productCacheService->allBundles();
+        }
+        return $this->productCacheService
+            ->allProducts()
+            ->filter(function ($product) {
+                return $product->categories->contains(
+                    "id",
+                    $this->selectedCategory
+                );
+            });
     }
 }
