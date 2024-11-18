@@ -61,7 +61,6 @@
                 <x-general.product-item-card
                     :product="$product"
                     class="swiper-slide !h-auto"
-                    img="{{asset('storage/test/product/product.webp')}}"
                     subtitle="A-luminate, CLEANSE"
                 />
             @endforeach

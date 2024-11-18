@@ -15,7 +15,19 @@ class ImageGetter
         ?int $width = null,
         ?int $height = null,
         bool $lazy = false
-    ) {
+    ): string {
+        $image = $model->getFirstMedia(config("const.media.featured"));
+        if (!$image) {
+            return "";
+        }
+        return self::responsiveImgElement(
+            $image,
+            $conversion,
+            $class,
+            $width,
+            $height,
+            $lazy
+        );
     }
 
     public static function responsiveImgElement(

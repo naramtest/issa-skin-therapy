@@ -27,3 +27,12 @@
 //TODO: check if there is any animation you can add to product , shop page
 //TODO: add swiper animation in home page
 //TODO: add Scale animation for the cards
+
+// use this for product card for seo
+//<div class="product" itemscope itemtype="https://schema.org/Product">
+//  <h2 itemprop="name">Product Name</h2>
+//  <img src="product.jpg" alt="Product Image" itemprop="image">
+//  <p itemprop="description">A short description of the product.</p>
+//  <span itemprop="priceCurrency" content="USD">$<span itemprop="price">99.99</span></span>
+//  <button>Add to Cart</button>
+//</div>

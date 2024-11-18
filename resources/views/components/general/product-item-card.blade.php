@@ -1,6 +1,4 @@
 @props([
-    "title",
-    "img",
     "subtitle",
     "product",
 ])
@@ -11,11 +9,7 @@
     {{ $attributes->class(["!flex flex-col rounded-[15px] bg-[#F4F4F4] p-2"]) }}
 >
     <div class="group relative">
-        <img
-            class="h-[400px] w-full rounded-[10px] object-cover"
-            src="{{ $img }}"
-            alt=""
-        />
+        {!! \App\Services\Media\ImageGetter::responsiveFeaturedImg($product, class: "h-[400px] w-full rounded-[10px] object-cover") !!}
         <button
             @click="isModalOpen = true"
             class="absolute end-3 top-4 rounded-full border p-3 transition-colors hover:bg-white/80"
@@ -32,7 +26,27 @@
     </div>
     <div class="px-2 pb-3 pt-5">
         <div>
-            <p class="text-xs text-[#8C92A4]">{{ $subtitle }}</p>
+            <p class="text-xs text-[#8C92A4]">
+                @if (count($product->categories))
+                    <span>
+                        <a
+                            href="{{ route("product-category.index", ["slug" => $product->categories[0]->slug]) }}"
+                        >
+                            {{ $product->categories[0]->name }}
+                        </a>
+                    </span>
+                @endif
+
+                @if (count($product->types))
+                    <span>
+                        <a
+                            href=" {{ route("product-category.index", ["slug" => $product->types[0]->slug]) }}"
+                        >
+                            {{ $product->types[0]->name }}
+                        </a>
+                    </span>
+                @endif
+            </p>
 
             <div
                 class="mt-3 flex items-center justify-between gap-x-2 text-darkColor"
@@ -106,18 +120,32 @@
                     <div class="grid grid-cols-2 gap-6">
                         <!-- Product Image -->
                         <div class="relative">
-                            <img
-                                class="h-[400px] w-full rounded-lg object-cover"
-                                src="{{ $img }}"
-                                alt="{{ $product->name }}"
-                            />
+                            {!! \App\Services\Media\ImageGetter::responsiveFeaturedImg($product, class: "h-[400px] w-full rounded-lg object-cover") !!}
                         </div>
 
                         <!-- Product Details -->
                         <div class="py-6">
-                            <span class="text-sm text-[#8C92A4]">
-                                {{ $subtitle }}
-                            </span>
+                            <p class="text-xs text-[#8C92A4]">
+                                @if (count($product->categories))
+                                    <span>
+                                        <a
+                                            href="{{ route("product-category.index", ["slug" => $product->categories[0]->slug]) }}"
+                                        >
+                                            {{ $product->categories[0]->name }}
+                                        </a>
+                                    </span>
+                                @endif
+
+                                @if (count($product->types))
+                                    <span>
+                                        <a
+                                            href=" {{ route("product-category.index", ["slug" => $product->types[0]->slug]) }}"
+                                        >
+                                            {{ $product->types[0]->name }}
+                                        </a>
+                                    </span>
+                                @endif
+                            </p>
                             <h2 class="mt-2 text-2xl font-semibold">
                                 {{ $product->name }}
                             </h2>
@@ -126,21 +154,14 @@
                                 {{ userPrice($product->money_regular_price) }}
                             </p>
 
-                            <div class="no-tailwind mt-6">
-                                <ul class="text-darkColor">
-                                    <li>
-                                        Suitable for acne prone or oily skin
-                                    </li>
-                                    <li>Helps unclog pores</li>
-                                    <li>
-                                        Gently exfoliates with
-                                        <strong>2% salicylic acid</strong>
-                                    </li>
-                                </ul>
+                            <div class="no-tailwind my-5">
+                                <div class="!ps-10 text-darkColor">
+                                    {!! $product->description !!}
+                                </div>
                             </div>
 
                             <div
-                                class="mt-8 flex items-center justify-between gap-x-6 text-sm"
+                                class="flex items-center justify-between gap-x-6 text-sm"
                             >
                                 <label for="quantity">
                                     <input
