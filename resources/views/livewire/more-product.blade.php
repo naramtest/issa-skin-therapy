@@ -49,22 +49,32 @@
         class="product-swiper swiper mt-8 transition-all duration-500 ease-in-out"
     >
         <div class="swiper-wrapper">
+            @php
+                $products = $this->products;
+                $productsCount = $products->count();
+                $repetitions = $productsCount < 5 ? ceil(5 / $productsCount) : 1;
+            @endphp
+
             @if ($isProducts)
-                @foreach ($this->products as $product)
-                    <x-general.product-item-card
-                        :product="$product"
-                        class="swiper-slide !h-auto"
-                    />
-                @endforeach
+                @for ($i = 0; $i < $repetitions; $i++)
+                    @foreach ($this->products as $product)
+                        <x-general.product-item-card
+                            :product="$product"
+                            class="swiper-slide !h-auto"
+                        />
+                    @endforeach
+                @endfor
             @else
-                @foreach ($this->products as $product)
-                    <x-shop.shop-collection
-                        :bundle="$product"
-                        class="swiper-slide !h-auto"
-                        subtitle="For Anti-Wrinkles and Anti-Aging"
-                        img="{{asset('storage/test/collection4.webp')}}"
-                    />
-                @endforeach
+                @for ($i = 0; $i < $repetitions; $i++)
+                    @foreach ($this->products as $product)
+                        <x-shop.shop-collection
+                            :bundle="$product"
+                            class="swiper-slide !h-auto"
+                            subtitle="For Anti-Wrinkles and Anti-Aging"
+                            img="{{asset('storage/test/collection4.webp')}}"
+                        />
+                    @endforeach
+                @endfor
             @endif
         </div>
     </div>
