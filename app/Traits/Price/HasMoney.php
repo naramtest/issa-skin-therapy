@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace App\Traits\Price;
 
 use App\Helpers\Money\UserCurrency;
 use Money\Currency;

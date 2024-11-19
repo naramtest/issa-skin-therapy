@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
-use App\Traits\HasPricing;
 use App\Traits\Inventory\HasBundleInventory;
+use App\Traits\Price\HasBundlePrice;
+use App\Traits\Price\HasPricing;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
@@ -17,7 +19,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Bundle extends Model implements HasMedia
 {
-    use SoftDeletes, HasPricing, HasBundleInventory;
+    use SoftDeletes, HasPricing, HasBundlePrice, HasBundleInventory;
     use HasTranslations;
     use InteractsWithMedia;
 
@@ -105,58 +107,16 @@ class Bundle extends Model implements HasMedia
         });
     }
 
-    public function calculateTotalPrice(): void
-    {
-        if (!$this->auto_calculate_price) {
-            return;
-        }
-
-        $totalRegularPrice = 0;
-        $totalCurrentPrice = 0;
-
-        foreach ($this->items as $item) {
-            $product = $item->product;
-            $quantity = $item->quantity;
-
-            // Calculate regular price
-            $totalRegularPrice += $product->regular_price * $quantity;
-
-            // Calculate current price (considering sales)
-            $currentPrice = $product->isOnSale()
-                ? $product->sale_price
-                : $product->regular_price;
-            $totalCurrentPrice += $currentPrice * $quantity;
-        }
-
-        // Update bundle prices
-        $this->regular_price = $totalRegularPrice;
-
-        // Only set sale price if it's different from regular price
-        if ($totalCurrentPrice < $totalRegularPrice) {
-            $this->sale_price = $totalCurrentPrice;
-
-            // If any product is on sale, check for the earliest end date
-            $earliestEndDate = $this->items
-                ->map(function ($item) {
-                    return $item->product->sale_ends_at;
-                })
-                ->filter()
-                ->min();
-
-            if ($earliestEndDate) {
-                $this->sale_ends_at = $earliestEndDate;
-                $this->is_sale_scheduled = true;
-            }
-        } else {
-            $this->sale_price = null;
-            $this->sale_ends_at = null;
-            $this->is_sale_scheduled = false;
-        }
-    }
-
     public function items(): HasMany
     {
         return $this->hasMany(BundleItem::class);
+    }
+
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, "bundle_items")
+            ->withPivot("quantity")
+            ->withTimestamps();
     }
 
     public function registerMediaConversions(?Media $media = null): void

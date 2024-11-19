@@ -4,9 +4,9 @@ namespace App\Models;
 
 use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
-use App\Traits\HasMoney;
-use App\Traits\HasPricing;
 use App\Traits\Inventory\HasProductInventory;
+use App\Traits\Price\HasMoney;
+use App\Traits\Price\HasPricing;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -128,32 +128,17 @@ class Product extends Model implements HasMedia
                 $product->published_at = null;
             }
 
-            //TODO: add observer when updating product price or quantity or stock state to update the bundle that contain this product
             $product->stock_status = $product->determineStockStatus(
                 $product->quantity
             );
         });
     }
 
-    /**
-     * Update prices of associated auto-calculated bundles
-     */
-    public function updateBundlePrices(): void
+    public function bundles(): BelongsToMany
     {
-        $bundles = $this->autoCalculatedBundles()->get();
-
-        foreach ($bundles as $bundle) {
-            $bundle->calculateTotalPrice();
-            $bundle->save();
-        }
-    }
-
-    /**
-     * Get bundles with auto-calculate price enabled
-     */
-    public function autoCalculatedBundles(): BelongsToMany
-    {
-        return $this->bundles()->where("auto_calculate_price", true);
+        return $this->belongsToMany(Bundle::class, "bundle_items")
+            ->withPivot("quantity")
+            ->withTimestamps();
     }
 
     public function types(): BelongsToMany

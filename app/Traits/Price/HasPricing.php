@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace App\Traits\Price;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,10 +13,10 @@ trait HasPricing
     public function getCurrentPrice(): float
     {
         if ($this->isOnSale()) {
-            return (float) $this->sale_price;
+            return $this->sale_price;
         }
 
-        return (float) $this->regular_price;
+        return $this->regular_price;
     }
 
     /**

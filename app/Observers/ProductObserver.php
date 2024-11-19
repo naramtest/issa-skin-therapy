@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Product;
 use App\Services\Product\ProductCacheService;
+use InvalidArgumentException;
 
 readonly class ProductObserver
 {
@@ -16,7 +17,7 @@ readonly class ProductObserver
     {
         // Ensure regular price is greater than 0
         if ($product->regular_price <= 0) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Regular price must be greater than 0"
             );
         }
@@ -26,7 +27,7 @@ readonly class ProductObserver
             $product->sale_price &&
             $product->sale_price >= $product->regular_price
         ) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Sale price must be less than regular price"
             );
         }
@@ -37,15 +38,13 @@ readonly class ProductObserver
             $product->sale_ends_at &&
             $product->sale_starts_at->gt($product->sale_ends_at)
         ) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Sale end date must be after start date"
             );
         }
 
         if ($product->weight && $product->weight <= 0) {
-            throw new \InvalidArgumentException(
-                "Weight must be greater than 0"
-            );
+            throw new InvalidArgumentException("Weight must be greater than 0");
         }
 
         // Validate country code
@@ -53,7 +52,7 @@ readonly class ProductObserver
             $product->country_of_origin &&
             strlen($product->country_of_origin) !== 2
         ) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Country of origin must be an ISO 2 code"
             );
         }
@@ -61,12 +60,20 @@ readonly class ProductObserver
 
     public function updated(Product $product): void
     {
-        // Check for low stock
-        if ($product->isLowStock()) {
-            // Notify admin about low stock
-            // TODO: You'll need to implement this notification
-            //            \Notification::route('mail', config('shop.admin_email'))
-            //                ->notify(new LowStockNotification($product));
+        $priceFields = [
+            "regular_price",
+            "sale_price",
+            "sale_starts_at",
+            "sale_ends_at",
+        ];
+
+        if ($product->wasChanged($priceFields)) {
+            $bundles = $product->bundles()->where("auto_calculate_price", true);
+
+            foreach ($bundles as $bundle) {
+                $bundle->calculateTotalPrice();
+                $bundle->save();
+            }
         }
     }
 
