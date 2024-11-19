@@ -82,7 +82,7 @@ trait HasProductInventory
             $newQuantity = max(0, $newQuantity);
         }
 
-        $newStatus = $this->determineStockStatus($newQuantity);
+        $newStatus = $this->determineStockStatus();
 
         $this->update([
             "quantity" => $newQuantity,
@@ -91,17 +91,18 @@ trait HasProductInventory
     }
 
     //use when Updating a Product
-    protected function determineStockStatus(int $quantity): StockStatus
+    protected function determineStockStatus(): StockStatus
     {
         if (!$this->shouldTrackQuantity()) {
             return $this->stock_status;
         }
 
         return match (true) {
-            $quantity <= 0 && $this->getAllowBackorders()
+            $this->quantity <= 0 && $this->getAllowBackorders()
                 => StockStatus::BACKORDER,
-            $quantity <= 0 => StockStatus::OUT_OF_STOCK,
-            $quantity <= $this->low_stock_threshold => StockStatus::LOW_STOCK,
+            $this->quantity <= 0 => StockStatus::OUT_OF_STOCK,
+            $this->quantity <= $this->low_stock_threshold
+                => StockStatus::LOW_STOCK,
             default => StockStatus::IN_STOCK,
         };
     }

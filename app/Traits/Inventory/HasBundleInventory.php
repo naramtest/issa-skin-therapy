@@ -38,7 +38,7 @@ trait HasBundleInventory
         return $this->calculateLowestAvailableQuantity();
     }
 
-    protected function calculateLowestAvailableQuantity(): int
+    public function calculateLowestAvailableQuantity(): int
     {
         return $this->items
             ->map(function ($item) {
@@ -100,7 +100,7 @@ trait HasBundleInventory
 
     //Use when Showing on the front end
 
-    protected function determineStockStatus(int $quantity): StockStatus
+    public function determineStockStatus(): StockStatus
     {
         if ($this->bundle_level_stock) {
             if (!$this->shouldTrackQuantity()) {
@@ -108,10 +108,10 @@ trait HasBundleInventory
             }
 
             return match (true) {
-                $quantity <= 0 && $this->getAllowBackorders()
+                $this->quantity <= 0 && $this->getAllowBackorders()
                     => StockStatus::BACKORDER,
-                $quantity <= 0 => StockStatus::OUT_OF_STOCK,
-                $quantity <= $this->low_stock_threshold
+                $this->quantity <= 0 => StockStatus::OUT_OF_STOCK,
+                $this->quantity <= $this->low_stock_threshold
                     => StockStatus::LOW_STOCK,
                 default => StockStatus::IN_STOCK,
             };

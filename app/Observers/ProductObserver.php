@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Product;
 use App\Services\Product\ProductCacheService;
+use App\Services\Store\BundleService;
 use InvalidArgumentException;
 
 readonly class ProductObserver
@@ -73,6 +74,20 @@ readonly class ProductObserver
             foreach ($bundles as $bundle) {
                 $bundle->calculateTotalPrice();
                 $bundle->save();
+            }
+        }
+
+        $stockFields = [
+            "quantity",
+            "stock_status",
+            "track_quantity",
+            "allow_backorders",
+        ];
+
+        if ($product->wasChanged($stockFields)) {
+            $bundles = $product->bundles;
+            foreach ($bundles as $bundle) {
+                app(BundleService::class)->syncBundleStock($bundle);
             }
         }
     }

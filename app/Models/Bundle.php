@@ -103,7 +103,7 @@ class Bundle extends Model implements HasMedia
                 $bundle->calculateTotalPrice();
             }
 
-            $bundle->determineStockStatus($bundle->quantity);
+            $bundle->determineStockStatus();
         });
     }
 

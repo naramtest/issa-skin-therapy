@@ -27,7 +27,7 @@ class BundleService
         $newQuantity = $bundle->quantity - $quantity;
         $bundle->update([
             "quantity" => max(0, $newQuantity),
-            "stock_status" => $bundle->determineStockStatus($newQuantity),
+            "stock_status" => $bundle->determineStockStatus(),
         ]);
     }
 
@@ -56,21 +56,11 @@ class BundleService
             return;
         }
 
-        $lowestAvailableQuantity = $bundle->items
-            ->map(function ($item) {
-                if (!$item->product->track_quantity) {
-                    return PHP_INT_MAX;
-                }
-                return floor($item->product->quantity / $item->quantity);
-            })
-            ->min();
+        $lowestAvailableQuantity = $bundle->calculateLowestAvailableQuantity();
 
         $bundle->update([
             "quantity" => $lowestAvailableQuantity,
-            "stock_status" => $this->determineStockStatus(
-                $lowestAvailableQuantity,
-                $bundle
-            ),
+            "stock_status" => $bundle->determineStockStatus(),
         ]);
     }
 }

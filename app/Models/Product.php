@@ -128,9 +128,7 @@ class Product extends Model implements HasMedia
                 $product->published_at = null;
             }
 
-            $product->stock_status = $product->determineStockStatus(
-                $product->quantity
-            );
+            $product->stock_status = $product->determineStockStatus();
         });
     }
 
