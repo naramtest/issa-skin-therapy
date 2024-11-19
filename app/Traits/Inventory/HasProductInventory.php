@@ -51,6 +51,9 @@ trait HasProductInventory
     //Use When Making Order
     public function canBePurchased(int $requestedQuantity = 1): bool
     {
+        if (!$this->shouldTrackQuantity()) {
+            return $this->hasAvailableStockStatus();
+        }
         if ($this->getAllowBackorders()) {
             return true;
         }

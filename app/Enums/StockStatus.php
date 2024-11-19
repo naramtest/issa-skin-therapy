@@ -35,11 +35,9 @@ enum StockStatus: string implements HasLabel, HasColor
     public function getColor(): string
     {
         return match ($this) {
-            self::IN_STOCK => "green",
-            self::OUT_OF_STOCK => "red",
-            self::LOW_STOCK => "yellow",
-            self::BACKORDER => "orange",
-            self::PREORDER => "blue",
+            self::IN_STOCK => "success",
+            self::OUT_OF_STOCK => "danger",
+            self::LOW_STOCK, self::PREORDER, self::BACKORDER => "warning",
             self::DISCONTINUED => "gray",
         };
     }

@@ -64,4 +64,5 @@ return [
     "Bundle Items" => "Bundle Items",
     "Quantity" => "Quantity",
     "Image" => "Image",
+    "Stock Status" => "Stock Status",
 ];

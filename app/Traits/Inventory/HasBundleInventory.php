@@ -2,7 +2,6 @@
 
 namespace App\Traits\Inventory;
 
-use App\Enums\QuantityAction;
 use App\Enums\StockStatus;
 use App\Models\Bundle;
 
@@ -43,42 +42,63 @@ trait HasBundleInventory
     {
         return $this->items
             ->map(function ($item) {
+                if (!$item->product->track_quantity) {
+                    return PHP_INT_MAX;
+                }
                 return floor($item->product->quantity / $item->quantity);
             })
             ->min();
     }
 
-    public function updateStock(int $quantity, QuantityAction $action): void
+    //Use when Saving a Bundle
+
+    public function canBePurchased(int $requestedQuantity = 1): bool
+    {
+        if ($this->bundle_level_stock) {
+            if (!$this->shouldTrackQuantity()) {
+                return $this->hasAvailableStockStatus();
+            }
+
+            if ($this->getAllowBackorders()) {
+                return true;
+            }
+
+            return $this->getCurrentQuantity() >= $requestedQuantity;
+        }
+        // When not using bundle-level stock, check if all items can be purchased
+        return $this->items->every(function ($item) use ($requestedQuantity) {
+            return $item->product->canBePurchased(
+                $item->quantity * $requestedQuantity
+            );
+        });
+    }
+
+    protected function getAllowBackorders(): bool
     {
         /** @var $this Bundle */
 
-        if (
-            $this->bundle_level_stock && !$this->track_quantity or
-            !$this->bundle_level_stock
-        ) {
-            return;
-        }
-
-        $newQuantity = match ($action) {
-            QuantityAction::ADD => $this->quantity + $quantity,
-            QuantityAction::SUBTRACT => $this->quantity - $quantity,
-            QuantityAction::SET => $quantity,
-        };
-
-        // Ensure quantity doesn't go below zero unless backorders are allowed
-        if (!$this->allow_backorders) {
-            $newQuantity = max(0, $newQuantity);
-        }
-
-        $newStatus = $this->determineStockStatus($newQuantity);
-
-        $this->update([
-            "quantity" => $newQuantity,
-            "stock_status" => $newStatus,
-        ]);
+        return $this->bundle_level_stock && $this->allow_backorders;
     }
 
-    //Use when Saving a Bundle
+    //Use when making an order
+
+    public function isInStock(): bool
+    {
+        if ($this->bundle_level_stock) {
+            if (!$this->shouldTrackQuantity()) {
+                return $this->hasAvailableStockStatus();
+            }
+            return $this->getCurrentQuantity() > 0 ||
+                $this->getAllowBackorders();
+        }
+
+        // When not using bundle-level stock, check all items
+        return $this->items->every(function ($item) {
+            return $item->product->isInStock();
+        });
+    }
+
+    //Use when Showing on the front end
 
     protected function determineStockStatus(int $quantity): StockStatus
     {
@@ -105,52 +125,5 @@ trait HasBundleInventory
                 => StockStatus::LOW_STOCK,
             default => StockStatus::IN_STOCK,
         };
-    }
-
-    protected function getAllowBackorders(): bool
-    {
-        /** @var $this Bundle */
-
-        return $this->bundle_level_stock && $this->allow_backorders;
-    }
-
-    //Use when making an order
-    public function canBePurchased(int $requestedQuantity = 1): bool
-    {
-        if ($this->bundle_level_stock) {
-            if (!$this->shouldTrackQuantity()) {
-                return $this->hasAvailableStockStatus();
-            }
-
-            if ($this->getAllowBackorders()) {
-                return true;
-            }
-
-            return $this->getCurrentQuantity() >= $requestedQuantity;
-        }
-        // When not using bundle-level stock, check if all items can be purchased
-        return $this->items->every(function ($item) use ($requestedQuantity) {
-            return $item->product->canBePurchased(
-                $item->quantity * $requestedQuantity
-            );
-        });
-    }
-
-    //Use when Showing on the front end
-
-    public function isInStock(): bool
-    {
-        if ($this->bundle_level_stock) {
-            if (!$this->shouldTrackQuantity()) {
-                return $this->hasAvailableStockStatus();
-            }
-            return $this->getCurrentQuantity() > 0 ||
-                $this->getAllowBackorders();
-        }
-
-        // When not using bundle-level stock, check all items
-        return $this->items->every(function ($item) {
-            return $item->product->isInStock();
-        });
     }
 }

@@ -34,6 +34,8 @@ class BundleResource extends Resource
 {
     use Translatable;
 
+    //TODO: add preview button to every table column and inside edit page for every resource that has a page
+
     protected static ?string $model = Bundle::class;
     protected static ?string $navigationIcon = "heroicon-o-cube";
     protected static ?string $navigationGroup = "Shop";
@@ -329,6 +331,7 @@ class BundleResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make("name")
+                    ->label(__("store.Name"))
                     ->searchable()
                     ->sortable(),
 
@@ -338,18 +341,13 @@ class BundleResource extends Resource
                 MoneyColumn::make("sale_price")->label(
                     __("dashboard.Sale Price")
                 ),
-                Tables\Columns\TextColumn::make("stock_status")->badge()->color(
-                    fn(StockStatus $state): string => match ($state) {
-                        StockStatus::IN_STOCK => "success",
-                        StockStatus::LOW_STOCK => "warning",
-                        StockStatus::OUT_OF_STOCK => "danger",
-                        StockStatus::BACKORDER => "info",
-                        default => "gray",
-                    }
-                ),
+                Tables\Columns\TextColumn::make("stock_status")
+                    ->badge()
+                    ->label(__("dashboard.Stock Status")),
 
                 Tables\Columns\TextColumn::make("created_at")
-                    ->dateTime()
+                    ->label(__("dashboard.Created At"))
+                    ->dateTime("M j, Y")
                     ->sortable(),
             ])
             ->filters([
