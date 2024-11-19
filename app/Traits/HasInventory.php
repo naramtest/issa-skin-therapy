@@ -139,5 +139,51 @@ trait HasInventory
         });
     }
 
-    // ... other methods remain the same ...
+    /**
+     * Get volume in cubic centimeters
+     */
+    public function getVolume(): ?float
+    {
+        if ($this->length && $this->width && $this->height) {
+            return $this->length * $this->width * $this->height;
+        }
+
+        return null;
+    }
+
+    /**
+     * Scope for low stock products
+     */
+    public function scopeLowStock(Builder $query): Builder
+    {
+        return $query
+            ->where("track_quantity", true)
+            ->where("stock_status", StockStatus::LOW_STOCK->value);
+    }
+
+    /**
+     * Scope for out of stock products
+     */
+    public function scopeOutOfStock(Builder $query): Builder
+    {
+        return $query
+            ->where("track_quantity", true)
+            ->where("stock_status", StockStatus::OUT_OF_STOCK->value);
+    }
+
+    /**
+     * Get stock movement description
+     */
+    public function getStockMovementDescription(
+        QuantityAction $action,
+        int $quantity
+    ): string {
+        return sprintf(
+            "%s %s %d units. New quantity: %d",
+            $action->getDescription(),
+            $action->getSign(),
+            $quantity,
+            $this->quantity
+        );
+    }
 }

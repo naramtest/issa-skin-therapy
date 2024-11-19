@@ -105,7 +105,7 @@ class Product extends Model implements HasMedia
             }
         });
 
-        static::saving(function ($product) {
+        static::saving(function (Product $product) {
             if ($product->is_featured) {
                 static::where("id", "!=", $product->id)
                     ->where("is_featured", true)
@@ -127,6 +127,10 @@ class Product extends Model implements HasMedia
             ) {
                 $product->published_at = null;
             }
+
+            $product->stock_status = $product->determineStockStatus(
+                $product->quantity
+            );
         });
     }
 
