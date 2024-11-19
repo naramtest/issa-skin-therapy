@@ -2,41 +2,11 @@
 
 namespace App\Services\Store;
 
-use App\Enums\StockStatus;
 use App\Models\Bundle;
-use App\Models\BundleItem;
-use Illuminate\Database\Eloquent\Collection;
 
 class BundleService
 {
-    public function validateBundleAvailability(Bundle $bundle): bool
-    {
-        if ($bundle->bundle_level_stock) {
-            return $bundle->stock_status->isAvailableForPurchase();
-        }
-
-        return $this->checkItemsAvailability($bundle->items);
-    }
-
-    public function checkItemsAvailability(Collection $bundleItems): bool
-    {
-        /** @var BundleItem $item */
-        foreach ($bundleItems as $item) {
-            if (!$item->product->isAvailableForPurchase()) {
-                return false;
-            }
-
-            if (
-                $item->product->track_quantity &&
-                $item->product->quantity < $item->quantity
-            ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
+    //use When Making A Bundle order
     public function processBundlePurchase(
         Bundle $bundle,
         int $quantity = 1
@@ -57,26 +27,8 @@ class BundleService
         $newQuantity = $bundle->quantity - $quantity;
         $bundle->update([
             "quantity" => max(0, $newQuantity),
-            "stock_status" => $this->determineStockStatus(
-                $newQuantity,
-                $bundle
-            ),
+            "stock_status" => $bundle->determineStockStatus($newQuantity),
         ]);
-    }
-
-    protected function determineStockStatus(int $quantity, $model): StockStatus
-    {
-        if (!$model->track_quantity) {
-            return $model->stock_status;
-        }
-
-        return match (true) {
-            $quantity <= 0 && $model->allow_backorders
-                => StockStatus::BACKORDER,
-            $quantity <= 0 => StockStatus::OUT_OF_STOCK,
-            $quantity <= $model->low_stock_threshold => StockStatus::LOW_STOCK,
-            default => StockStatus::IN_STOCK,
-        };
     }
 
     protected function updateBundleItemsStock(
@@ -90,9 +42,8 @@ class BundleService
                 $newQuantity = $item->product->quantity - $deductQuantity;
                 $item->product->update([
                     "quantity" => max(0, $newQuantity),
-                    "stock_status" => $this->determineStockStatus(
-                        $newQuantity,
-                        $item->product
+                    "stock_status" => $item->product->determineStockStatus(
+                        $newQuantity
                     ),
                 ]);
             }

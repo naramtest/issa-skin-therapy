@@ -128,6 +128,7 @@ class Product extends Model implements HasMedia
                 $product->published_at = null;
             }
 
+            //TODO: add observer when updating product price or quantity or stock state to update the bundle that contain this product
             $product->stock_status = $product->determineStockStatus(
                 $product->quantity
             );
