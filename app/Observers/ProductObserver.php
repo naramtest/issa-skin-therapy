@@ -69,7 +69,10 @@ readonly class ProductObserver
         ];
 
         if ($product->wasChanged($priceFields)) {
-            $bundles = $product->bundles()->where("auto_calculate_price", true);
+            $bundles = $product
+                ->bundles()
+                ->where("auto_calculate_price", true)
+                ->get();
 
             foreach ($bundles as $bundle) {
                 $bundle->calculateTotalPrice();

@@ -1,8 +1,6 @@
 <?php
-// TODO: products always shows out of stock in the resource table
 // TODO: Price in Products table
 // TODO: Can't Translate FAQ repeater fields in FAQs Sections resource
-// TODO: dropdown errors
 // TODO: move shared section between Product and Bundle Resource
 // TODO: make the gallery takes full width
 // TODO: auto calculate false
