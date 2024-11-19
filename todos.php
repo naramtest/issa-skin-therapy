@@ -16,6 +16,7 @@
 // TODO: Published date when editing Product , Bundle
 // TODO: when Scrolling the side menu lag
 // TODO: fix slug in the product , model
+// TODO: exporter for all tables
 
 //14/11
 //TODO: like Product page

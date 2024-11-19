@@ -37,14 +37,7 @@ return new class extends Migration {
             $table->boolean("allow_backorders")->default(false);
             $table
                 ->string("stock_status")
-                ->default(StockStatus::OUT_OF_STOCK->value)
-                ->comment(
-                    "Possible values: " .
-                        implode(
-                            ", ",
-                            array_column(StockStatus::cases(), "value")
-                        )
-                );
+                ->default(StockStatus::OUT_OF_STOCK->value);
 
             // Physical attributes
             $table->decimal("weight", 8, 3)->nullable(); // in kg

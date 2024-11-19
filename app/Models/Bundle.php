@@ -4,8 +4,8 @@ namespace App\Models;
 
 use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
-use App\Traits\HasInventory;
 use App\Traits\HasPricing;
+use App\Traits\Inventory\HasBundleInventory;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -17,7 +17,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Bundle extends Model implements HasMedia
 {
-    use SoftDeletes, HasPricing, HasInventory;
+    use SoftDeletes, HasPricing, HasBundleInventory;
     use HasTranslations;
     use InteractsWithMedia;
 
@@ -78,7 +78,7 @@ class Bundle extends Model implements HasMedia
             }
         });
 
-        static::saving(function ($bundle) {
+        static::saving(function (Bundle $bundle) {
             // Set published_at timestamp when status changes to published
             if (
                 $bundle->status === ProductStatus::PUBLISHED &&
@@ -101,10 +101,7 @@ class Bundle extends Model implements HasMedia
                 $bundle->calculateTotalPrice();
             }
 
-            // Update stock status based on bundle items if bundle level stock is disabled
-            if (!$bundle->bundle_level_stock) {
-                $bundle->updateStockBasedOnItems();
-            }
+            $bundle->determineStockStatus($bundle->quantity);
         });
     }
 
@@ -155,22 +152,6 @@ class Bundle extends Model implements HasMedia
             $this->sale_ends_at = null;
             $this->is_sale_scheduled = false;
         }
-    }
-
-    public function updateStockBasedOnItems(): void
-    {
-        if ($this->bundle_level_stock) {
-            return;
-        }
-
-        $lowestQuantity = $this->items->min(function ($item) {
-            return floor($item->product->quantity / $item->quantity);
-        });
-
-        $newStatus = $this->determineStockStatus($lowestQuantity);
-
-        $this->quantity = $lowestQuantity;
-        $this->stock_status = $newStatus;
     }
 
     public function items(): HasMany

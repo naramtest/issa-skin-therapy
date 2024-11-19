@@ -4,9 +4,9 @@ namespace App\Models;
 
 use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
-use App\Traits\HasInventory;
 use App\Traits\HasMoney;
 use App\Traits\HasPricing;
+use App\Traits\Inventory\HasProductInventory;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -20,7 +20,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Product extends Model implements HasMedia
 {
-    use SoftDeletes, HasPricing, HasInventory, HasMoney;
+    use SoftDeletes, HasPricing, HasProductInventory, HasMoney;
     use HasTranslations;
     use InteractsWithMedia;
     use HasTags;
