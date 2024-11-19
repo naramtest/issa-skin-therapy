@@ -29,10 +29,14 @@ trait HasProductInventory
         return $this->quantity;
     }
 
+    //Use when Showing on the front end
+
     protected function getAllowBackorders(): bool
     {
         return $this->allow_backorders;
     }
+
+    //Use when Showing on the front end
 
     public function isLowStock(): bool
     {
@@ -44,12 +48,9 @@ trait HasProductInventory
             $this->getCurrentQuantity() > 0;
     }
 
+    //Use When Making Order
     public function canBePurchased(int $requestedQuantity = 1): bool
     {
-        if (!$this->shouldTrackQuantity()) {
-            return $this->hasAvailableStockStatus();
-        }
-
         if ($this->getAllowBackorders()) {
             return true;
         }
@@ -86,6 +87,7 @@ trait HasProductInventory
         ]);
     }
 
+    //use when Updating a Product
     protected function determineStockStatus(int $quantity): StockStatus
     {
         if (!$this->shouldTrackQuantity()) {

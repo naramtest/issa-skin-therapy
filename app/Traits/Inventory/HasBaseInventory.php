@@ -17,9 +17,6 @@ trait HasBaseInventory
         return $sku;
     }
 
-    /**
-     * Scope for products available for purchase
-     */
     public function scopeAvailable(Builder $query): Builder
     {
         return $query->where(function ($query) {
@@ -32,9 +29,6 @@ trait HasBaseInventory
         });
     }
 
-    /**
-     * Get volume in cubic centimeters
-     */
     public function getVolume(): ?float
     {
         if ($this->length && $this->width && $this->height) {
@@ -44,25 +38,16 @@ trait HasBaseInventory
         return null;
     }
 
-    /**
-     * Scope for low stock products
-     */
     public function scopeLowStock(Builder $query): Builder
     {
         return $query->where("stock_status", StockStatus::LOW_STOCK->value);
     }
 
-    /**
-     * Scope for out of stock products
-     */
     public function scopeOutOfStock(Builder $query): Builder
     {
         return $query->where("stock_status", StockStatus::OUT_OF_STOCK->value);
     }
 
-    /**
-     * Get stock movement description
-     */
     public function getStockMovementDescription(
         QuantityAction $action,
         int $quantity

@@ -155,29 +155,9 @@ class Product extends Model implements HasMedia
         return $this->bundles()->where("auto_calculate_price", true);
     }
 
-    public function updateStockStatus(): void
-    {
-        $newStatus = match (true) {
-            !$this->track_quantity => StockStatus::IN_STOCK,
-            $this->quantity <= 0 && $this->allow_backorders
-                => StockStatus::BACKORDER,
-            $this->quantity <= 0 => StockStatus::OUT_OF_STOCK,
-            $this->quantity <= $this->low_stock_threshold
-                => StockStatus::LOW_STOCK,
-            default => StockStatus::IN_STOCK,
-        };
-
-        $this->update(["stock_status" => $newStatus]);
-    }
-
     public function types(): BelongsToMany
     {
         return $this->belongsToMany(ProductType::class);
-    }
-
-    public function isAvailableForPurchase(): bool
-    {
-        return $this->stock_status->isAvailableForPurchase();
     }
 
     public function registerMediaConversions(?Media $media = null): void
