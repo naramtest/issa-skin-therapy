@@ -10,6 +10,7 @@ trait HasBundleInventory
 {
     use HasBaseInventory;
 
+    //Use when Showing on the front end
     public function isLowStock(): bool
     {
         if ($this->bundle_level_stock) {
@@ -26,8 +27,6 @@ trait HasBundleInventory
 
     protected function shouldTrackQuantity(): bool
     {
-        /** @var $this Bundle */
-
         return $this->bundle_level_stock && $this->track_quantity;
     }
 
@@ -79,6 +78,8 @@ trait HasBundleInventory
         ]);
     }
 
+    //Use when Saving a Bundle
+
     protected function determineStockStatus(int $quantity): StockStatus
     {
         if ($this->bundle_level_stock) {
@@ -113,6 +114,7 @@ trait HasBundleInventory
         return $this->bundle_level_stock && $this->allow_backorders;
     }
 
+    //Use when making an order
     public function canBePurchased(int $requestedQuantity = 1): bool
     {
         if ($this->bundle_level_stock) {
@@ -133,6 +135,8 @@ trait HasBundleInventory
             );
         });
     }
+
+    //Use when Showing on the front end
 
     public function isInStock(): bool
     {

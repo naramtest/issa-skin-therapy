@@ -10,6 +10,8 @@ trait HasProductInventory
 {
     use HasBaseInventory;
 
+    //Use when Showing on the front end
+
     public function isInStock(): bool
     {
         if (!$this->shouldTrackQuantity()) {
@@ -28,8 +30,6 @@ trait HasProductInventory
     {
         return $this->quantity;
     }
-
-    //Use when Showing on the front end
 
     protected function getAllowBackorders(): bool
     {
