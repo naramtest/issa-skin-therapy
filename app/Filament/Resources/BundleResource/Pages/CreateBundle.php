@@ -12,6 +12,14 @@ class CreateBundle extends CreateRecord
 
     protected static string $resource = BundleResource::class;
 
+    function afterCreate()
+    {
+        if ($this->record->auto_calculate_price) {
+            $this->record->calculateTotalPrice();
+            $this->record->save();
+        }
+    }
+
     protected function getHeaderActions(): array
     {
         return [Actions\LocaleSwitcher::make()];

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ProductResource\Pages;
 
 use App\Filament\Resources\ProductResource;
+use App\Helpers\Filament\MediaFilamentForm;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
@@ -19,11 +20,21 @@ class EditProduct extends EditRecord
 
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        $image = $this->record->getFirstMedia(config("const.media.featured"));
-        $data["featured_caption"] = $image->custom_properties["caption"] ?? "";
-        $data["featured_title"] = $image->custom_properties["title"] ?? "";
-        $data["featured_alt"] = $image->custom_properties["alt"] ?? "";
+        $data = MediaFilamentForm::fill(
+            config("const.media.featured"),
+            $data,
+            $this->record
+        );
 
         return parent::mutateFormDataBeforeFill($data);
+    }
+
+    protected function afterSave(): void
+    {
+        MediaFilamentForm::save(
+            config("const.media.featured"),
+            $this->data,
+            $this->record
+        );
     }
 }

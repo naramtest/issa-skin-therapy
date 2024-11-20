@@ -14,6 +14,7 @@ trait HasBundlePrice
         $totalCurrentPrice = 0;
 
         foreach ($this->items as $item) {
+            clock($item);
             $product = $item->product;
             $quantity = $item->quantity;
 

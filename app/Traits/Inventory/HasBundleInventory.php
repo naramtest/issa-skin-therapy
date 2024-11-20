@@ -40,6 +40,9 @@ trait HasBundleInventory
 
     public function calculateLowestAvailableQuantity(): int
     {
+        if (!count($this->items)) {
+            return 0;
+        }
         return $this->items
             ->map(function ($item) {
                 if (!$item->product->track_quantity) {

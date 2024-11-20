@@ -23,7 +23,7 @@ return new class extends Migration {
 
             // Pricing
             $table->boolean("auto_calculate_price")->default(true);
-            $table->integer("regular_price");
+            $table->integer("regular_price")->default(0);
             $table->integer("sale_price")->nullable();
             $table->timestamp("sale_starts_at")->nullable();
             $table->timestamp("sale_ends_at")->nullable();

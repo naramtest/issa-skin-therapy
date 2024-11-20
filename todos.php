@@ -14,6 +14,7 @@
 // TODO: when Scrolling the side menu lag
 // TODO: fix slug in the product , model
 // TODO: exporter for all tables
+// TODO: clockwork on production
 
 //14/11
 //TODO: like Product page

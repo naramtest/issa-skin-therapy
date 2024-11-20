@@ -10,11 +10,12 @@ class BundleObserver
     public function saving(Bundle $bundle): void
     {
         // Validate regular price
-        if ($bundle->regular_price <= 0) {
-            throw new InvalidArgumentException(
-                "Regular price must be greater than 0"
-            );
-        }
+        //        TODO: reactivate this after making the regular price update automatically in Filament Resource
+        //        if ($bundle->regular_price <= 0) {
+        //            throw new InvalidArgumentException(
+        //                "Regular price must be greater than 0"
+        //            );
+        //        }
 
         // Validate sale price
         if (

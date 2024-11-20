@@ -101,7 +101,11 @@ class BundleResource extends Resource
 
                         MoneyInput::make("regular_price")
                             ->label(__("dashboard.Regular Price"))
-                            ->required()
+                            ->required(
+                                fn(callable $get) => !$get(
+                                    "auto_calculate_price"
+                                )
+                            )
                             ->disabled(
                                 fn(callable $get) => $get(
                                     "auto_calculate_price"
@@ -119,7 +123,12 @@ class BundleResource extends Resource
 
                         Toggle::make("is_sale_scheduled")
                             ->label(__("dashboard.Schedule Sale"))
-                            ->reactive(),
+                            ->reactive()
+                            ->disabled(
+                                fn(callable $get) => $get(
+                                    "auto_calculate_price"
+                                )
+                            ),
 
                         DateTimePicker::make("sale_starts_at")
                             ->label(__("dashboard.Sale Start Date"))

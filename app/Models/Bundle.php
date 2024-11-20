@@ -74,7 +74,7 @@ class Bundle extends Model implements HasMedia
 
     protected static function booted(): void
     {
-        static::creating(function ($bundle) {
+        static::creating(function (Bundle $bundle) {
             if (empty($bundle->sku)) {
                 $bundle->sku = static::generateSKU();
             }
@@ -99,7 +99,7 @@ class Bundle extends Model implements HasMedia
             }
 
             // Auto calculate price if enabled
-            if ($bundle->auto_calculate_price) {
+            if ($bundle->auto_calculate_price and count($bundle->items)) {
                 $bundle->calculateTotalPrice();
             }
 

@@ -61,16 +61,13 @@ class FullImageSectionUpload
                     TextInput::make($field . "_title")
                         ->label(__("dashboard.Title"))
                         ->inlineLabel()
-                        ->dehydrated(false)
                         ->required(fn(Get $get) => $get($field)),
                     TextInput::make($field . "_alt")
                         ->label(__("dashboard.alt"))
                         ->inlineLabel()
-                        ->dehydrated(false)
                         ->required(fn(Get $get) => $get($field)),
                     TextInput::make($field . "_caption")
                         ->inlineLabel()
-                        ->dehydrated(false)
                         ->label(__("dashboard.Caption")),
                     // Used it to auto save
                 ])
