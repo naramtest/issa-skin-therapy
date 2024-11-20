@@ -65,4 +65,13 @@ return [
     "Quantity" => "Quantity",
     "Image" => "Image",
     "Stock Status" => "Stock Status",
+    "Will be generated automatically if left empty" =>
+        "Will be generated automatically if left empty",
+    "Full Ingredients" => "Full Ingredients",
+    "How To Store" => "How To Store",
+    "Gallery" => "Gallery",
+    "Status" => "Status",
+    "Stock management" => "Stock management",
+    "Track stock quantity for this product" =>
+        "Track stock quantity for this product",
 ];

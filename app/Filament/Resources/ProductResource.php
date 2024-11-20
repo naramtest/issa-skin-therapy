@@ -3,25 +3,22 @@
 namespace App\Filament\Resources;
 
 use App\Enums\CategoryType;
-use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
 use App\Filament\Resources\ProductResource\Pages;
+use App\Helpers\Filament\Purchasable\BasicInformation;
+use App\Helpers\Filament\Purchasable\MediaSection;
+use App\Helpers\Filament\Purchasable\ShippingSection;
+use App\Helpers\Filament\Purchasable\StatusSection;
 use App\Models\Product;
 use App\Services\Filament\Component\CategoryFilament;
 use App\Services\Filament\Component\CustomNameSlugField;
-use App\Services\Filament\Component\FullImageSectionUpload;
-use Carbon\Carbon;
 use Exception;
 use Filament\Forms;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
@@ -49,93 +46,32 @@ class ProductResource extends Resource
             Forms\Components\Group::make()
                 ->schema([
                     Tabs::make("Product")->tabs([
-                        // Basic Information Tab
-                        Tabs\Tab::make(__("dashboard.Basic Information"))
-                            ->icon("gmdi-inventory-2-o")
-                            ->schema([
-                                CustomNameSlugField::getCustomTitleField(
-                                    label: __("store.Name"),
-                                    fieldName: "name"
-                                )
-                                    ->translate(true)
-                                    ->inlineLabel(),
-                                CustomNameSlugField::getCustomSlugField()
-                                    ->helperText(
-                                        "https://" .
-                                            request()->getHost() .
-                                            "/product/"
-                                    )
-                                    ->inlineLabel()
-                                    ->label(__("dashboard.Permalink")),
-
-                                Forms\Components\TextInput::make("sku")
-                                    ->label("SKU")
-                                    ->unique(ignoreRecord: true)
-                                    ->inlineLabel()
-                                    ->placeholder(
-                                        "Will be generated automatically if left empty"
-                                    ),
-
-                                Forms\Components\RichEditor::make("description")
-                                    ->required()
-                                    ->label(__("dashboard.Description"))
-                                    ->columnSpanFull(),
-                                Forms\Components\RichEditor::make(
-                                    "short_description"
-                                )
-                                    ->label(__("dashboard.Short Description"))
-                                    ->required()
-                                    ->columnSpanFull(),
-                            ]),
-
+                        BasicInformation::make([
+                            Forms\Components\RichEditor::make(
+                                "short_description"
+                            )
+                                ->label(__("dashboard.Short Description"))
+                                ->required()
+                                ->columnSpanFull(),
+                        ]),
                         // Shipping Tab
-                        Tabs\Tab::make(__("store.Shipping"))
-                            ->icon("gmdi-shopping-cart-o")
-                            ->columns()
-                            ->schema([
-                                Forms\Components\TextInput::make("weight")
-                                    ->label(__("dashboard.Weight"))
-                                    ->numeric()
-                                    ->step(0.001)
-                                    ->suffix("kg"),
+                        ShippingSection::make([
+                            Forms\Components\TextInput::make("hs_code")->label(
+                                "HS Code"
+                            ),
 
-                                Forms\Components\TextInput::make("length")
-                                    ->label(__("dashboard.Length"))
-                                    ->numeric()
-                                    ->step(0.01)
-                                    ->suffix("cm"),
-
-                                Forms\Components\TextInput::make("width")
-                                    ->label(__("dashboard.Width"))
-                                    ->numeric()
-                                    ->step(0.01)
-                                    ->suffix("cm"),
-
-                                Forms\Components\TextInput::make("height")
-                                    ->label(__("dashboard.Height"))
-                                    ->numeric()
-                                    ->step(0.01)
-                                    ->suffix("cm"),
-
-                                Forms\Components\TextInput::make(
-                                    "hs_code"
-                                )->label("HS Code"),
-
-                                Forms\Components\Select::make(
-                                    "country_of_origin"
-                                )
-                                    ->searchable()
-                                    ->label(__("dashboard.Country Of Origin"))
-                                    ->options(function () {
-                                        // TODO:You'll need to implement this with a proper country list
-                                        return [
-                                            "AE" => "United Arab Emirates",
-                                            "US" => "United States",
-                                            // Add more countries
-                                        ];
-                                    }),
-                            ]),
-
+                            Forms\Components\Select::make("country_of_origin")
+                                ->searchable()
+                                ->label(__("dashboard.Country Of Origin"))
+                                ->options(function () {
+                                    // TODO:You'll need to implement this with a proper country list
+                                    return [
+                                        "AE" => "United Arab Emirates",
+                                        "US" => "United States",
+                                        // Add more countries
+                                    ];
+                                }),
+                        ]),
                         // Additional Information Tab
                         Tabs\Tab::make(__("dashboard.Additional Information"))
                             ->icon("gmdi-info-o")
@@ -157,108 +93,44 @@ class ProductResource extends Resource
                                             ->required(),
                                     ]),
 
-                                Forms\Components\RichEditor::make(
-                                    "details"
-                                )->columnSpanFull(),
+                                Forms\Components\RichEditor::make("details")
+                                    ->label(__("store.Details"))
+                                    ->columnSpanFull(),
 
-                                Forms\Components\RichEditor::make(
-                                    "how_to_use"
-                                )->columnSpanFull(),
+                                Forms\Components\RichEditor::make("how_to_use")
+                                    ->label(__("store.How to use"))
+                                    ->columnSpanFull(),
 
                                 Forms\Components\RichEditor::make(
                                     "key_ingredients"
-                                )->columnSpanFull(),
+                                )
+                                    ->label(__("store.Key Ingredients"))
+                                    ->columnSpanFull(),
 
                                 Forms\Components\RichEditor::make(
                                     "full_ingredients"
-                                )->columnSpanFull(),
+                                )
+                                    ->label(__("dashboard.Full Ingredients"))
+                                    ->columnSpanFull(),
 
-                                Forms\Components\RichEditor::make(
-                                    "caution"
-                                )->columnSpanFull(),
+                                Forms\Components\RichEditor::make("caution")
+                                    ->label(__("store.Caution"))
+                                    ->columnSpanFull(),
 
                                 Forms\Components\RichEditor::make(
                                     "how_to_store"
-                                )->columnSpanFull(),
+                                )
+                                    ->label(__("dashboard.How To Store"))
+                                    ->columnSpanFull(),
                             ]),
 
-                        Tabs\Tab::make(__("dashboard.Media"))
-                            ->icon("gmdi-image-o")
-                            ->columns()
-                            ->schema([
-                                Fieldset::make(
-                                    __("dashboard.Featured")
-                                )->schema(
-                                    FullImageSectionUpload::make(
-                                        config("const.media.featured"),
-                                        __("dashboard.Featured"),
-                                        config("const.media.featured")
-                                    )
-                                ),
-
-                                Fieldset::make("Gallery")->schema([
-                                    SpatieMediaLibraryFileUpload::make(
-                                        config("const.media.gallery")
-                                    )
-                                        ->hiddenLabel()
-                                        ->collection(
-                                            config("const.media.gallery")
-                                        )
-                                        ->columnSpan(1)
-                                        ->imageEditor()
-                                        ->image()
-                                        ->multiple()
-                                        ->live()
-                                        ->downloadable()
-                                        ->maxSize(5120)
-                                        ->imageEditorAspectRatios([
-                                            null,
-                                            "16:9",
-                                            "4:3",
-                                            "1:1",
-                                        ]),
-                                ]),
-                            ]),
+                        MediaSection::make(),
                     ]),
                 ])
                 ->columnSpan(2),
             Forms\Components\Group::make()
                 ->schema([
-                    Section::make("Status")->schema([
-                        ToggleButtons::make("status")
-                            ->options(ProductStatus::class)
-                            ->inline()
-                            ->default(ProductStatus::PUBLISHED)
-                            ->extraInputAttributes([
-                                "class" => "toggle-button",
-                            ])
-                            ->live()
-                            ->hiddenLabel()
-                            ->grouped(),
-                        DateTimePicker::make("published_at")
-                            ->maxDate(now()->addDay())
-                            ->label(__("dashboard.Published At"))
-                            ->live()
-                            ->default(function ($operation) {
-                                if ($operation == "create") {
-                                    return now();
-                                }
-
-                                return null;
-                            })
-                            ->minDate(function ($operation) {
-                                if ($operation == "create") {
-                                    return Carbon::today();
-                                }
-
-                                return null;
-                            })
-                            ->visible(
-                                fn(callable $get) => $get("status") ===
-                                    ProductStatus::PUBLISHED->value
-                            )
-                            ->displayFormat("d-m-Y-H-i-s"),
-
+                    StatusSection::make([
                         Toggle::make("is_featured")
                             ->label(__("dashboard.Featured Product"))
                             ->helperText(
@@ -319,14 +191,17 @@ class ProductResource extends Resource
                     ]),
                     Section::make(__("dashboard.Inventory"))->schema([
                         Forms\Components\Toggle::make("track_quantity")
-                            ->label("Stock management")
+                            ->label(__("dashboard.Stock management"))
                             ->helperText(
-                                "Track stock quantity for this product"
+                                __(
+                                    "dashboard.Track stock quantity for this product"
+                                )
                             )
                             ->default(true)
                             ->reactive(),
 
                         Forms\Components\TextInput::make("quantity")
+                            ->label(__("dashboard.Quantity"))
                             ->numeric()
                             ->inlineLabel()
                             ->default(0)

@@ -2,26 +2,23 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
 use App\Filament\Resources\BundleResource\Pages;
+use App\Helpers\Filament\Purchasable\BasicInformation;
+use App\Helpers\Filament\Purchasable\MediaSection;
+use App\Helpers\Filament\Purchasable\ShippingSection;
+use App\Helpers\Filament\Purchasable\StatusSection;
 use App\Models\Bundle;
 use App\Models\Product;
-use App\Services\Filament\Component\CustomNameSlugField;
-use App\Services\Filament\Component\FullImageSectionUpload;
-use Carbon\Carbon;
 use Exception;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
@@ -47,38 +44,8 @@ class BundleResource extends Resource
             Forms\Components\Group::make()
                 ->schema([
                     Tabs::make("Bundle")->tabs([
-                        Tabs\Tab::make(
-                            __("dashboard.Basic Information")
-                        )->schema([
-                            CustomNameSlugField::getCustomTitleField(
-                                label: __("store.Name"),
-                                fieldName: "name"
-                            )
-                                ->translate(true)
-                                ->inlineLabel(),
-
-                            CustomNameSlugField::getCustomSlugField()
-                                ->helperText(
-                                    "https://" .
-                                        request()->getHost() .
-                                        "/bundle/"
-                                )
-                                ->inlineLabel()
-                                ->label(__("dashboard.Permalink")),
-
-                            Forms\Components\TextInput::make("sku")
-                                ->label("SKU")
-                                ->unique(ignoreRecord: true)
-                                ->inlineLabel()
-                                ->placeholder(
-                                    "Will be generated automatically if left empty"
-                                ),
-
-                            Forms\Components\RichEditor::make("description")
-                                ->required()
-                                ->label(__("dashboard.Description"))
-                                ->columnSpanFull(),
-                        ]),
+                        BasicInformation::make([]),
+                        ShippingSection::make([]),
 
                         // Bundle Items Tab
                         Tabs\Tab::make(__("dashboard.Bundle Items"))->schema([
@@ -116,72 +83,7 @@ class BundleResource extends Resource
                                         : null
                                 ),
                         ]),
-                        Tabs\Tab::make(__("store.Shipping"))
-                            ->icon("gmdi-shopping-cart-o")
-                            ->columns()
-                            ->schema([
-                                Forms\Components\TextInput::make("weight")
-                                    ->label(__("dashboard.Weight"))
-                                    ->numeric()
-                                    ->step(0.001)
-                                    ->suffix("kg"),
-
-                                Forms\Components\TextInput::make("length")
-                                    ->label(__("dashboard.Length"))
-                                    ->numeric()
-                                    ->step(0.01)
-                                    ->suffix("cm"),
-
-                                Forms\Components\TextInput::make("width")
-                                    ->label(__("dashboard.Width"))
-                                    ->numeric()
-                                    ->step(0.01)
-                                    ->suffix("cm"),
-
-                                Forms\Components\TextInput::make("height")
-                                    ->label(__("dashboard.Height"))
-                                    ->numeric()
-                                    ->step(0.01)
-                                    ->suffix("cm"),
-                            ]),
-
-                        Tabs\Tab::make(__("dashboard.Media"))
-                            ->icon("gmdi-image-o")
-                            ->columns()
-                            ->schema([
-                                Fieldset::make(
-                                    __("dashboard.Featured")
-                                )->schema(
-                                    FullImageSectionUpload::make(
-                                        config("const.media.featured"),
-                                        __("dashboard.Featured"),
-                                        config("const.media.featured")
-                                    )
-                                ),
-
-                                Fieldset::make("Gallery")->schema([
-                                    SpatieMediaLibraryFileUpload::make(
-                                        config("const.media.gallery")
-                                    )
-                                        ->hiddenLabel()
-                                        ->collection(
-                                            config("const.media.gallery")
-                                        )
-                                        ->columnSpan(1)
-                                        ->imageEditor()
-                                        ->image()
-                                        ->multiple()
-                                        ->live()
-                                        ->downloadable()
-                                        ->maxSize(5120)
-                                        ->imageEditorAspectRatios([
-                                            null,
-                                            "16:9",
-                                            "4:3",
-                                            "1:1",
-                                        ]),
-                                ]),
-                            ]),
+                        MediaSection::make(),
                     ]),
                 ])
                 ->columnSpan(2),
@@ -189,35 +91,7 @@ class BundleResource extends Resource
             Forms\Components\Group::make()
                 ->schema([
                     // Status Section
-                    Section::make("Status")->schema([
-                        ToggleButtons::make("status")
-                            ->options(ProductStatus::class)
-                            ->inline()
-                            ->default(ProductStatus::PUBLISHED)
-                            ->extraInputAttributes([
-                                "class" => "toggle-button",
-                            ])
-                            ->live()
-                            ->hiddenLabel()
-                            ->grouped(),
-                        DateTimePicker::make("published_at")
-                            ->maxDate(now()->addDay())
-                            ->label(__("dashboard.Published At"))
-                            ->live()
-                            ->default(function ($operation) {
-                                if ($operation == "create") {
-                                    return now();
-                                }
-
-                                return null;
-                            })
-                            ->minDate(fn() => Carbon::today())
-                            ->visible(
-                                fn(callable $get) => $get("status") ===
-                                    ProductStatus::PUBLISHED
-                            )
-                            ->displayFormat("d-m-Y-H-i-s"),
-                    ]),
+                    StatusSection::make([]),
 
                     Section::make(__("dashboard.Pricing"))->schema([
                         Toggle::make("auto_calculate_price")
