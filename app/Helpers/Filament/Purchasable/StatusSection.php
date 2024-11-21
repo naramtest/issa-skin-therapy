@@ -42,8 +42,7 @@ class StatusSection
                     return null;
                 })
                 ->visible(
-                    fn(callable $get) => $get("status") ===
-                        ProductStatus::PUBLISHED->value
+                    fn(callable $get) => $get("status") !== ProductStatus::DRAFT
                 )
                 ->displayFormat("d-m-Y-H-i-s"),
         ]);

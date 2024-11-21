@@ -100,7 +100,7 @@ class Bundle extends Model implements HasMedia
 
             // Auto calculate price if enabled
             if ($bundle->auto_calculate_price and count($bundle->items)) {
-                $bundle->calculateTotalPrice();
+                $bundle->calculateAndSavePrices();
             }
 
             $bundle->determineStockStatus();

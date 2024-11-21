@@ -278,16 +278,21 @@ class ProductResource extends Resource
                 Tables\Filters\TernaryFilter::make("is_sale_scheduled")->label(
                     "On Sale"
                 ),
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->defaultSort("order")
             ->reorderable("order")
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }

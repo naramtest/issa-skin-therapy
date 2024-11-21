@@ -233,6 +233,7 @@ class BundleResource extends Resource
                     ->dateTime("M j, Y")
                     ->sortable(),
             ])
+            ->defaultSort("created_at", "desc")
             ->filters([
                 Tables\Filters\SelectFilter::make("stock_status")->options(
                     StockStatus::class
@@ -241,14 +242,19 @@ class BundleResource extends Resource
                 Tables\Filters\TernaryFilter::make("is_sale_scheduled")->label(
                     "On Sale"
                 ),
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }

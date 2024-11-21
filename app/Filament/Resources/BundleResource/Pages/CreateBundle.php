@@ -15,7 +15,7 @@ class CreateBundle extends CreateRecord
     function afterCreate()
     {
         if ($this->record->auto_calculate_price) {
-            $this->record->calculateTotalPrice();
+            $this->record->calculateAndSavePrices();
             $this->record->save();
         }
     }

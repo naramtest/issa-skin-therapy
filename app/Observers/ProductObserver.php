@@ -75,7 +75,7 @@ readonly class ProductObserver
                 ->get();
 
             foreach ($bundles as $bundle) {
-                $bundle->calculateTotalPrice();
+                $bundle->calculateAndSavePrices();
                 $bundle->save();
             }
         }
