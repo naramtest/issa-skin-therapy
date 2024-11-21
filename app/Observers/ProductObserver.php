@@ -3,8 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Product;
+use App\Services\BundleQuantityUpdateService;
 use App\Services\Product\ProductCacheService;
-use App\Services\Store\BundleQuantityUpdateService;
 use InvalidArgumentException;
 
 readonly class ProductObserver

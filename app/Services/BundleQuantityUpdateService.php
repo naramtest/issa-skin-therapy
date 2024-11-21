@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Store;
+namespace App\Services;
 
 use App\Models\Bundle;
 
@@ -42,7 +42,9 @@ class BundleQuantityUpdateService
                 $newQuantity = $item->product->quantity - $deductQuantity;
                 $item->product->update([
                     "quantity" => max(0, $newQuantity),
-                    "stock_status" => $item->product->determineStockStatus(),
+                    "stock_status" => $item->product
+                        ->inventory()
+                        ->determineStockStatus(),
                 ]);
             }
         }

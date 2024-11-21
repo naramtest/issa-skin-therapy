@@ -28,14 +28,10 @@ class InventoryManager extends BaseInventoryService
         return $this->product->track_quantity;
     }
 
-    // Delegate shared methods where needed
-
     public function getCurrentQuantity(): int
     {
         return $this->product->quantity;
     }
-
-    // Override shared methods if required
 
     public function getAllowBackorders(): bool
     {
@@ -58,5 +54,27 @@ class InventoryManager extends BaseInventoryService
                 => StockStatus::LOW_STOCK,
             default => StockStatus::IN_STOCK,
         };
+    }
+
+    public function canBePurchased(int $requestedQuantity): bool
+    {
+        if (!$this->shouldTrackQuantity()) {
+            return $this->hasAvailableStockStatus();
+        }
+
+        if ($this->getAllowBackorders()) {
+            return true;
+        }
+
+        return $this->getCurrentQuantity() >= $requestedQuantity;
+    }
+
+    public function getProductVolume(): ?float
+    {
+        return parent::getVolume(
+            $this->product->length,
+            $this->product->width,
+            $this->product->height
+        );
     }
 }

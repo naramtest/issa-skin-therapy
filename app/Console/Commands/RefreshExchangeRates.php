@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\Store\Currency\Currency;
+use App\Services\Currency\Currency;
 use Illuminate\Console\Command;
 
 class RefreshExchangeRates extends Command

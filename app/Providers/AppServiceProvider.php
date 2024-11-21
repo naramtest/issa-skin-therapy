@@ -4,9 +4,9 @@ namespace App\Providers;
 
 use App\Contracts\InventoryInterface;
 use App\Helpers\Money\UserCurrency;
+use App\Services\Currency\CurrencyHelper;
+use App\Services\Currency\CurrencyService;
 use App\Services\Inventory\InventoryManager;
-use App\Services\Store\Currency\CurrencyHelper;
-use App\Services\Store\Currency\CurrencyService;
 use Blade;
 use Illuminate\Support\ServiceProvider;
 use Money\Money;

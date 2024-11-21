@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Services\Store\Currency\CurrencyHelper;
+use App\Services\Currency\CurrencyHelper;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 

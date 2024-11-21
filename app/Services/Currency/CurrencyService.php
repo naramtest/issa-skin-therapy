@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Store\Currency;
+namespace App\Services\Currency;
 
 use Exception;
 use Log;

@@ -56,6 +56,15 @@ class BaseInventoryService
         );
     }
 
+    public function generateSKU(string $modelClass): string
+    {
+        do {
+            $sku = strtoupper(substr(uniqid(), -6));
+        } while ($modelClass::where("sku", $sku)->exists());
+
+        return $sku;
+    }
+
     protected function hasAvailableStockStatus(string $stockStatus): bool
     {
         return in_array($stockStatus, [
@@ -64,14 +73,5 @@ class BaseInventoryService
             StockStatus::BACKORDER,
             StockStatus::PREORDER,
         ]);
-    }
-
-    protected function generateSKU(string $modelClass): string
-    {
-        do {
-            $sku = strtoupper(substr(uniqid(), -6));
-        } while ($modelClass::where("sku", $sku)->exists());
-
-        return $sku;
     }
 }

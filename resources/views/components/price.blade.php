@@ -3,5 +3,5 @@
 ])
 
 <bdi {{ $attributes }}>
-    {{ \App\Services\Store\Currency\Currency::convertToUserCurrencyWithCache($money) }}
+    {{ \App\Services\Currency\Currency::convertToUserCurrencyWithCache($money) }}
 </bdi>

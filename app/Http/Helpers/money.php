@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\Store\Currency\Currency;
+use App\Services\Currency\Currency;
 use Money\Money;
 
 if (!function_exists("userPrice")) {

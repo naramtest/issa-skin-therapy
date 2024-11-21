@@ -28,7 +28,7 @@ class BundleInventoryManager extends BaseInventoryService
 
         // Check all items in the bundle
         return $this->bundle->items->every(
-            fn($item) => $item->product->isInStock()
+            fn($item) => $item->product->inventory()->isInStock()
         );
     }
 
@@ -97,9 +97,9 @@ class BundleInventoryManager extends BaseInventoryService
 
         // Check if all items can be purchased
         return $this->bundle->items->every(
-            fn($item) => $item->product->canBePurchased(
-                $item->quantity * $requestedQuantity
-            )
+            fn($item) => $item->product
+                ->inventory()
+                ->canBePurchased($item->quantity * $requestedQuantity)
         );
     }
 

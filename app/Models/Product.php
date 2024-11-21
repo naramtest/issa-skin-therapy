@@ -4,17 +4,17 @@ namespace App\Models;
 
 use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
+use App\Models\Query\ProductQuery;
 use App\Services\Inventory\InventoryManager;
+use App\Services\Product\ProductService;
+use App\Traits\HasPurchasableMedia;
 use App\Traits\Price\HasMoney;
 use App\Traits\Price\HasPricing;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Tags\HasTags;
 use Spatie\Translatable\HasTranslations;
 
@@ -22,13 +22,12 @@ class Product extends Model implements HasMedia
 {
     use SoftDeletes, HasPricing, HasMoney;
     use HasTranslations;
-    use InteractsWithMedia;
     use HasTags;
+    use HasPurchasableMedia;
 
     public array $sortable = [
         "order_column_name" => "order",
     ];
-
     public array $translatable = [
         "name",
         "description",
@@ -42,6 +41,7 @@ class Product extends Model implements HasMedia
         "how_to_store",
         "short_description",
     ];
+    protected InventoryManager $inventory;
     protected $fillable = [
         "name",
         "slug",
@@ -96,7 +96,6 @@ class Product extends Model implements HasMedia
         "status" => ProductStatus::class,
         "published_at" => "datetime",
     ];
-    protected InventoryManager $inventory;
 
     public function __construct(array $attributes = [])
     {
@@ -110,55 +109,23 @@ class Product extends Model implements HasMedia
     {
         static::creating(function ($product) {
             if (empty($product->sku)) {
-                $product->sku = static::generateSKU();
+                $product->sku = $this->inventory()->generateSKU(Product::class);
             }
         });
 
         static::saving(function (Product $product) {
-            if ($product->is_featured) {
-                static::where("id", "!=", $product->id)
-                    ->where("is_featured", true)
-                    ->update(["is_featured" => false]);
-            }
-            // Set published_at timestamp when status changes to published
-            if (
-                $product->status === ProductStatus::PUBLISHED &&
-                empty($product->published_at)
-            ) {
-                $product->published_at = Carbon::now();
-            }
+            $service = app(ProductService::class);
+            $service->handleSaving($product);
 
-            // Clear published_at when status changes to draft
-            if (
-                $product->status === ProductStatus::DRAFT &&
-                $product->getOriginal("status") ===
-                    ProductStatus::PUBLISHED->value
-            ) {
-                $product->published_at = null;
-            }
-
-            $product->stock_status = $product->determineStockStatus();
+            $product->stock_status = $product
+                ->inventory()
+                ->determineStockStatus();
         });
     }
 
-    public function determineStockStatus(): StockStatus
+    public function inventory(): InventoryManager
     {
-        return $this->inventory->determineStockStatus();
-    }
-
-    public function isInStock(): bool
-    {
-        return $this->inventory->isInStock();
-    }
-
-    public function isLowStock(): bool
-    {
-        return $this->inventory->isLowStock();
-    }
-
-    public function canBePurchased(int $requestedQuantity): bool
-    {
-        return $this->inventory->canBePurchased($requestedQuantity);
+        return $this->inventory;
     }
 
     public function bundles(): BelongsToMany
@@ -173,49 +140,14 @@ class Product extends Model implements HasMedia
         return $this->belongsToMany(ProductType::class);
     }
 
-    public function registerMediaConversions(?Media $media = null): void
-    {
-        $this->addMediaConversion(config("const.media.thumbnail"))
-            ->format("webp")
-            ->performOnCollections(config("const.media.featured"))
-            ->width(400)
-            ->height(400)
-            ->optimize()
-            ->quality(70);
-        $this->addMediaConversion(config("const.media.optimized"))
-            ->format("webp")
-            ->optimize()
-            ->withResponsiveImages();
-    }
-
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection(config("const.media.featured"))->singleFile();
-
-        $this->addMediaCollection(config("const.media.gallery"));
-    }
-
     public function categories(): morphToMany
     {
         return $this->morphToMany(Category::class, "model", "categorizables");
     }
 
-    public function scopePublished($query)
+    public function newEloquentBuilder($query): ProductQuery
     {
-        return $query
-            ->where("status", ProductStatus::PUBLISHED)
-            ->whereNotNull("published_at")
-            ->where("published_at", "<=", now());
-    }
-
-    public function scopeDraft($query)
-    {
-        return $query->where("status", ProductStatus::DRAFT);
-    }
-
-    public function scopeFeatured($query)
-    {
-        return $query->where("is_featured", true);
+        return new ProductQuery($query);
     }
 
     public function isPublished(): bool
@@ -233,10 +165,5 @@ class Product extends Model implements HasMedia
         return $this->status === ProductStatus::PUBLISHED &&
             $this->published_at &&
             $this->published_at->isFuture();
-    }
-
-    public function scopeByOrder($query)
-    {
-        return $query->orderBy("order");
     }
 }
