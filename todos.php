@@ -1,8 +1,5 @@
 <?php
-
-// TODO: move shared section between Product and Bundle Resource
 // TODO: auto calculate regular price when adding items to bundle
-// TODO: Product and Bundle table
 // TODO: bundle front end Page
 // TODO: copy validation translation
 // TODO: add Queue for image generation in production
