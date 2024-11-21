@@ -1,22 +1,13 @@
 <?php
 
-namespace App\Traits\Inventory;
+namespace App\Services\Inventory;
 
 use App\Enums\QuantityAction;
 use App\Enums\StockStatus;
 use Illuminate\Database\Eloquent\Builder;
 
-trait HasBaseInventory
+class BaseInventoryService
 {
-    protected static function generateSKU(): string
-    {
-        do {
-            $sku = strtoupper(substr(uniqid(), -6));
-        } while (static::where("sku", $sku)->exists());
-
-        return $sku;
-    }
-
     public function scopeAvailable(Builder $query): Builder
     {
         return $query->where(function ($query) {
@@ -29,10 +20,13 @@ trait HasBaseInventory
         });
     }
 
-    public function getVolume(): ?float
-    {
-        if ($this->length && $this->width && $this->height) {
-            return $this->length * $this->width * $this->height;
+    public function getVolume(
+        ?float $length,
+        ?float $width,
+        ?float $height
+    ): ?float {
+        if ($length && $width && $height) {
+            return $length * $width * $height;
         }
 
         return null;
@@ -50,30 +44,34 @@ trait HasBaseInventory
 
     public function getStockMovementDescription(
         QuantityAction $action,
-        int $quantity
+        int $quantity,
+        int $currentQuantity
     ): string {
         return sprintf(
             "%s %s %d units. New quantity: %d",
             $action->getDescription(),
             $action->getSign(),
             $quantity,
-            $this->quantity
+            $currentQuantity
         );
     }
 
-    abstract protected function shouldTrackQuantity(): bool;
-
-    abstract protected function getCurrentQuantity(): int;
-
-    abstract protected function getAllowBackorders(): bool;
-
-    protected function hasAvailableStockStatus(): bool
+    protected function hasAvailableStockStatus(string $stockStatus): bool
     {
-        return in_array($this->stock_status, [
+        return in_array($stockStatus, [
             StockStatus::IN_STOCK,
             StockStatus::LOW_STOCK,
             StockStatus::BACKORDER,
             StockStatus::PREORDER,
         ]);
+    }
+
+    protected function generateSKU(string $modelClass): string
+    {
+        do {
+            $sku = strtoupper(substr(uniqid(), -6));
+        } while ($modelClass::where("sku", $sku)->exists());
+
+        return $sku;
     }
 }

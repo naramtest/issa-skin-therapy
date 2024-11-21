@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
-use App\Traits\Inventory\HasBundleInventory;
+use App\Services\Inventory\BundleInventoryManager;
 use App\Traits\Price\HasBundlePrice;
 use App\Traits\Price\HasPricing;
 use Carbon\Carbon;
@@ -19,7 +19,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Bundle extends Model implements HasMedia
 {
-    use SoftDeletes, HasPricing, HasBundlePrice, HasBundleInventory;
+    use SoftDeletes, HasPricing, HasBundlePrice;
     use HasTranslations;
     use InteractsWithMedia;
 
@@ -72,6 +72,18 @@ class Bundle extends Model implements HasMedia
         "height" => "decimal:2",
     ];
 
+    protected BundleInventoryManager $inventory;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // Inject BundleInventoryManager
+        $this->inventory = app(BundleInventoryManager::class, [
+            "bundle" => $this,
+        ]);
+    }
+
     protected static function booted(): void
     {
         static::creating(function (Bundle $bundle) {
@@ -103,8 +115,33 @@ class Bundle extends Model implements HasMedia
                 $bundle->calculateAndSavePrices();
             }
 
-            $bundle->determineStockStatus();
+            $bundle->stock_status = $bundle->determineStockStatus();
         });
+    }
+
+    public function determineStockStatus(): StockStatus
+    {
+        return $this->inventory->determineStockStatus();
+    }
+
+    public function isInStock(): bool
+    {
+        return $this->inventory->isInStock();
+    }
+
+    public function isLowStock(): bool
+    {
+        return $this->inventory->isLowStock();
+    }
+
+    public function canBePurchased(int $requestedQuantity): bool
+    {
+        return $this->inventory->canBePurchased($requestedQuantity);
+    }
+
+    public function calculateLowestAvailableQuantity(): int
+    {
+        return $this->inventory->calculateLowestAvailableQuantity();
     }
 
     public function items(): HasMany

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Contracts\InventoryInterface;
 use App\Helpers\Money\UserCurrency;
+use App\Services\Inventory\InventoryManager;
 use App\Services\Store\Currency\CurrencyHelper;
 use App\Services\Store\Currency\CurrencyService;
 use Blade;
@@ -43,6 +45,10 @@ class AppServiceProvider extends ServiceProvider
                 ->build();
 
             return new CurrencyService($builder->build());
+        });
+
+        $this->app->bind(InventoryInterface::class, function ($app, $params) {
+            return new InventoryManager($params["product"]);
         });
     }
 

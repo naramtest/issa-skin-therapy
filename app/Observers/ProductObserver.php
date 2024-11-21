@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use App\Models\Product;
 use App\Services\Product\ProductCacheService;
-use App\Services\Store\BundleService;
+use App\Services\Store\BundleQuantityUpdateService;
 use InvalidArgumentException;
 
 readonly class ProductObserver
@@ -90,7 +90,9 @@ readonly class ProductObserver
         if ($product->wasChanged($stockFields)) {
             $bundles = $product->bundles;
             foreach ($bundles as $bundle) {
-                app(BundleService::class)->syncBundleStock($bundle);
+                app(BundleQuantityUpdateService::class)->syncBundleStock(
+                    $bundle
+                );
             }
         }
     }

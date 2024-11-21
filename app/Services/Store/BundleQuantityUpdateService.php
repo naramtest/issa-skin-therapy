@@ -4,7 +4,7 @@ namespace App\Services\Store;
 
 use App\Models\Bundle;
 
-class BundleService
+class BundleQuantityUpdateService
 {
     //use When Making A Bundle order
     public function processBundlePurchase(
@@ -42,9 +42,7 @@ class BundleService
                 $newQuantity = $item->product->quantity - $deductQuantity;
                 $item->product->update([
                     "quantity" => max(0, $newQuantity),
-                    "stock_status" => $item->product->determineStockStatus(
-                        $newQuantity
-                    ),
+                    "stock_status" => $item->product->determineStockStatus(),
                 ]);
             }
         }
@@ -57,7 +55,6 @@ class BundleService
         }
 
         $lowestAvailableQuantity = $bundle->calculateLowestAvailableQuantity();
-
         $bundle->update([
             "quantity" => $lowestAvailableQuantity,
             "stock_status" => $bundle->determineStockStatus(),

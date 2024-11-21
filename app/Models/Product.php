@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
-use App\Traits\Inventory\HasProductInventory;
+use App\Services\Inventory\InventoryManager;
 use App\Traits\Price\HasMoney;
 use App\Traits\Price\HasPricing;
 use Carbon\Carbon;
@@ -20,7 +20,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Product extends Model implements HasMedia
 {
-    use SoftDeletes, HasPricing, HasProductInventory, HasMoney;
+    use SoftDeletes, HasPricing, HasMoney;
     use HasTranslations;
     use InteractsWithMedia;
     use HasTags;
@@ -96,6 +96,15 @@ class Product extends Model implements HasMedia
         "status" => ProductStatus::class,
         "published_at" => "datetime",
     ];
+    protected InventoryManager $inventory;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // Dependency Injection
+        $this->inventory = app(InventoryManager::class, ["product" => $this]);
+    }
 
     protected static function booted(): void
     {
@@ -130,6 +139,26 @@ class Product extends Model implements HasMedia
 
             $product->stock_status = $product->determineStockStatus();
         });
+    }
+
+    public function determineStockStatus(): StockStatus
+    {
+        return $this->inventory->determineStockStatus();
+    }
+
+    public function isInStock(): bool
+    {
+        return $this->inventory->isInStock();
+    }
+
+    public function isLowStock(): bool
+    {
+        return $this->inventory->isLowStock();
+    }
+
+    public function canBePurchased(int $requestedQuantity): bool
+    {
+        return $this->inventory->canBePurchased($requestedQuantity);
     }
 
     public function bundles(): BelongsToMany
