@@ -10,7 +10,7 @@
     {{ $attributes->class(["card-hover-trigger block !flex flex-col rounded-[15px] bg-[#FAFAFA]"]) }}
 >
     <div class="rounded-inherit h-[360px] w-full overflow-hidden">
-        {!! \App\Services\Media\ImageGetter::responsiveFeaturedImg($bundle, class: "rounded-inherit h-[360px] w-full object-cover hover:scale-105  transition-transform duration-300") !!}
+        {!! \App\Helpers\Media\ImageGetter::responsiveFeaturedImg($bundle, class: "rounded-inherit h-[360px] w-full object-cover hover:scale-105  transition-transform duration-300") !!}
     </div>
     <div class="px-7 py-5">
         <div class="flex items-center justify-between">

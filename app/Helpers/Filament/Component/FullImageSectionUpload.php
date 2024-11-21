@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Filament\Component;
+namespace App\Helpers\Filament\Component;
 
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;

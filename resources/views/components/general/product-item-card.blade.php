@@ -11,7 +11,7 @@
 >
     <div class="group relative">
         <a href="{{ route("product.show", ["product" => $product->slug]) }}">
-            {!! \App\Services\Media\ImageGetter::responsiveFeaturedImg($product, class: "h-[400px] w-full rounded-[10px] object-cover") !!}
+            {!! \App\Helpers\Media\ImageGetter::responsiveFeaturedImg($product, class: "h-[400px] w-full rounded-[10px] object-cover") !!}
         </a>
         <button
             @click="isModalOpen = true"
@@ -124,7 +124,7 @@
                     <div class="grid grid-cols-2 gap-6">
                         <!-- Product Image -->
                         <div class="relative">
-                            {!! \App\Services\Media\ImageGetter::responsiveFeaturedImg($product, class: "h-[400px] w-full rounded-lg object-cover") !!}
+                            {!! \App\Helpers\Media\ImageGetter::responsiveFeaturedImg($product, class: "h-[400px] w-full rounded-lg object-cover") !!}
                         </div>
 
                         <!-- Product Details -->

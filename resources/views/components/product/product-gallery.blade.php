@@ -24,7 +24,7 @@
                                 data-pswp-width="{{ $width }}"
                                 data-pswp-height="{{ $height }}"
                             >
-                                {!! \App\Services\Media\ImageGetter::responsiveImgElement($image, class: "h-full w-full object-cover") !!}
+                                {!! \App\Helpers\Media\ImageGetter::responsiveImgElement($image, class: "h-full w-full object-cover") !!}
                             </a>
                         </div>
                     @endforeach
@@ -81,7 +81,7 @@
                     @click="slideTo({{ $loop->index }})"
                     class="overflow-hidden rounded-lg transition-all duration-300"
                 >
-                    {!! \App\Services\Media\ImageGetter::responsiveImgElement($image, config("const.media.thumbnail"), class: "h-[250px] w-full object-cover") !!}
+                    {!! \App\Helpers\Media\ImageGetter::responsiveImgElement($image, config("const.media.thumbnail"), class: "h-[250px] w-full object-cover") !!}
                 </button>
             @endforeach
         </div>

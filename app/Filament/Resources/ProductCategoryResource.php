@@ -4,9 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Enums\CategoryType;
 use App\Filament\Resources\ProductCategoryResource\Pages\ManageProductCategories;
+use App\Helpers\Filament\Component\CategoryMoveAndDeleteButton;
+use App\Helpers\Filament\Component\CustomNameSlugField;
 use App\Models\Category;
-use App\Services\Filament\Component\CategoryMoveAndDeleteButton;
-use App\Services\Filament\Component\CustomNameSlugField;
 use Auth;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Textarea;

@@ -2,7 +2,7 @@
 
 namespace App\Helpers\Filament\Purchasable\Form;
 
-use App\Services\Filament\Component\CustomNameSlugField;
+use App\Helpers\Filament\Component\CustomNameSlugField;
 use Filament\Forms;
 use Filament\Forms\Components\Tabs;
 

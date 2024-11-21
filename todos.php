@@ -1,7 +1,5 @@
 <?php
 // TODO: auto calculate regular price when adding items to bundle
-// TODO: bundle front end Page
-// TODO: copy validation translation
 // TODO: add Queue for image generation in production
 // TODO: change database for cache ... , to redis in production
 // TODO: when Scrolling the side menu lag
@@ -14,6 +12,7 @@
 //TODO: check Product status (if published ,order ,... etc)
 //TODO: link shop page
 //TODO: add spatie cache library and delete cache when faq , Product , reviews ..... etc
+// TODO: bundle front end Page
 
 //animation
 //TODO: check if there is any animation you can add to product , shop page

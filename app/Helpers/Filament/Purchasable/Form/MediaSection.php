@@ -2,7 +2,7 @@
 
 namespace App\Helpers\Filament\Purchasable\Form;
 
-use App\Services\Filament\Component\FullImageSectionUpload;
+use App\Helpers\Filament\Component\FullImageSectionUpload;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Tabs;

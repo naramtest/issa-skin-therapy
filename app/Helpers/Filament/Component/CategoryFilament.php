@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Filament\Component;
+namespace App\Helpers\Filament\Component;
 
 use App\Enums\CategoryType;
 use Filament\Forms\Components\Hidden;
