@@ -74,4 +74,5 @@ return [
     "Stock management" => "Stock management",
     "Track stock quantity for this product" =>
         "Track stock quantity for this product",
+    "On Sale" => "On Sale",
 ];

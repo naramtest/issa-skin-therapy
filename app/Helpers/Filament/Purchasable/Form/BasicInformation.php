@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers\Filament\Purchasable;
+namespace App\Helpers\Filament\Purchasable\Form;
 
 use App\Services\Filament\Component\CustomNameSlugField;
 use Filament\Forms;

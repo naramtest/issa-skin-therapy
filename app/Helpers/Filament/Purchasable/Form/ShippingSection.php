@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers\Filament\Purchasable;
+namespace App\Helpers\Filament\Purchasable\Form;
 
 use Filament\Forms;
 use Filament\Forms\Components\Tabs;

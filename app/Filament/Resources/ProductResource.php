@@ -5,10 +5,11 @@ namespace App\Filament\Resources;
 use App\Enums\CategoryType;
 use App\Enums\StockStatus;
 use App\Filament\Resources\ProductResource\Pages;
-use App\Helpers\Filament\Purchasable\BasicInformation;
-use App\Helpers\Filament\Purchasable\MediaSection;
-use App\Helpers\Filament\Purchasable\ShippingSection;
-use App\Helpers\Filament\Purchasable\StatusSection;
+use App\Helpers\Filament\Purchasable\Form\BasicInformation;
+use App\Helpers\Filament\Purchasable\Form\MediaSection;
+use App\Helpers\Filament\Purchasable\Form\ShippingSection;
+use App\Helpers\Filament\Purchasable\Form\StatusSection;
+use App\Helpers\Filament\Purchasable\PurchasableTable;
 use App\Models\Product;
 use App\Services\Filament\Component\CategoryFilament;
 use App\Services\Filament\Component\CustomNameSlugField;
@@ -22,10 +23,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
 use Pelmered\FilamentMoneyField\Forms\Components\MoneyInput;
-use Pelmered\FilamentMoneyField\Tables\Columns\MoneyColumn;
 
 class ProductResource extends Resource
 {
@@ -236,65 +235,12 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make("name")
-                    ->searchable()
-                    ->sortable(),
-
-                Tables\Columns\TextColumn::make("sku")
-                    ->searchable()
-                    ->sortable(),
-
-                MoneyColumn::make("regular_price")->label(
-                    __("dashboard.Regular Price")
-                ),
-                MoneyColumn::make("sale_price")->label(
-                    __("dashboard.Sale Price")
-                ),
-
-                Tables\Columns\TextColumn::make("quantity")->sortable(),
-
-                Tables\Columns\TextColumn::make("stock_status")->badge()->color(
-                    fn(StockStatus $state): string => match ($state) {
-                        StockStatus::IN_STOCK => "success",
-                        StockStatus::LOW_STOCK => "warning",
-                        StockStatus::OUT_OF_STOCK => "danger",
-                        StockStatus::BACKORDER => "info",
-                        default => "gray",
-                    }
-                ),
-
-                Tables\Columns\TextColumn::make("updated_at")
-                    ->dateTime()
-                    ->sortable(),
-            ])
-            ->filters([
-                Tables\Filters\SelectFilter::make("stock_status")->options(
-                    StockStatus::class
-                ),
-
-                Tables\Filters\TernaryFilter::make("track_quantity"),
-
-                Tables\Filters\TernaryFilter::make("is_sale_scheduled")->label(
-                    "On Sale"
-                ),
-                Tables\Filters\TrashedFilter::make(),
-            ])
+            ->columns(PurchasableTable::columns())
+            ->filters(PurchasableTable::filters())
             ->defaultSort("order")
             ->reorderable("order")
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
-            ]);
+            ->actions(PurchasableTable::actions())
+            ->bulkActions(PurchasableTable::bulkActions());
     }
 
     public static function getRelations(): array

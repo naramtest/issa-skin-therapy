@@ -4,10 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Enums\StockStatus;
 use App\Filament\Resources\BundleResource\Pages;
-use App\Helpers\Filament\Purchasable\BasicInformation;
-use App\Helpers\Filament\Purchasable\MediaSection;
-use App\Helpers\Filament\Purchasable\ShippingSection;
-use App\Helpers\Filament\Purchasable\StatusSection;
+use App\Helpers\Filament\Purchasable\Form\BasicInformation;
+use App\Helpers\Filament\Purchasable\Form\MediaSection;
+use App\Helpers\Filament\Purchasable\Form\ShippingSection;
+use App\Helpers\Filament\Purchasable\Form\StatusSection;
+use App\Helpers\Filament\Purchasable\PurchasableTable;
 use App\Models\Bundle;
 use App\Models\Product;
 use Exception;
@@ -22,10 +23,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
 use Pelmered\FilamentMoneyField\Forms\Components\MoneyInput;
-use Pelmered\FilamentMoneyField\Tables\Columns\MoneyColumn;
 
 class BundleResource extends Resource
 {
@@ -212,51 +211,11 @@ class BundleResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make("name")
-                    ->label(__("store.Name"))
-                    ->searchable()
-                    ->sortable(),
-
-                MoneyColumn::make("regular_price")->label(
-                    __("dashboard.Regular Price")
-                ),
-                MoneyColumn::make("sale_price")->label(
-                    __("dashboard.Sale Price")
-                ),
-                Tables\Columns\TextColumn::make("stock_status")
-                    ->badge()
-                    ->label(__("dashboard.Stock Status")),
-
-                Tables\Columns\TextColumn::make("created_at")
-                    ->label(__("dashboard.Created At"))
-                    ->dateTime("M j, Y")
-                    ->sortable(),
-            ])
+            ->columns(PurchasableTable::columns())
             ->defaultSort("created_at", "desc")
-            ->filters([
-                Tables\Filters\SelectFilter::make("stock_status")->options(
-                    StockStatus::class
-                ),
-                Tables\Filters\TernaryFilter::make("bundle_level_stock"),
-                Tables\Filters\TernaryFilter::make("is_sale_scheduled")->label(
-                    "On Sale"
-                ),
-                Tables\Filters\TrashedFilter::make(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
-            ]);
+            ->filters(PurchasableTable::filters())
+            ->actions(PurchasableTable::actions())
+            ->bulkActions(PurchasableTable::bulkActions());
     }
 
     public static function getRelations(): array
