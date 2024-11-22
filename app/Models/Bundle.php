@@ -4,24 +4,24 @@ namespace App\Models;
 
 use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
+use App\Models\Query\BundleQuery;
+use App\Services\Bundle\BundleService;
 use App\Services\Inventory\BundleInventoryManager;
+use App\Traits\HasPurchasableMedia;
 use App\Traits\Price\HasBundlePrice;
 use App\Traits\Price\HasPricing;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Translatable\HasTranslations;
 
 class Bundle extends Model implements HasMedia
 {
     use SoftDeletes, HasPricing, HasBundlePrice;
     use HasTranslations;
-    use InteractsWithMedia;
+    use HasPurchasableMedia;
 
     public array $translatable = ["name", "description"];
 
@@ -93,55 +93,14 @@ class Bundle extends Model implements HasMedia
         });
 
         static::saving(function (Bundle $bundle) {
-            // Set published_at timestamp when status changes to published
-            if (
-                $bundle->status === ProductStatus::PUBLISHED &&
-                empty($bundle->published_at)
-            ) {
-                $bundle->published_at = Carbon::now();
-            }
-
-            // Clear published_at when status changes to draft
-            if (
-                $bundle->status === ProductStatus::DRAFT &&
-                $bundle->getOriginal("status") ===
-                    ProductStatus::PUBLISHED->value
-            ) {
-                $bundle->published_at = null;
-            }
-
-            // Auto calculate price if enabled
-            if ($bundle->auto_calculate_price and count($bundle->items)) {
-                $bundle->calculateAndSavePrices();
-            }
-
-            $bundle->stock_status = $bundle->determineStockStatus();
+            $service = app(BundleService::class);
+            $service->handleSaving($bundle);
         });
     }
 
-    public function determineStockStatus(): StockStatus
+    public function inventory(): BundleInventoryManager
     {
-        return $this->inventory->determineStockStatus();
-    }
-
-    public function isInStock(): bool
-    {
-        return $this->inventory->isInStock();
-    }
-
-    public function isLowStock(): bool
-    {
-        return $this->inventory->isLowStock();
-    }
-
-    public function canBePurchased(int $requestedQuantity): bool
-    {
-        return $this->inventory->canBePurchased($requestedQuantity);
-    }
-
-    public function calculateLowestAvailableQuantity(): int
-    {
-        return $this->inventory->calculateLowestAvailableQuantity();
+        return $this->inventory;
     }
 
     public function items(): HasMany
@@ -156,25 +115,8 @@ class Bundle extends Model implements HasMedia
             ->withTimestamps();
     }
 
-    public function registerMediaConversions(?Media $media = null): void
+    public function newEloquentBuilder($query): BundleQuery
     {
-        $this->addMediaConversion(config("const.media.thumbnail"))
-            ->format("webp")
-            ->performOnCollections(config("const.media.featured"))
-            ->width(400)
-            ->height(400)
-            ->optimize()
-            ->quality(70);
-
-        $this->addMediaConversion(config("const.media.optimized"))
-            ->format("webp")
-            ->optimize()
-            ->withResponsiveImages();
-    }
-
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection(config("const.media.featured"))->singleFile();
-        $this->addMediaCollection(config("const.media.gallery"));
+        return new BundleQuery($query);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Bundle;
 
 use App\Models\Bundle;
 
@@ -27,7 +27,7 @@ class BundleQuantityUpdateService
         $newQuantity = $bundle->quantity - $quantity;
         $bundle->update([
             "quantity" => max(0, $newQuantity),
-            "stock_status" => $bundle->determineStockStatus(),
+            "stock_status" => $bundle->inventory()->determineStockStatus(),
         ]);
     }
 
@@ -56,10 +56,12 @@ class BundleQuantityUpdateService
             return;
         }
 
-        $lowestAvailableQuantity = $bundle->calculateLowestAvailableQuantity();
+        $lowestAvailableQuantity = $bundle
+            ->inventory()
+            ->calculateLowestAvailableQuantity();
         $bundle->update([
             "quantity" => $lowestAvailableQuantity,
-            "stock_status" => $bundle->determineStockStatus(),
+            "stock_status" => $bundle->inventory()->determineStockStatus(),
         ]);
     }
 }

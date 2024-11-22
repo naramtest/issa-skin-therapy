@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Product;
-use App\Services\BundleQuantityUpdateService;
+use App\Services\Bundle\BundleQuantityUpdateService;
 use App\Services\Product\ProductCacheService;
 use InvalidArgumentException;
 
