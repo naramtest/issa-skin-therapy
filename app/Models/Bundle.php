@@ -23,7 +23,13 @@ class Bundle extends Model implements HasMedia
     use HasTranslations;
     use HasPurchasableMedia;
 
-    public array $translatable = ["name", "description"];
+    public array $translatable = [
+        "name",
+        "description",
+        "how_to_use_am",
+        "how_to_use_pm",
+        "extra_tips",
+    ];
 
     protected $fillable = [
         "name",
@@ -49,6 +55,10 @@ class Bundle extends Model implements HasMedia
         "length",
         "width",
         "height",
+        "url",
+        "how_to_use_am",
+        "how_to_use_pm",
+        "extra_tips",
     ];
 
     protected $casts = [

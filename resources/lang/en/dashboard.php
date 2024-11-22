@@ -75,4 +75,7 @@ return [
     "Track stock quantity for this product" =>
         "Track stock quantity for this product",
     "On Sale" => "On Sale",
+    "How To Use" => "How To Use",
+    "Extra Tips" => "Extra Tips",
+    "Video URL" => "Video URL",
 ];

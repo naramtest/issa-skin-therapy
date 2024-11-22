@@ -47,42 +47,67 @@ class BundleResource extends Resource
                         ShippingSection::make([]),
 
                         // Bundle Items Tab
-                        Tabs\Tab::make(__("dashboard.Bundle Items"))->schema([
-                            Repeater::make("items")
-                                ->hiddenLabel()
-                                ->relationship("items")
-                                ->schema([
-                                    Select::make("product_id")
-                                        ->label(__("dashboard.Product"))
-                                        ->relationship("product", "name")
-                                        ->required()
-                                        ->searchable()
-                                        ->preload()
-                                        ->columnSpan(2),
+                        Tabs\Tab::make(__("dashboard.Bundle Items"))
+                            ->icon("gmdi-category-o")
+                            ->schema([
+                                Repeater::make("items")
+                                    ->hiddenLabel()
+                                    ->relationship("items")
+                                    ->schema([
+                                        Select::make("product_id")
+                                            ->label(__("dashboard.Product"))
+                                            ->relationship("product", "name")
+                                            ->required()
+                                            ->searchable()
+                                            ->preload()
+                                            ->columnSpan(2),
 
-                                    TextInput::make("quantity")
-                                        ->label(__("dashboard.Quantity"))
-                                        ->numeric()
-                                        ->default(1)
-                                        ->required()
-                                        ->minValue(1)
-                                        ->columnSpan(1),
-                                ])
-                                ->columnSpanFull()
-                                ->columns(3)
-                                ->itemLabel(
-                                    fn(array $state): ?string => $state[
-                                        "product_id"
-                                    ]
-                                        ? Product::find($state["product_id"])
-                                                ?->name .
-                                            " (Qty: " .
-                                            ($state["quantity"] ?? 1) .
-                                            ")"
-                                        : null
-                                ),
-                        ]),
+                                        TextInput::make("quantity")
+                                            ->label(__("dashboard.Quantity"))
+                                            ->numeric()
+                                            ->default(1)
+                                            ->required()
+                                            ->minValue(1)
+                                            ->columnSpan(1),
+                                    ])
+                                    ->columnSpanFull()
+                                    ->columns(3)
+                                    ->itemLabel(
+                                        fn(array $state): ?string => $state[
+                                            "product_id"
+                                        ]
+                                            ? Product::find(
+                                                    $state["product_id"]
+                                                )?->name .
+                                                " (Qty: " .
+                                                ($state["quantity"] ?? 1) .
+                                                ")"
+                                            : null
+                                    ),
+                            ]),
                         MediaSection::make(),
+                        Tabs\Tab::make(
+                            __("dashboard.Additional Information")
+                        )->schema([
+                            TextInput::make("url")->label(
+                                __("dashboard.Video URL")
+                            ),
+                            Forms\Components\Fieldset::make(
+                                __("dashboard.How To Use")
+                            )
+                                ->columns(1)
+                                ->schema([
+                                    Forms\Components\RichEditor::make(
+                                        "how_to_use_am"
+                                    )->label("AM"),
+                                    Forms\Components\RichEditor::make(
+                                        "how_to_use_pm"
+                                    )->label("PM"),
+                                ]),
+                            Forms\Components\RichEditor::make(
+                                "extra_tips"
+                            )->label(__("dashboard.Extra Tips")),
+                        ]),
                     ]),
                 ])
                 ->columnSpan(2),

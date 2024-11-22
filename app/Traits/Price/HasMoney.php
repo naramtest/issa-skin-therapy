@@ -2,7 +2,6 @@
 
 namespace App\Traits\Price;
 
-use App\Helpers\Money\UserCurrency;
 use Money\Currency;
 use Money\Money;
 
