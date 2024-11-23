@@ -78,4 +78,11 @@ return [
     "How To Use" => "How To Use",
     "Extra Tips" => "Extra Tips",
     "Video URL" => "Video URL",
+    "Post" => "Post",
+    "Posts" => "Posts",
+    "Author" => "Author",
+    "Show" => "Show",
+    "Publish" => "Publish",
+    "Cover" => "Cover",
+    "Association" => "Association",
 ];

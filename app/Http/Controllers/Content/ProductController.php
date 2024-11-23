@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Content;
 
+use App\Http\Controllers\Controller;
 use App\Models\Bundle;
 use App\Models\Product;
 use App\Services\Faq\FaqService;

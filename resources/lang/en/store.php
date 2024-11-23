@@ -149,4 +149,5 @@ return [
     "AM" => "AM",
     "PM" => "PM",
     "Included in the collection" => "Included in the collection",
+    "General" => "General",
 ];

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\StoreFront;
+namespace App\Http\Controllers\Content;
 
 use App\Http\Controllers\Controller;
 

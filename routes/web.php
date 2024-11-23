@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\FaqController;
-use App\Http\Controllers\ProductCategoryController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ShopController;
-use App\Http\Controllers\StoreFront\HomeController;
+use App\Http\Controllers\Content\FaqController;
+use App\Http\Controllers\Content\HomeController;
+use App\Http\Controllers\Content\PostController;
+use App\Http\Controllers\Content\ProductCategoryController;
+use App\Http\Controllers\Content\ProductController;
+use App\Http\Controllers\Content\ShopController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/account", [HomeController::class, "index"])->name("account.index");
@@ -42,6 +43,10 @@ Route::get("/shop", [ShopController::class, "index"])->name("shop.index");
 Route::get("/product/{product:slug}", [ProductController::class, "show"])->name(
     "product.show"
 );
+Route::controller(PostController::class)->group(function () {
+    Route::get("/post/{post:slug}", "show")->name("post.show");
+    Route::get("/blog", "index")->name("post.index");
+});
 
 Route::get("/collection/{bundle:slug}", [
     ProductController::class,
