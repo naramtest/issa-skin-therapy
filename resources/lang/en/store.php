@@ -139,4 +139,14 @@ return [
     "Full ingredients" => "Full ingredients",
     "Key Ingredients" => "Key Ingredients",
     "How to use" => "How to use",
+    "Made in USA" => "Made in USA",
+    "Patent Delivery Technology" => "Patent Delivery Technology",
+    "Watch the full tutorial video to learn how to use!" =>
+        "Watch the full tutorial video to learn how to use!",
+    "Tutorial" => "Tutorial",
+    "How to Use?" => "How to Use?",
+    "icon" => "icon",
+    "AM" => "AM",
+    "PM" => "PM",
+    "Included in the collection" => "Included in the collection",
 ];

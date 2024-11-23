@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table("bundles", function (Blueprint $table) {
-            $table->string("url")->nullable();
+            $table->text("url")->nullable();
             $table->json("how_to_use_am")->nullable();
             $table->json("how_to_use_pm")->nullable();
             $table->json("extra_tips")->nullable();

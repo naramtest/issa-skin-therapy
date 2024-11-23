@@ -9,6 +9,7 @@ use App\Services\Bundle\BundleService;
 use App\Services\Inventory\BundleInventoryManager;
 use App\Traits\HasPurchasableMedia;
 use App\Traits\Price\HasBundlePrice;
+use App\Traits\Price\HasMoney;
 use App\Traits\Price\HasPricing;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -19,7 +20,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Bundle extends Model implements HasMedia
 {
-    use SoftDeletes, HasPricing, HasBundlePrice;
+    use SoftDeletes, HasPricing, HasBundlePrice, HasMoney;
     use HasTranslations;
     use HasPurchasableMedia;
 

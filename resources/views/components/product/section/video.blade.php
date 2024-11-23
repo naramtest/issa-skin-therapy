@@ -13,10 +13,10 @@
     ></video>
     <div class="z-[10] flex w-[60%] flex-col items-center text-white">
         <p class="text-[13px] font-[200] uppercase tracking-[2px]">
-            Made in USA
+            {{ __("store.Made in USA") }}
         </p>
         <h2 class="headline-font mt-4 text-center">
-            Patent Delivery Technology
+            {{ __("store.Patent Delivery Technology") }}
         </h2>
     </div>
 </x-home.section-container>

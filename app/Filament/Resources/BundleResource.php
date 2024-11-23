@@ -89,9 +89,9 @@ class BundleResource extends Resource
                         Tabs\Tab::make(
                             __("dashboard.Additional Information")
                         )->schema([
-                            TextInput::make("url")->label(
-                                __("dashboard.Video URL")
-                            ),
+                            Forms\Components\Textarea::make("url")
+                                ->label(__("dashboard.Video URL"))
+                                ->autosize(),
                             Forms\Components\Fieldset::make(
                                 __("dashboard.How To Use")
                             )

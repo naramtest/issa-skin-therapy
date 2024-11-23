@@ -19,14 +19,14 @@ class ProductController extends Controller
         ]);
     }
 
-    public function showBundle(Bundle $product, FaqService $faqService)
+    public function showBundle(Bundle $bundle, FaqService $faqService)
     {
-        $product->load(["media", "categories", "types"]);
+        $bundle->load(["media", "products"]);
         $productFaqs = $faqService->getProductFaqs();
-        return view("storefront.product.show", [
-            "product" => $product,
+        return view("storefront.product.bundle", [
+            "bundle" => $bundle,
             "faqs" => $productFaqs,
-            "media" => $product->media,
+            "media" => $bundle->media,
         ]);
     }
 }
