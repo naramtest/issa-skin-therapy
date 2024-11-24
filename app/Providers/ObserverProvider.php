@@ -5,10 +5,12 @@ namespace App\Providers;
 use App\Models\Bundle;
 use App\Models\Faq;
 use App\Models\FaqSection;
+use App\Models\Post;
 use App\Models\Product;
 use App\Observers\BundleObserver;
 use App\Observers\FaqObserver;
 use App\Observers\FaqSectionObserver;
+use App\Observers\PostObserver;
 use App\Observers\ProductObserver;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,5 +33,6 @@ class ObserverProvider extends ServiceProvider
         Faq::observe(FaqObserver::class);
         FaqSection::observe(FaqSectionObserver::class);
         Bundle::observe(BundleObserver::class);
+        Post::observe(PostObserver::class);
     }
 }

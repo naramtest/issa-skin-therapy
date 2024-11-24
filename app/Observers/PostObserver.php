@@ -15,10 +15,10 @@ readonly class PostObserver
 
     public function creating(Post $post): void
     {
-        $this->editBody($post);
+        $this->processBody($post);
     }
 
-    public function editBody(Post $post): void
+    public function processBody(Post $post): void
     {
         $post->body = $this->postImageManagerService->editBody($post);
         $post->edited = true;
@@ -28,7 +28,7 @@ readonly class PostObserver
     public function updating(Post $post): void
     {
         if ($post->isDirty("body")) {
-            $this->editBody($post);
+            $this->processBody($post);
         }
     }
 }
