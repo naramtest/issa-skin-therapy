@@ -16,4 +16,8 @@ class PostController extends Controller
     {
         return view("storefront.posts.show", ["post" => $post]);
     }
+
+    public function preview(int $id)
+    {
+    }
 }

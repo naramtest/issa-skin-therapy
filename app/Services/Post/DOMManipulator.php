@@ -8,15 +8,21 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class DOMManipulator
 {
-    public function processImages(string $html, Closure $imageProcessor): string
-    {
-        $crawler = new Crawler($html, useHtml5Parser: true);
-        $images = $crawler->filter("img");
+    public function processImages(
+        array $content,
+        Closure $imageProcessor
+    ): array {
+        $result = [];
+        foreach ($content as $key => $html) {
+            $crawler = new Crawler($html, useHtml5Parser: true);
+            $images = $crawler->filter("img");
 
-        $imageProcessor($images);
+            $imageProcessor($images);
 
-        $html = urldecode($this->getBufferedHtml($crawler));
-        return $this->removeBodyTags($html);
+            $html = urldecode($this->getBufferedHtml($crawler));
+            $result[$key] = $this->removeBodyTags($html);
+        }
+        return $result;
     }
 
     /**

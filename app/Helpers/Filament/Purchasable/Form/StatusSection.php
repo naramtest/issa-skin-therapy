@@ -45,6 +45,7 @@ class StatusSection
                     fn(callable $get) => $get("status") !== ProductStatus::DRAFT
                 )
                 ->displayFormat("d-m-Y-H-i-s"),
+            ...$array,
         ]);
     }
 }

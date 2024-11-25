@@ -85,4 +85,6 @@ return [
     "Publish" => "Publish",
     "Cover" => "Cover",
     "Association" => "Association",
+    "Visible" => "Visible",
+    "Save" => "Save",
 ];

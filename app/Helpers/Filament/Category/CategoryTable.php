@@ -1,19 +1,62 @@
 <?php
 
-namespace App\Helpers\Filament\Component;
+namespace App\Helpers\Filament\Category;
 
 use App\Enums\CategoryType;
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\Product;
 use Auth;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 
-class CategoryMoveAndDeleteButton
+class CategoryTable
 {
-    public static function make()
+    public static function columns(): array
+    {
+        return [
+            TextColumn::make("order")
+                ->label(__("dashboard.Order"))
+                ->grow(false)
+                ->sortable()
+                ->grow(false),
+            TextColumn::make("name")
+                ->label(__("store.Name"))
+                ->sortable()
+                ->searchable(),
+            IconColumn::make("is_visible")
+                ->label(__("dashboard.Published"))
+                ->boolean(),
+            TextColumn::make("created_at")
+                ->label(__("dashboard.Created At"))
+                ->date("M j, Y")
+                ->sortable(),
+        ];
+    }
+
+    public static function actions(): array
+    {
+        return [
+            EditAction::make(),
+            DeleteAction::make()->hidden(function (Category $record) {
+                $exists =
+                    $record->type === CategoryType::PRODUCT
+                        ? $record->products()->exists()
+                        : $record->posts()->exists();
+                return !Auth::user()->can("delete", $record) or !$exists;
+            }),
+
+            self::moveAndDeleteAction(),
+        ];
+    }
+
+    protected static function moveAndDeleteAction()
     {
         return Action::make("Delete")
             ->label(__("dashboard.Delete"))
@@ -53,7 +96,15 @@ class CategoryMoveAndDeleteButton
                             ->attach($data["category"])
                     );
                 } elseif ($record->type === CategoryType::POST) {
-                    //TODO: add Post Here
+                    $posts = Post::whereHas(
+                        "categories",
+                        fn($query) => $query->where("category_id", $record->id)
+                    )->get();
+                    $posts->each(
+                        fn($post) => $post
+                            ->categories()
+                            ->attach($data["category"])
+                    );
                 }
 
                 if ($record->delete()) {
@@ -68,9 +119,12 @@ class CategoryMoveAndDeleteButton
                 }
             })
             ->modalSubmitActionLabel(__("dashboard.Move & Delete"))
-            ->hidden(
-                fn(Category $record) => !Auth::user()->can("delete", $record) or
-                    !$record->products()->exists()
-            );
+            ->hidden(function (Category $record) {
+                $exists =
+                    $record->type === CategoryType::PRODUCT
+                        ? $record->products()->exists()
+                        : $record->posts()->exists();
+                return !Auth::user()->can("delete", $record) or !$exists;
+            });
     }
 }

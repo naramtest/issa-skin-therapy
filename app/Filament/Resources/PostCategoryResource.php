@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\CategoryType;
-use App\Filament\Resources\ProductCategoryResource\Pages\ManageProductCategories;
+use App\Filament\Resources\PostCategoryResource\Pages\ManagePostCategories;
 use App\Helpers\Filament\Category\CategoryForm;
 use App\Helpers\Filament\Category\CategoryTable;
 use App\Models\Category;
@@ -13,13 +13,13 @@ use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-class ProductCategoryResource extends Resource
+class PostCategoryResource extends Resource
 {
     use Translatable;
 
     protected static ?string $model = Category::class;
 
-    protected static ?string $slug = "product-categories";
+    protected static ?string $slug = "post-categories";
 
     protected static ?string $navigationIcon = "heroicon-o-rectangle-stack";
 
@@ -31,19 +31,19 @@ class ProductCategoryResource extends Resource
             ->reorderable("order")
             ->actions(CategoryTable::actions())
             ->modifyQueryUsing(function (Builder $query) {
-                return $query->where("type", CategoryType::PRODUCT);
+                return $query->where("type", CategoryType::POST);
             });
     }
 
     public static function form(Form $form): Form
     {
-        return CategoryForm::make($form, CategoryType::PRODUCT);
+        return CategoryForm::make($form, CategoryType::POST);
     }
 
     public static function getPages(): array
     {
         return [
-            "index" => ManageProductCategories::route("/"),
+            "index" => ManagePostCategories::route("/"),
         ];
     }
 
@@ -79,11 +79,11 @@ class ProductCategoryResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __("store.Shop");
+        return __("dashboard.Content");
     }
 
     public static function getNavigationParentItem(): ?string
     {
-        return __("store.Products");
+        return __("dashboard.Posts");
     }
 }

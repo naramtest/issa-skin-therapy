@@ -46,6 +46,7 @@ Route::get("/product/{product:slug}", [ProductController::class, "show"])->name(
 Route::controller(PostController::class)->group(function () {
     Route::get("/post/{post:slug}", "show")->name("post.show");
     Route::get("/blog", "index")->name("post.index");
+    Route::get("/blog/preview/{id}", "preview")->name("post.preview");
 });
 
 Route::get("/collection/{bundle:slug}", [

@@ -19,31 +19,38 @@ class PostImageManagerService
             $availableUrl = $image->getAvailableUrl([
                 config("const.media.optimized"),
             ]);
-            if (!Str::contains($post->getOriginal("body"), $availableUrl)) {
+            $exists = false;
+            foreach ($post->getTranslations("body") as $body) {
+                if (Str::contains($body, $availableUrl)) {
+                    $exists = true;
+                }
+            }
+            if (!$exists) {
                 $image->delete();
             }
         }
     }
 
-    public function editBody(Post $post): string
+    public function editBody(Post $post): array
     {
         try {
             return app(DOMManipulator::class)->processImages(
-                $post->getOriginal("body"),
-                function ($img) use ($post) {
-                    $url = $img->getAttribute("src");
-                    if (Str::contains($url, "body-attachments")) {
-                        $newUrl = $this->getNewUrl($url);
-                        $media = $this->addMediaFromUrl($post, $newUrl);
-                        $this->updateImageSrc($img, $media);
-                    } elseif (Str::contains($url, "base64")) {
-                        $media = $this->addMediaFromBase64($post, $url);
-                        $this->updateImageSrc($img, $media);
+                $post->getTranslations("body"),
+                function ($images) use ($post) {
+                    foreach ($images as $img) {
+                        $url = $img->getAttribute("src");
+                        if (Str::contains($url, "body-attachments")) {
+                            $newUrl = self::getNewUrl($url);
+                            $media = self::addMediaFromUrl($post, $newUrl);
+                            $this->updateImageSrc($img, $media);
+                        } elseif (Str::contains($url, "base64")) {
+                            $media = self::addMediaFromBase64($post, $url);
+                            $this->updateImageSrc($img, $media);
+                        }
                     }
                 }
             );
         } catch (FileCannotBeAdded | FileDoesNotExist | FileIsTooBig | InvalidBase64Data $e) {
-            logger($e);
             return $post->body;
         }
     }

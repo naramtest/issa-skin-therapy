@@ -12,16 +12,19 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Tags\HasTags;
+use Spatie\Translatable\HasTranslations;
 use Str;
 
-class Post extends Model
+class Post extends Model implements HasMedia
 {
     use HasPostSeo;
     use HasSEO;
     use HasTags;
+    use HasTranslations;
     use InteractsWithMedia;
     use Prunable, SoftDeletes;
 

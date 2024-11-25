@@ -48,6 +48,11 @@ class Category extends Model
         return $this->morphedByMany(Product::class, "model", "categorizables");
     }
 
+    public function posts(): MorphToMany
+    {
+        return $this->morphedByMany(Post::class, "model", "categorizables");
+    }
+
     public function determineTitleColumnName(): string
     {
         return "name";

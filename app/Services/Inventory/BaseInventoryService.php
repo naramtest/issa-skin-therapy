@@ -4,22 +4,9 @@ namespace App\Services\Inventory;
 
 use App\Enums\QuantityAction;
 use App\Enums\StockStatus;
-use Illuminate\Database\Eloquent\Builder;
 
 class BaseInventoryService
 {
-    public function scopeAvailable(Builder $query): Builder
-    {
-        return $query->where(function ($query) {
-            $query->orWhereIn("stock_status", [
-                StockStatus::IN_STOCK->value,
-                StockStatus::LOW_STOCK->value,
-                StockStatus::BACKORDER->value,
-                StockStatus::PREORDER->value,
-            ]);
-        });
-    }
-
     public function getVolume(
         ?float $length,
         ?float $width,
@@ -30,16 +17,6 @@ class BaseInventoryService
         }
 
         return null;
-    }
-
-    public function scopeLowStock(Builder $query): Builder
-    {
-        return $query->where("stock_status", StockStatus::LOW_STOCK->value);
-    }
-
-    public function scopeOutOfStock(Builder $query): Builder
-    {
-        return $query->where("stock_status", StockStatus::OUT_OF_STOCK->value);
     }
 
     public function getStockMovementDescription(

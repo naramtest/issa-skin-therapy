@@ -220,6 +220,7 @@ class ProductResource extends Resource
                         Forms\Components\Select::make("stock_status")
                             ->options(StockStatus::class)
                             ->default(StockStatus::IN_STOCK)
+                            ->label("Stock Status")
                             ->disabled(
                                 fn(callable $get) => $get("track_quantity")
                             ),
