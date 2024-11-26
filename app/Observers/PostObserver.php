@@ -3,14 +3,25 @@
 namespace App\Observers;
 
 use App\Models\Post;
+use App\Services\Post\PostCacheService;
 use App\Services\Post\PostImageManagerService;
 
 readonly class PostObserver
 {
-    //TODO: add cache like the one in productCache observe here and in the bundle
     public function __construct(
-        private PostImageManagerService $postImageManagerService
+        private PostImageManagerService $postImageManagerService,
+        private PostCacheService $postCacheService
     ) {
+    }
+
+    public function saved(Post $post): void
+    {
+        $this->postCacheService->clearPostsCache();
+    }
+
+    public function deleted(Post $post): void
+    {
+        $this->postCacheService->clearPostsCache();
     }
 
     public function creating(Post $post): void

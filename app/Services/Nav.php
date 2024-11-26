@@ -57,7 +57,7 @@ class Nav
                 [
                     "name" => "Blog",
                     "title" => __("store.Blog"),
-                    "route" => "blog.index",
+                    "route" => "posts.index",
                 ],
                 [
                     "name" => "Refund Returns",

@@ -8,6 +8,7 @@
     <h2 class="headline-font">{{ __("store.You may also like") }}</h2>
     <div class="mt-12 flex items-center justify-between">
         <ul class="flex flex-1 items-center gap-x-4">
+            {{-- TODO: Cache Porduct Categories --}}
             @foreach (\App\Models\Category::all() as $category)
                 <x-product.categories-item
                     id="{{$category->id}}"

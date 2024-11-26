@@ -14,6 +14,14 @@
 //TODO: add spatie cache library and delete cache when faq , Product , reviews ..... etc
 // TODO: bundle front end Page
 
+
+
+//25/11
+//TODO: add Post , Blog , Archive (for , product , bundle , post) front end pages
+//TODO: make them responsive
+//TODO: finish Bundle Page
+//TODO: add soft delete for every resource
+
 //animation
 //TODO: check if there is any animation you can add to product , shop page
 //TODO: add swiper animation in home page

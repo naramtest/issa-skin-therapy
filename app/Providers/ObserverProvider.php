@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Models\Bundle;
+use App\Models\Category;
 use App\Models\Faq;
 use App\Models\FaqSection;
 use App\Models\Post;
 use App\Models\Product;
 use App\Observers\BundleObserver;
+use App\Observers\CategoryObserver;
 use App\Observers\FaqObserver;
 use App\Observers\FaqSectionObserver;
 use App\Observers\PostObserver;
@@ -34,5 +36,6 @@ class ObserverProvider extends ServiceProvider
         FaqSection::observe(FaqSectionObserver::class);
         Bundle::observe(BundleObserver::class);
         Post::observe(PostObserver::class);
+        Category::observe(CategoryObserver::class);
     }
 }
