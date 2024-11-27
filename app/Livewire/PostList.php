@@ -13,13 +13,14 @@ class PostList extends Component
 {
     use WithPagination;
 
-    private const REQUIRED_POSTS = 9;
-    private const POSTS_PER_PAGE = 9;
+    public const REQUIRED_POSTS = 6;
+    private const POSTS_PER_PAGE = 6;
     #[Url]
     public ?string $categoryId = null;
+    public Collection $categories;
     private PostCacheService $postCacheService;
 
-    public function mount(PostCacheService $postCacheService): void
+    public function boot(PostCacheService $postCacheService)
     {
         $this->postCacheService = $postCacheService;
     }
@@ -62,8 +63,9 @@ class PostList extends Component
         return $repeatedPosts->take(self::REQUIRED_POSTS);
     }
 
-    public function updatedCategoryId(): void
+    public function filterByCategory($categoryId): void
     {
+        $this->categoryId = $categoryId;
         $this->resetPage();
     }
 }

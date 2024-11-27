@@ -95,6 +95,7 @@ class PostCacheService
                     );
                 },
             ])
+            ->byDate()
             ->latest();
 
         if ($categoryIds) {

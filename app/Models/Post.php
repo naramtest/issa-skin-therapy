@@ -152,7 +152,7 @@ class Post extends Model implements HasMedia
     //            ->title($this->title)
     //            ->summary($this->excerpt)
     //            ->updated($this->updated_at)
-    //            ->link(route('post.show', ['post' => $this->slug]))
+    //            ->link(route('posts.show', ['post' => $this->slug]))
     //            ->authorName($this->author->name)
     //            ->authorEmail('info@alaanplus.com');
     //    }

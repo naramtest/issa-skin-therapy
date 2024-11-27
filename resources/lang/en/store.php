@@ -150,4 +150,7 @@ return [
     "PM" => "PM",
     "Included in the collection" => "Included in the collection",
     "General" => "General",
+    "Comments Icon" => "Comments Icon",
+    "No Comments" => "No Comments",
+    "Read More" => "Read More",
 ];

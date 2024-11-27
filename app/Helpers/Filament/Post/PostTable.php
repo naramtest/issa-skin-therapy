@@ -117,7 +117,7 @@ class PostTable
                             ProductStatus::PUBLISHED
                     )
                     ->url(
-                        fn(Post $record) => route("post.show", [
+                        fn(Post $record) => route("posts.show", [
                             "post" => $record->slug,
                         ]),
                         true

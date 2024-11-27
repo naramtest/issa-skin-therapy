@@ -20,7 +20,7 @@ class AutoSaveActions
             ->label(__("dashboard.Show"))
             ->color("success")
             ->url(
-                fn(Post $record) => route("post.show", [
+                fn(Post $record) => route("posts.show", [
                     "post" => $record->slug,
                 ]),
                 true

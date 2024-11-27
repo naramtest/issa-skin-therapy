@@ -27,14 +27,14 @@ trait HasPostSeo
             description: $post->description ?? substr($post->excerpt, 0, 160),
             author: $post->author->name,
             image: $image,
-            url: route("post.show", ["post" => $post->slug]),
+            url: route("posts.show", ["post" => $post->slug]),
             published_time: $post->published_at,
             section: $post->categories->first()?->name ?? __("store.General"),
             tags: $post->tags->pluck("name")->toArray(),
             schema: SchemaCollection::initialize()->addArticle(),
             type: "article",
             site_name: config("app.name"),
-            canonical_url: route("post.show", ["post" => $post->slug])
+            canonical_url: route("posts.show", ["post" => $post->slug])
         );
     }
 }

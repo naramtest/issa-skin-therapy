@@ -112,6 +112,12 @@ body {
     border-radius: 20px;
 }
 
+.card-opacity-10.card-overlay:before {
+    border-radius: 20px;
+    opacity: 0.2;
+
+}
+
 .headline-font {
     font-size: 2.75rem;
     font-weight: 800;

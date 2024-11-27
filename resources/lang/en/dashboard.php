@@ -87,4 +87,5 @@ return [
     "Association" => "Association",
     "Visible" => "Visible",
     "Save" => "Save",
+    "Calender Icon" => "Calender Icon",
 ];
