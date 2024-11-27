@@ -153,4 +153,6 @@ return [
     "Comments Icon" => "Comments Icon",
     "No Comments" => "No Comments",
     "Read More" => "Read More",
+    "Share" => "Share",
+    "Latest Stories" => "Latest Stories",
 ];

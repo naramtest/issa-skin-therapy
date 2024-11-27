@@ -60,24 +60,30 @@ body {
 
 }
 
+.no-tailwind.post ul, .no-tailwind.post ol {
+    padding: revert;
+    @apply flex gap-y-[7px] flex-col
+
+}
+
 
 .no-tailwind h2 {
-    font-size: 22px !important;
+    font-size: 24px !important;
     font-weight: 600 !important;
 }
 
 .no-tailwind h2 * {
-    font-size: 22px !important;
+    font-size: 24px !important;
     font-weight: 600 !important;
 }
 
 .no-tailwind h3 {
-    font-size: 22px !important;
+    font-size: 24px !important;
     font-weight: 500 !important;
 }
 
 .no-tailwind h3 * {
-    font-size: 22px !important;
+    font-size: 24px !important;
     font-weight: 500 !important;
 }
 
@@ -316,6 +322,11 @@ body.menu-open {
 .modal-container {
     transform: translateX(100%);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+
+.post-width {
+    width: min(100%, 1140px);
 }
 
 

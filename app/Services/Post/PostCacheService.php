@@ -13,7 +13,7 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class PostCacheService
 {
-    //TODO: test this if its work add and removing the cache
+    //TODO: test this if its work (add and removing the cache)
     //TODO: switch to spatie cache / for posts , faq ... etc / to know what to do ask claude how to cache a pagination
     /**
      * Cache duration in seconds (1 week)
@@ -121,11 +121,6 @@ class PostCacheService
         );
     }
 
-    public function clearPostsCache(): void
-    {
-        Cache::tags(["posts"])->flush();
-    }
-
     public function clearCategoriesCache(?array $categoryIds = null): void
     {
         if ($categoryIds) {
@@ -135,5 +130,10 @@ class PostCacheService
         }
 
         Cache::tags(["categories"])->flush();
+    }
+
+    public function clearPostsCache(): void
+    {
+        Cache::tags(["posts"])->flush();
     }
 }

@@ -11,12 +11,8 @@
     </a>
     <div class="absolute bottom-10 z-[100] px-8 text-white">
         @if (count($post->categories))
-            {{-- TODO: add url to archive page --}}
-            <div class="w-fit rounded-3xl bg-[#92E1D8] px-6 py-2 text-xs">
-                <p class="text-darkColor">
-                    {{ $post->categories->first()->name }}
-                </p>
-            </div>
+            <x-blog.category-label :post="$post" class="bg-[#92E1D8]" />
+
             <div class="mt-4 flex divide-x-2 divide-white">
                 <div class="flex items-center pe-3">
                     <img

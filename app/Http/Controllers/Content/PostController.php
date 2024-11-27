@@ -22,7 +22,33 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        return view("storefront.posts.show", ["post" => $post]);
+        //       TODO: cache this using Spatie cache not laravel cache
+        $nextPost = Post::select(["id", "title", "slug", "published_at"])
+            ->where("id", ">", $post->id)
+            ->byDate()
+            ->first();
+        $pastPost = Post::select(["id", "title", "slug", "published_at"])
+            ->where("id", "<", $post->id)
+            ->byDate()
+            ->first();
+        $latestPosts = Post::select([
+            "id",
+            "title",
+            "slug",
+            "published_at",
+            "excerpt",
+        ])
+            ->where("id", "!=", $post->id)
+            ->byDate()
+            ->limit(3)
+            ->get();
+
+        return view("storefront.posts.show", [
+            "post" => $post,
+            "latestPosts" => $latestPosts,
+            "nextPost" => $nextPost,
+            "pastPost" => $pastPost,
+        ]);
     }
 
     public function preview(int $id)

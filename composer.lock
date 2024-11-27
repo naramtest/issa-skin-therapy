@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d09ccb0e9b42d0eaef53acbeb00f723",
+    "content-hash": "83606fd41f65c5b2581ab5f8d76d9258",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -7058,6 +7058,89 @@
                 }
             ],
             "time": "2024-11-08T18:45:41+00:00"
+        },
+        {
+            "name": "spatie/laravel-responsecache",
+            "version": "7.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-responsecache.git",
+                "reference": "008a12bb69478075f64e1cf4d9a09c7c1a28e959"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-responsecache/zipball/008a12bb69478075f64e1cf4d9a09c7c1a28e959",
+                "reference": "008a12bb69478075f64e1cf4d9a09c7c1a28e959",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/cache": "^10.0|^11.0",
+                "illuminate/console": "^10.0|^11.0",
+                "illuminate/container": "^10.0|^11.0",
+                "illuminate/http": "^10.0|^11.0",
+                "illuminate/support": "^10.0|^11.0",
+                "nesbot/carbon": "^2.63|^3.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.9"
+            },
+            "require-dev": {
+                "laravel/framework": "^10.0|^11.0",
+                "mockery/mockery": "^1.4",
+                "orchestra/testbench": "^8.0|^9.0",
+                "pestphp/pest": "^2.22"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\ResponseCache\\ResponseCacheServiceProvider"
+                    ],
+                    "aliases": {
+                        "ResponseCache": "Spatie\\ResponseCache\\Facades\\ResponseCache"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\ResponseCache\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Speed up a Laravel application by caching the entire response",
+            "homepage": "https://github.com/spatie/laravel-responsecache",
+            "keywords": [
+                "cache",
+                "laravel",
+                "laravel-responsecache",
+                "performance",
+                "response",
+                "spatie"
+            ],
+            "support": {
+                "source": "https://github.com/spatie/laravel-responsecache/tree/7.6.1"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-11-18T11:37:25+00:00"
         },
         {
             "name": "spatie/laravel-tags",
