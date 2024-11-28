@@ -1,4 +1,5 @@
 @import "components/image-comparison.css";
+@import "components/button-animation.css";
 
 @tailwind base;
 @tailwind components;

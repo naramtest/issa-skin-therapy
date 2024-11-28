@@ -21,14 +21,17 @@
                     {{ $content }}
                 </h2>
             </div>
-            <div>
-                <a
-                    href=""
-                    class="rounded-[50px] bg-lightColor px-[30px] py-[15px] hover:bg-lightAccentColor"
-                >
-                    {{ __("store.Shop Now") }}
-                </a>
-            </div>
+            <style>
+                :root {
+                    --mask-image-url: url('{{ asset("storage/images/image.png") }}');
+                }
+            </style>
+            <a
+                href="{{ route("shop.index") }}"
+                class="mask-button relative h-[50px] w-[200px] rounded-[50px] border-2 border-white bg-black text-center transition-all duration-500"
+            >
+                <span class="text-black">{{ __("store.Shop Now") }}</span>
+            </a>
         </div>
         <hr class="w-full border-t-[1px] border-white/60" />
         <div class="py-10"></div>

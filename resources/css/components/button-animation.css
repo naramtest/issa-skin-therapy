@@ -1,0 +1,56 @@
+.mask-button::before {
+    content: "";
+    @apply absolute rounded-[inherit] border-2 border-solid border-white inset-[-1px] w-[102%] h-[102%] bg-white;
+    -webkit-mask: url("https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/nature-sprite.png");
+    mask: url("https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/nature-sprite.png");
+    -webkit-mask-size: 2300% 100%;
+    mask-size: 2300% 100%;
+    animation: maskOut 0.7s steps(22) forwards;
+}
+
+
+.mask-button:hover::before {
+    animation: maskIn 0.7s steps(22) forwards;
+}
+
+
+.mask-button span {
+    @apply absolute inset-0 w-full text-center  leading-[50px] transition-colors duration-700;
+}
+
+.mask-button:hover span {
+
+    @apply text-white;
+}
+
+
+@keyframes bgOut {
+    0% {
+        background-color: var(--color-dark);
+    }
+    99% {
+        background-color: white;
+    }
+}
+
+@keyframes maskIn {
+    from {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+    }
+    to {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+    }
+}
+
+@keyframes maskOut {
+    from {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+    }
+    to {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+    }
+}

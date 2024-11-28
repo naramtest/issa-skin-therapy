@@ -14,6 +14,7 @@
             <x-posts.first-list-item :post="$this->displayPosts[0]" />
             <div class="col-span-3 flex h-[42rem] flex-col justify-between">
                 <x-posts.second-list-item :post="$this->displayPosts[1]" />
+                <div class="h-[1px] w-full bg-gray-200"></div>
                 <x-posts.second-list-item :post="$this->displayPosts[2]" />
             </div>
             @for ($i=3 ; $i < 6 ; $i++)

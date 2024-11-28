@@ -15,5 +15,5 @@
 
         <x-home.section.logos />
     </main>
-    <livewire:first-visit-modal />
+    {{-- <livewire:first-visit-modal /> --}}
 </x-store-main-layout>

@@ -1,7 +1,7 @@
 @props([
     "post",
 ])
-<article class="flex h-[48%] items-start justify-between">
+<article class="flex h-[47%] items-start justify-between">
     <div class="relative h-full w-[40%]">
         {!! \App\Helpers\Media\ImageGetter::responsiveFeaturedImg($post, class: "h-full  object-cover rounded-2xl w-full") !!}
         <x-blog.category-label
