@@ -330,6 +330,21 @@ body.menu-open {
     width: min(100%, 1140px);
 }
 
+/* resources/css/app.css */
+@layer utilities {
+    .duration-800 {
+        transition-duration: 800ms;
+    }
+}
+
+@layer components {
+    /* Fallback for browsers that don't support clip-path */
+    @supports not (clip-path: ellipse(150% 150% at 50% 100%)) {
+        .button-overlay {
+            border-radius: 50px;
+        }
+    }
+}
 
 
 

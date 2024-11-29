@@ -84,4 +84,20 @@ class Nav
             ],
         ];
     }
+
+    public static function headerPages()
+    {
+        return [
+            [
+                "name" => "Home",
+                "title" => __("store.Home"),
+                "route" => "storefront.index",
+            ],
+            [
+                "name" => "Shop",
+                "title" => __("store.Shop"),
+                "route" => "shop.index",
+            ],
+        ];
+    }
 }

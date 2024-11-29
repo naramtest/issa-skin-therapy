@@ -1,8 +1,5 @@
 import "./bootstrap";
-import {
-    Alpine,
-    Livewire,
-} from "../../vendor/livewire/livewire/dist/livewire.esm";
+import { Alpine, Livewire } from "../../vendor/livewire/livewire/dist/livewire.esm";
 import { initLightbox } from "./feature/lightbox.js";
 
 import Swiper from "swiper";
@@ -47,4 +44,34 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 initTextEffects();
+
+Alpine.directive("button-animation", (el) => {
+    const overlay = el.querySelector(".button-overlay");
+
+    gsap.set(overlay, {
+        y: "100%",
+        clipPath: "ellipse(150% 150% at 50% 0%)"
+    });
+
+    const tl = gsap.timeline({ paused: true });
+
+    // Show from bottom animation
+    tl.to(overlay, {
+        y: 0,
+        clipPath: "ellipse(150% 150% at 50% 100%)",
+        duration: 0.8,
+        ease: "power2.inOut"
+    });
+
+    el.addEventListener("mouseenter", () => tl.play());
+    el.addEventListener("mouseleave", () => {
+        // Hide to top animation
+        gsap.to(overlay, {
+            y: "-100%",
+            clipPath: "ellipse(150% 150% at 50% 0%)",
+            duration: 0.8,
+            ease: "power2.inOut"
+        });
+    });
+});
 Livewire.start();

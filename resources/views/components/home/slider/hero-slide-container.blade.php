@@ -21,16 +21,13 @@
                     {{ $content }}
                 </h2>
             </div>
-            <style>
-                :root {
-                    --mask-image-url: url('{{ asset("storage/images/image.png") }}');
-                }
-            </style>
+
             <a
                 href="{{ route("shop.index") }}"
-                class="mask-button relative h-[50px] w-[200px] rounded-[50px] border-2 border-white bg-black text-center transition-all duration-500"
+                class="relative  h-[50px] w-[200px] overflow-hidden rounded-[50px] border-2 border-white bg-white  hover:text-white inline-block text-black uppercase"
+
             >
-                <span class="text-black">{{ __("store.Shop Now") }}</span>
+                <x-general.button-animation />
             </a>
         </div>
         <hr class="w-full border-t-[1px] border-white/60" />

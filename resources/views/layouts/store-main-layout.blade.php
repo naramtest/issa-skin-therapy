@@ -18,7 +18,11 @@
         <!-- Styles -->
         @stack("styles")
         @livewireStyles
-
+        <style>
+            :root {
+                --mask-image-url: url('{{ asset("storage/images/image.png") }}');
+            }
+        </style>
         @vite(["resources/css/app.css", "resources/js/app.js"])
         @stack("header-scripts")
     </head>
