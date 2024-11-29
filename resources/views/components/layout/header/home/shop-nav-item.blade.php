@@ -1,11 +1,13 @@
 @props([
     "title",
+
 ])
 
 <li
     {{ $attributes->class(["nav-padding "]) }}
 >
-    <div
+    <a
+        href="{{route('shop.index')}}"
         @mouseenter="open = true; $nextTick(() => animateItems())"
         class="cursor-pointer rounded-[3.125rem] font-medium"
     >
@@ -21,5 +23,5 @@
                 {{ $title }}
             </span>
         </div>
-    </div>
+    </a>
 </li>

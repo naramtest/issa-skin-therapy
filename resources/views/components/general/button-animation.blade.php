@@ -1,5 +1,5 @@
 <div
-    {{ $attributes->class(['transition-all w-full h-full flex items-center justify-center text-center   duration-800']) }}
+    {{ $attributes->class(['transition-all w-full h-full flex items-center justify-center text-center   duration-[800ms]']) }}
     x-data="{ hoverOn: false ,hoverOff:false,mouseOn(){
                     this.hoverOn = true;
                     this.hoverOff = false;

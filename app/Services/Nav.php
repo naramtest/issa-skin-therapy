@@ -98,6 +98,16 @@ class Nav
                 "title" => __("store.Shop"),
                 "route" => "shop.index",
             ],
+            [
+                'name' => 'About',
+                'title' => __('store.About'),
+                'route' => 'about.index',
+            ],
+            [
+                'name' => 'Contact Us',
+                'title' => __('store.Contact Us'),
+                'route' => 'contact.index',
+            ],
         ];
     }
 }
