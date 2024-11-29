@@ -3,10 +3,19 @@
 namespace App\Observers;
 
 use App\Models\Bundle;
+use App\Models\Product;
+use App\Services\Product\ProductCacheService;
 use InvalidArgumentException;
 
-class BundleObserver
+readonly class BundleObserver
 {
+
+    public function __construct(
+        private ProductCacheService $productCacheService
+    )
+    {
+    }
+
     public function saving(Bundle $bundle): void
     {
         // Validate regular price
@@ -46,5 +55,15 @@ class BundleObserver
             });
             $bundle->weight = $totalWeight;
         }
+    }
+
+    public function saved(Product $product): void
+    {
+        $this->productCacheService->clearAllBundlesCache();
+    }
+
+    public function deleted(Product $product): void
+    {
+        $this->productCacheService->clearAllBundlesCache();
     }
 }

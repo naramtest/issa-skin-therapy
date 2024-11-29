@@ -16,6 +16,9 @@ Route::get("/checkout", [CheckoutController::class, "index"])->name(
 Route::get("/order-tracking", [HomeController::class, "index"])->name(
     "order.tracking"
 );
+Route::get("/collections-page", [HomeController::class, "index"])->name(
+    "bundles.index"
+);
 
 Route::get("/contact-us", [HomeController::class, "index"])->name(
     "contact.index"

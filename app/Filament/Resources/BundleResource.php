@@ -31,6 +31,7 @@ class BundleResource extends Resource
     use Translatable;
 
     //TODO: add preview button to every table column and inside edit page for every resource that has a page
+    //TODO: Add Save Button to every resource and soft deletes
 
     protected static ?string $model = Bundle::class;
     protected static ?string $navigationIcon = "heroicon-o-cube";
@@ -43,7 +44,14 @@ class BundleResource extends Resource
             Forms\Components\Group::make()
                 ->schema([
                     Tabs::make("Bundle")->tabs([
-                        BasicInformation::make([]),
+                        BasicInformation::make([
+                            TextInput::make('subtitle')
+                                ->label(__('dashboard.Subtitle'))
+                                ->translate(true)
+                                ->maxLength(250)
+                                ->counter('subtitle', 250)
+                                ->inlineLabel()
+                        ]),
                         ShippingSection::make([]),
 
                         // Bundle Items Tab
@@ -73,15 +81,13 @@ class BundleResource extends Resource
                                     ->columnSpanFull()
                                     ->columns(3)
                                     ->itemLabel(
-                                        fn(array $state): ?string => $state[
-                                            "product_id"
-                                        ]
+                                        fn(array $state): ?string => $state["product_id"]
                                             ? Product::find(
-                                                    $state["product_id"]
-                                                )?->name .
-                                                " (Qty: " .
-                                                ($state["quantity"] ?? 1) .
-                                                ")"
+                                                $state["product_id"]
+                                            )?->name .
+                                            " (Qty: " .
+                                            ($state["quantity"] ?? 1) .
+                                            ")"
                                             : null
                                     ),
                             ]),
@@ -193,8 +199,8 @@ class BundleResource extends Resource
                             ->default(0)
                             ->visible(
                                 fn(callable $get) => $get(
-                                    "bundle_level_stock"
-                                ) && $get("track_quantity")
+                                        "bundle_level_stock"
+                                    ) && $get("track_quantity")
                             ),
 
                         TextInput::make("low_stock_threshold")
@@ -203,8 +209,8 @@ class BundleResource extends Resource
                             ->default(5)
                             ->visible(
                                 fn(callable $get) => $get(
-                                    "bundle_level_stock"
-                                ) && $get("track_quantity")
+                                        "bundle_level_stock"
+                                    ) && $get("track_quantity")
                             ),
 
                         Toggle::make("allow_backorders")
@@ -212,8 +218,8 @@ class BundleResource extends Resource
                             ->default(false)
                             ->visible(
                                 fn(callable $get) => $get(
-                                    "bundle_level_stock"
-                                ) && $get("track_quantity")
+                                        "bundle_level_stock"
+                                    ) && $get("track_quantity")
                             ),
 
                         Select::make("stock_status")
@@ -221,8 +227,8 @@ class BundleResource extends Resource
                             ->default(StockStatus::IN_STOCK)
                             ->visible(
                                 fn(callable $get) => $get(
-                                    "bundle_level_stock"
-                                ) && !$get("track_quantity")
+                                        "bundle_level_stock"
+                                    ) && !$get("track_quantity")
                             ),
                     ]),
                 ])
@@ -237,7 +243,8 @@ class BundleResource extends Resource
     {
         return $table
             ->columns(PurchasableTable::columns())
-            ->defaultSort("created_at", "desc")
+            ->defaultSort("order",)
+            ->reorderable('order')
             ->filters(PurchasableTable::filters())
             ->actions(PurchasableTable::actions())
             ->bulkActions(PurchasableTable::bulkActions());

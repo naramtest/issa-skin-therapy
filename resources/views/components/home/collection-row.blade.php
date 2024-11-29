@@ -1,7 +1,11 @@
+@props(['title'  , 'url' , 'image' ,'subtitle'])
+
 <div {{ $attributes->class(["mt-6 flex "]) }}>
+
+
     <div
         style="
-            background-image: url({{ asset("storage/test/hero2.webp") }});
+            background-image: url({{ $image }});
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center center;
@@ -9,8 +13,8 @@
         class="card-hover-trigger relative h-[450px] w-[25%] rounded-[20px]"
     >
         <a
-            aria-label="{{ __("store.Shop by collection") }}"
-            href=""
+            aria-label="{{ $title }}"
+            href=" {{$url}} "
             class="relative z-10 block h-full w-full"
         >
             <div class="absolute bottom-7 w-full px-7 text-white">
@@ -18,23 +22,20 @@
                     <h3
                         class="text-underline text-underline-white text-xl font-bold"
                     >
-                        {{ __("store.Shop by collection") }}
+                        {{ $title }}
                     </h3>
                     <x-icons.card-arrow-right
                         class="arrow h-5 w-5 text-white"
                     />
                 </div>
-                <p class="mt-2">{{ __("store.Check out all") }}</p>
+                <p class="mt-2">{{$subtitle}}</p>
             </div>
         </a>
     </div>
     <div x-data="collectionSwiper()" class="ms-6 w-[74%]">
         <div class="collection-swiper swiper h-full">
             <div class="swiper-wrapper">
-                <x-home.collection-swiper-slide />
-                <x-home.collection-swiper-slide />
-                <x-home.collection-swiper-slide />
-                <x-home.collection-swiper-slide />
+                {{$slot}}
             </div>
         </div>
         <div class="h-full"></div>
@@ -45,14 +46,14 @@
     <script>
         function collectionSwiper() {
             return {
-                collectionSwiper: new Swiper('.collection-swiper', {
+                collectionSwiper: new Swiper(".collection-swiper", {
                     modules: [Autoplay],
                     slidesPerView: 3,
                     spaceBetween: 10,
                     speed: 800,
                     autoplay: {
                         delay: 5000,
-                        disableOnInteraction: false,
+                        disableOnInteraction: false
                     },
                     loop: false,
 
@@ -61,14 +62,14 @@
 
                         let goingForward = true;
 
-                        this.collectionSwiper.on('slideChange', () => {
+                        this.collectionSwiper.on("slideChange", () => {
                             const lastSlideIndex =
                                 this.collectionSwiper.slides.length - 3;
 
                             if (
                                 goingForward &&
                                 this.collectionSwiper.activeIndex >=
-                                    lastSlideIndex
+                                lastSlideIndex
                             ) {
                                 goingForward = false;
                                 this.collectionSwiper.params.autoplay.reverseDirection = true;
@@ -80,8 +81,8 @@
                                 this.collectionSwiper.params.autoplay.reverseDirection = false;
                             }
                         });
-                    },
-                }),
+                    }
+                })
             };
         }
     </script>

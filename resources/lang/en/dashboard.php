@@ -88,4 +88,5 @@ return [
     "Visible" => "Visible",
     "Save" => "Save",
     "Calender Icon" => "Calender Icon",
+    'Subtitle' => 'Subtitle',
 ];

@@ -11,7 +11,8 @@ readonly class ProductObserver
 {
     public function __construct(
         private ProductCacheService $productCacheService
-    ) {
+    )
+    {
     }
 
     public function saving(Product $product): void
@@ -99,11 +100,11 @@ readonly class ProductObserver
 
     public function saved(Product $product): void
     {
-        $this->productCacheService->clearCache();
+        $this->productCacheService->clearAllProductCache();
     }
 
     public function deleted(Product $product): void
     {
-        $this->productCacheService->clearCache();
+        $this->productCacheService->clearAllProductCache();
     }
 }

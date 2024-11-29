@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\CategoryType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Support\Facades\Cache;
 use Spatie\Translatable\HasTranslations;
 
 class Category extends Model
@@ -32,16 +31,6 @@ class Category extends Model
         "type",
     ];
 
-    protected static function booted(): void
-    {
-        static::created(function () {
-            Cache::forget(config("cache-const.categories"));
-        });
-        static::updated(function () {
-            Cache::forget(config("cache-const.categories"));
-        });
-    }
-
     //
     public function products(): MorphToMany
     {
@@ -63,7 +52,7 @@ class Category extends Model
         return $query->where("is_visible", 1);
     }
 
-    public function scopeProject($query)
+    public function scopeProduct($query)
     {
         return $query->where("type", CategoryType::PRODUCT);
     }
@@ -71,5 +60,10 @@ class Category extends Model
     public function scopePost($query)
     {
         return $query->where("type", CategoryType::POST);
+    }
+
+    public function byOrder(): self
+    {
+        return $this->orderBy("order");
     }
 }

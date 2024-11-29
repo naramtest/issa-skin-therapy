@@ -30,6 +30,7 @@ class Bundle extends Model implements HasMedia
         "how_to_use_am",
         "how_to_use_pm",
         "extra_tips",
+        'subtitle'
     ];
 
     protected $fillable = [
@@ -60,6 +61,7 @@ class Bundle extends Model implements HasMedia
         "how_to_use_am",
         "how_to_use_pm",
         "extra_tips",
+        'subtitle'
     ];
 
     protected $casts = [

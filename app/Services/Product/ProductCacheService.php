@@ -20,6 +20,7 @@ class ProductCacheService
 
     const CACHE_KEY_ALL_PRODUCTS = "all_products";
     const CACHE_KEY_ALL_BUNDLES = "all_bundles";
+    const CACHE_KEY_ALL_CATEGORIES = "all_categories";
     const COLUMNS = [
         "id",
         "name",
@@ -78,7 +79,8 @@ class ProductCacheService
 
     public function allBundles(): Collection
     {
-        $query = App\Models\Bundle::select(self::COLUMNS)->get();
+
+        $query = App\Models\Bundle::select(array_merge(self::COLUMNS, ['subtitle']))->get();
 
         if (App::isLocal()) {
             return $query;
@@ -91,11 +93,35 @@ class ProductCacheService
         );
     }
 
-    /**
-     * Clear all FAQ caches
-     */
-    public function clearCache(): void
+    public function allProductCategories(): Collection
+    {
+
+        $query = App\Models\Category::select(['slug', 'name', 'id', 'order', 'type', 'is_visible'])->byOrder()->visible()->product()->get();
+
+        if (App::isLocal()) {
+            return $query;
+        }
+
+        return Cache::remember(
+            self::CACHE_KEY_ALL_CATEGORIES,
+            self::CACHE_DURATION,
+            fn() => $query ?? Collection::make()
+        );
+    }
+
+
+    public function clearAllProductCache(): void
     {
         Cache::forget(self::CACHE_KEY_ALL_PRODUCTS);
+    }
+
+    public function clearAllBundlesCache(): void
+    {
+        Cache::forget(self::CACHE_KEY_ALL_BUNDLES);
+    }
+
+    public function clearAllCategoriesCache(): void
+    {
+        Cache::forget(self::CACHE_KEY_ALL_CATEGORIES);
     }
 }

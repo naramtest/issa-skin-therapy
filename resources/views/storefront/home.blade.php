@@ -1,7 +1,7 @@
 <x-store-main-layout>
     <main class="relative">
         <x-home.section.hero-swiper />
-        <x-home.section.collection />
+        <x-home.section.collection :bundles="$bundles" :categories="$categories" />
 
         <x-home.section.best-seller-product />
         <x-home.section.vedio-background />
