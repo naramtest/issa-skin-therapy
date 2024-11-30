@@ -155,4 +155,5 @@ return [
     "Read More" => "Read More",
     "Share" => "Share",
     "Latest Stories" => "Latest Stories",
+    'Skin That Defies Time' => 'Skin That Defies Time',
 ];

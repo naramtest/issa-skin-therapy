@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Content\FaqController;
 use App\Http\Controllers\Content\HomeController;
@@ -32,7 +33,7 @@ Route::get("product-category/{slug}", [
     "index",
 ])->name("product-category.index");
 
-Route::get("/about", [HomeController::class, "index"])->name("about.index");
+
 Route::get("/terms-conditions", [HomeController::class, "index"])->name(
     "terms.index"
 );
@@ -56,3 +57,4 @@ Route::get("/collection/{bundle:slug}", [
     ProductController::class,
     "showBundle",
 ])->name("product.bundle");
+Route::get("/about", [AboutController::class, "index"])->name("about.index");
