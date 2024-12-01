@@ -9,10 +9,10 @@ class HomeController extends Controller
 {
     public function index(ProductCacheService $productCacheService)
     {
-        //TODO : add Cache here
         $bundles = $productCacheService->allBundles();
         $categories = $productCacheService->allProductCategories();
+        $featuredProduct = $productCacheService->getFeaturedProduct();
         return view("storefront.home", ['bundles' => $bundles,
-            'categories' => $categories]);
+            'categories' => $categories, 'featuredProduct' => $featuredProduct]);
     }
 }

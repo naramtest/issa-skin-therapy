@@ -3,7 +3,7 @@
         <x-home.section.hero-swiper />
         <x-home.section.collection :bundles="$bundles" :categories="$categories" />
 
-        <x-home.section.best-seller-product />
+        <x-home.section.best-seller-product :product="$featuredProduct" />
         <x-home.section.vedio-background />
         <x-home.section.boxes />
         <x-home.section.image-com />

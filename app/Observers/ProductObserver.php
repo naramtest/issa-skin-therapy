@@ -101,10 +101,13 @@ readonly class ProductObserver
     public function saved(Product $product): void
     {
         $this->productCacheService->clearAllProductCache();
+        $this->productCacheService->clearFeaturedProductCache();
     }
 
     public function deleted(Product $product): void
     {
         $this->productCacheService->clearAllProductCache();
+        $this->productCacheService->clearFeaturedProductCache();
+        
     }
 }

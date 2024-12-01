@@ -20,6 +20,7 @@ class ProductCacheService
 
     const CACHE_KEY_ALL_PRODUCTS = "all_products";
     const CACHE_KEY_ALL_BUNDLES = "all_bundles";
+    const CACHE_KEY_FEATURED_PRODUCT = "all_featured_product";
     const CACHE_KEY_ALL_CATEGORIES = "all_categories";
     const COLUMNS = [
         "id",
@@ -77,6 +78,27 @@ class ProductCacheService
         );
     }
 
+    /**
+     * Get Featured Product (cached)
+     */
+    public function getFeaturedProduct(): Product
+    {
+        $query = Product::select(array_merge(self::COLUMNS, ['short_description']))
+            ->where('is_featured', true)
+            ->with([
+                "media",
+            ])
+            ->first();
+        if (App::isLocal()) {
+            return $query;
+        }
+        return Cache::remember(
+            self::CACHE_KEY_ALL_PRODUCTS,
+            self::CACHE_DURATION,
+            fn() => $query ?? Collection::make()
+        );
+    }
+
     public function allBundles(): Collection
     {
 
@@ -123,5 +145,10 @@ class ProductCacheService
     public function clearAllCategoriesCache(): void
     {
         Cache::forget(self::CACHE_KEY_ALL_CATEGORIES);
+    }
+
+    public function clearFeaturedProductCache(): void
+    {
+        Cache::forget(self::CACHE_KEY_FEATURED_PRODUCT);
     }
 }

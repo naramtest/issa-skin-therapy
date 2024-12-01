@@ -1,50 +1,44 @@
-@php
-    $imageCount = 4;
-@endphp
+@props(['media'])
 
 <div
     {{ $attributes->class(["flex w-full gap-4 "]) }}
     x-data="productSwiper()"
 >
     <!-- Thumbnails Column -->
-    <div class="flex w-[100px] flex-col gap-3">
-        @for ($i = 0 ; $i < $imageCount ; $i++)
+    <div class="flex w-[120px] flex-col gap-3">
+        @foreach ($media as $image)
             <button
-                @click="slideTo({{ $i }})"
-                :class="activeIndex === {{ $i }} ? 'border-black shadow-lg' : 'border-transparent hover:border-gray-300'"
-                class="overflow-hidden rounded-lg border-2 transition-all duration-300"
+                x-show="activeIndex !== {{ $loop->index }}"
+                @click="slideTo({{ $loop->index }})"
+                class="overflow-hidden rounded-lg transition-all duration-300"
             >
-                <img
-                    src="{{ asset("storage/test/" . ($i + 1) . ".webp") }}"
-                    class="h-24 w-full object-cover"
-                    alt=""
-                />
+                {!! \App\Helpers\Media\ImageGetter::responsiveImgElement($image, config("const.media.thumbnail"), class: "h-[180px] w-full object-cover") !!}
             </button>
-        @endfor
+        @endforeach
     </div>
 
     <!-- Main Image -->
-    <div class="relative w-[calc(100%-120px)]">
+    <div class="relative w-[calc(100%-150px)]">
         <div class="product-swiper swiper">
             <div class="swiper-wrapper h-full" id="gallery">
-                @for ($i = 0 ; $i < 4 ; $i++)
+                @foreach ($media as $image)
                     <div
-                        class="swiper-slide aspect-square h-full overflow-hidden rounded-xl bg-gray-100"
+                        class="swiper-slide aspect-square min-h-[600px] overflow-hidden rounded-xl bg-gray-100"
                     >
-                        {{-- TODO: make the width and hieght dynamic --}}
+                        {{-- TODO:save those in the image table as custom attributes --}}
+                        @php
+                            [$width, $height] = getimagesize($image->getPath());
+                        @endphp
+
                         <a
-                            href="{{ asset("storage/test/" . ($i + 1) . ".webp") }}"
-                            data-pswp-width="2600"
-                            data-pswp-height="1600"
+                            href="{{ $image->getAvailableUrl([config("const.media.optimized")]) }}"
+                            data-pswp-width="{{ $width }}"
+                            data-pswp-height="{{ $height }}"
                         >
-                            <img
-                                src="{{ asset("storage/test/" . ($i + 1) . ".webp") }}"
-                                class="h-full w-full object-cover"
-                                alt=""
-                            />
+                            {!! \App\Helpers\Media\ImageGetter::responsiveImgElement($image, class: "h-full w-full object-cover") !!}
                         </a>
                     </div>
-                @endfor
+                @endforeach
             </div>
         </div>
 
@@ -71,7 +65,7 @@
         <button
             @click="nextSlide()"
             class="absolute end-0 top-1/2 z-10 mr-4 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-lg transition-colors hover:bg-white disabled:opacity-50"
-            :disabled="activeIndex === {{ $imageCount }} - 1"
+            :disabled="activeIndex === {{ count($media) }} - 1"
         >
             <svg
                 class="h-6 w-6"
@@ -89,3 +83,39 @@
         </button>
     </div>
 </div>
+
+@pushonce("scripts")
+    <script>
+        function productSwiper() {
+            return {
+                activeIndex: 0,
+                productSwiper1: null,
+                init() {
+                    this.productSwiper1 = new Swiper(".product-swiper", {
+                        modules: [EffectFade],
+                        slidesPerView: 1,
+                        speed: 800,
+                        effect: "fade",
+                        on: {
+                            slideChange: () => {
+                                if (this.productSwiper1) {
+                                    this.activeIndex =
+                                        this.productSwiper1.realIndex;
+                                }
+                            }
+                        }
+                    });
+                },
+                slideTo(index) {
+                    this.productSwiper1?.slideTo(index, 500);
+                },
+                nextSlide() {
+                    this.productSwiper1?.slideNext(500);
+                },
+                pervSlide() {
+                    this.productSwiper1?.slidePrev(500);
+                }
+            };
+        }
+    </script>
+@endpushonce

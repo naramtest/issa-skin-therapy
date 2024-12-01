@@ -45,7 +45,7 @@
                     class="w-full mt-6"
 
                 >
-                    <x-general.button-black-animation />
+                    <x-general.button-black-animation label="{{ __("store.Shop Now") }}" />
                 </button>
             </form>
         </div>

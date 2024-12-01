@@ -51,7 +51,7 @@ return [
         "Each collection is a step towards radiant skin.",
     "Our Story" => "Our Story",
     "Add to Card" => "Add to Card",
-    "Need help? Contact us" => "Need help? Contact us",
+    "Need help?" => "Need help?",
     "Social:" => "Social:",
     "View full details" => "View full details",
     "A-CLEAR" => "A-CLEAR",
@@ -158,4 +158,5 @@ return [
     'Skin That Defies Time' => 'Skin That Defies Time',
     'Type your name' => 'Type your name',
     'Type you email' => 'Type your email',
+    'Contact us' => 'Contact us',
 ];

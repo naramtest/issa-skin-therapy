@@ -1,7 +1,6 @@
-<div {{$attributes->class(['relative  py-4 w-full overflow-hidden rounded-[50px] border-2 border-darkColor bg-darkColor  hover:text-darkColor inline-block text-white uppercase'])}}>
-    <div
-        class="transition-all w-full h-full flex items-center justify-center text-center   duration-[800ms]"
-        x-data="{ hoverOn: false ,hoverOff:false,mouseOn(){
+@props(['label'])
+<div
+    {{$attributes->class(['relative  py-4 w-full overflow-hidden rounded-[50px] border-2 border-darkColor bg-darkColor  hover:text-darkColor inline-block text-white uppercase'])}}  x-data="{ hoverOn: false ,hoverOff:false,mouseOn(){
                     this.hoverOn = true;
                     this.hoverOff = false;
                 },
@@ -10,10 +9,13 @@
                     this.hoverOff = true
                 }
                 }"
-        @mouseenter="mouseOn()"
-        @mouseleave="mouseOut()">
+    @mouseenter="mouseOn()"
+    @mouseleave="mouseOut()">
+    <div
+        class="transition-all w-full h-full flex items-center justify-center text-center   duration-[800ms]"
+    >
                         <span class="relative z-10 inline-block ">
-                        {{ __("store.Shop Now") }}
+                            {{$label}}
                     </span>
         <div
             style="inset-block-start: -50%;
