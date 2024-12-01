@@ -1,3 +1,4 @@
+@props(['bundles'])
 <x-home.section-container
     class="content-x-padding relative z-10 h-[600px] -translate-y-10 bg-lightColor py-14"
 >
@@ -11,10 +12,10 @@
     <div x-data="boxesSwiper()" class="mt-6 w-full">
         <div class="boxes-swiper swiper">
             <div class="swiper-wrapper !h-[400px]">
-                <x-home.boxes-slide image="{{asset('storage/test/1.webp')}}" />
-                <x-home.boxes-slide image="{{asset('storage/test/2.webp')}}" />
-                <x-home.boxes-slide image="{{asset('storage/test/3.webp')}}" />
-                <x-home.boxes-slide image="{{asset('storage/test/4.webp')}}" />
+                @foreach($bundles as $bundle)
+                    <x-home.boxes-slide :bundle="$bundle" />
+                @endforeach
+
             </div>
 
             <!-- Navigation arrows -->
@@ -46,15 +47,15 @@
                     isEnd: false,
                     boxesSwiper: null,
                     init() {
-                        this.boxesSwiper = new Swiper('.boxes-swiper', {
+                        this.boxesSwiper = new Swiper(".boxes-swiper", {
                             modules: [Pagination],
                             slidesPerView: 3,
                             spaceBetween: 20,
                             loop: false,
                             pagination: {
-                                el: '.swiper-pagination',
+                                el: ".swiper-pagination",
                                 clickable: true,
-                                type: 'bullets',
+                                type: "bullets"
                             },
                             on: {
                                 reachBeginning: () => {
@@ -65,8 +66,8 @@
                                     this.isBeginning = false;
 
                                     this.isEnd = true;
-                                },
-                            },
+                                }
+                            }
                         });
                     },
                     nextSlide() {
@@ -78,7 +79,7 @@
                         if (!this.isBeginning) {
                             this.boxesSwiper.slidePrev(1000);
                         }
-                    },
+                    }
                 };
             }
         </script>

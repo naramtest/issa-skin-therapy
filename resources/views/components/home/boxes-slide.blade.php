@@ -1,10 +1,6 @@
 @props([
-    "image",
+    'bundle'
 ])
-<div {{ $attributes->class(["swiper-slide"]) }}>
-    <img
-        class="h-full w-full rounded-[15px] object-cover"
-        src="{{ $image }}"
-        alt=""
-    />
-</div>
+<a href="{{route('product.bundle' , $bundle)}}" {{ $attributes->class(["swiper-slide"]) }}>
+    {!! \App\Helpers\Media\ImageGetter::responsiveFeaturedImg($bundle , class: 'h-full w-full rounded-[15px] object-cover') !!}
+</a>
