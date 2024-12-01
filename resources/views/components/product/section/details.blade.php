@@ -47,16 +47,8 @@
                 alt="{{ __("store.Tabby") }}"
             />
         </div>
-        <div
-            x-data="{
-                quantity: 1,
-                addToCart() {
-                    Livewire.dispatch('add-to-cart', {
-                        product: {{ $product->id }},
-                        quantity: this.quantity,
-                    })
-                },
-            }"
+        <x-general.add-to-cart
+            :product="$product"
             class="my-4 flex items-center"
         >
             {{-- TODO: add to cart --}}
@@ -72,13 +64,15 @@
                     max="30"
                 />
             </label>
-            <button
-                @click="addToCart()"
-                class="ms-4 flex-1 rounded-3xl bg-darkColor py-2 text-lightColor hover:bg-[#333F43]"
-            >
-                {{ __("store.Add to Card") }}
-            </button>
-        </div>
+            <x-slot:button>
+                <button
+                    class="ms-4 flex-1 rounded-3xl bg-darkColor py-2 text-lightColor hover:bg-[#333F43]"
+                >
+                    {{ __("store.Add to Card") }}
+                </button>
+            </x-slot>
+        </x-general.add-to-cart>
+
         {{-- TODO: button animation --}}
         <a
             href="{{ route("checkout.index") }}"
