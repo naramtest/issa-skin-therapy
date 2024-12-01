@@ -27,7 +27,7 @@
                 class="relative  h-[50px] w-[200px] overflow-hidden rounded-[50px] border-2 border-white bg-white  hover:text-white inline-block text-black uppercase"
 
             >
-                <x-general.button-animation />
+                <x-general.button-white-animation />
             </a>
         </div>
         <hr class="w-full border-t-[1px] border-white/60" />

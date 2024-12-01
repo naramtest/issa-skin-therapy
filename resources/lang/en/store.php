@@ -156,4 +156,6 @@ return [
     "Share" => "Share",
     "Latest Stories" => "Latest Stories",
     'Skin That Defies Time' => 'Skin That Defies Time',
+    'Type your name' => 'Type your name',
+    'Type you email' => 'Type your email',
 ];

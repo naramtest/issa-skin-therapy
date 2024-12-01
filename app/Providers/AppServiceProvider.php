@@ -4,20 +4,32 @@ namespace App\Providers;
 
 use App\Contracts\InventoryInterface;
 use App\Helpers\Money\UserCurrency;
+use App\Services\Caches\CacheQueries;
 use App\Services\Currency\CurrencyHelper;
 use App\Services\Currency\CurrencyService;
+use App\Services\Info\InfoCacheService;
 use App\Services\Inventory\InventoryManager;
 use Blade;
+use Clockwork\Support\Laravel\ClockworkMiddleware;
+use Clockwork\Support\Laravel\ClockworkServiceProvider;
+use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Money\Money;
 use Swap\Builder;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Psr16Cache;
+use View;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+
+        if ($this->app->isLocal()) {
+            $this->app->register(ClockworkServiceProvider::class);
+        }
+
         //        TODO: use Redis
         //        $redis = new \Redis();
         //        $redis->connect('127.0.0.1', 6379);
@@ -52,10 +64,28 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    public function boot(): void
+    public function boot(Kernel $kernel): void
     {
         Blade::stringable(function (Money $money) {
             return CurrencyHelper::moneyObjectInBlade($money);
         });
+        View::composer(
+            [
+
+                "components.layout.*",
+                "storefront.contact"
+            ],
+            function ($view) {
+                $view->with("info", app(InfoCacheService::class)->getInfo());
+            }
+        );
+
+
+        if ($this->app->isLocal()) {
+            $kernel->prependMiddleware(ClockworkMiddleware::class);
+        }
+        Model::preventsLazyLoading();
+        Model::preventAccessingMissingAttributes();
+
     }
 }

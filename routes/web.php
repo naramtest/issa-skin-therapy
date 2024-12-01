@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\Content\FaqController;
 use App\Http\Controllers\Content\HomeController;
 use App\Http\Controllers\Content\PostController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Content\ProductCategoryController;
 use App\Http\Controllers\Content\ProductController;
 use App\Http\Controllers\Content\ShopController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get("/account", [HomeController::class, "index"])->name("account.index");
 Route::get("/checkout", [CheckoutController::class, "index"])->name(
@@ -21,9 +23,7 @@ Route::get("/collections-page", [HomeController::class, "index"])->name(
     "bundles.index"
 );
 
-Route::get("/contact-us", [HomeController::class, "index"])->name(
-    "contact.index"
-);
+
 Route::get("/blog", [HomeController::class, "index"])->name("blog.index");
 Route::get("/refund_returns", [HomeController::class, "index"])->name(
     "return.index"
@@ -58,3 +58,6 @@ Route::get("/collection/{bundle:slug}", [
     "showBundle",
 ])->name("product.bundle");
 Route::get("/about", [AboutController::class, "index"])->name("about.index");
+Route::get("/contact-us", [ContactUsController::class, "index"])->name(
+    "contact.index"
+);
