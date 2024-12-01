@@ -27,7 +27,11 @@
                 class="w-[200px]"
 
             >
-                <x-general.button-white-animation label="{{__('store.Shop Now')}}" />
+                <x-general.button-white-animation>
+                     <span class="relative z-10 inline-block ">
+                        {{__('store.Shop Now')}}
+                    </span>
+                </x-general.button-white-animation>
 
             </a>
         </div>

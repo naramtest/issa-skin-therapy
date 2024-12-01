@@ -1,6 +1,6 @@
 @props(['product'])
 <x-home.section-container
-    class="relative flex w-full flex-col items-center gap-16 px-40 py-28 lg:flex-row"
+    class="relative flex w-full flex-col items-center gap-16 px-40 py-20 lg:flex-row"
 >
     <x-general.product-gallery class="lg:w-[55%]" :media="$product->media" />
     <div class="flex w-full flex-col lg:w-[45%]">
@@ -28,7 +28,11 @@
             class="w-full mt-4"
 
         >
-            <x-general.button-black-animation class="!py-2" label="{{__('store.Add to Card')}}" />
+            <x-general.button-black-animation class="!py-2">
+                 <span class="relative z-10 inline-block ">
+                            {{__('store.Add to Card')}}
+                    </span>
+            </x-general.button-black-animation>
 
         </button>
 

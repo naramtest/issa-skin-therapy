@@ -19,11 +19,18 @@
             {{ __("store.The ISSA SKIN THERAPY team recognized PET™’s potential in") }}
         </p>
         <a
-            class="mt-10 flex w-fit items-center rounded-[50px] bg-lightColor px-6 py-4 text-[15px] font-medium text-black transition-colors duration-200 hover:bg-lightAccentColor"
-            href=""
+            class="mt-10 w-fit group"
+            href="{{ route('about.index') }} "
         >
-            <span>Know More</span>
-            <x-icons.arrow-right class="ms-3 h-4 w-4 text-black" />
+            <x-general.button-white-animation class="!w-fit !px-6">
+                 <span class="relative z-10 inline-block  text-[15px] font-medium">
+                            {{__('store.Know More')}}
+                    </span>
+                <x-icons.arrow-right class="ms-3 h-4 w-4 z-10" />
+
+            </x-general.button-white-animation>
+
         </a>
+
     </div>
 </x-home.section-container>

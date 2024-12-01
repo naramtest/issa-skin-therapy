@@ -8,7 +8,11 @@
                 class="w-[200px] mt-10  inline-block"
 
             >
-                <x-general.button-white-animation class="!border-black" label="{{__('store.Our Story')}}" />
+                <x-general.button-white-animation class="!border-black">
+                     <span class="relative z-10 inline-block ">
+                        {{__('store.Our Story')}}
+                    </span>
+                </x-general.button-white-animation>
 
             </a>
 

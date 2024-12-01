@@ -45,7 +45,11 @@
                     class="w-full mt-6"
 
                 >
-                    <x-general.button-black-animation label="{{ __("store.Shop Now") }}" />
+                    <x-general.button-black-animation>
+                         <span class="relative z-10 inline-block ">
+                                    {{ __("store.Shop Now") }}
+                         </span>
+                    </x-general.button-black-animation>
                 </button>
             </form>
         </div>

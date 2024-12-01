@@ -1,4 +1,3 @@
-@props(['label'])
 <div {{$attributes->class(['relative   w-full overflow-hidden rounded-[50px] border-2 border-white bg-white  hover:text-white inline-block text-black uppercase'])}}>
     <div
         class="transition-all w-full h-full flex items-center justify-center text-center   duration-[800ms] py-4"
@@ -13,9 +12,8 @@
                 }"
         @mouseenter="mouseOn()"
         @mouseleave="mouseOut()">
-                        <span class="relative z-10 inline-block ">
-                        {{$label}}
-                    </span>
+        {{$slot}}
+
         <div
             style="inset-block-start: -50%;
                             inset-inline-start: -25%;
