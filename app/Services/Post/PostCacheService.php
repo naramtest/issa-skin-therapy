@@ -2,6 +2,7 @@
 
 namespace App\Services\Post;
 
+use App;
 use App\Enums\CategoryType;
 use App\Models\Category;
 use App\Models\Post;
@@ -31,13 +32,43 @@ class PostCacheService
         "excerpt",
     ];
 
-    private const POST_CACHE_TTL = 30 * 24 * 3600; // 7 days in seconds
+    private const POST_CACHE_TTL = 30 * 24 * 3600;
     private const CATEGORY_CACHE_TTL = 30 * 24 * 3600; // 30 days in seconds
+    private const CACHE_KEY_HOME_PRODUCTS = 'home_products'; // 30 days in seconds
+
+    public function getHomePost()
+    {
+        $query = Post::select(self::COLUMNS)
+            ->published()
+            ->byDate()
+            ->with([
+                "media",
+                "categories" => function ($query) {
+                    $query->select(
+                        "categories.id",
+                        "categories.name",
+                        "categories.slug"
+                    );
+                },
+
+            ])
+            ->limit(3)
+            ->get();
+        if (App::isLocal()) {
+            return $query;
+        }
+        return Cache::remember(
+            self::CACHE_KEY_HOME_PRODUCTS,
+            self::POST_CACHE_TTL,
+            fn() => $query ?? Collection::make()
+        );
+    }
 
     public function getPaginatedPosts(
         ?array $categoryIds = null,
-        int $perPage = 12
-    ): LengthAwarePaginator {
+        int    $perPage = 12
+    ): LengthAwarePaginator
+    {
         try {
             $page = request()->get("page", 1);
             $cacheKey = $this->generatePostsCacheKey(
@@ -59,16 +90,17 @@ class PostCacheService
                 self::POST_CACHE_TTL,
                 fn() => $this->queryPosts($categoryIds, $perPage)
             );
-        } catch (\Exception | NotFoundExceptionInterface | ContainerExceptionInterface $e) {
+        } catch (\Exception|NotFoundExceptionInterface|ContainerExceptionInterface $e) {
             return $this->queryPosts($categoryIds, $perPage);
         }
     }
 
     private function generatePostsCacheKey(
         ?array $categoryIds,
-        int $page,
-        int $perPage
-    ): string {
+        int    $page,
+        int    $perPage
+    ): string
+    {
         $key = "posts.page.$page.$perPage";
 
         if ($categoryIds) {
@@ -81,8 +113,9 @@ class PostCacheService
 
     private function queryPosts(
         ?array $categoryIds,
-        int $perPage
-    ): LengthAwarePaginator {
+        int    $perPage
+    ): LengthAwarePaginator
+    {
         $query = Post::query()
             ->select(self::COLUMNS)
             ->with([

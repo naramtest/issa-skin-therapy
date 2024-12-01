@@ -155,8 +155,10 @@ return [
     "Read More" => "Read More",
     "Share" => "Share",
     "Latest Stories" => "Latest Stories",
-    'Skin That Defies Time' => 'Skin That Defies Time',
-    'Type your name' => 'Type your name',
-    'Type you email' => 'Type your email',
-    'Contact us' => 'Contact us',
+    "Skin That Defies Time" => "Skin That Defies Time",
+    "Type your name" => "Type your name",
+    "Type you email" => "Type your email",
+    "Contact us" => "Contact us",
+    "Share your before and after to get a nice gift!" =>
+        "Share your before and after to get a nice gift!",
 ];

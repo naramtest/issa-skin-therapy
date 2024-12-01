@@ -8,12 +8,12 @@
     />
     <div class="z-[10] flex w-[60%] flex-col items-center text-white">
         <h2 class="w-[70%] text-center text-5xl leading-[48px]">
-            Share your before and after to get a nice gift!
+            {{ __("store.Share your before and after to get a nice gift!") }}
         </h2>
 
         <a
-            class="mt-10 flex w-fit items-center rounded-[50px] border border-lightColor bg-[#333F4396] px-8 py-3 text-[15px] font-medium text-black text-white transition-colors duration-200 hover:border-[#333F43] hover:bg-[#333F43]"
-            href=""
+            class="mt-10 flex w-fit items-center rounded-[50px] border border-lightColor bg-[#333F4396] px-8 py-3 text-[15px] font-medium text-white transition-colors duration-200 hover:border-[#333F43] hover:bg-[#333F43]"
+            href="{{ route("shop.index") }}"
         >
             <span>{{ __("store.Explore Sales") }}</span>
             <x-icons.arrow-right class="ms-3 h-4 w-4" />

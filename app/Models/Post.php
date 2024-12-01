@@ -139,6 +139,13 @@ class Post extends Model implements HasMedia
         return self::getPostSeoData($this);
     }
 
+    public function scopePublished($query)
+    {
+        return $query->where("status", ProductStatus::PUBLISHED)
+            ->whereNotNull("published_at")
+            ->where("published_at", "<=", now());
+    }
+
     protected function pruning(): void
     {
         $this->media()->delete();
