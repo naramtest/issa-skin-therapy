@@ -5,6 +5,7 @@ namespace App\Helpers\Filament\Category;
 use App\Enums\CategoryType;
 use App\Helpers\Filament\Component\CustomNameSlugField;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -29,6 +30,17 @@ class CategoryForm
                 ->maxLength(160)
                 ->columnSpan(2),
             Hidden::make("type")->default($type),
+            SpatieMediaLibraryFileUpload::make(config('const.media.featured'))
+                ->label(__('dashboard.Featured'))
+                ->collection(config('const.media.featured'))
+                ->hiddenLabel()
+                ->columnSpan(1)
+                ->imageEditor()
+                ->image()
+                ->live()
+                ->downloadable()
+                ->maxSize(5120)
+                ->imageEditorAspectRatios([null, "16:9", "4:3", "1:1"]),
         ]);
     }
 }

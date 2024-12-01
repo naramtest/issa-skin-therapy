@@ -4,13 +4,14 @@
         <div class="w-[25%]">
             <x-home.fancy-heading />
             <a
-
-                class="mt-10 flex w-fit items-center rounded-[50px] border border-[#a5bbc4] px-6 py-4 text-[15px] font-medium transition-colors duration-300 hover:border-transparent hover:bg-lightAccentColor"
                 href="{{route('about.index')}}"
+                class="w-[200px] mt-10  inline-block"
+
             >
-                <span>{{ __("store.Our Story") }}</span>
-                <x-icons.arrow-right class="ms-3 h-4 w-4 text-black" />
+                <x-general.button-white-animation class="!border-black" label="{{__('store.Our Story')}}" />
+
             </a>
+
         </div>
         <ol class="w-[60%] text-2xl">
             <li class="mb-1">
@@ -33,15 +34,15 @@
         @endforeach
     </x-home.collection-row>
 
-    <x-home.collection-row title="{{__('store.Shop by collection')}}" subtitle="{{__('store.Check out all')}}"
-                           image="{{asset('storage/images/bundle-home-collection.webp')}}"
+    <x-home.collection-row title="{{ __('store.All Products') }}" subtitle="{{__('store.Check out all our products')}}"
+                           image="{{asset('storage/images/product-home-collection.webp')}}"
                            url="{{route('bundles.index')}}">
         @foreach($categories as $category)
-            @if(Str::contains($category->name , '&') )
-            @else
-                <x-home.collection-swiper-slide title="{{$bundle->name}}" url="{{route('product.bundle',$bundle)}}"
-                                                :media="$bundle->getFirstMedia(config('const.media.featured'))"
-                                                subtitle="{!! $bundle->subtitle !!}" />
+            @unless(Str::contains($category->name , '&') )
+
+                <x-home.collection-swiper-slide title="{{$category->name}}" url="{{route('product.category',$bundle)}}"
+                                                :media="$category->getFirstMedia(config('const.media.featured'))"
+                                                subtitle="{{'Check out our' . $category->name }}" />
             @endif
 
         @endforeach

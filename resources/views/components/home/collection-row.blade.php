@@ -10,7 +10,7 @@
             background-size: cover;
             background-position: center center;
         "
-        class="card-hover-trigger relative h-[450px] w-[25%] rounded-[20px]"
+        class="card-hover-trigger full-rounded card-overlay relative h-[450px] w-[25%] rounded-[20px]"
     >
         <a
             aria-label="{{ $title }}"

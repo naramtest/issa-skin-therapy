@@ -30,4 +30,9 @@ class ProductController extends Controller
             "media" => $bundle->media,
         ]);
     }
+
+    public function showProductCategory(string $slug)
+    {
+        return view("storefront.product.category");
+    }
 }

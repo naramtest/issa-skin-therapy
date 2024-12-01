@@ -28,10 +28,6 @@ Route::get("/blog", [HomeController::class, "index"])->name("blog.index");
 Route::get("/refund_returns", [HomeController::class, "index"])->name(
     "return.index"
 );
-Route::get("product-category/{slug}", [
-    ProductCategoryController::class,
-    "index",
-])->name("product-category.index");
 
 
 Route::get("/terms-conditions", [HomeController::class, "index"])->name(
@@ -61,3 +57,8 @@ Route::get("/about", [AboutController::class, "index"])->name("about.index");
 Route::get("/contact-us", [ContactUsController::class, "index"])->name(
     "contact.index"
 );
+
+Route::get("product-category/{slug}", [
+    ProductController::class,
+    "index",
+])->name("product.category");
