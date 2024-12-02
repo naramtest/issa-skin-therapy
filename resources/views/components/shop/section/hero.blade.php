@@ -1,3 +1,6 @@
+@props([
+    "label",
+])
 <div {{ $attributes->class(["h-[100vh] w-full bg-lightColor"]) }}>
     <div
         style="
@@ -26,7 +29,7 @@
                 </a>
             </div>
             <h1 class="text-[75px] font-bold">
-                {{ __("dashboard.Our Products") }}
+                {{ $label }}
             </h1>
         </div>
     </div>

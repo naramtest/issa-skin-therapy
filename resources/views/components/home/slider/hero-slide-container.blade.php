@@ -22,17 +22,12 @@
                 </h2>
             </div>
 
-            <a
-                href="{{ route("shop.index") }}"
-                class="w-[200px]"
-
-            >
-                <x-general.button-white-animation>
-                     <span class="relative z-10 inline-block ">
-                        {{__('store.Shop Now')}}
+            <a href="{{ route("shop.index") }}" class="w-[200px]">
+                <x-general.button-white-animation class="!py-4">
+                    <span class="relative z-10 inline-block">
+                        {{ __("store.Shop Now") }}
                     </span>
                 </x-general.button-white-animation>
-
             </a>
         </div>
         <hr class="w-full border-t-[1px] border-white/60" />

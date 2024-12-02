@@ -23,16 +23,18 @@ class CategoryForm
                 label: __("store.Name"),
                 fieldName: "name"
             ),
-            CustomNameSlugField::getCustomSlugField(),
+            CustomNameSlugField::getCustomSlugField(
+                unique: $type !== CategoryType::PRODUCT
+            ),
             Textarea::make("description")
                 ->label(__("dashboard.Description"))
                 ->rows(3)
                 ->maxLength(160)
                 ->columnSpan(2),
             Hidden::make("type")->default($type),
-            SpatieMediaLibraryFileUpload::make(config('const.media.featured'))
-                ->label(__('dashboard.Featured'))
-                ->collection(config('const.media.featured'))
+            SpatieMediaLibraryFileUpload::make(config("const.media.featured"))
+                ->label(__("dashboard.Featured"))
+                ->collection(config("const.media.featured"))
                 ->hiddenLabel()
                 ->columnSpan(1)
                 ->imageEditor()

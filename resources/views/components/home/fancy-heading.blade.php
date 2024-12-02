@@ -12,9 +12,9 @@
     class="w-fit"
 >
     <h3 class="text-[2.75rem] font-[800] leading-[48px]">
-        <span class="mb-1 block">Skin</span>
+        <span class="mb-1 block">{{ __("dashboard.Skin") }}</span>
         <span class="relative mb-1 block">
-            That Defies
+            {{ __("dashboard.That Defies") }}
             <svg
                 x-show="startAnimation"
                 x-transition:enter="transition duration-100 ease-out"
@@ -33,6 +33,6 @@
                 ></path>
             </svg>
         </span>
-        <span class="block">Time</span>
+        <span class="block">{{ __("dashboard.Time") }}</span>
     </h3>
 </div>

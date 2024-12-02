@@ -110,4 +110,7 @@ return [
     "WHATSAPP ONLY" => "WHATSAPP ONLY",
     "Collections" => "Collections",
     "Our Products" => "Our Products",
+    "Time" => "Time",
+    "That Defies" => "That Defies",
+    "Skin" => "Skin",
 ];

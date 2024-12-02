@@ -10,7 +10,7 @@
                 href="{{ route("about.index") }}"
                 class="mt-10 inline-block w-[200px]"
             >
-                <x-general.button-white-animation class="!border-black">
+                <x-general.button-white-animation class="!border-black !py-4">
                     <span class="relative z-10 inline-block">
                         {{ __("store.Our Story") }}
                     </span>
@@ -24,7 +24,7 @@
             <li class="mb-1">
                 {{ __("store.Revolutionary Patent Delivery Technology") }}
             </li>
-            <li>{{ __("store.Premium Quality, Made in USA.") }}</li>
+            <li>{{ __("store.Premium Quality, Made in USA") }}</li>
         </ol>
     </div>
     <x-home.collection-row
@@ -47,7 +47,7 @@
         title="{{ __('store.All Products') }}"
         subtitle="{{__('store.Check out all our products')}}"
         image="{{asset('storage/images/product-home-collection.webp')}}"
-        url="{{route('bundles.index')}}"
+        url="{{route('shop.index')}}"
     >
         {{-- TODO: edit images to transparent bg --}}
         @foreach ($categories as $category)

@@ -34,16 +34,19 @@ class CustomNameSlugField
             });
     }
 
-    public static function getCustomSlugField(): TextInput
+    public static function getCustomSlugField(bool $unique = true): TextInput
     {
-        return TextInput::make("slug")
+        $textInput = TextInput::make("slug")
             ->required()
             ->live(onBlur: true)
-            ->unique(ignoreRecord: true)
             ->afterStateUpdated(
                 callback: function (TextInput $component, $state) {
                     $component->state(Str::slug($state, language: null));
                 }
             );
+        if ($unique) {
+            $textInput->unique(ignoreRecord: true);
+        }
+        return $textInput;
     }
 }

@@ -48,15 +48,12 @@ Route::controller(ProductController::class)->group(function () {
     Route::get("/collection/{bundle:slug}", "showBundle")->name(
         "product.bundle"
     );
+    Route::get("product-category/{slug}", "showProductCategory")->name(
+        "product.category"
+    );
 });
 
 Route::get("/about", [AboutController::class, "index"])->name("about.index");
 Route::get("/contact-us", [ContactUsController::class, "index"])->name(
     "contact.index"
 );
-
-//TODO:
-Route::get("product-category/{slug}", [
-    ProductController::class,
-    "index",
-])->name("product.category");
