@@ -8,8 +8,8 @@
         </h2>
     </div>
     <x-general.image-comparison
-        before-image="{{ asset('storage/test/home-before.jpeg') }}"
-        after-image="{{ asset('storage/test/home-after.jpeg') }}"
+        before-image="{{ asset('storage/images/home-before.webp') }}"
+        after-image="{{ asset('storage/images/home-after.webp') }}"
         before-alt="Product before modification"
         after-alt="Product after modification"
         class="mt-9 h-[750px]"

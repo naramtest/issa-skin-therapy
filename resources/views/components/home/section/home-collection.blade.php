@@ -54,7 +54,7 @@
             @unless (Str::contains($category->name, "&"))
                 <x-home.collection-swiper-slide
                     title="{{$category->name}}"
-                    url="{{route('product.category',$bundle)}}"
+                    url="{{route('product.category',['slug'=>$category->slug])}}"
                     :media="$category->getFirstMedia(config('const.media.featured'))"
                     subtitle="{{'Check out our' . $category->name }}"
                     fit="object-contain"
