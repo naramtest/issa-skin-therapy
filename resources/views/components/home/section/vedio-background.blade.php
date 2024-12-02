@@ -18,19 +18,15 @@
         <p class="font-lg mt-4 text-center">
             {{ __("store.The ISSA SKIN THERAPY team recognized PET™’s potential in") }}
         </p>
-        <a
-            class="mt-10 w-fit group"
-            href="{{ route('about.index') }} "
-        >
-            <x-general.button-white-animation class="!w-fit !px-6">
-                 <span class="relative z-10 inline-block  text-[15px] font-medium">
-                            {{__('store.Know More')}}
-                    </span>
-                <x-icons.arrow-right class="ms-3 h-4 w-4 z-10" />
-
+        <a class="group mt-10 w-fit" href="{{ route("about.index") }} ">
+            <x-general.button-white-animation class="!w-fit !px-6 !py-4">
+                <span
+                    class="relative z-10 inline-block text-[15px] font-medium"
+                >
+                    {{ __("store.Know More") }}
+                </span>
+                <x-icons.arrow-right class="z-10 ms-3 h-4 w-4" />
             </x-general.button-white-animation>
-
         </a>
-
     </div>
 </x-home.section-container>

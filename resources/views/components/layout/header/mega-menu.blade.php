@@ -133,7 +133,8 @@
     <div class="w-1/2">
         <div class="grid auto-rows-fr grid-cols-2 gap-4">
             <!-- Collection Card -->
-            <div
+            <a
+                href="{{ route("bundles.index") }}"
                 class="menu-item card-one card-background card-overlay full-rounded relative min-h-[412px] w-full overflow-hidden rounded-2xl px-6 opacity-0"
             >
                 <div
@@ -151,10 +152,11 @@
                     </div>
                     <x-icons.card-arrow-right class="arrow h-5 w-5" />
                 </div>
-            </div>
+            </a>
 
             <!-- All Products Card -->
-            <div
+            <a
+                href="{{ route("shop.index") }}"
                 class="menu-item card-tow card-background card-overlay full-rounded relative min-h-[412px] w-full translate-x-4 overflow-hidden rounded-2xl opacity-0"
             >
                 <div
@@ -172,7 +174,7 @@
                     </div>
                     <x-icons.card-arrow-right class="arrow h-5 w-5" />
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 </div>
