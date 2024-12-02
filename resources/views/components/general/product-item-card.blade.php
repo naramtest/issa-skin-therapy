@@ -194,6 +194,7 @@
                                     </label>
                                     <x-slot:button>
                                         <x-general.button-black-animation
+                                            @click="isModalOpen = false"
                                             class="text-nowrap !px-7 !py-2"
                                         >
                                             <span class="z-10">
@@ -202,11 +203,15 @@
                                         </x-general.button-black-animation>
                                     </x-slot>
                                 </x-general.add-to-cart>
-                                <button
-                                    class="text-nowrap rounded-[50px] border border-black px-7 py-2 transition-colors duration-300 hover:border-transparent hover:bg-[#2f2f2f] hover:text-lightColor"
-                                >
-                                    {{ __("store.Check Out") }}
-                                </button>
+                                <a href="{{ route("checkout.index") }}">
+                                    <x-general.button-white-animation
+                                        class="text-nowrap !border !border-black !px-7 !py-2"
+                                    >
+                                        <span class="z-10">
+                                            {{ __("store.Check Out") }}
+                                        </span>
+                                    </x-general.button-white-animation>
+                                </a>
                             </div>
                         </div>
                     </div>

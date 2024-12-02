@@ -10,7 +10,7 @@ class ShopController extends Controller
     public function index(ProductCacheService $productCacheService)
     {
         $bundles = $productCacheService->allBundles();
-        $products = $productCacheService->allProducts();
+        $products = $productCacheService->getPaginatedProduct(12);
         return view("storefront.shop", [
             "bundles" => $bundles,
             "products" => $products,

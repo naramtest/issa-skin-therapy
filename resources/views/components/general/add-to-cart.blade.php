@@ -14,7 +14,7 @@
     {{ $attributes }}
 >
     {{ $slot }}
-    <div class="cursor-pointer" @click="addToCart()">
+    <button class="cursor-pointer" @click="addToCart()">
         {{ $button }}
-    </div>
+    </button>
 </div>

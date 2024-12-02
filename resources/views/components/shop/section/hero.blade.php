@@ -12,14 +12,22 @@
             class="padding-from-side-menu absolute bottom-[15%] start-0 text-lightColor"
         >
             <div class="flex">
-                <a class="hover:text-lightAccentColor" href="">
-                    <span>Collections</span>
+                <a
+                    class="hover:text-lightAccentColor"
+                    href="{{ route("bundles.index") }}"
+                >
+                    <span>{{ __("dashboard.Collections") }}</span>
                 </a>
-                <a class="ms-3 hover:text-lightAccentColor" href="">
-                    <span>All Products</span>
+                <a
+                    class="ms-3 hover:text-lightAccentColor"
+                    href="{{ route("shop.index") }}"
+                >
+                    <span>{{ __("store.All Products") }}</span>
                 </a>
             </div>
-            <h1 class="text-[75px] font-bold">Our Products</h1>
+            <h1 class="text-[75px] font-bold">
+                {{ __("dashboard.Our Products") }}
+            </h1>
         </div>
     </div>
 </div>

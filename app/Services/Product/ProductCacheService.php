@@ -5,7 +5,10 @@ namespace App\Services\Product;
 use App;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class ProductCacheService
 {
@@ -19,6 +22,7 @@ class ProductCacheService
      */
 
     const CACHE_KEY_ALL_PRODUCTS = "all_products";
+    const CACHE_KEY_PAGINATE_PRODUCTS = "paginate_products";
     const CACHE_KEY_ALL_BUNDLES = "all_bundles";
     const CACHE_KEY_FEATURED_PRODUCT = "all_featured_product";
     const CACHE_KEY_ALL_CATEGORIES = "all_categories";
@@ -42,12 +46,28 @@ class ProductCacheService
         "stock_status",
     ];
 
-    /**
-     * Get product FAQs (cached)
-     */
-    public function allProducts(): Collection
+    public function getPaginatedProduct(int $perPage = 9): LengthAwarePaginator
     {
-        $query = Product::select(self::COLUMNS)
+        try {
+            $page = request()->get("page", 1);
+            $cacheKey = "products.page.$page.$perPage";
+
+            $tags = ["products"];
+
+            return Cache::tags($tags)->remember(
+                $cacheKey,
+                self::CACHE_KEY_PAGINATE_PRODUCTS,
+                fn() => $this->queryPosts()->paginate($perPage)
+            );
+        } catch (\Exception | NotFoundExceptionInterface | ContainerExceptionInterface $e) {
+            return $this->queryPosts()->paginate($perPage);
+        }
+    }
+
+    private function queryPosts()
+    {
+        return Product::query()
+            ->select(self::COLUMNS)
             ->published()
             ->byOrder()
             ->with([
@@ -66,8 +86,15 @@ class ProductCacheService
                         "product_types.slug"
                     );
                 },
-            ])
-            ->get();
+            ]);
+    }
+
+    /**
+     * Get product FAQs (cached)
+     */
+    public function allProducts(): Collection
+    {
+        $query = $this->queryPosts()->get();
         if (App::isLocal()) {
             return $query;
         }
@@ -86,6 +113,7 @@ class ProductCacheService
         $query = Product::select(
             array_merge(self::COLUMNS, ["short_description"])
         )
+            ->published()
             ->where("is_featured", true)
             ->with(["media"])
             ->first();
@@ -145,6 +173,7 @@ class ProductCacheService
     public function clearAllProductCache(): void
     {
         Cache::forget(self::CACHE_KEY_ALL_PRODUCTS);
+        Cache::tags(["posts"])->flush();
     }
 
     public function clearAllBundlesCache(): void

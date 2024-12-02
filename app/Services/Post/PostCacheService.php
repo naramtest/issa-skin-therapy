@@ -34,7 +34,7 @@ class PostCacheService
 
     private const POST_CACHE_TTL = 30 * 24 * 3600;
     private const CATEGORY_CACHE_TTL = 30 * 24 * 3600; // 30 days in seconds
-    private const CACHE_KEY_HOME_PRODUCTS = 'home_products'; // 30 days in seconds
+    private const CACHE_KEY_HOME_PRODUCTS = "home_products"; // 30 days in seconds
 
     public function getHomePost()
     {
@@ -50,7 +50,6 @@ class PostCacheService
                         "categories.slug"
                     );
                 },
-
             ])
             ->limit(3)
             ->get();
@@ -66,9 +65,8 @@ class PostCacheService
 
     public function getPaginatedPosts(
         ?array $categoryIds = null,
-        int    $perPage = 12
-    ): LengthAwarePaginator
-    {
+        int $perPage = 12
+    ): LengthAwarePaginator {
         try {
             $page = request()->get("page", 1);
             $cacheKey = $this->generatePostsCacheKey(
@@ -90,17 +88,16 @@ class PostCacheService
                 self::POST_CACHE_TTL,
                 fn() => $this->queryPosts($categoryIds, $perPage)
             );
-        } catch (\Exception|NotFoundExceptionInterface|ContainerExceptionInterface $e) {
+        } catch (\Exception | NotFoundExceptionInterface | ContainerExceptionInterface $e) {
             return $this->queryPosts($categoryIds, $perPage);
         }
     }
 
     private function generatePostsCacheKey(
         ?array $categoryIds,
-        int    $page,
-        int    $perPage
-    ): string
-    {
+        int $page,
+        int $perPage
+    ): string {
         $key = "posts.page.$page.$perPage";
 
         if ($categoryIds) {
@@ -113,9 +110,8 @@ class PostCacheService
 
     private function queryPosts(
         ?array $categoryIds,
-        int    $perPage
-    ): LengthAwarePaginator
-    {
+        int $perPage
+    ): LengthAwarePaginator {
         $query = Post::query()
             ->select(self::COLUMNS)
             ->with([
@@ -128,8 +124,7 @@ class PostCacheService
                     );
                 },
             ])
-            ->byDate()
-            ->latest();
+            ->byDate();
 
         if ($categoryIds) {
             $query->whereHas("categories", function ($query) use (

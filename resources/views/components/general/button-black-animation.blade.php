@@ -1,29 +1,31 @@
 <div
-    {{$attributes->class(['relative  py-4 w-full overflow-hidden rounded-[50px] border-2 border-darkColor bg-darkColor  hover:text-darkColor inline-block text-white uppercase'])}}  x-data="{ hoverOn: false ,hoverOff:false,mouseOn(){
-                    this.hoverOn = true;
-                    this.hoverOff = false;
-                },
-                    mouseOut(){
-                    this.hoverOn = false
-                    this.hoverOff = true
-                }
-                }"
+    {{ $attributes->class(["relative w-full overflow-hidden rounded-[50px] border-2 border-darkColor bg-darkColor py-4 uppercase text-white hover:text-darkColor"]) }}
+    x-data="{
+        hoverOn: false,
+        hoverOff: false,
+        mouseOn() {
+            this.hoverOn = true
+            this.hoverOff = false
+        },
+        mouseOut() {
+            this.hoverOn = false
+            this.hoverOff = true
+        },
+    }"
     @mouseenter="mouseOn()"
-    @mouseleave="mouseOut()">
+    @mouseleave="mouseOut()"
+>
     <div
-        class="transition-all w-full h-full flex items-center justify-center text-center   duration-[800ms]"
+        class="flex h-full w-full items-center justify-center text-center transition-all duration-[800ms]"
     >
-        {{$slot}}
+        {{ $slot }}
         <div
-            style="inset-block-start: -50%;
-                            inset-inline-start: -25%;
-                            "
-            class="absolute inset-0 -z-0 bg-white transition-transform rounded-[50%] h-[200%]  w-[150%] duration-800 ease-in-out -translate-y-[76%]"
+            style="inset-block-start: -50%; inset-inline-start: -25%"
+            class="duration-800 absolute inset-0 -z-0 h-[200%] w-[150%] -translate-y-[76%] rounded-[50%] bg-white transition-transform ease-in-out"
             :class="{ 'button-on': hoverOn ,
                                 'button-out': hoverOff
                             }"
             7
         ></div>
     </div>
-
 </div>

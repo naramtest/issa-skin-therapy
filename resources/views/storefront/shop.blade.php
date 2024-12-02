@@ -12,7 +12,7 @@
                     <x-general.product-item-card :product="$product" />
                 @endforeach
             </div>
-            {{-- TODO: pagination --}}
+            {!! $products->links("pagination::tailwind") !!}
         </section>
         <x-home.section-container
             style="
@@ -25,23 +25,22 @@
         >
             <div class="z-[10] flex w-[60%] flex-col items-center text-white">
                 <p class="text-[13px] font-[200] uppercase tracking-[2px]">
-                    Made in USA
+                    {{ __("store.Made in USA") }}
                 </p>
                 <h2 class="headline-font mt-4 text-center">
-                    Patent Delivery Technology
+                    {{ __("store.Patent Delivery Technology") }}
                 </h2>
                 <p
                     class="mt-10 text-[13px] font-[200] uppercase tracking-[2px]"
                 >
-                    Crafted By Dermatologist and make a slide of nice photos
-                    folder
+                    {{ __("store.Crafted By Dermatologist and make a slide of nice photos folder") }}
                 </p>
 
                 <a
                     class="mt-6 rounded-[50px] bg-lightColor px-12 py-3 text-darkColor transition-colors duration-300 hover:bg-[#CCDBE1]"
-                    href=""
+                    href="{{ route("about.index") }}"
                 >
-                    About Us
+                    {{ __("store.About Us") }}
                 </a>
             </div>
         </x-home.section-container>

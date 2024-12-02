@@ -161,4 +161,6 @@ return [
     "Contact us" => "Contact us",
     "Share your before and after to get a nice gift!" =>
         "Share your before and after to get a nice gift!",
+    "Crafted By Dermatologist and make a slide of nice photos folder" =>
+        "Crafted By Dermatologist and make a slide of nice photos folder",
 ];
