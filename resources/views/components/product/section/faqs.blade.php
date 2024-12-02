@@ -14,7 +14,10 @@
                 >
                     <p>
                         {{ __("store.Please read our") }}
-                        <a class="text-lightColor underline" href="/">
+                        <a
+                            class="text-lightColor underline"
+                            href="{{ route("faq.index") }}"
+                        >
                             {{ __("store.FAQs") }}
                         </a>
                         {{ __("store.page to find out more.") }}

@@ -2,7 +2,7 @@
     <main>
         <x-product.section.details :product="$bundle" :media="$media" />
 
-        {{-- <x-bundle.video-section :bundle="$bundle" /> --}}
+        <x-bundle.video-section :bundle="$bundle" />
         <x-bundle.how-to-use-section :bundle="$bundle" :faqs="$faqs" />
         <x-bundle.extra-tips :bundle="$bundle" />
 
@@ -17,13 +17,13 @@
                     src="https://issaskintherapy.com/wp-content/uploads/2024/07/box-handle-1024x433.png"
                     alt=""
                 />
-                <div class="flex rounded-lg bg-[#FAFAFA] px-12 py-4">
+                <div
+                    class="flex w-full justify-between rounded-lg bg-[#FAFAFA] px-12 py-4"
+                >
                     @foreach ($bundle->products as $product)
-                        <img
-                            class="w-[200px]"
-                            src="{{ $product->getFirstMedia(config("const.media.featured"))->getUrl(config("const.media.thumbnail")) }}"
-                            alt=""
-                        />
+                        <a href="{{ route("product.show", $product) }}">
+                            {!! \App\Helpers\Media\ImageGetter::responsiveFeaturedImg($product, class: "w-[200px]") !!}
+                        </a>
                     @endforeach
                 </div>
             </div>

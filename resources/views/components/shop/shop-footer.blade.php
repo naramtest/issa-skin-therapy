@@ -18,11 +18,12 @@
             {{ __("store.Crafted By Dermatologist and make a slide of nice photos folder") }}
         </p>
 
-        <a
-            class="mt-6 rounded-[50px] bg-lightColor px-12 py-3 text-darkColor transition-colors duration-300 hover:bg-[#CCDBE1]"
-            href="{{ route("about.index") }}"
-        >
-            {{ __("store.About Us") }}
+        <a class="mt-6" href="{{ route("about.index") }}">
+            <x-general.button-white-animation class="px-12 py-3">
+                <span class="z-10">
+                    {{ __("store.About Us") }}
+                </span>
+            </x-general.button-white-animation>
         </a>
     </div>
 </x-home.section-container>

@@ -65,20 +65,25 @@
                 />
             </label>
             <x-slot:button>
-                <button
-                    class="ms-4 flex-1 rounded-3xl bg-darkColor py-2 text-lightColor hover:bg-[#333F43]"
+                <x-general.button-black-animation
+                    class="ms-4 !flex-1 rounded-3xl !py-2"
                 >
-                    {{ __("store.Add to Card") }}
-                </button>
+                    <span class="z-10">
+                        {{ __("store.Add to Card") }}
+                    </span>
+                </x-general.button-black-animation>
             </x-slot>
         </x-general.add-to-cart>
 
         {{-- TODO: button animation --}}
-        <a
-            href="{{ route("checkout.index") }}"
-            class="rounded-3xl border border-darkColor py-2 transition-colors duration-300 hover:bg-darkColor hover:text-lightColor"
-        >
-            <p class="text-center">{{ __("store.Check Out") }}</p>
+        <a href="{{ route("checkout.index") }}" class="">
+            <x-general.button-white-animation
+                class="border !border-darkColor !py-2"
+            >
+                <span class="z-10 text-center">
+                    {{ __("store.Check Out") }}
+                </span>
+            </x-general.button-white-animation>
         </a>
         <div class="mt-6 flex justify-between px-2">
             <div class="flex gap-x-2">

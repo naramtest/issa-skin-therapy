@@ -9,11 +9,9 @@ use InvalidArgumentException;
 
 readonly class BundleObserver
 {
-
     public function __construct(
         private ProductCacheService $productCacheService
-    )
-    {
+    ) {
     }
 
     public function saving(Bundle $bundle): void
@@ -48,13 +46,13 @@ readonly class BundleObserver
         }
 
         // Validate total weight if shipping is required
-        if ($bundle->requires_shipping && !$bundle->weight) {
-            // Auto-calculate weight from items if not set
-            $totalWeight = $bundle->items->sum(function ($item) {
-                return $item->product->weight * $item->quantity;
-            });
-            $bundle->weight = $totalWeight;
-        }
+        //        if ($bundle->requires_shipping && !$bundle->weight) {
+        //            // Auto-calculate weight from items if not set
+        //            $totalWeight = $bundle->items->sum(function ($item) {
+        //                return $item->product->weight * $item->quantity;
+        //            });
+        //            $bundle->weight = $totalWeight;
+        //        }
     }
 
     public function saved(Product $product): void
