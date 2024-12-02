@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\Bundle;
-use App\Models\Product;
 use App\Services\Product\ProductCacheService;
 use InvalidArgumentException;
 
@@ -55,12 +54,12 @@ readonly class BundleObserver
         //        }
     }
 
-    public function saved(Product $product): void
+    public function saved(Bundle $product): void
     {
         $this->productCacheService->clearAllBundlesCache();
     }
 
-    public function deleted(Product $product): void
+    public function deleted(Bundle $product): void
     {
         $this->productCacheService->clearAllBundlesCache();
     }
