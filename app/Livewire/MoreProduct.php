@@ -12,11 +12,17 @@ class MoreProduct extends Component
 {
     public int $selectedCategory = 1;
     public bool $isProducts = true;
+    public Collection $categories;
     protected ProductCacheService $productCacheService;
 
     public function boot(ProductCacheService $productCacheService)
     {
         $this->productCacheService = $productCacheService;
+    }
+
+    public function mount()
+    {
+        $this->categories = $this->productCacheService->allProductCategories();
     }
 
     public function render()

@@ -1,86 +1,16 @@
 <x-store-main-layout>
     <main class="relative">
         <x-shop.section.hero />
-        <section class="content-x-padding py-12">
+        <section class="padding-from-side-menu py-12">
             <div class="grid grid-cols-4 gap-4">
-                <x-shop.shop-collection
-                    title="X- Age Collection"
-                    subtitle="For Anti-Wrinkles and Anti-Aging"
-                    img="{{asset('storage/test/collection1.webp')}}"
-                />
-                <x-shop.shop-collection
-                    title="X- Age Collection"
-                    subtitle="For Anti-Wrinkles and Anti-Aging"
-                    img="{{asset('storage/test/collection2.webp')}}"
-                />
-                <x-shop.shop-collection
-                    title="X- Age Collection"
-                    subtitle="For Anti-Wrinkles and Anti-Aging"
-                    img="{{asset('storage/test/collection3.webp')}}"
-                />
-                <x-shop.shop-collection
-                    title="X- Age Collection"
-                    subtitle="For Anti-Wrinkles and Anti-Aging"
-                    img="{{asset('storage/test/collection4.webp')}}"
-                />
+                @foreach ($bundles as $bundle)
+                    <x-shop.shop-collection :bundle="$bundle" />
+                @endforeach
             </div>
             <div class="mt-8 grid grid-cols-4 gap-6">
-                <x-general.product-item-card
-                    class="swiper-slide"
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-                <x-general.product-item-card
-                    class="swiper-slide"
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-                <x-general.product-item-card
-                    class="swiper-slide"
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-                <x-general.product-item-card
-                    class="swiper-slide"
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-                <x-general.product-item-card
-                    class="swiper-slide"
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-                <x-general.product-item-card
-                    class="swiper-slide"
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-                <x-general.product-item-card
-                    class="swiper-slide"
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
-                <x-general.product-item-card
-                    class="swiper-slide"
-                    title="LumiCleanse Cleanser"
-                    img="{{asset('storage/test/product/product.webp')}}"
-                    subtitle="A-luminate, CLEANSE"
-                    price="200.00$"
-                />
+                @foreach ($products as $product)
+                    <x-general.product-item-card :product="$product" />
+                @endforeach
             </div>
             {{-- TODO: pagination --}}
         </section>

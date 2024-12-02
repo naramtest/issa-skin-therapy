@@ -1,7 +1,4 @@
 @props([
-    "title",
-    "img",
-    "subtitle",
     "bundle",
 ])
 
@@ -19,6 +16,6 @@
             </h3>
             <x-icons.card-arrow-right class="arrow h-5 w-5" />
         </div>
-        <p class="mt-2">{{ $subtitle }}</p>
+        <p class="mt-2">{{ $bundle->subtitle }}</p>
     </div>
 </a>

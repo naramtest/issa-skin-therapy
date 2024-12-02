@@ -33,18 +33,19 @@
                 @if (count($product->categories))
                     <span class="hover:text-gray-500">
                         <a
-                            href="{{ route("product-category.index", ["slug" => $product->categories[0]->slug]) }}"
+                            href="{{ route("product.category", ["slug" => $product->categories[0]->slug]) }}"
                         >
                             {{ $product->categories[0]->name }}
                         </a>
                     </span>
                 @endif
 
+                {{-- TODO: add type pages --}}
                 @if (count($product->types))
                     <span>-</span>
                     <span>
                         <a
-                            href=" {{ route("product-category.index", ["slug" => $product->types[0]->slug]) }}"
+                            href=" {{ route("product.category", ["slug" => $product->types[0]->slug]) }}"
                         >
                             {{ $product->types[0]->name }}
                         </a>
@@ -133,7 +134,7 @@
                                 @if (count($product->categories))
                                     <span>
                                         <a
-                                            href="{{ route("product-category.index", ["slug" => $product->categories[0]->slug]) }}"
+                                            href="{{ route("product.category", ["slug" => $product->categories[0]->slug]) }}"
                                         >
                                             {{ $product->categories[0]->name }}
                                         </a>
@@ -143,7 +144,7 @@
                                 @if (count($product->types))
                                     <span>
                                         <a
-                                            href=" {{ route("product-category.index", ["slug" => $product->types[0]->slug]) }}"
+                                            href=" {{ route("product.category", ["slug" => $product->types[0]->slug]) }}"
                                         >
                                             {{ $product->types[0]->name }}
                                         </a>
@@ -174,26 +175,35 @@
                             </div>
 
                             <div
-                                class="flex items-center justify-between gap-x-6 text-sm"
+                                class="flex items-center justify-between gap-x-5 text-sm"
                             >
-                                <label for="quantity">
-                                    <input
-                                        class="rounded-[50px] bg-[#F4F4F4] px-2 py-2 text-center focus-visible:outline-0"
-                                        type="number"
-                                        name="quantity"
-                                        id="quantity"
-                                        value="1"
-                                        min="1"
-                                        max="30"
-                                    />
-                                </label>
-                                <button
-                                    class="hover:bg-darkColor/90 w-full rounded-[50px] bg-darkColor px-3 py-2 text-white transition-colors duration-300 hover:bg-[#2f2f2f]"
+                                <x-general.add-to-cart
+                                    :product="$product"
+                                    class="flex flex-1 items-center justify-between gap-x-5 text-sm"
                                 >
-                                    {{ __("store.Add to cart") }}
-                                </button>
+                                    <label for="quantity">
+                                        <input
+                                            class="rounded-[50px] bg-[#F4F4F4] px-2 py-2 text-center focus-visible:outline-0"
+                                            type="number"
+                                            name="quantity"
+                                            id="quantity"
+                                            value="1"
+                                            min="1"
+                                            max="30"
+                                        />
+                                    </label>
+                                    <x-slot:button>
+                                        <x-general.button-black-animation
+                                            class="text-nowrap !px-7 !py-2"
+                                        >
+                                            <span class="z-10">
+                                                {{ __("store.Add to cart") }}
+                                            </span>
+                                        </x-general.button-black-animation>
+                                    </x-slot>
+                                </x-general.add-to-cart>
                                 <button
-                                    class="w-full rounded-[50px] border border-black px-3 py-2 transition-colors duration-300 hover:border-transparent hover:bg-[#2f2f2f] hover:text-lightColor"
+                                    class="text-nowrap rounded-[50px] border border-black px-7 py-2 transition-colors duration-300 hover:border-transparent hover:bg-[#2f2f2f] hover:text-lightColor"
                                 >
                                     {{ __("store.Check Out") }}
                                 </button>

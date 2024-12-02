@@ -83,11 +83,11 @@ class ProductCacheService
      */
     public function getFeaturedProduct(): Product
     {
-        $query = Product::select(array_merge(self::COLUMNS, ['short_description']))
-            ->where('is_featured', true)
-            ->with([
-                "media",
-            ])
+        $query = Product::select(
+            array_merge(self::COLUMNS, ["short_description"])
+        )
+            ->where("is_featured", true)
+            ->with(["media"])
             ->first();
         if (App::isLocal()) {
             return $query;
@@ -101,8 +101,9 @@ class ProductCacheService
 
     public function allBundles(): Collection
     {
-
-        $query = App\Models\Bundle::select(array_merge(self::COLUMNS, ['subtitle']))->get();
+        $query = App\Models\Bundle::select(
+            array_merge(self::COLUMNS, ["subtitle"])
+        )->get();
 
         if (App::isLocal()) {
             return $query;
@@ -117,8 +118,18 @@ class ProductCacheService
 
     public function allProductCategories(): Collection
     {
-
-        $query = App\Models\Category::select(['slug', 'name', 'id', 'order', 'type', 'is_visible'])->byOrder()->visible()->product()->get();
+        $query = App\Models\Category::select([
+            "slug",
+            "name",
+            "id",
+            "order",
+            "type",
+            "is_visible",
+        ])
+            ->byOrder()
+            ->visible()
+            ->product()
+            ->get();
 
         if (App::isLocal()) {
             return $query;
@@ -130,7 +141,6 @@ class ProductCacheService
             fn() => $query ?? Collection::make()
         );
     }
-
 
     public function clearAllProductCache(): void
     {

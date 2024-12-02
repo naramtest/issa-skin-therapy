@@ -8,13 +8,14 @@
     <h2 class="headline-font">{{ __("store.You may also like") }}</h2>
     <div class="mt-12 flex items-center justify-between">
         <ul class="flex flex-1 items-center gap-x-4">
-            {{-- TODO: Cache Porduct Categories --}}
-            @foreach (\App\Models\Category::all() as $category)
-                <x-product.categories-item
-                    id="{{$category->id}}"
-                    name="{{$category->name}}"
-                    :is-active="$selectedCategory === $category->id"
-                />
+            @foreach ($categories as $category)
+                @unless ($category->slug === "protect" || $category->slug === "hydrate")
+                    <x-product.categories-item
+                        id="{{$category->id}}"
+                        name="{{$category->name}}"
+                        :is-active="$selectedCategory === $category->id"
+                    />
+                @endunless
             @endforeach
 
             <x-product.categories-item
@@ -68,12 +69,7 @@
             @else
                 @for ($i = 0; $i < $repetitions; $i++)
                     @foreach ($this->products as $product)
-                        <x-shop.shop-collection
-                            :bundle="$product"
-                            class="swiper-slide !h-auto"
-                            subtitle="For Anti-Wrinkles and Anti-Aging"
-                            img="{{asset('storage/test/collection4.webp')}}"
-                        />
+                        <x-shop.shop-collection :bundle="$product" />
                     @endforeach
                 @endfor
             @endif
