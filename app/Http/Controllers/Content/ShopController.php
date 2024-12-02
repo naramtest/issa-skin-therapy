@@ -16,4 +16,11 @@ class ShopController extends Controller
             "products" => $products,
         ]);
     }
+
+    public function collection(ProductCacheService $productCacheService)
+    {
+        $bundles = $productCacheService->allBundles();
+
+        return view("storefront.collections", ["bundles" => $bundles]);
+    }
 }
