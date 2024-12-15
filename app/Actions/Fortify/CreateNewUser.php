@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -15,26 +16,53 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Validate and create a newly registered user.
      *
-     * @param  array<string, string>  $input
+     * @param array<string, string> $input
      */
     public function create(array $input): User
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
+            "first_name" => ["required", "string", "max:255"],
+            "last_name" => ["required", "string", "max:255"],
+            "email" => [
+                "required",
+                "string",
+                "email",
+                "max:255",
                 Rule::unique(User::class),
             ],
-            'password' => $this->passwordRules(),
+            "password" => $this->passwordRules(),
         ])->validate();
 
-        return User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'password' => Hash::make($input['password']),
+        $user = User::create([
+            "first_name" => $input["first_name"],
+            "last_name" => $input["last_name"],
+            "email" => $input["email"],
+            "password" => Hash::make($input["password"]),
         ]);
+
+        // Assign customer role
+        $user->assignRole("customer");
+
+        // Check if there's an existing customer with this email
+        $existingCustomer = Customer::where("email", $input["email"])->first();
+
+        if ($existingCustomer) {
+            // Link the existing customer to the new user
+            $existingCustomer->update([
+                "user_id" => $user->id,
+                "is_registered" => true,
+            ]);
+        } else {
+            // Create new customer profile
+            Customer::create([
+                "user_id" => $user->id,
+                "first_name" => $input["first_name"],
+                "last_name" => $input["last_name"],
+                "email" => $input["email"],
+                "is_registered" => true,
+            ]);
+        }
+
+        return $user;
     }
 }

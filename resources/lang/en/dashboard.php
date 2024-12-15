@@ -113,4 +113,6 @@ return [
     "Time" => "Time",
     "That Defies" => "That Defies",
     "Skin" => "Skin",
+    "Password" => "Password",
+    "Confirm Password" => "Confirm Password",
 ];

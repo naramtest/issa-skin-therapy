@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\Content\FaqController;
@@ -57,3 +58,10 @@ Route::get("/about", [AboutController::class, "index"])->name("about.index");
 Route::get("/contact-us", [ContactUsController::class, "index"])->name(
     "contact.index"
 );
+
+Route::controller(AuthController::class)->group(function () {
+    Route::middleware("guest")->group(function () {
+        Route::get("/login", "login")->name("login.index");
+        Route::get("/register", "register")->name("store.login");
+    });
+});

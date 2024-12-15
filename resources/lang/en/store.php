@@ -163,4 +163,14 @@ return [
         "Share your before and after to get a nice gift!",
     "Crafted By Dermatologist and make a slide of nice photos folder" =>
         "Crafted By Dermatologist and make a slide of nice photos folder",
+    "Register" => "Register",
+    "Create Account" => "Create Account",
+    "Back To Store" => "Back To Store",
+    "Sign In" => "Sign In",
+    "First Name" => "First Name",
+    "Your First Name" => "Your First Name ...",
+    "Last Name" => "Last Name",
+    "Your Last Name " => "Your Last Name ...",
+    "Email Address" => "Email Address",
+    "Enter your email here " => "Enter your email here ...",
 ];
