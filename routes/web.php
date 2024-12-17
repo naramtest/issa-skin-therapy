@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactUsController;
@@ -59,11 +60,16 @@ Route::get("/contact-us", [ContactUsController::class, "index"])->name(
     "contact.index"
 );
 
-Route::controller(AuthController::class)->group(function () {
-    Route::middleware("guest")->group(function () {
+Route::controller(AuthController::class)
+    ->middleware("guest")
+    ->group(function () {
         Route::get("/login", "login")->name("login");
         Route::get("/register", "register")->name("register");
     });
 
-    Route::get("my-account", "myAccount")->name("my-account.index");
-});
+Route::controller(AccountController::class)
+    ->prefix("/my-account")
+    ->group(function () {
+        Route::get("/", "show")->name("account.index");
+        Route::get("edit-account", "edit")->name("account.edit");
+    });

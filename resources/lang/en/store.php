@@ -176,4 +176,13 @@ return [
     "My account" => "My account",
     "Log out" => "Log out",
     "Hello" => "Hello",
+    "From your account dashboard you can view your" =>
+        "From your account dashboard you can view your",
+    "recent orders" => "recent orders",
+    "manage your" => "manage your",
+    "shipping and billing addresses" => "shipping and billing addresses",
+    "and" => "and",
+    "edit your password and account details" =>
+        "edit your password and account details",
+    "User Information" => "User Information",
 ];

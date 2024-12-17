@@ -13,9 +13,4 @@ class AuthController extends Controller
     {
         return view("auth.register");
     }
-
-    public function myAccount()
-    {
-        return view("auth.myAccount", ["user" => \Auth::user()]);
-    }
 }
