@@ -173,4 +173,7 @@ return [
     "Your Last Name " => "Your Last Name ...",
     "Email Address" => "Email Address",
     "Enter your email here " => "Enter your email here ...",
+    "My account" => "My account",
+    "Log out" => "Log out",
+    "Hello" => "Hello",
 ];

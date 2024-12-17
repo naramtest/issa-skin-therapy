@@ -115,4 +115,6 @@ return [
     "Skin" => "Skin",
     "Password" => "Password",
     "Confirm Password" => "Confirm Password",
+    "Forget Password?" => "Forget Password?",
+    "Remember Me" => "Remember Me",
 ];

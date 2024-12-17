@@ -61,7 +61,9 @@ Route::get("/contact-us", [ContactUsController::class, "index"])->name(
 
 Route::controller(AuthController::class)->group(function () {
     Route::middleware("guest")->group(function () {
-        Route::get("/login", "login")->name("login.index");
-        Route::get("/register", "register")->name("store.login");
+        Route::get("/login", "login")->name("login");
+        Route::get("/register", "register")->name("register");
     });
+
+    Route::get("my-account", "myAccount")->name("my-account.index");
 });

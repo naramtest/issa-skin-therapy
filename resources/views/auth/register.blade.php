@@ -41,12 +41,9 @@
                     field="password_confirmation"
                     :is-required="true"
                 />
-                <div
-                    class="mt-6 flex w-full items-center justify-between"
-                ></div>
                 <x-general.button-black-animation class="!w-fit !py-2 px-6">
                     <button class="relative z-10" type="submit">
-                        {{ __("store.Register") }}
+                        {{ __("store.Sign In") }}
                     </button>
                 </x-general.button-black-animation>
             </form>
