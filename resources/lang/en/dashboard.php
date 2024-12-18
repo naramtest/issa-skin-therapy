@@ -117,4 +117,5 @@ return [
     "Confirm Password" => "Confirm Password",
     "Forget Password?" => "Forget Password?",
     "Remember Me" => "Remember Me",
+    "Send Reset Link" => "Send Reset Link",
 ];

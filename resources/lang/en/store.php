@@ -187,4 +187,5 @@ return [
     "User Information" => "User Information",
     "A new verification link has been sent to your email address" =>
         "A new verification link has been sent to your email address.",
+    "Reset Password" => "Reset Password",
 ];

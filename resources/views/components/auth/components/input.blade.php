@@ -4,6 +4,7 @@
     "label",
     "type" => "text",
     "isRequired",
+    "value" => null,
 ])
 
 <div {{ $attributes->class(["mb-4"]) }}>
@@ -16,7 +17,7 @@
         name="{{ $field }}"
         id="{{ $field }}"
         placeholder="{{ $placeholder }}"
-        value="{{ old($field) }}"
+        value="{{ $value ?? old($field) }}"
         @required($isRequired)
     />
     @error($field)

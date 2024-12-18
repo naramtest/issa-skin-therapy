@@ -33,13 +33,15 @@
                             {{ __("dashboard.Remember Me") }}
                         </label>
                     </div>
-                    <a href="">{{ __("dashboard.Forget Password?") }}</a>
+                    <a href="{{ route("password.request") }}">
+                        {{ __("dashboard.Forget Password?") }}
+                    </a>
                 </div>
                 <x-general.button-black-animation
                     class="mt-4 !w-fit !py-2 px-6"
                 >
                     <button class="relative z-10" type="submit">
-                        {{ __("store.Register") }}
+                        {{ __("store.Login") }}
                     </button>
                 </x-general.button-black-animation>
             </form>
