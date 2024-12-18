@@ -48,6 +48,16 @@ class User extends Authenticatable implements MustVerifyEmail
                 );
             }
         });
+        static::updated(function (User $user) {
+            if (
+                $user->customer &&
+                ($user->isDirty("first_name") || $user->isDirty("last_name"))
+            ) {
+                $user->customer->first_name = $user->first_name;
+                $user->customer->last_name = $user->last_name;
+                $user->customer->save();
+            }
+        });
     }
 
     public function getFullNameAttribute(): string

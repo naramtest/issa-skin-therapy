@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AddressType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -9,7 +10,6 @@ class CustomerAddress extends Model
 {
     protected $fillable = [
         "customer_id",
-        "name",
         "phone",
         "address",
         "city",
@@ -18,12 +18,16 @@ class CustomerAddress extends Model
         "is_default",
         "is_billing",
         "last_used_at",
+        "type",
+        "first_name",
+        "last_name",
     ];
 
     protected $casts = [
         "is_default" => "boolean",
         "is_billing" => "boolean",
         "last_used_at" => "datetime",
+        "type" => AddressType::class,
     ];
 
     public function customer(): BelongsTo
