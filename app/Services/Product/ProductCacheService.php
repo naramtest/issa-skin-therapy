@@ -144,8 +144,9 @@ class ProductCacheService
         );
     }
 
-    public function allProductCategories(): Collection
-    {
+    public function allProductCategories(
+        int $productsPerCategory = 2
+    ): Collection {
         $query = App\Models\Category::select([
             "slug",
             "name",
@@ -157,6 +158,16 @@ class ProductCacheService
             ->byOrder()
             ->visible()
             ->product()
+            ->with([
+                "products" => function ($query) use ($productsPerCategory) {
+                    $query
+                        ->select(self::COLUMNS)
+                        ->published()
+                        ->byOrder()
+                        ->with(["media"])
+                        ->limit($productsPerCategory);
+                },
+            ])
             ->get();
 
         if (App::isLocal()) {
@@ -184,6 +195,7 @@ class ProductCacheService
     public function clearAllCategoriesCache(): void
     {
         Cache::forget(self::CACHE_KEY_ALL_CATEGORIES);
+        Cache::forget("specific_categories_*");
     }
 
     public function clearFeaturedProductCache(): void

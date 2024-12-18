@@ -41,4 +41,4 @@
     </nav>
 </div>
 {{-- Mega Menu --}}
-<x-layout.header.mega-menu />
+<x-mega-menu-component />

@@ -10,107 +10,38 @@
 >
     <div class="w-1/2">
         <div
-            class="grid auto-rows-fr grid-cols-2 gap-3 font-normal text-[#1f1f1f]"
+            class="grid auto-rows-fr grid-cols-2 gap-x-3 font-normal text-[#1f1f1f]"
         >
-            <!-- Cleanse Category -->
-            <div class="menu-item translate-x-2 opacity-0">
-                <h2 class="text-base font-bold">Cleanse</h2>
-                <ul class="mt-3">
-                    <li>
-                        <a href="#" class="mega-menu-link group inline-block">
-                            <span class="link-text">Lumi cleanse Cleanser</span>
-                        </a>
-                    </li>
-                    <li class="mt-1">
-                        <a href="#" class="mega-menu-link group inline-block">
-                            <span class="link-text">SaliCleanse Cleanser</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Hydrate Category -->
-            <div class="menu-item translate-x-2 opacity-0">
-                <h2 class="text-base font-bold">Hydrate</h2>
-                <ul class="mt-3">
-                    <li>
-                        <a href="#" class="mega-menu-link group inline-block">
-                            <span class="link-text">
-                                LumiHydra Anti-Oxidant Emulsion
-                            </span>
-                        </a>
-                    </li>
-                    <li class="mt-1">
-                        <a href="#" class="mega-menu-link group inline-block">
-                            <span class="link-text">
-                                PureHydra Oil-Free lotion
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Treat Category -->
-            <div class="menu-item translate-x-2 opacity-0">
-                <h2 class="text-base font-bold">Treat</h2>
-                <ul class="mt-3">
-                    <li>
-                        <a href="#" class="mega-menu-link group inline-block">
-                            <span class="link-text">A-Clear</span>
-                        </a>
-                    </li>
-                    <li class="mt-1">
-                        <a href="#" class="mega-menu-link group inline-block">
-                            <span class="link-text">A-Luminate</span>
-                        </a>
-                    </li>
-                    <li class="mt-1">
-                        <a href="#" class="mega-menu-link group inline-block">
-                            <span class="link-text">X-Age</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Protect Category -->
-            <div class="menu-item translate-x-2 opacity-0">
-                <h2 class="text-base font-bold">Protect</h2>
-                <ul class="mt-3">
-                    <li>
-                        <a href="#" class="mega-menu-link group inline-block">
-                            <span class="link-text">
-                                LumiGaurd Broad Spectrum emulsion
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            @foreach ($categories as $category)
+                @unless (Str::contains($category->name, "&"))
+                    @if ($category->slug === "treat")
+                        <x-layout.header.mega.treat :category="$category" />
+                    @else
+                        <x-layout.header.mega.categories
+                            :category="$category"
+                            :loop="$loop->index"
+                        />
+                    @endif
+                @endif
+            @endforeach
         </div>
 
         <!-- Collections Section -->
-        <div class="menu-item translate-x-2 opacity-0">
-            <h2 class="mt-4 text-base font-bold">Collections</h2>
+        <div class="menu-item mt-12 translate-x-2 opacity-0">
+            <h2 class="mt-4 text-base font-bold">
+                {{ __("dashboard.Collections") }}
+            </h2>
             <ul class="mt-2 grid auto-rows-fr grid-cols-2">
-                <li>
-                    <a href="#" class="mega-menu-link group inline-block">
-                        <span class="link-text">X-Age Collection</span>
-                    </a>
-                </li>
-                <li class="mt-1">
-                    <a href="#" class="mega-menu-link group inline-block">
-                        <span class="link-text">A-Luminate One</span>
-                    </a>
-                </li>
-                <li class="mt-1">
-                    <a href="#" class="mega-menu-link group inline-block">
-                        <span class="link-text">A-Luminate Two</span>
-                    </a>
-                </li>
-                <li class="mt-1">
-                    <a href="#" class="mega-menu-link group inline-block">
-                        <span class="link-text">A-Clear Collection</span>
-                    </a>
-                </li>
+                @foreach ($bundles as $bundle)
+                    <li>
+                        <a
+                            href="{{ route("product.bundle", $bundle) }}"
+                            class="mega-menu-link group inline-block"
+                        >
+                            <span class="link-text">{{ $bundle->name }}</span>
+                        </a>
+                    </li>
+                @endforeach
             </ul>
         </div>
 
@@ -120,14 +51,17 @@
             style="width: 0"
         ></div>
 
-        <div
+        <a
+            href="{{ route("shop.index") }}"
             class="menu-item flex translate-x-2 items-center justify-between opacity-0"
         >
-            <a href="#" class="mega-menu-link group inline-block">
-                <h2 class="link-text text-xl font-bold">Visit shop</h2>
-            </a>
+            <div href="#" class="mega-menu-link group inline-block">
+                <h2 class="link-text text-xl font-bold">
+                    {{ __("store.Visit Shop") }}
+                </h2>
+            </div>
             <x-icons.arrow-right class="h-5 w-5" />
-        </div>
+        </a>
     </div>
 
     <div class="w-1/2">
