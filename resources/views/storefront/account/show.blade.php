@@ -6,7 +6,7 @@
                 <span class="capitalize text-darkColor">
                     {{ $user->full_name }}
                 </span>
-                ( not
+                ( {{ __("store.not") }}
                 <span class="capitalize text-darkColor">
                     {{ $user->full_name }}
                 </span>
@@ -19,7 +19,7 @@
             >
                 @csrf
                 <button class="ms-1 text-darkColor underline" type="submit">
-                    Log out
+                    {{ __("store.Log out") }}
                 </button>
             </form>
             <p class="inline-block">)</p>

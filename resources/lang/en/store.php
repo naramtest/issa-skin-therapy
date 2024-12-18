@@ -188,4 +188,7 @@ return [
     "A new verification link has been sent to your email address" =>
         "A new verification link has been sent to your email address.",
     "Reset Password" => "Reset Password",
+    "not" => "not",
+    "Save Changes" => "Save Changes",
+    "Current Password" => "Current Password",
 ];

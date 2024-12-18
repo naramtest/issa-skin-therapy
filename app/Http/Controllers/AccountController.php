@@ -2,15 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+
 class AccountController extends Controller
 {
     public function show()
     {
-        return view("storefront.account.show", ["user" => \Auth::user()]);
+        $user = Auth::user();
+        if (!$user) {
+            abort(403);
+        }
+        return view("storefront.account.show", ["user" => $user]);
     }
 
     public function edit()
     {
-        return view("storefront.account.edit", ["user" => \Auth::user()]);
+        $user = Auth::user();
+        if (!$user) {
+            abort(403);
+        }
+        return view("storefront.account.edit", ["user" => $user]);
     }
 }

@@ -3,7 +3,7 @@
 ])
 
 <x-store-main-layout>
-    <main class="mx-auto min-h-[100vh] w-[75%] pt-10">
+    <main class="mx-auto min-h-[100vh] w-[75%] pb-10 pt-10">
         <h1 class="text-[95px] font-bold">{{ __("store.My account") }}</h1>
         <div class="ms-2 mt-2 flex items-center gap-x-6">
             <x-general.button-white-animation
