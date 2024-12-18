@@ -26,6 +26,7 @@ class ProductCacheService
     const CACHE_KEY_ALL_BUNDLES = "all_bundles";
     const CACHE_KEY_FEATURED_PRODUCT = "all_featured_product";
     const CACHE_KEY_ALL_CATEGORIES = "all_categories";
+    const CACHE_KEY_ALL_TYPES = "all_types";
     const COLUMNS = [
         "id",
         "name",
@@ -181,6 +182,21 @@ class ProductCacheService
         );
     }
 
+    public function allProductTypes(int $productsPerCategory = 2): Collection
+    {
+        $query = App\Models\ProductType::select(["slug", "name", "id"])->get();
+
+        if (App::isLocal()) {
+            return $query;
+        }
+
+        return Cache::remember(
+            self::CACHE_KEY_ALL_TYPES,
+            self::CACHE_DURATION,
+            fn() => $query ?? Collection::make()
+        );
+    }
+
     public function clearAllProductCache(): void
     {
         Cache::forget(self::CACHE_KEY_ALL_PRODUCTS);
@@ -195,7 +211,11 @@ class ProductCacheService
     public function clearAllCategoriesCache(): void
     {
         Cache::forget(self::CACHE_KEY_ALL_CATEGORIES);
-        Cache::forget("specific_categories_*");
+    }
+
+    public function clearAllTypesCache(): void
+    {
+        Cache::forget(self::CACHE_KEY_ALL_TYPES);
     }
 
     public function clearFeaturedProductCache(): void
