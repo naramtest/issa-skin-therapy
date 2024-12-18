@@ -185,4 +185,6 @@ return [
     "edit your password and account details" =>
         "edit your password and account details",
     "User Information" => "User Information",
+    "A new verification link has been sent to your email address" =>
+        "A new verification link has been sent to your email address.",
 ];

@@ -69,6 +69,7 @@ Route::controller(AuthController::class)
 
 Route::controller(AccountController::class)
     ->prefix("/my-account")
+    ->middleware(["verified"])
     ->group(function () {
         Route::get("/", "show")->name("account.index");
         Route::get("edit-account", "edit")->name("account.edit");
