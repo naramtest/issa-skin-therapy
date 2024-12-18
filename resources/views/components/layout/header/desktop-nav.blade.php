@@ -1,4 +1,4 @@
-<div class="relative z-[20] bg-darkColor">
+<div class="relative z-[30] bg-darkColor">
     <nav
         class="content-x-padding hidden rounded-t-[1.25rem] bg-lightColor lg:flex lg:gap-x-8"
     >
@@ -25,11 +25,13 @@
             @endforeach
         </ul>
         <div class="flex w-[20%] items-center justify-end gap-x-5">
-            <a href="{{ route("login") }}">
+            <a
+                href="{{ Auth::check() ? route("account.index") : route("login") }}"
+            >
                 <x-icons.person class="h-7 w-7" />
             </a>
             <x-icons.search class="h-6 w-6" />
-            <x-icons.bookmark class="h-7 w-7" />
+            {{-- <x-icons.bookmark class="h-7 w-7" /> --}}
             <x-icons.cart-icon
                 x-data
                 @click="$dispatch('toggle-cart')"

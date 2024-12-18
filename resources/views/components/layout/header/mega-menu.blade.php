@@ -1,5 +1,5 @@
 <div
-    class="absolute left-0 top-[100%] z-[10] flex w-full gap-12 overflow-hidden bg-lightColor bg-white px-24 py-10 pe-10 text-[#1f1f1f] shadow-lg"
+    class="absolute left-0 top-[100%] z-[20] flex w-full gap-12 overflow-hidden bg-lightColor bg-white px-24 py-10 pe-10 text-[#1f1f1f] shadow-lg"
     x-transition:enter="transform transition duration-300 ease-in"
     x-transition:enter-start="-translate-y-full "
     x-transition:enter-end=" translate-y-0 opacity-100"
