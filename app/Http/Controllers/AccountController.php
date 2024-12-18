@@ -6,6 +6,7 @@ use Auth;
 
 class AccountController extends Controller
 {
+    //TODO: add last order , edit addresses
     public function show()
     {
         $user = Auth::user();

@@ -4,7 +4,6 @@
     {{-- TODO: change name to dynimc name --}}
     <div>© {{ now()->year }} {{ $info->name }}.</div>
     <div class="flex justify-end gap-x-4">
-        {{-- TODO: there is a problem when switching from a dropdown to onather --}}
         <x-shared.local-switcher location="bottom" />
         <livewire:currency-selector location="bottom" />
     </div>
