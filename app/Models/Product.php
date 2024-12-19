@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Purchasable;
 use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
 use App\Models\Query\ProductQuery;
@@ -18,7 +19,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\Tags\HasTags;
 use Spatie\Translatable\HasTranslations;
 
-class Product extends Model implements HasMedia
+class Product extends Model implements HasMedia, Purchasable
 {
     use SoftDeletes, HasPricing, HasMoney;
     use HasTranslations;
@@ -165,5 +166,15 @@ class Product extends Model implements HasMedia
         return $this->status === ProductStatus::PUBLISHED &&
             $this->published_at &&
             $this->published_at->isFuture();
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

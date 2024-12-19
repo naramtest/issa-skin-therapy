@@ -2,10 +2,12 @@
 
 namespace App\Services\Inventory;
 
+use App\Contracts\InventoryInterface;
 use App\Enums\StockStatus;
 use App\Models\Product;
 
-class InventoryManager extends BaseInventoryService
+class InventoryManager extends BaseInventoryService implements
+    InventoryInterface
 {
     protected Product $product;
 
@@ -76,5 +78,15 @@ class InventoryManager extends BaseInventoryService
             $this->product->width,
             $this->product->height
         );
+    }
+
+    public function isLowStock(): bool
+    {
+        if (!$this->shouldTrackQuantity()) {
+            return $this->product->stock_status === StockStatus::LOW_STOCK;
+        }
+        return $this->getCurrentQuantity() <=
+            $this->product->low_stock_threshold &&
+            $this->getCurrentQuantity() > 0;
     }
 }

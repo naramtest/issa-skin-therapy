@@ -2,13 +2,9 @@
 
 namespace App\Providers;
 
-use App\Contracts\InventoryInterface;
-use App\Helpers\Money\UserCurrency;
-use App\Services\Caches\CacheQueries;
 use App\Services\Currency\CurrencyHelper;
 use App\Services\Currency\CurrencyService;
 use App\Services\Info\InfoCacheService;
-use App\Services\Inventory\InventoryManager;
 use Blade;
 use Clockwork\Support\Laravel\ClockworkMiddleware;
 use Clockwork\Support\Laravel\ClockworkServiceProvider;
@@ -25,7 +21,6 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-
         if ($this->app->isLocal()) {
             $this->app->register(ClockworkServiceProvider::class);
         }
@@ -59,9 +54,9 @@ class AppServiceProvider extends ServiceProvider
             return new CurrencyService($builder->build());
         });
 
-        $this->app->bind(InventoryInterface::class, function ($app, $params) {
-            return new InventoryManager($params["product"]);
-        });
+        //        $this->app->bind(InventoryInterface::class, function ($app, $params) {
+        //            return new InventoryManager($params["product"]);
+        //        });
     }
 
     public function boot(Kernel $kernel): void
@@ -69,23 +64,16 @@ class AppServiceProvider extends ServiceProvider
         Blade::stringable(function (Money $money) {
             return CurrencyHelper::moneyObjectInBlade($money);
         });
-        View::composer(
-            [
-
-                "components.layout.*",
-                "storefront.contact"
-            ],
-            function ($view) {
-                $view->with("info", app(InfoCacheService::class)->getInfo());
-            }
-        );
-
+        View::composer(["components.layout.*", "storefront.contact"], function (
+            $view
+        ) {
+            $view->with("info", app(InfoCacheService::class)->getInfo());
+        });
 
         if ($this->app->isLocal()) {
             $kernel->prependMiddleware(ClockworkMiddleware::class);
         }
         Model::preventsLazyLoading();
         Model::preventAccessingMissingAttributes();
-
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Purchasable;
 use App\Enums\ProductStatus;
 use App\Enums\StockStatus;
 use App\Models\Query\BundleQuery;
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\Translatable\HasTranslations;
 
-class Bundle extends Model implements HasMedia
+class Bundle extends Model implements HasMedia, Purchasable
 {
     use SoftDeletes, HasPricing, HasBundlePrice, HasMoney;
     use HasTranslations;
@@ -30,7 +31,7 @@ class Bundle extends Model implements HasMedia
         "how_to_use_am",
         "how_to_use_pm",
         "extra_tips",
-        'subtitle'
+        "subtitle",
     ];
 
     protected $fillable = [
@@ -61,7 +62,7 @@ class Bundle extends Model implements HasMedia
         "how_to_use_am",
         "how_to_use_pm",
         "extra_tips",
-        'subtitle'
+        "subtitle",
     ];
 
     protected $casts = [
@@ -131,5 +132,15 @@ class Bundle extends Model implements HasMedia
     public function newEloquentBuilder($query): BundleQuery
     {
         return new BundleQuery($query);
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->stock_status;
     }
 }

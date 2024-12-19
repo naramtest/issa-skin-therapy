@@ -2,10 +2,12 @@
 
 namespace App\Services\Inventory;
 
+use App\Contracts\InventoryInterface;
 use App\Enums\StockStatus;
 use App\Models\Bundle;
 
-class BundleInventoryManager extends BaseInventoryService
+class BundleInventoryManager extends BaseInventoryService implements
+    InventoryInterface
 {
     protected Bundle $bundle;
 
