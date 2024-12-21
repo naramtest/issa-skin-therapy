@@ -1,6 +1,10 @@
 <x-store-main-layout>
     <main>
-        <x-product.section.details :product="$product" :media="$media" />
+        <x-product.section.details
+            :type="\App\Enums\ProductType::PRODUCT->value"
+            :product="$product"
+            :media="$media"
+        />
 
         <x-product.section.video />
 

@@ -1,4 +1,9 @@
 <?php
+//Important Section
+//1- Newsletter
+//2- Add To Cart Button So when Item Already on the cart show something on the button
+//3- Remove or disable or change label of Add to Cart button when Out of Stock
+
 // TODO: auto calculate regular price when adding items to bundle
 // TODO: add Queue for image generation in production
 // TODO: change database for cache ... , to redis in production
@@ -13,8 +18,6 @@
 //TODO: link shop page
 //TODO: add spatie cache library and delete cache when faq , Product , reviews ..... etc
 // TODO: bundle front end Page
-
-
 
 //25/11
 //TODO: add Post , Blog , Archive (for , product , bundle , post) front end pages

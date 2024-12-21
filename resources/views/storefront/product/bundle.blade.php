@@ -1,6 +1,10 @@
 <x-store-main-layout>
     <main>
-        <x-product.section.details :product="$bundle" :media="$media" />
+        <x-product.section.details
+            :type="\App\Enums\ProductType::BUNDLE->value"
+            :product="$bundle"
+            :media="$media"
+        />
 
         <x-bundle.video-section :bundle="$bundle" />
         <x-bundle.how-to-use-section :bundle="$bundle" :faqs="$faqs" />

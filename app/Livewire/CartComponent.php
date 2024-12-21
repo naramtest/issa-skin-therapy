@@ -34,7 +34,6 @@ class CartComponent extends Component
     protected function refreshCart(): void
     {
         try {
-            //            dd($this->cartService->getItems());
             $this->cartItems = $this->cartService->getItems();
             $this->subtotal = $this->cartService->getSubtotal();
             $this->total = $this->cartService->getTotal();

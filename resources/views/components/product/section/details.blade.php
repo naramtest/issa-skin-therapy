@@ -1,6 +1,7 @@
 @props([
     /**@var\App\Models\Product$product*/"product",
     "media",
+    "type",
 ])
 
 <x-home.section-container
@@ -47,7 +48,9 @@
                 alt="{{ __("store.Tabby") }}"
             />
         </div>
+        {{-- TODO:  Remove when Out of Stock --}}
         <x-general.add-to-cart
+            type="{{$type}}"
             :product="$product"
             class="my-4 flex items-center"
         >
