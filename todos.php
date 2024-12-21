@@ -3,6 +3,8 @@
 //1- Newsletter
 //2- Add To Cart Button So when Item Already on the cart show something on the button
 //3- Remove or disable or change label of Add to Cart button when Out of Stock
+//4- when user login merge its cart with guest cart
+//5- reserve product when a user put it in the cart (for some time)
 
 // TODO: auto calculate regular price when adding items to bundle
 // TODO: add Queue for image generation in production

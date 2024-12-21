@@ -33,11 +33,12 @@
                 </button>
                 <button class="relative">
                     <x-icons.cart-icon class="h-6 w-6" />
-                    <span
-                        class="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-darkColor text-xs text-white"
-                    >
-                        0
-                    </span>
+                    {{-- TODO: add cart count here and on the desktop --}}
+                    {{-- <span --}}
+                    {{-- class="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-darkColor text-xs text-white" --}}
+                    {{-- > --}}
+                    {{-- 0 --}}
+                    {{-- </span> --}}
                 </button>
             </div>
 

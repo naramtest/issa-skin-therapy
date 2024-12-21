@@ -11,6 +11,7 @@ class CurrencySelector extends Component
     public string $location;
     public Collection $currencies;
     public string $selectedCurrency;
+    public bool $isMobile = false;
 
     public function mount()
     {

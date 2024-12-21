@@ -3,7 +3,7 @@
 >
     {{-- TODO: change name to dynimc name --}}
     <div>© {{ now()->year }} {{ $info->name }}.</div>
-    <div class="flex justify-end gap-x-4">
+    <div class="flex items-center justify-end gap-x-4">
         <x-shared.local-switcher location="bottom" />
         <livewire:currency-selector location="bottom" />
     </div>

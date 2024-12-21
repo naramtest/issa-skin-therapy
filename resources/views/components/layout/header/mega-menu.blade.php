@@ -7,6 +7,7 @@
     x-transition:leave-start="translate-y-0 opacity-100"
     x-transition:leave-end="-translate-y-full opacity-50"
     x-show="open"
+    x-cloak
 >
     <div class="w-1/2">
         <div

@@ -85,7 +85,7 @@ class Nav
         ];
     }
 
-    public static function headerPages()
+    public static function headerPages(): array
     {
         return [
             [
@@ -99,14 +99,14 @@ class Nav
                 "route" => "shop.index",
             ],
             [
-                'name' => 'About',
-                'title' => __('store.About'),
-                'route' => 'about.index',
+                "name" => "About",
+                "title" => __("store.About"),
+                "route" => "about.index",
             ],
             [
-                'name' => 'Contact Us',
-                'title' => __('store.Contact Us'),
-                'route' => 'contact.index',
+                "name" => "Contact Us",
+                "title" => __("store.Contact Us"),
+                "route" => "contact.index",
             ],
         ];
     }

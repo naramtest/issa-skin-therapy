@@ -9,12 +9,6 @@
         open: false,
         mobileMenu: false,
 
-        menuItems: [
-            { title: '{{ __("store.Home") }}', url: '#' },
-            { title: '{{ __("store.Shop") }}', url: '#' },
-            { title: '{{ __("store.About") }}', url: '#' },
-            { title: '{{ __("store.Contact Us") }}', url: '#' },
-        ],
         ...headerAnimations(),
     }"
     @mouseleave="open = false; resetAnimations()"
