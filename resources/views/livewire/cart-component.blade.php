@@ -1,4 +1,5 @@
 <div>
+    {{-- TODO: Cart Page and Promo code --}}
     <!-- Cart Overlay -->
     <div
         x-data="{ open: $wire.entangle('isOpen') }"
@@ -42,11 +43,12 @@
                         class="flex items-center justify-between border-b px-4 py-6"
                     >
                         <div>
-                            <h2 class="text-lg font-medium">Cart</h2>
+                            <h2 class="text-lg font-medium">
+                                {{ __("store.Cart") }}
+                            </h2>
                             <div class="py23">
                                 <p class="text-sm text-darkColor">
-                                    Free shipping in UAE over 270 AED and
-                                    worldwide over $180
+                                    {{ __('store.Free shipping in UAE over 270 AED and                                     worldwide over $180') }}
                                 </p>
                             </div>
                         </div>
@@ -55,7 +57,9 @@
                             class="text-gray-400 hover:text-gray-500"
                             @click="open = false"
                         >
-                            <span class="sr-only">Close panel</span>
+                            <span class="sr-only">
+                                {{ __("store.Close panel") }}
+                            </span>
                             <svg
                                 class="h-6 w-6"
                                 fill="none"
@@ -83,15 +87,17 @@
                                     class="relative h-16 w-16 flex-shrink-0 rounded-md border"
                                 >
                                     <img
-                                        src="{{ $item["image"] }}"
-                                        alt="{{ $item["name"] }}"
+                                        src="{{ \App\Helpers\Media\ImageGetter::getMediaThumbnailUrl($item->getPurchasable()) }}"
+                                        alt="{{ $item->getPurchasable()->name }}"
                                         class="h-full w-full object-cover object-center"
                                     />
                                     <button
-                                        wire:click="removeItem('{{ $item["id"] }}')"
+                                        wire:click="removeItem('{{ $item->getId() }}')"
                                         class="absolute start-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#dedfea] p-[2px] text-gray-500 hover:text-gray-600"
                                     >
-                                        <span class="sr-only">Remove</span>
+                                        <span class="sr-only">
+                                            {{ __("store.Remove") }}
+                                        </span>
                                         <svg
                                             class="h-3 w-3"
                                             viewBox="0 0 20 20"
@@ -109,10 +115,11 @@
                                 <div class="ml-4 flex flex-1 flex-col">
                                     <div class="flex justify-between">
                                         <h3 class="text-sm font-semibold">
-                                            {{ $item["name"] }}
+                                            {{ $item->getPurchasable()->name }}
                                         </h3>
+                                        {{-- TODO:add price --}}
                                         <p class="ms-4 text-sm text-[#24272d]">
-                                            €{{ number_format($item["price"], 2) }}
+                                            {{ $item->getPrice() }}
                                         </p>
                                     </div>
 
@@ -123,7 +130,7 @@
                                             class="flex items-center rounded-[6px] border"
                                         >
                                             <button
-                                                wire:click="updateQuantity('{{ $item["id"] }}', 'decrement')"
+                                                wire:click="updateQuantity('{{ $item->getId() }}', 'decrement')"
                                                 class="rounded-l-[6px] px-3 py-[2px] hover:bg-gray-100"
                                             >
                                                 -
@@ -131,10 +138,10 @@
                                             <span
                                                 class="border-x px-3 py-[2px]"
                                             >
-                                                {{ $item["quantity"] }}
+                                                {{ $item->getQuantity() }}
                                             </span>
                                             <button
-                                                wire:click="updateQuantity('{{ $item["id"] }}', 'increment')"
+                                                wire:click="updateQuantity('{{ $item->getId() }}', 'increment')"
                                                 class="rounded-r-[6px] px-3 py-[2px] hover:bg-gray-100"
                                             >
                                                 +
@@ -145,7 +152,9 @@
                             </div>
                         @empty
                             <div class="py-6 text-center">
-                                <p class="text-gray-500">Your cart is empty</p>
+                                <p class="text-gray-500">
+                                    {{ __("store.Your cart is empty") }}
+                                </p>
                             </div>
                         @endforelse
                     </div>
@@ -189,7 +198,7 @@
                                     <input
                                         type="text"
                                         class="min-w-0 flex-1 rounded-s-[50px] border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Enter coupon code"
+                                        placeholder="{{ __("store.Enter coupon code") }}"
                                     />
                                     <button
                                         class="rounded-e-[50px] bg-[#1f1f1f] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2f2f2f]"
@@ -203,11 +212,11 @@
                                 class="flex justify-between pt-3 text-base font-medium text-gray-900"
                             >
                                 <p>{{ __("store.Subtotal") }}</p>
-                                <p>€{{ number_format($subtotal, 2) }}</p>
+                                <p>{{ $subtotalString }}</p>
                             </div>
                             <div class="mt-4 flex gap-x-6">
                                 <a
-                                    href="/"
+                                    href="{{ route("checkout.index") }}"
                                     class="flex flex-1 items-center justify-center rounded-full bg-[#1f1f1f] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#2f2f2f]"
                                 >
                                     <x-gmdi-shopping-cart-checkout-o

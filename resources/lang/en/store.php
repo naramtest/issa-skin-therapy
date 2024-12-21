@@ -195,4 +195,11 @@ return [
     "Insufficient stock" => "Insufficient stock",
     "Item not found in cart" => "Item not found in cart",
     "Item removed from cart" => "Item removed from cart",
+    "Cart" => "Cart",
+    'Free shipping in UAE over 270 AED and                                     worldwide over $180' => 'Free shipping in UAE over 270 AED and
+                                    worldwide over $180',
+    "Close panel" => "Close panel",
+    "Remove" => "Remove",
+    "Your cart is empty" => "Your cart is empty",
+    "Enter coupon code" => "Enter coupon code",
 ];

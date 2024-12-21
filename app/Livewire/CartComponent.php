@@ -4,18 +4,21 @@ namespace App\Livewire;
 
 use App\Enums\ProductType;
 use App\Services\Cart\CartService;
+use App\Services\Currency\CurrencyHelper;
 use Exception;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Money\Money;
 
 class CartComponent extends Component
 {
     public $isOpen = false;
     public $cartItems = [];
-    public $subtotal = 0;
-    public $total = 0;
+    public string $subtotalString = "";
     public $itemCount = 0;
 
+    protected Money $subtotal;
+    protected Money $total;
     protected CartService $cartService;
 
     public function boot(CartService $cartService): void
@@ -31,9 +34,16 @@ class CartComponent extends Component
     protected function refreshCart(): void
     {
         try {
+            //            dd($this->cartService->getItems());
             $this->cartItems = $this->cartService->getItems();
-            $this->subtotal = $this->cartService->getSubtotal()->getAmount();
-            $this->total = $this->cartService->getTotal()->getAmount();
+            $this->subtotal = $this->cartService->getSubtotal();
+            $this->total = $this->cartService->getTotal();
+
+            //I have to do that because I can push money object to livewire
+            $this->subtotalString = CurrencyHelper::moneyObjectInBlade(
+                $this->subtotal
+            );
+
             $this->itemCount = $this->cartService->itemCount();
         } catch (Exception $e) {
             $this->dispatch(

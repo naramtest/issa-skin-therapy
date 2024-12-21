@@ -74,4 +74,13 @@ class ImageGetter
         }
         return $image->getAvailableUrl([config("const.media.optimized")]);
     }
+
+    public static function getMediaThumbnailUrl(Model&HasMedia $model)
+    {
+        $image = $model->getFirstMedia(config("const.media.featured"));
+        if (!$image) {
+            return "";
+        }
+        return $image->getAvailableUrl([config("const.media.thumbnail")]);
+    }
 }
