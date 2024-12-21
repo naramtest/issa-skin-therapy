@@ -191,4 +191,8 @@ return [
     "not" => "not",
     "Save Changes" => "Save Changes",
     "Current Password" => "Current Password",
+    "Item added to cart successfully" => "Item added to cart successfully",
+    "Insufficient stock" => "Insufficient stock",
+    "Item not found in cart" => "Item not found in cart",
+    "Item removed from cart" => "Item removed from cart",
 ];

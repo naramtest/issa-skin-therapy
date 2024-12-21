@@ -101,8 +101,8 @@ class CartRedisService
                 // Reset expiration
                 $pipe->expire($this->getKey(), self::CART_EXPIRATION);
             });
-        } catch (\Exception $e) {
-            throw new \Exception(
+        } catch (Exception $e) {
+            throw new Exception(
                 "Failed to add item to cart: " . $e->getMessage()
             );
         }

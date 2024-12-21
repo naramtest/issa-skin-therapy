@@ -10,7 +10,7 @@ interface Purchasable
 
     public function getName(): string;
 
-    public function getCurrentPrice(): Money;
+    public function getCurrentMoneyPriceAttribute(): Money;
 
     public function inventory(): InventoryInterface;
 }

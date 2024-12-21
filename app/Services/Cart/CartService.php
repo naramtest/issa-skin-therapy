@@ -2,8 +2,10 @@
 
 namespace App\Services\Cart;
 
-use App\Contracts\CartInterface;
+use App\Enums\ProductType;
+use App\Models\Bundle;
 use App\Models\Product;
+use App\Services\Currency\CurrencyHelper;
 use App\ValueObjects\CartItem;
 use Exception;
 use Log;
@@ -12,8 +14,9 @@ use Money\Money;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-class CartService implements CartInterface
+class CartService
 {
+    //    TODO: add USer Currency to the final order with the current currency conversion rate
     private CartRedisService $redisService;
 
     public function __construct()
@@ -42,7 +45,7 @@ class CartService implements CartInterface
 
         try {
             session()->put("cart_id", $cartId);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Failed to store cart ID in session", [
                 "cart_id" => $cartId,
                 "error" => $e->getMessage(),
@@ -61,22 +64,22 @@ class CartService implements CartInterface
      * @throws Exception
      */
     public function addItem(
-        string $productId,
+        ProductType $type,
+        int $id,
         int $quantity = 1,
         array $options = []
     ): void {
-        $product = Product::findOrFail($productId);
+        $purchasable = match ($type) {
+            ProductType::PRODUCT => Product::findOrFail($id),
+            ProductType::BUNDLE => Bundle::findOrFail($id),
+        };
 
-        // Business logic validation
-        if (!$product->inventory()->canBePurchased($quantity)) {
-            throw new Exception("Insufficient stock");
+        // Validate inventory
+        if (!$purchasable->inventory()->canBePurchased($quantity)) {
+            throw new Exception(__("store.Insufficient stock"));
         }
 
-        if (!$product->isPublished()) {
-            throw new Exception("Product is not available for purchase");
-        }
-
-        $this->redisService->addItem($product, $quantity, $options);
+        $this->redisService->addItem($purchasable, $quantity, $options);
 
         // Additional business logic
         // event(new ItemAddedToCart($product, $quantity));
@@ -95,11 +98,11 @@ class CartService implements CartInterface
         $item = $this->redisService->getItem($itemId);
 
         if (!$item) {
-            throw new Exception("Item not found in cart");
+            throw new Exception(__("store.Item not found in cart"));
         }
 
-        if (!$item->getProduct()->inventory()->canBePurchased($quantity)) {
-            throw new Exception("Insufficient stock");
+        if (!$item->getPurchasable()->inventory()->canBePurchased($quantity)) {
+            throw new Exception(__("store.Insufficient stock"));
         }
 
         $this->redisService->updateItem($itemId, $quantity);
@@ -133,16 +136,26 @@ class CartService implements CartInterface
 
     public function getSubtotal(): Money
     {
-        //        TODO: get user selected Currency
-        return array_reduce(
-            $this->getItems(),
-            fn(Money $carry, CartItem $item) => $carry->add(
-                $item->getSubtotal()
-            ),
-            new Money(0, new Currency(config("app.currency")))
+        $initial = new Money(
+            0,
+            new Currency(CurrencyHelper::getUserCurrency())
         );
+        try {
+            return array_reduce(
+                $this->getItems(),
+                fn(Money $carry, CartItem $item) => $carry->add(
+                    $item->getSubtotal()
+                ),
+                $initial
+            );
+        } catch (Exception) {
+            return $initial;
+        }
     }
 
+    /**
+     * @throws Exception
+     */
     public function getItems(): array
     {
         return $this->redisService->getItems();

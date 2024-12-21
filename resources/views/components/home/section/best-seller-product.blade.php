@@ -27,7 +27,11 @@
                 {!! $product->short_description !!}
             </div>
         </div>
-        <x-general.add-to-cart :product="$product" class="mt-4 w-full">
+        <x-general.add-to-cart
+            :type="\App\Enums\ProductType::PRODUCT->value"
+            :product="$product"
+            class="mt-4 w-full"
+        >
             <x-slot:button>
                 <x-general.button-black-animation class="!py-2">
                     <span class="relative z-10 inline-block">

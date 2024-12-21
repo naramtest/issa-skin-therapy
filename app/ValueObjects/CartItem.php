@@ -48,6 +48,7 @@ class CartItem
 
     public function getPrice(): Money
     {
-        return $this->fixedPrice ?? $this->purchasable->getCurrentPrice();
+        return $this->fixedPrice ??
+            $this->purchasable->getCurrentMoneyPriceAttribute();
     }
 }

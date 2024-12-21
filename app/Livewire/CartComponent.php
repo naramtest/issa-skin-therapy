@@ -2,6 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Enums\ProductType;
+use App\Services\Cart\CartService;
+use Exception;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -10,106 +13,119 @@ class CartComponent extends Component
     public $isOpen = false;
     public $cartItems = [];
     public $subtotal = 0;
+    public $total = 0;
+    public $itemCount = 0;
 
-    public function mount()
+    protected CartService $cartService;
+
+    public function boot(CartService $cartService): void
     {
-        $this->cartItems = [
-            [
-                "id" => 1,
-                "name" => "X-AGE Stem Booster",
-                "price" => 195.47,
-                "quantity" => 1,
-                "image" => asset("storage/test/product/product.webp"),
-                "subtitle" => "TREAT, X-AGE",
-            ],
-            [
-                "id" => 2,
-                "name" => "A-Clear Control lotion",
-                "price" => 63.5,
-                "quantity" => 2,
-                "image" => asset("storage/test/product/product.webp"),
-
-                "subtitle" => "A-Clear, TREAT",
-            ],
-            [
-                "id" => 3,
-                "name" => "A-Luminate Renewing Lotion",
-                "price" => 59.0,
-                "quantity" => 1,
-                "image" => asset("storage/test/product/product.webp"),
-
-                "subtitle" => "HYDRATE & PROTECT",
-            ],
-            [
-                "id" => 4,
-                "name" => "LumiGuard Broad Spectrum Emulsion",
-                "price" => 59.76,
-                "quantity" => 1,
-                "image" => asset("storage/test/product/product.webp"),
-
-                "subtitle" => "A-Luminate, HYDRATE & PROTECT",
-            ],
-        ];
-
-        $this->calculateSubtotal();
+        $this->cartService = $cartService;
     }
 
-    private function calculateSubtotal()
+    public function mount(): void
     {
-        $this->subtotal = array_reduce(
-            $this->cartItems,
-            function ($carry, $item) {
-                return $carry + $item["price"] * $item["quantity"];
-            },
-            0
-        );
+        $this->refreshCart();
+    }
+
+    protected function refreshCart(): void
+    {
+        try {
+            $this->cartItems = $this->cartService->getItems();
+            $this->subtotal = $this->cartService->getSubtotal()->getAmount();
+            $this->total = $this->cartService->getTotal()->getAmount();
+            $this->itemCount = $this->cartService->itemCount();
+        } catch (Exception $e) {
+            $this->dispatch(
+                "error",
+                message: "Failed to load cart: " . $e->getMessage()
+            );
+        }
     }
 
     #[On("toggle-cart")]
-    public function toggleCart()
+    public function toggleCart(): void
     {
         $this->isOpen = !$this->isOpen;
     }
 
     #[On("add-to-cart")]
-    public function addToCart($product, $quantity = 1): void
-    {
-        // Add your cart logic here
-        $this->isOpen = !$this->isOpen;
+    public function addToCart(
+        string $type,
+        $id,
+        $quantity = 1,
+        $options = []
+    ): void {
+        try {
+            $this->cartService->addItem(
+                type: ProductType::fromString($type),
+                id: $id,
+                quantity: $quantity,
+                options: $options
+            );
 
-        $this->dispatch("cart-updated");
-    }
-
-    public function updateQuantity($itemId, $action)
-    {
-        // Find the item in the cart
-        $index = array_search($itemId, array_column($this->cartItems, "id"));
-
-        if ($action === "increment") {
-            $this->cartItems[$index]["quantity"]++;
-        } elseif (
-            $action === "decrement" &&
-            $this->cartItems[$index]["quantity"] > 1
-        ) {
-            $this->cartItems[$index]["quantity"]--;
+            $this->refreshCart();
+            $this->isOpen = true;
+            $this->dispatch("cart-updated");
+            //TODO: for notification
+            $this->dispatch(
+                "success",
+                message: __("store.Item added to cart successfully")
+            );
+        } catch (Exception $e) {
+            $this->dispatch("error", message: $e->getMessage());
         }
-
-        $this->calculateSubtotal();
     }
 
-    public function removeItem($itemId)
+    public function updateQuantity(string $itemId, string $action): void
     {
-        $this->cartItems = array_filter($this->cartItems, function ($item) use (
-            $itemId
-        ) {
-            return $item["id"] !== $itemId;
-        });
+        try {
+            $item = $this->cartService->getItems()[$itemId] ?? null;
+            if (!$item) {
+                throw new Exception(__("store.Item not found in cart"));
+            }
 
-        $this->calculateSubtotal();
+            $currentQty = $item->getQuantity();
+            $newQty =
+                $action === "increment" ? $currentQty + 1 : $currentQty - 1;
+
+            if ($newQty < 1) {
+                $this->removeItem($itemId);
+                return;
+            }
+
+            $this->cartService->updateItemQuantity($itemId, $newQty);
+            $this->refreshCart();
+            $this->dispatch("cart-updated");
+        } catch (Exception $e) {
+            $this->dispatch("error", message: $e->getMessage());
+        }
+    }
+
+    public function removeItem(string $itemId): void
+    {
+        try {
+            $this->cartService->removeItem($itemId);
+            $this->refreshCart();
+            $this->dispatch("cart-updated");
+        } catch (\Exception $e) {
+            $this->dispatch("error", message: $e->getMessage());
+        }
     }
 
     public function render()
     {
         return view("livewire.cart-component");
+    }
+
+    public function clearCart(): void
+    {
+        try {
+            $this->cartService->clear();
+            $this->refreshCart();
+            $this->dispatch("cart-updated");
+        } catch (\Exception $e) {
+            $this->dispatch("error", message: $e->getMessage());
+        }
     }
 }

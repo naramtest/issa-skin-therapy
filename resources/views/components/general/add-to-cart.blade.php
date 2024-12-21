@@ -1,4 +1,5 @@
 @props([
+    "type",
     "product",
 ])
 <div
@@ -6,7 +7,8 @@
         quantity: 1,
         addToCart() {
             Livewire.dispatch('add-to-cart', {
-                product: {{ $product->id }},
+                type: '{{ $type }}',
+                id: {{ $product->id }},
                 quantity: this.quantity,
             })
         },

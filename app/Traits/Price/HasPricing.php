@@ -4,14 +4,13 @@ namespace App\Traits\Price;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Money\Money;
 
 trait HasPricing
 {
     /**
      * Get the current active price for the product
      */
-    public function getCurrentPrice(): Money
+    public function getCurrentPrice()
     {
         if ($this->isOnSale()) {
             return $this->sale_price;
