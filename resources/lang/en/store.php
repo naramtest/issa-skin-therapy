@@ -202,4 +202,13 @@ return [
     "Remove" => "Remove",
     "Your cart is empty" => "Your cart is empty",
     "Enter coupon code" => "Enter coupon code",
+    "Payment Pending" => "Payment Pending",
+    "Paid" => "Paid",
+    "Payment Failed" => "Payment Failed",
+    "Refunded" => "Refunded",
+    "Processing" => "Processing",
+    "Pending" => "Pending",
+    "Completed" => "Completed",
+    "Cancelled" => "Cancelled",
+    "On Hold" => "On Hold",
 ];
