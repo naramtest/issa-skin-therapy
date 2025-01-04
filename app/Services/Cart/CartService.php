@@ -9,7 +9,6 @@ use App\Services\Currency\CurrencyHelper;
 use App\ValueObjects\CartItem;
 use Exception;
 use Log;
-use Money\Currency;
 use Money\Money;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -136,10 +135,7 @@ class CartService
 
     public function getSubtotal(): Money
     {
-        $initial = new Money(
-            0,
-            new Currency(CurrencyHelper::getUserCurrency())
-        );
+        $initial = new Money(0, CurrencyHelper::defaultCurrency());
         try {
             return array_reduce(
                 $this->getItems(),

@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Services\Currency\CurrencyHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Money\Currency;
 use Money\Money;
 
 class OrderItem extends Model
@@ -37,17 +37,11 @@ class OrderItem extends Model
 
     public function getMoneyUnitPrice(): Money
     {
-        return new Money(
-            $this->unit_price,
-            new Currency(config("app.money_currency"))
-        );
+        return new Money($this->unit_price, CurrencyHelper::defaultCurrency());
     }
 
     public function getMoneySubtotal(): Money
     {
-        return new Money(
-            $this->subtotal,
-            new Currency(config("app.money_currency"))
-        );
+        return new Money($this->subtotal, CurrencyHelper::defaultCurrency());
     }
 }

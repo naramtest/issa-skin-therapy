@@ -4,11 +4,11 @@ namespace App\Models;
 
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
+use App\Services\Currency\CurrencyHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Money\Currency;
 use Money\Money;
 
 class Order extends Model
@@ -59,25 +59,19 @@ class Order extends Model
 
     public function getMoneyTotal(): Money
     {
-        return new Money(
-            $this->total,
-            new Currency(config("app.money_currency"))
-        );
+        return new Money($this->total, CurrencyHelper::defaultCurrency());
     }
 
     public function getMoneySubtotal(): Money
     {
-        return new Money(
-            $this->subtotal,
-            new Currency(config("app.money_currency"))
-        );
+        return new Money($this->subtotal, CurrencyHelper::defaultCurrency());
     }
 
     public function getMoneyShippingCost(): Money
     {
         return new Money(
             $this->shipping_cost,
-            new Currency(config("app.money_currency"))
+            CurrencyHelper::defaultCurrency()
         );
     }
 }

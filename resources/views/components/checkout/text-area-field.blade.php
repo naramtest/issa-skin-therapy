@@ -5,7 +5,9 @@
     "placeHolder",
 ])
 
-<div {{ $attributes }}>
+<div
+    {{ $attributes->except(["wire:model", "wire:model.live", "wire:model.blur", "wire:model.defer"]) }}
+>
     <label class="mb-1 block font-[700] text-[#69727d]" for="{{ $field }}">
         {{ $label }}
         @if ($required)
@@ -16,9 +18,9 @@
         class="w-full rounded-[11px] border-none bg-[#F4F4F4] px-7 py-5 text-sm text-[#69727d] focus:outline-none"
         name="{{ $field }}"
         id="{{ $field }}"
-        required="{{ $required }}"
+        @required($required)
         placeholder="{{ $placeHolder }}"
-        value="{{ old($field) }}"
+        {{ $attributes->only(["wire:model", "wire:model.live", "wire:model.blur", "wire:model.defer"]) }}
         rows="5"
     ></textarea>
 </div>

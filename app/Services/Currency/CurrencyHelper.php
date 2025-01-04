@@ -14,6 +14,25 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class CurrencyHelper
 {
+    public static function userCurrency(): Currency
+    {
+        if (session()->has("currency")) {
+            try {
+                return new Currency(
+                    session()->get("currency", config("app.money_currency"))
+                );
+            } catch (NotFoundExceptionInterface | ContainerExceptionInterface) {
+                return self::defaultCurrency();
+            }
+        }
+        return self::defaultCurrency();
+    }
+
+    public static function defaultCurrency(): Currency
+    {
+        return new Currency(config("app.money_currency"));
+    }
+
     public static function setUserCurrency(string $currency): void
     {
         if (!self::isValidCurrency($currency)) {

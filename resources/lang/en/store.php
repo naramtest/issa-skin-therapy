@@ -211,4 +211,6 @@ return [
     "Completed" => "Completed",
     "Cancelled" => "Cancelled",
     "On Hold" => "On Hold",
+    "Postal Code" => "Postal Code",
+    "Please type" => 'Please type "0000" if postcode is unknown.',
 ];

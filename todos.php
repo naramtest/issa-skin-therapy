@@ -6,6 +6,10 @@
 //4- when user login merge its cart with guest cart
 //5- reserve product when a user put it in the cart (for some time)
 
+//TODO: there is an error with currency convertor when converting to BHD or KWD ... etc but not all currency
+
+//TODO: what should do if user opens the checkout page and the cart were empty
+
 // TODO: auto calculate regular price when adding items to bundle
 // TODO: add Queue for image generation in production
 // TODO: change database for cache ... , to redis in production

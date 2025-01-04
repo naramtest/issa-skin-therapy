@@ -2,7 +2,7 @@
 
 namespace App\Traits\Price;
 
-use Money\Currency;
+use App\Services\Currency\CurrencyHelper;
 use Money\Money;
 
 trait HasMoney
@@ -11,7 +11,7 @@ trait HasMoney
     {
         return new Money(
             $this->regular_price,
-            new Currency(config("app.money_currency"))
+            CurrencyHelper::defaultCurrency()
         );
     }
 
@@ -20,10 +20,7 @@ trait HasMoney
         if ($this->sale_price === null) {
             return null;
         }
-        return new Money(
-            $this->sale_price,
-            new Currency(config("app.money_currency"))
-        );
+        return new Money($this->sale_price, CurrencyHelper::defaultCurrency());
     }
 
     public function getCurrentMoneyPriceAttribute(): Money
