@@ -13,9 +13,7 @@ use App\Http\Controllers\Content\ShopController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/account", [HomeController::class, "index"])->name("account.index");
-Route::get("/checkout", [CheckoutController::class, "index"])->name(
-    "checkout.index"
-);
+
 Route::get("/order-tracking", [HomeController::class, "index"])->name(
     "order.tracking"
 );
@@ -74,3 +72,8 @@ Route::controller(AccountController::class)
         Route::get("/", "show")->name("account.index");
         Route::get("edit-account", "edit")->name("account.edit");
     });
+
+Route::controller(CheckoutController::class)->group(function () {
+    Route::get("/checkout", "index")->name("checkout.index");
+    Route::get("/checkout/success", "success")->name("checkout.success");
+});

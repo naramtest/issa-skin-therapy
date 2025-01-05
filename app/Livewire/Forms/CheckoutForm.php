@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms;
 
+use App\Enums\AddressType;
 use Livewire\Attributes\Rule;
 use Livewire\Form;
 
@@ -122,29 +123,16 @@ class CheckoutForm extends Form
     {
         $this->phone = $address->phone;
 
-        if ($address->type === "billing") {
-            $this->billing_first_name = $address->first_name;
-            $this->billing_last_name = $address->last_name;
-            $this->billing_address = $address->address;
-            $this->billing_city = $address->city;
-            $this->billing_state = $address->state;
-            $this->billing_country = $address->country;
-            $this->billing_postal_code = $address->postal_code;
-            $this->billing_area = $address->area;
-            $this->billing_building = $address->building;
-            $this->billing_flat = $address->flat;
-        } else {
-            $this->shipping_first_name = $address->first_name;
-            $this->shipping_last_name = $address->last_name;
-            $this->shipping_address = $address->address;
-            $this->shipping_city = $address->city;
-            $this->shipping_state = $address->state;
-            $this->shipping_country = $address->country;
-            $this->shipping_postal_code = $address->postal_code;
-            $this->shipping_area = $address->area;
-            $this->shipping_building = $address->building;
-            $this->shipping_flat = $address->flat;
-        }
+        $this->billing_first_name = $address->first_name;
+        $this->billing_last_name = $address->last_name;
+        $this->billing_address = $address->address;
+        $this->billing_city = $address->city;
+        $this->billing_state = $address->state;
+        $this->billing_country = $address->country;
+        $this->billing_postal_code = $address->postal_code;
+        $this->billing_area = $address->area;
+        $this->billing_building = $address->building;
+        $this->billing_flat = $address->flat;
     }
 
     public function getShippingAddressData(): array
@@ -154,7 +142,7 @@ class CheckoutForm extends Form
         }
 
         return [
-            "type" => "shipping",
+            "type" => AddressType::SHIPPING->value,
             "first_name" => $this->shipping_first_name,
             "last_name" => $this->shipping_last_name,
             "phone" => $this->phone,
@@ -172,7 +160,7 @@ class CheckoutForm extends Form
     public function getBillingAddressData(): array
     {
         return [
-            "type" => "billing",
+            "type" => AddressType::BILLING->value,
             "first_name" => $this->billing_first_name,
             "last_name" => $this->billing_last_name,
             "phone" => $this->phone,

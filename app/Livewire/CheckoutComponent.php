@@ -3,10 +3,9 @@
 namespace App\Livewire;
 
 use App\Livewire\Forms\CheckoutForm;
-use App\Models\Customer;
-use App\Models\CustomerAddress;
 use App\Services\Cart\CartService;
-use App\Services\Checkout\CheckoutService;
+use App\Services\Checkout\CustomerCheckoutService;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -17,18 +16,23 @@ class CheckoutComponent extends Component
     public CheckoutForm $form;
 
     protected CartService $cartService;
-    protected CheckoutService $checkoutService;
+    protected CustomerCheckoutService $customerCheckoutService;
 
     public function boot(
         CartService $cartService,
-        CheckoutService $checkoutService
-    ) {
+        CustomerCheckoutService $customerCheckoutService
+    ): void {
         $this->cartService = $cartService;
-        $this->checkoutService = $checkoutService;
+        $this->customerCheckoutService = $customerCheckoutService;
     }
 
-    public function mount()
+    public function mount(): void
     {
+        if ($this->cartService->isEmpty()) {
+            $this->redirect(route("cart.index"));
+            return;
+        }
+
         if (auth()->check()) {
             $this->form->setFromUser(auth()->user());
         }
@@ -39,8 +43,7 @@ class CheckoutComponent extends Component
     {
         try {
             return $this->cartService->getItems();
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
+        } catch (Exception) {
             return [];
         }
     }
@@ -57,55 +60,65 @@ class CheckoutComponent extends Component
         return $this->cartService->getTotal();
     }
 
-    public function placeOrder()
+    public function placeOrder(): void
     {
-        dd($this->form->validate());
+        $validatedData = $this->form->validate();
 
-        dd("naram");
         try {
             DB::beginTransaction();
 
-            // Create or get customer
-            $customer = $this->getOrCreateCustomer();
-
-            // Create shipping address
-            $shippingAddress = $this->createAddress(
-                $customer,
-                $this->form->getShippingAddressData()
-            );
-
-            // Create billing address if different
-            $billingAddress = $this->form->different_billing_address
-                ? $this->createAddress(
-                    $customer,
-                    $this->form->getBillingAddressData()
-                )
-                : $shippingAddress;
-
-            // Create the order
-            $order = $this->checkoutService->createOrder(
-                customer: $customer,
-                billingAddress: $billingAddress,
-                shippingAddress: $shippingAddress,
-                notes: $this->form->order_notes
-            );
-
-            if ($this->form->create_account && !auth()->check()) {
-                // Handle account creation logic here
-            }
+            $order = $this->customerCheckoutService->processCheckout([
+                "email" => $this->form->email,
+                "billing" => [
+                    "first_name" => $this->form->billing_first_name,
+                    "last_name" => $this->form->billing_last_name,
+                    "phone" => $this->form->phone,
+                    "address" => $this->form->billing_address,
+                    "city" => $this->form->billing_city,
+                    "state" => $this->form->billing_state,
+                    "country" => $this->form->billing_country,
+                    "postal_code" => $this->form->billing_postal_code,
+                    "area" => $this->form->billing_area,
+                    "building" => $this->form->billing_building,
+                    "flat" => $this->form->billing_flat,
+                ],
+                "shipping" => $this->form->different_shipping_address
+                    ? [
+                        "first_name" => $this->form->shipping_first_name,
+                        "last_name" => $this->form->shipping_last_name,
+                        "phone" => $this->form->phone,
+                        "address" => $this->form->shipping_address,
+                        "city" => $this->form->shipping_city,
+                        "state" => $this->form->shipping_state,
+                        "country" => $this->form->shipping_country,
+                        "postal_code" => $this->form->shipping_postal_code,
+                        "area" => $this->form->shipping_area,
+                        "building" => $this->form->shipping_building,
+                        "flat" => $this->form->shipping_flat,
+                    ]
+                    : null,
+                "different_shipping_address" =>
+                    $this->form->different_shipping_address,
+                "notes" => $this->form->order_notes,
+                "shipping_method" => $this->form->shipping_method ?? null,
+                "payment_method" => $this->form->payment_method,
+                "create_account" => $this->form->create_account,
+            ]);
 
             DB::commit();
 
-            // Clear the cart
-            $this->cartService->clear();
+            session()->flash("order_success");
+            session()->flash("order_number", $order->order_number);
 
-            // Redirect to success page
-            return $this->redirect(
-                route("checkout.success", ["order" => $order]),
-                navigate: true
-            );
-        } catch (\Exception $e) {
+            $this->redirectRoute("checkout.success", ["order" => $order]);
+        } catch (Exception $e) {
             DB::rollBack();
+            Log::error("Order creation failed", [
+                "error" => $e->getMessage(),
+                "trace" => $e->getTraceAsString(),
+                "form_data" => $validatedData,
+            ]);
+
             $this->addError(
                 "order",
                 __("store.Failed to create order. Please try again.")
@@ -113,33 +126,39 @@ class CheckoutComponent extends Component
         }
     }
 
-    protected function getOrCreateCustomer(): Customer
+    public function updatedFormBillingCountry($value)
     {
-        if (auth()->check()) {
-            return auth()->user()->customer;
+        // Here you could load states/regions for the selected country
+        // and update the shipping country if it's the same address
+        if (!$this->form->different_shipping_address) {
+            $this->form->shipping_country = $value;
         }
-
-        return Customer::firstOrCreate(
-            ["email" => $this->form->email],
-            [
-                "first_name" => $this->form->first_name,
-                "last_name" => $this->form->last_name,
-                "name" =>
-                    $this->form->first_name . " " . $this->form->last_name,
-                "is_registered" => false,
-            ]
-        );
     }
 
-    protected function createAddress(
-        Customer $customer,
-        array $addressData
-    ): CustomerAddress {
-        return CustomerAddress::create(
-            array_merge($addressData, [
-                "customer_id" => $customer->id,
-                "is_default" => !$customer->addresses()->exists(),
-            ])
-        );
+    public function updatedFormDifferentShippingAddress($value)
+    {
+        if (!$value) {
+            // Copy billing address to shipping address
+            $this->form->shipping_first_name = $this->form->billing_first_name;
+            $this->form->shipping_last_name = $this->form->billing_last_name;
+            $this->form->shipping_address = $this->form->billing_address;
+            $this->form->shipping_city = $this->form->billing_city;
+            $this->form->shipping_state = $this->form->billing_state;
+            $this->form->shipping_country = $this->form->billing_country;
+            $this->form->shipping_postal_code =
+                $this->form->billing_postal_code;
+            $this->form->shipping_area = $this->form->billing_area;
+            $this->form->shipping_building = $this->form->billing_building;
+            $this->form->shipping_flat = $this->form->billing_flat;
+        }
+    }
+
+    public function render()
+    {
+        if (count($this->cartItems) === 0) {
+            $this->redirect(route("cart.index"));
+        }
+
+        return view("livewire.checkout-component");
     }
 }

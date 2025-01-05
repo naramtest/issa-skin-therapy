@@ -2,107 +2,114 @@
 
 namespace App\Services\Checkout;
 
-use App\Enums\Checkout\OrderStatus;
-use App\Enums\Checkout\PaymentStatus;
-use App\Models\Customer;
-use App\Models\CustomerAddress;
 use App\Models\Order;
-use App\Services\Cart\CartService;
 use App\Services\Currency\CurrencyHelper;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use App\ValueObjects\CartItem;
+use InvalidArgumentException;
+use Str;
 
-readonly class OrderService
+class OrderService
 {
-    public function __construct(private CartService $cartService)
+    public function createOrder(array $data): Order
     {
-    }
+        // Validate order data
+        $this->validateOrderData($data);
 
-    public function createOrder(
-        Customer $customer,
-        CustomerAddress $billingAddress,
-        CustomerAddress $shippingAddress,
-        ?string $notes = null,
-        ?string $shippingMethod = null
-    ): Order {
-        return DB::transaction(function () use (
-            $customer,
-            $billingAddress,
-            $shippingAddress,
-            $notes,
-            $shippingMethod
-        ) {
-            // Create the order
-            $order = Order::create([
-                "order_number" => $this->generateOrderNumber(),
-                "customer_id" => $customer->id,
-                "billing_address_id" => $billingAddress->id,
-                "shipping_address_id" => $shippingAddress->id,
-                "status" => OrderStatus::PENDING,
-                "payment_status" => PaymentStatus::PENDING,
-                "shipping_method" => $shippingMethod,
-                "subtotal" =>
-                    $this->cartService->getSubtotal()->getAmount() / 100,
-                "shipping_cost" => 0, // TODO: Will be calculated later with DHL integration
-                "total" => $this->cartService->getTotal()->getAmount() / 100,
-                "notes" => $notes,
-                "currency_code" => CurrencyHelper::getUserCurrency(),
-                "exchange_rate" => 1, // TODO: Will be set based on the currency service
+        // Generate unique order number
+        $orderNumber = $this->generateOrderNumber();
+
+        // Create the order
+        $order = Order::create([
+            "order_number" => $orderNumber,
+            "customer_id" => $data["customer_id"],
+            "email" => $data["email"],
+            "billing_address_id" => $data["billing_address_id"],
+            "shipping_address_id" => $data["shipping_address_id"],
+            "status" => $data["status"],
+            "payment_status" => $data["payment_status"],
+            "shipping_method" => $data["shipping_method"],
+            "subtotal" => $data["subtotal"],
+            "shipping_cost" => 0, // Will be calculated with DHL integration
+            "total" => $data["total"],
+            "notes" => $data["notes"],
+            "currency_code" => app(CurrencyHelper::class)->getUserCurrency(),
+            "exchange_rate" => 1, //TODO: Will be set based on the currency service
+        ]);
+
+        // Create order items
+        foreach ($data["cart_items"] as $item) {
+            $order->items()->create([
+                "purchasable_id" => $item->getPurchasable()->getId(),
+                "purchasable_type" => get_class($item->getPurchasable()),
+                "quantity" => $item->getQuantity(),
+                "unit_price" => $item->getPrice()->getAmount(),
+                "subtotal" => $item->getSubtotal()->getAmount(),
+                "options" => $item->getOptions(),
             ]);
 
-            // Create order items
-            foreach ($this->cartService->getItems() as $cartItem) {
-                $order->items()->create([
-                    "purchasable_id" => $cartItem->getPurchasable()->getId(),
-                    "purchasable_type" => get_class(
-                        $cartItem->getPurchasable()
-                    ),
-                    "quantity" => $cartItem->getQuantity(),
-                    "unit_price" => $cartItem->getPrice()->getAmount() / 100,
-                    "subtotal" => $cartItem->getSubtotal()->getAmount() / 100,
-                    "options" => $cartItem->getOptions(),
-                ]);
+            // Handle inventory
+            $this->handleInventory($item);
+        }
+
+        // Update customer total spent
+        $order->customer->increment("total_spent", $order->total);
+
+        //TODO:  Fire events
+        //event(new OrderCreated($order));
+
+        return $order;
+    }
+
+    private function validateOrderData(array $data): void
+    {
+        $requiredFields = [
+            "customer_id",
+            "email",
+            "billing_address_id",
+            "shipping_address_id",
+            "status",
+            "payment_status",
+            "subtotal",
+            "total",
+            "cart_items",
+        ];
+
+        foreach ($requiredFields as $field) {
+            if (!isset($data[$field])) {
+                throw new InvalidArgumentException(
+                    "Missing required field: {$field}"
+                );
             }
+        }
 
-            // Clear the cart
-            $this->cartService->clear();
-
-            // Update customer metrics
-            $customer->update([
-                "orders_count" => $customer->orders_count + 1,
-                "total_spent" => $customer->total_spent + $order->total,
-                "last_order_at" => Carbon::now(),
-            ]);
-
-            return $order;
-        });
+        if (empty($data["cart_items"])) {
+            throw new InvalidArgumentException("Cart cannot be empty");
+        }
     }
 
-    public function generateOrderNumber(): string
+    private function generateOrderNumber(): string
     {
-        $prefix = config("shop.order_prefix", "ORD");
-        $timestamp = now()->format("Ymd");
-
         do {
-            $random = strtoupper(Str::random(4));
-            $orderNumber = "{$prefix}-{$timestamp}-{$random}";
-        } while (Order::where("order_number", $orderNumber)->exists());
+            $number = "ORD-" . date("Ymd") . "-" . strtoupper(Str::random(5));
+        } while (Order::where("order_number", $number)->exists());
 
-        return $orderNumber;
+        return $number;
     }
 
-    public function updateOrderStatus(Order $order, OrderStatus $status): void
+    private function handleInventory(CartItem $item): void
     {
-        $order->update(["status" => $status]);
-        // TODO: Send notification about status change
-    }
+        $purchasable = $item->getPurchasable();
 
-    public function updatePaymentStatus(
-        Order $order,
-        PaymentStatus $status
-    ): void {
-        $order->update(["payment_status" => $status]);
-        // TODO: Send notification about payment status change
+        if ($purchasable->inventory()->shouldTrackQuantity()) {
+            // Reduce inventory
+            $purchasable->decrement("quantity", $item->getQuantity());
+
+            // Update stock status
+            $purchasable->update([
+                "stock_status" => $purchasable
+                    ->inventory()
+                    ->determineStockStatus(),
+            ]);
+        }
     }
 }

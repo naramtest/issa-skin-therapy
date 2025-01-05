@@ -29,6 +29,7 @@ class Order extends Model
         "notes",
         "currency_code",
         "exchange_rate",
+        "email",
     ];
 
     protected $casts = [
