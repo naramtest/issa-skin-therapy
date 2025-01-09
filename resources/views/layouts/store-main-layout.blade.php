@@ -37,7 +37,5 @@
 
         @livewireScriptConfig
         @stack("scripts")
-        {{-- TODO: move to checkout page --}}
-        <script src="https://js.stripe.com/v3/"></script>
     </body>
 </html>

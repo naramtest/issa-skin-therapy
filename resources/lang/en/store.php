@@ -227,4 +227,5 @@ return [
     "Place Order and Pay" => "Place Order and Pay",
     "I have read and agree to the website" =>
         "I have read and agree to the website",
+    "Payment Details" => "Payment Details",
 ];
