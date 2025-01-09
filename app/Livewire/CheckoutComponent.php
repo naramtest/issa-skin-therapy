@@ -168,31 +168,6 @@ class CheckoutComponent extends Component
         }
     }
 
-    public function processPayment(string $paymentIntentId): void
-    {
-        try {
-            if ($this->paymentService->confirmPayment($paymentIntentId)) {
-                // Clear the cart
-                $this->cartService->clear();
-
-                // Redirect to success page
-                $this->redirect(route("checkout.success"));
-            } else {
-                $this->error = __(
-                    "store.Payment verification failed. Please contact support."
-                );
-            }
-        } catch (Exception $e) {
-            Log::error("Payment confirmation failed", [
-                "error" => $e->getMessage(),
-                "payment_intent_id" => $paymentIntentId,
-            ]);
-            $this->error = __(
-                "store.Payment confirmation failed. Please contact support."
-            );
-        }
-    }
-
     public function updatedFormBillingCountry($value): void
     {
         //TODO: Here you could load states/regions for the selected country

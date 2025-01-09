@@ -10,6 +10,7 @@ use App\Http\Controllers\Content\HomeController;
 use App\Http\Controllers\Content\PostController;
 use App\Http\Controllers\Content\ProductController;
 use App\Http\Controllers\Content\ShopController;
+use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/account", [HomeController::class, "index"])->name("account.index");
@@ -78,3 +79,8 @@ Route::controller(CheckoutController::class)->group(function () {
     Route::get("/checkout/success", "success")->name("checkout.success");
     Route::get("/cart", "success")->name("cart.index");
 });
+
+Route::post("stripe/webhook", [
+    StripeWebhookController::class,
+    "handleWebhook",
+])->name("cashier.webhook");

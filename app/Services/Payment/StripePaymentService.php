@@ -3,6 +3,8 @@
 namespace App\Services\Payment;
 
 use App\Contracts\PaymentServiceInterface;
+use App\Enums\Checkout\OrderStatus;
+use App\Enums\Checkout\PaymentStatus;
 use App\Models\Order;
 use App\Services\Currency\Currency;
 use Exception;
@@ -94,34 +96,37 @@ class StripePaymentService implements PaymentServiceInterface
         try {
             $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
 
-            $success = $paymentIntent->status === "succeeded";
-
-            if ($success) {
-                // Store payment method details
-                $order = Order::where(
-                    "payment_intent_id",
-                    $paymentIntentId
-                )->first();
-                if ($order) {
-                    $paymentMethod = $paymentIntent->payment_method;
-                    if ($paymentMethod) {
-                        $order->update([
-                            "payment_method_details" => [
-                                "type" => $paymentMethod->type,
-                                "last4" => $paymentMethod->card->last4 ?? null,
-                                "brand" => $paymentMethod->card->brand ?? null,
-                                "exp_month" =>
-                                    $paymentMethod->card->exp_month ?? null,
-                                "exp_year" =>
-                                    $paymentMethod->card->exp_year ?? null,
-                            ],
-                            "payment_captured_at" => now(),
-                        ]);
-                    }
-                }
+            if ($paymentIntent->status !== "succeeded") {
+                return false;
             }
 
-            return $success;
+            // Store payment method details
+            $order = Order::where(
+                "payment_intent_id",
+                $paymentIntentId
+            )->first();
+
+            $paymentMethod = $paymentIntent->payment_method;
+
+            if (!$order or !$paymentMethod) {
+                return false;
+            }
+            $order->update([
+                "status" => OrderStatus::PROCESSING,
+                "payment_status" => PaymentStatus::PAID,
+                "payment_authorized_at" => now(),
+                "payment_captured_at" => now(),
+                "payment_method_details" => [
+                    "type" => $paymentMethod->type,
+                    "last4" => $paymentMethod->card->last4 ?? null,
+                    "brand" => $paymentMethod->card->brand ?? null,
+                    "exp_month" => $paymentMethod->card->exp_month ?? null,
+                    "exp_year" => $paymentMethod->card->exp_year ?? null,
+                ],
+            ]);
+
+            //TODO: event(new OrderPaid($order));
+            return true;
         } catch (ApiErrorException $e) {
             Log::error("Failed to confirm payment", [
                 "error" => $e->getMessage(),

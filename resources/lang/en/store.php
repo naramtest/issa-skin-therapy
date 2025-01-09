@@ -228,4 +228,6 @@ return [
     "I have read and agree to the website" =>
         "I have read and agree to the website",
     "Payment Details" => "Payment Details",
+    "An error occurred while processing your payment" =>
+        "An error occurred while processing your payment.",
 ];
