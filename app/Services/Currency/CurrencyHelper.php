@@ -80,6 +80,7 @@ class CurrencyHelper
      */
     public static function moneyObjectInBlade(Money $money)
     {
+        //TODO : use only to number after period
         //TODO: check if it changes when the language changes
         // TODO: check if it bad for performance
         return app()

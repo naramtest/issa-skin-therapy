@@ -18,6 +18,7 @@
         <!-- Styles -->
         @stack("styles")
         @livewireStyles
+
         <style>
             :root {
                 --mask-image-url: url('{{ asset("storage/images/image.png") }}');
@@ -36,5 +37,7 @@
 
         @livewireScriptConfig
         @stack("scripts")
+        {{-- TODO: move to checkout page --}}
+        <script src="https://js.stripe.com/v3/"></script>
     </body>
 </html>

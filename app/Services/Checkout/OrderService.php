@@ -2,6 +2,8 @@
 
 namespace App\Services\Checkout;
 
+use App\Enums\Checkout\OrderStatus;
+use App\Enums\Checkout\PaymentStatus;
 use App\Models\Order;
 use App\Services\Currency\CurrencyHelper;
 use App\ValueObjects\CartItem;
@@ -111,5 +113,17 @@ class OrderService
                     ->determineStockStatus(),
             ]);
         }
+    }
+
+    public function isOrderPendingPayment(Order $order): bool
+    {
+        return $order->status === OrderStatus::PENDING &&
+            $order->payment_status === PaymentStatus::PENDING &&
+            $order->payment_intent_id !== null;
+    }
+
+    public function getOrderByPaymentIntent(string $paymentIntentId): ?Order
+    {
+        return Order::where("payment_intent_id", $paymentIntentId)->first();
     }
 }

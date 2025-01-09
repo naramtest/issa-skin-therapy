@@ -99,8 +99,7 @@ return [
     "Total" => "Total",
     "Coupon Code" => "Coupon Code",
     "privacy policy" => "privacy policy",
-    " I have read and agree to the website" =>
-        " I have read and agree to the website",
+
     "terms and conditions" => "terms and conditions",
     "Place order" => "Place order",
     "Your personal data will be used to process your                                 order, support your experience throughout this                                 website, and for other purposes described in our" => 'Your personal data will be used to process your
@@ -213,4 +212,19 @@ return [
     "On Hold" => "On Hold",
     "Postal Code" => "Postal Code",
     "Please type" => 'Please type "0000" if postcode is unknown.',
+    "Failed to create order" => [
+        " Please try again" => "Failed to create order. Please try again.",
+    ],
+    "Payment verification failed" => [
+        " Please contact support" =>
+            "Payment verification failed. Please contact support.",
+    ],
+    "Payment confirmation failed" => [
+        " Please contact support" =>
+            "Payment confirmation failed. Please contact support.",
+    ],
+    "Please check the form for errors" => "Please check the form for errors.",
+    "Place Order and Pay" => "Place Order and Pay",
+    "I have read and agree to the website" =>
+        "I have read and agree to the website",
 ];

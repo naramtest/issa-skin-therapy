@@ -21,6 +21,7 @@ class CustomerAddress extends Model
         "type",
         "first_name",
         "last_name",
+        "state",
     ];
 
     protected $casts = [

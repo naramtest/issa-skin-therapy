@@ -56,7 +56,7 @@ readonly class CustomerCheckoutService
             ]);
 
             // 4. Clear the cart after successful order creation
-            $this->cartService->clear();
+            //            $this->cartService->clear();
 
             return $order;
         });

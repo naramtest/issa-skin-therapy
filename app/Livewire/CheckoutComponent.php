@@ -2,9 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Enums\Checkout\OrderStatus;
 use App\Livewire\Forms\CheckoutForm;
+use App\Models\Order;
 use App\Services\Cart\CartService;
 use App\Services\Checkout\CustomerCheckoutService;
+use App\Services\Checkout\OrderService;
+use App\Services\Payment\StripePaymentService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -14,16 +18,25 @@ use Log;
 class CheckoutComponent extends Component
 {
     public CheckoutForm $form;
+    public bool $processing = false;
+    public ?string $error = null;
+    public ?string $currentOrderId = null;
 
     protected CartService $cartService;
     protected CustomerCheckoutService $customerCheckoutService;
+    protected StripePaymentService $paymentService;
+    protected OrderService $orderService;
 
     public function boot(
         CartService $cartService,
-        CustomerCheckoutService $customerCheckoutService
+        CustomerCheckoutService $customerCheckoutService,
+        StripePaymentService $paymentService,
+        OrderService $orderService
     ): void {
         $this->cartService = $cartService;
         $this->customerCheckoutService = $customerCheckoutService;
+        $this->paymentService = $paymentService;
+        $this->orderService = $orderService;
     }
 
     public function mount(): void
@@ -41,11 +54,7 @@ class CheckoutComponent extends Component
     #[Computed]
     public function cartItems()
     {
-        try {
-            return $this->cartService->getItems();
-        } catch (Exception) {
-            return [];
-        }
+        return $this->cartService->getItems();
     }
 
     #[Computed]
@@ -60,82 +69,140 @@ class CheckoutComponent extends Component
         return $this->cartService->getTotal();
     }
 
-    public function placeOrder(): void
+    public function placeOrderAndPay(): void
     {
+        if ($this->processing) {
+            return;
+        }
+
         $validatedData = $this->form->validate();
 
-        try {
-            DB::beginTransaction();
+        // Validate cart is not empty
+        if ($this->cartService->isEmpty()) {
+            $this->error = __("store.Your cart is empty");
+            return;
+        }
 
+        $this->processing = true;
+        $this->error = null;
+
+        try {
+            if ($this->currentOrderId) {
+                $existingOrder = Order::find($this->currentOrderId);
+                if (
+                    $existingOrder &&
+                    $this->orderService->isOrderPendingPayment($existingOrder)
+                ) {
+                    $paymentData = $this->paymentService->getPaymentIntent(
+                        $existingOrder->payment_intent_id
+                    );
+
+                    $this->dispatch(
+                        "payment-ready",
+                        clientSecret: $paymentData["clientSecret"]
+                    );
+                    return;
+                }
+            }
+            DB::beginTransaction();
             $order = $this->customerCheckoutService->processCheckout([
-                "email" => $this->form->email,
+                "email" => $validatedData["email"],
                 "billing" => [
-                    "first_name" => $this->form->billing_first_name,
-                    "last_name" => $this->form->billing_last_name,
-                    "phone" => $this->form->phone,
-                    "address" => $this->form->billing_address,
-                    "city" => $this->form->billing_city,
-                    "state" => $this->form->billing_state,
-                    "country" => $this->form->billing_country,
-                    "postal_code" => $this->form->billing_postal_code,
-                    "area" => $this->form->billing_area,
-                    "building" => $this->form->billing_building,
-                    "flat" => $this->form->billing_flat,
+                    "first_name" => $validatedData["billing_first_name"],
+                    "last_name" => $validatedData["billing_last_name"],
+                    "phone" => $validatedData["phone"],
+                    "address" => $validatedData["billing_address"],
+                    "city" => $validatedData["billing_city"],
+                    "state" => $validatedData["billing_state"],
+                    "country" => $validatedData["billing_country"],
+                    "postal_code" => $validatedData["billing_postal_code"],
+                    "area" => $validatedData["billing_area"],
+                    "building" => $validatedData["billing_building"],
+                    "flat" => $validatedData["billing_flat"],
                 ],
-                "shipping" => $this->form->different_shipping_address
+                "shipping" => $validatedData["different_shipping_address"]
                     ? [
-                        "first_name" => $this->form->shipping_first_name,
-                        "last_name" => $this->form->shipping_last_name,
-                        "phone" => $this->form->phone,
-                        "address" => $this->form->shipping_address,
-                        "city" => $this->form->shipping_city,
-                        "state" => $this->form->shipping_state,
-                        "country" => $this->form->shipping_country,
-                        "postal_code" => $this->form->shipping_postal_code,
-                        "area" => $this->form->shipping_area,
-                        "building" => $this->form->shipping_building,
-                        "flat" => $this->form->shipping_flat,
+                        "first_name" => $validatedData["shipping_first_name"],
+                        "last_name" => $validatedData["shipping_last_name"],
+                        "phone" => $validatedData["phone"],
+                        "address" => $validatedData["shipping_address"],
+                        "city" => $validatedData["shipping_city"],
+                        "state" => $validatedData["shipping_state"],
+                        "country" => $validatedData["shipping_country"],
+                        "postal_code" => $validatedData["shipping_postal_code"],
+                        "area" => $validatedData["shipping_area"],
+                        "building" => $validatedData["shipping_building"],
+                        "flat" => $validatedData["shipping_flat"],
                     ]
                     : null,
                 "different_shipping_address" =>
-                    $this->form->different_shipping_address,
-                "notes" => $this->form->order_notes,
-                "shipping_method" => $this->form->shipping_method ?? null,
-                "payment_method" => $this->form->payment_method,
-                "create_account" => $this->form->create_account,
+                    $validatedData["different_shipping_address"],
+                "notes" => $validatedData["order_notes"],
+                "payment_method" => "card",
+                "create_account" => $validatedData["create_account"],
             ]);
+
+            $this->currentOrderId = $order->id;
+            // 2. Create Stripe Payment Intent
+            $paymentData = $this->paymentService->createPaymentIntent($order);
 
             DB::commit();
 
-            session()->flash("order_success");
-            session()->flash("order_number", $order->order_number);
-
-            $this->redirectRoute("checkout.success", ["order" => $order]);
+            // 3. Return the client secret for the frontend to complete the payment
+            $this->dispatch(
+                "payment-ready",
+                clientSecret: $paymentData["clientSecret"]
+            );
         } catch (Exception $e) {
             DB::rollBack();
             Log::error("Order creation failed", [
                 "error" => $e->getMessage(),
                 "trace" => $e->getTraceAsString(),
-                "form_data" => $validatedData,
             ]);
 
-            $this->addError(
-                "order",
-                __("store.Failed to create order. Please try again.")
+            $this->error = __(
+                "store.Failed to create order. Please try again."
+            );
+        } finally {
+            $this->processing = false;
+        }
+    }
+
+    public function processPayment(string $paymentIntentId): void
+    {
+        try {
+            if ($this->paymentService->confirmPayment($paymentIntentId)) {
+                // Clear the cart
+                $this->cartService->clear();
+
+                // Redirect to success page
+                $this->redirect(route("checkout.success"));
+            } else {
+                $this->error = __(
+                    "store.Payment verification failed. Please contact support."
+                );
+            }
+        } catch (Exception $e) {
+            Log::error("Payment confirmation failed", [
+                "error" => $e->getMessage(),
+                "payment_intent_id" => $paymentIntentId,
+            ]);
+            $this->error = __(
+                "store.Payment confirmation failed. Please contact support."
             );
         }
     }
 
-    public function updatedFormBillingCountry($value)
+    public function updatedFormBillingCountry($value): void
     {
-        // Here you could load states/regions for the selected country
+        //TODO: Here you could load states/regions for the selected country
         // and update the shipping country if it's the same address
         if (!$this->form->different_shipping_address) {
             $this->form->shipping_country = $value;
         }
     }
 
-    public function updatedFormDifferentShippingAddress($value)
+    public function updatedFormDifferentShippingAddress($value): void
     {
         if (!$value) {
             // Copy billing address to shipping address
@@ -153,12 +220,17 @@ class CheckoutComponent extends Component
         }
     }
 
-    public function render()
+    public function cleanup(): void
     {
-        if (count($this->cartItems) === 0) {
-            $this->redirect(route("cart.index"));
+        //TODO: makes a job to cancel order and payments
+        if (!$this->currentOrderId) {
+            return;
         }
-
-        return view("livewire.checkout-component");
+        $order = Order::find($this->currentOrderId);
+        $pendingOrder = $this->orderService->isOrderPendingPayment($order);
+        if ($order && $pendingOrder) {
+            $order->update(["status" => OrderStatus::CANCELLED]);
+            //TODO:  You might want to cancel the payment intent in Stripe as well
+        }
     }
 }

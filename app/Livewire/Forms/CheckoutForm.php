@@ -49,6 +49,7 @@ class CheckoutForm extends Form
     public string $billing_flat = "";
 
     // Shipping Address
+    #[Rule("boolean")]
     public bool $different_shipping_address = false;
 
     #[Rule("required_if:different_shipping_address,true|string|max:255")]
@@ -82,24 +83,18 @@ class CheckoutForm extends Form
     public string $shipping_flat = "";
 
     // Additional Options
+    #[Rule("boolean")]
     public bool $create_account = false;
+
+    #[Rule("nullable|string|max:1000")]
     public ?string $order_notes = null;
 
     #[Rule("accepted")]
     public bool $terms_accepted = false;
 
     // Payment Information
-    #[Rule("required")]
+    #[Rule("required|in:card")]
     public string $payment_method = "card";
-    //
-    //    #[Rule("required_if:payment_method,card")]
-    //    public ?string $card_number = null;
-    //
-    //    #[Rule("required_if:payment_method,card|string|size:5")]
-    //    public ?string $card_expiry = null;
-    //
-    //    #[Rule("required_if:payment_method,card|string|size:3")]
-    //    public ?string $card_cvc = null;
 
     // Coupon
     public ?string $coupon_code = null;
@@ -193,13 +188,6 @@ class CheckoutForm extends Form
             $this->shipping_building = $this->billing_building;
             $this->shipping_flat = $this->billing_flat;
         }
-    }
-
-    public function clearPaymentFields(): void
-    {
-        $this->card_number = null;
-        $this->card_expiry = null;
-        $this->card_cvc = null;
     }
 
     public function reset(...$properties): void

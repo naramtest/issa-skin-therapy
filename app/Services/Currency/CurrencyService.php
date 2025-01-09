@@ -30,48 +30,6 @@ class CurrencyService
     }
 
     /**
-     * Convert a Money object to user's preferred currency
-     */
-    public function convertToUserCurrency(Money $money): Money
-    {
-        try {
-            $userCurrency = CurrencyHelper::getUserCurrency();
-
-            // Return original amount if already in user's currency
-            if ($money->getCurrency()->getCode() === $userCurrency) {
-                return $money;
-            }
-            return $this->converter->convert(
-                $money,
-                new Currency($userCurrency)
-            );
-        } catch (Exception $e) {
-            Log::error("Currency conversion failed: " . $e->getMessage(), [
-                "from_currency" => $money->getCurrency()->getCode(),
-                "to_currency" => CurrencyHelper::getUserCurrency(),
-                "amount" => $money->getAmount(),
-            ]);
-
-            // Return original amount if conversion fails
-            return $money;
-        }
-    }
-
-    /**
-     * Convert amount from one currency to another
-     */
-    public function convert(int|string $amount, string $from, string $to): Money
-    {
-        try {
-            $money = new Money($amount, new Currency($from));
-            return $this->converter->convert($money, new Currency($to));
-        } catch (Exception $e) {
-            Log::error("Currency conversion failed: " . $e->getMessage());
-            return new Money($amount, new Currency($from));
-        }
-    }
-
-    /**
      * Cache exchange rates for commonly used currency pairs
      */
     public function cacheExchangeRates(): void
@@ -93,8 +51,8 @@ class CurrencyService
                     $rate,
                     now()->addHours(6)
                 );
-            } catch (\Exception $e) {
-                \Log::error(
+            } catch (Exception $e) {
+                Log::error(
                     "Failed to cache exchange rate for {$baseCurrency}/{$currency}: " .
                         $e->getMessage()
                 );
@@ -104,16 +62,9 @@ class CurrencyService
 
     public function getExchangeRate(string $from, string $to): float
     {
-        try {
-            $pair = $from . "/" . $to;
-            $rate = $this->swap->latest($pair);
-            return $rate->getValue();
-        } catch (Exception $e) {
-            Log::error("Failed to get exchange rate: " . $e->getMessage());
-
-            // Return 1 as fallback (no conversion)
-            return 1.0;
-        }
+        $pair = $from . "/" . $to;
+        $rate = $this->swap->latest($pair);
+        return $rate->getValue();
     }
 
     /**
@@ -129,7 +80,13 @@ class CurrencyService
         }
 
         $rate = $this->getCachedExchangeRate($from, $to);
-        $convertedAmount = (int) round($amount * $rate);
+        // Adjust for decimal places of source and target currencies
+        $fromDecimals = $this->getCurrencyDecimals($from);
+        $toDecimals = $this->getCurrencyDecimals($to);
+
+        // Convert considering decimal places
+        $multiplier = pow(10, $toDecimals - $fromDecimals);
+        $convertedAmount = (int) round($amount * $rate * $multiplier);
 
         return new Money($convertedAmount, new Currency($to));
     }
@@ -148,21 +105,41 @@ class CurrencyService
         );
     }
 
-    public function convertToUserCurrencyWithCache(Money $money): Money
+    public function getCurrencyDecimals(string $currencyCode): int
     {
-        $userCurrency = CurrencyHelper::getUserCurrency();
+        $currency = new Currency($currencyCode);
+        return $this->currencies->subunitFor($currency);
+    }
 
-        // Return original amount if already in user's currency
-        if ($money->getCurrency()->getCode() === $userCurrency) {
+    public function convertToUserCurrencyWithCache(
+        Money $money,
+        ?string $userCurrency = null
+    ): Money {
+        try {
+            $userCurrency ??= CurrencyHelper::getUserCurrency();
+
+            // Return original amount if already in user's currency
+            if ($money->getCurrency()->getCode() === $userCurrency) {
+                return $money;
+            }
+
+            $rate = $this->getCachedExchangeRate(
+                $money->getCurrency(),
+                $userCurrency
+            );
+            // Adjust for decimal places of source and target currencies
+            $fromDecimals = $this->getCurrencyDecimals($money->getCurrency());
+            $toDecimals = $this->getCurrencyDecimals($userCurrency);
+
+            // Convert considering decimal places
+            $multiplier = pow(10, $toDecimals - $fromDecimals);
+            $convertedAmount = (int) round(
+                $money->getAmount() * $rate * $multiplier
+            );
+
+            return new Money($convertedAmount, new Currency($userCurrency));
+        } catch (Exception) {
             return $money;
         }
-
-        $rate = $this->getCachedExchangeRate(
-            $money->getCurrency(),
-            $userCurrency
-        );
-        $convertedAmount = (int) round($money->getAmount() * $rate);
-
-        return new Money($convertedAmount, new Currency($userCurrency));
     }
 }

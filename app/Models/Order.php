@@ -30,12 +30,24 @@ class Order extends Model
         "currency_code",
         "exchange_rate",
         "email",
+
+        //payment columns
+        "payment_provider",
+        "payment_intent_id",
+        "payment_method_details",
+        "payment_authorized_at",
+        "payment_captured_at",
+        "payment_refunded_at",
     ];
 
     protected $casts = [
         "status" => OrderStatus::class,
         "payment_status" => PaymentStatus::class,
         "exchange_rate" => "decimal:6",
+        "payment_method_details" => "json",
+        "payment_authorized_at" => "datetime",
+        "payment_captured_at" => "datetime",
+        "payment_refunded_at" => "datetime",
     ];
 
     public function customer(): BelongsTo
@@ -74,5 +86,38 @@ class Order extends Model
             $this->shipping_cost,
             CurrencyHelper::defaultCurrency()
         );
+    }
+
+    public function markPaymentAuthorized(): void
+    {
+        $this->update([
+            "payment_status" => PaymentStatus::PAID,
+            "payment_authorized_at" => now(),
+            "status" => OrderStatus::PROCESSING,
+        ]);
+    }
+
+    public function markPaymentCaptured(): void
+    {
+        $this->update([
+            "payment_captured_at" => now(),
+        ]);
+    }
+
+    public function markPaymentFailed(): void
+    {
+        $this->update([
+            "payment_status" => PaymentStatus::FAILED,
+            "status" => OrderStatus::CANCELLED,
+        ]);
+    }
+
+    public function markPaymentRefunded(): void
+    {
+        $this->update([
+            "payment_status" => PaymentStatus::REFUNDED,
+            "payment_refunded_at" => now(),
+            "status" => OrderStatus::REFUNDED,
+        ]);
     }
 }

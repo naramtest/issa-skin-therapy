@@ -37,4 +37,9 @@ return [
     "exchange_rates_data" => env("EXCHANGE_RATES_DATA_API_KEY"),
     "fixer" => env("FIXER_API_KEY"),
     "currency_layer" => env("CURRENCY_LAYER_API_KEY"),
+
+    "stripe" => [
+        "api_key" => env("STRIPE_API_KEY"),
+        "secret_key" => env("STRIPE_SECRET_KEY"),
+    ],
 ];

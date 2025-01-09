@@ -149,11 +149,13 @@ class CartService
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function getItems(): array
     {
-        return $this->redisService->getItems();
+        try {
+            return $this->redisService->getItems();
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return [];
+        }
     }
 }
