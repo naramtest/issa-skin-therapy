@@ -154,4 +154,30 @@ class StripePaymentService implements PaymentServiceInterface
             throw new Exception("Failed to get payment details");
         }
     }
+
+    /**
+     * @throws ApiErrorException
+     */
+    public function cancelPaymentIntent(mixed $paymentIntentId): true
+    {
+        try {
+            $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
+
+            // Only cancel if not already canceled or succeeded
+            if (!in_array($paymentIntent->status, ["canceled", "succeeded"])) {
+                $paymentIntent->cancel([
+                    "cancellation_reason" => "abandoned",
+                ]);
+            }
+
+            return true;
+        } catch (ApiErrorException $e) {
+            Log::error("Failed to cancel payment intent", [
+                "payment_intent_id" => $paymentIntentId,
+                "error" => $e->getMessage(),
+                "trace" => $e->getTraceAsString(),
+            ]);
+            throw $e;
+        }
+    }
 }

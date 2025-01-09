@@ -48,7 +48,6 @@
 
                 if (! stripe || ! elements) {
                     $wire.set('error', 'Payment system not initialized properly')
-                    console.error('Stripe not initialized')
                     return
                 }
 
@@ -57,7 +56,6 @@
                     const { error: submitError } = await elements.submit()
                     if (submitError) {
                         $wire.set('error', submitError.message)
-                        console.error('Submit Error:', submitError)
                         return
                     }
 
@@ -109,18 +107,8 @@
                         }
 
                         $wire.set('error', errorMessage)
-
-                        console.error('Payment Error:', {
-                            type: result.error.type,
-                            code: result.error.code,
-                            message: result.error.message,
-                            details: result.error,
-                        })
-
-                        // Don't reset currentOrderId - we'll reuse it on retry
                     }
                 } catch (e) {
-                    console.error('Payment Processing Error:', e)
                     $wire.set(
                         'error',
                         'An unexpected error occurred while processing your payment. Please try again.',
