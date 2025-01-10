@@ -1,5 +1,5 @@
 <div
-    {{ $attributes->class(["content-x-padding relative z-[50] flex justify-between gap-x-10 bg-darkColor"]) }}
+    {{ $attributes->class(["content-x-padding relative z-[50] flex justify-between gap-x-10 bg-darkColor py-2 lg:py-0"]) }}
 >
     <x-layout.header.home.social class="hidden w-[20%] gap-x-6 md:flex" />
     <x-layout.header.home.alert-swiper />

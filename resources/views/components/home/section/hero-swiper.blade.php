@@ -1,5 +1,5 @@
 <section class="relative w-full" x-data="swiper()">
-    <div class="hero-swiper swiper mt-4 h-[97dvh] w-full">
+    <div class="hero-swiper swiper mt-4 h-[80dvh] w-full lg:h-[97dvh]">
         <div class="swiper-wrapper h-full w-full">
             <x-home.slider.image-hero-slide
                 img-url="{{asset('storage/test/hero1.webp')}}"
