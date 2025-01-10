@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Services\Cart\CartService;
 use App\Services\Payment\StripePaymentService;
-use Request;
+use Illuminate\Support\Facades\Request;
 
 class CheckoutController extends Controller
 {
@@ -18,7 +18,7 @@ class CheckoutController extends Controller
         Request $request,
         StripePaymentService $paymentService
     ) {
-        //TODO: success
+        //TODO: success page
         $paymentIntentId = $request->get("payment_intent");
 
         if (!$paymentIntentId) {

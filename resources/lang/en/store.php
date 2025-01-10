@@ -230,4 +230,16 @@ return [
     "Payment Details" => "Payment Details",
     "An error occurred while processing your payment" =>
         "An error occurred while processing your payment.",
+    "Email us or WhatsApp us for any concern and we will be happy to assist" =>
+        "Email us or WhatsApp us for any concern and we will be happy to assist",
+    "Customer service" => "Customer service",
+    'Free Worldwide International Shipping for orders over $180' =>
+        'Free Worldwide International Shipping for orders over $180',
+    "Free Shipping" => "Free Shipping",
+    "Within 7 days" => "Within 7 days",
+    "Returns" => "Returns",
+    "Secure payment" => "Secure payment",
+    "We care about security, you payment is 100% secure here" =>
+        "We care about security, you payment is 100% secure here",
+    "Subscribe" => "Subscribe",
 ];
