@@ -3,6 +3,7 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\Content\FaqController;
@@ -12,8 +13,6 @@ use App\Http\Controllers\Content\ProductController;
 use App\Http\Controllers\Content\ShopController;
 use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
-
-Route::get("/account", [HomeController::class, "index"])->name("account.index");
 
 Route::get("/order-tracking", [HomeController::class, "index"])->name(
     "order.tracking"
@@ -77,7 +76,10 @@ Route::controller(AccountController::class)
 Route::controller(CheckoutController::class)->group(function () {
     Route::get("/checkout", "index")->name("checkout.index");
     Route::get("/checkout/success", "success")->name("checkout.success");
-    Route::get("/cart", "success")->name("cart.index");
+});
+
+Route::controller(CartController::class)->group(function () {
+    Route::get("/cart", "index")->name("cart.index");
 });
 
 Route::post("stripe/webhook", [

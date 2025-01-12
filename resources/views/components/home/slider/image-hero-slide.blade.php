@@ -9,7 +9,7 @@
         alt=""
     />
     <x-slot:content>
-        shop the collection and
-        <span class="ms-2 font-bold">save 30%</span>
+        {{ __("store.shop the collection and") }}
+        <span class="font-bold">{{ " " . "{{ __('store.save 30%') }}" }}</span>
     </x-slot>
 </x-home.slider.hero-slide-container>

@@ -1,5 +1,7 @@
 <section class="relative w-full" x-data="swiper()">
-    <div class="hero-swiper swiper mt-4 h-[80dvh] w-full lg:h-[97dvh]">
+    <div
+        class="hero-swiper swiper mt-4 h-[70dvh] w-full md:h-[80dvh] lg:h-[97dvh]"
+    >
         <div class="swiper-wrapper h-full w-full">
             <x-home.slider.image-hero-slide
                 img-url="{{asset('storage/test/hero1.webp')}}"
@@ -24,7 +26,7 @@
         </div>
     </div>
     <div
-        class="absolute bottom-10 z-10 flex w-full translate-y-1/2 items-center justify-between px-24"
+        class="absolute bottom-10 z-10 flex w-full translate-y-1/2 items-center justify-between px-14 lg:px-24"
     >
         <img
             @click="pervSlide()"

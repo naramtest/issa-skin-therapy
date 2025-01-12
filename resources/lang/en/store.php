@@ -242,4 +242,6 @@ return [
     "We care about security, you payment is 100% secure here" =>
         "We care about security, you payment is 100% secure here",
     "Subscribe" => "Subscribe",
+    "shop the collection and" => "shop the collection and",
+    "save 30%" => "save 30%",
 ];

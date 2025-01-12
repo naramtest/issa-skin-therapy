@@ -21,5 +21,7 @@
             type="video/mp4"
         />
     </video>
-    <x-slot:content>Skin That Defies Time</x-slot>
+    <x-slot:content>
+        {{ __("store.Skin That Defies Time") }}
+    </x-slot>
 </x-home.slider.hero-slide-container>
