@@ -23,6 +23,7 @@
         "filament/spatie-laravel-media-library-plugin": "^3.2",
         "filament/spatie-laravel-tags-plugin": "^3.2",
         "filament/spatie-laravel-translatable-plugin": "3.x-dev",
+        "finller/laravel-invoices": "^3.4",
         "florianv/swap": "^4.3",
         "itsgoingd/clockwork": "^5.3",
         "laravel/fortify": "^1.25",

@@ -80,7 +80,7 @@ class Order extends Model
         return new Money($this->subtotal, CurrencyHelper::defaultCurrency());
     }
 
-    public function getMoneyShippingCost(): Money
+    public function getMoneyShippingCostAttribute(): Money
     {
         return new Money(
             $this->shipping_cost,

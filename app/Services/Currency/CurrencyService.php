@@ -113,7 +113,8 @@ class CurrencyService
 
     public function convertToUserCurrencyWithCache(
         Money $money,
-        ?string $userCurrency = null
+        ?string $userCurrency = null,
+        float $rate = null
     ): Money {
         try {
             $userCurrency ??= CurrencyHelper::getUserCurrency();
@@ -123,7 +124,7 @@ class CurrencyService
                 return $money;
             }
 
-            $rate = $this->getCachedExchangeRate(
+            $this->rate ??= $this->getCachedExchangeRate(
                 $money->getCurrency(),
                 $userCurrency
             );

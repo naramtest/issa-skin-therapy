@@ -35,7 +35,7 @@ class OrderItem extends Model
         return $this->morphTo();
     }
 
-    public function getMoneyUnitPrice(): Money
+    public function getMoneyUnitPriceAttribute(): Money
     {
         return new Money($this->unit_price, CurrencyHelper::defaultCurrency());
     }

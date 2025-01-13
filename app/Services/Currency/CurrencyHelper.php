@@ -5,6 +5,7 @@ namespace App\Services\Currency;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
+use Money\Formatter\DecimalMoneyFormatter;
 use Money\Formatter\IntlMoneyFormatter;
 use Money\Money;
 use Money\Parser\IntlLocalizedDecimalParser;
@@ -109,6 +110,15 @@ class CurrencyHelper
         );
 
         return $moneyFormatter->format($money);
+    }
+
+    public static function decimalFormatter(Money $money): string
+    {
+        $currencies = new ISOCurrencies();
+
+        $moneyFormatter = new DecimalMoneyFormatter($currencies);
+
+        return $moneyFormatter->format($money); // outputs 1.00
     }
 
     /**
