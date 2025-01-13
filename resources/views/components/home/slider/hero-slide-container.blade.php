@@ -2,7 +2,7 @@
     {{ $attributes->class(["swiper-slide overflow-hidden rounded-[20px]"]) }}
 >
     {{ $slot }}
-    <div class="absolute bottom-0 w-full px-3 md:px-8 lg:px-[3.75rem]">
+    <div class="absolute bottom-0 w-full px-5 md:px-8 lg:px-[3.75rem]">
         <div
             class="flex flex-col justify-between gap-y-3 border-b pb-5 md:pb-7 lg:flex-row lg:items-end lg:pb-10"
         >

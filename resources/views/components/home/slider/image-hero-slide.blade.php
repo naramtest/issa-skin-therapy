@@ -10,6 +10,6 @@
     />
     <x-slot:content>
         {{ __("store.shop the collection and") }}
-        <span class="font-bold">{{ " " . "{{ __('store.save 30%') }}" }}</span>
+        <span class="font-bold">{{ " " . __("store.save 30%") }}</span>
     </x-slot>
 </x-home.slider.hero-slide-container>

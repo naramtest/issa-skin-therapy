@@ -2,22 +2,28 @@
     "bundles",
     "categories",
 ])
-<x-home.section-container class="content-x-padding mt-10 py-14">
-    <div class="flex items-center justify-between px-14">
-        <div class="w-[25%]">
+<x-home.section-container
+    class="content-x-padding mt-6 py-10 md:mt-10 md:py-14"
+>
+    <div
+        class="flex flex-col justify-between gap-y-4 md:flex-row md:items-center md:px-14"
+    >
+        <div class="md:w-[25%]">
             <x-home.fancy-heading />
             <a
                 href="{{ route("about.index") }}"
-                class="mt-10 inline-block w-[200px]"
+                class="mt-5 inline-block w-[150px] md:mt-10 md:w-[200px]"
             >
-                <x-general.button-white-animation class="!border-black !py-4">
+                <x-general.button-white-animation
+                    class="!border-[1px] !border-[#a5bbc4] py-3 md:border md:!border-black md:!py-4"
+                >
                     <span class="relative z-10 inline-block">
                         {{ __("store.Our Story") }}
                     </span>
                 </x-general.button-white-animation>
             </a>
         </div>
-        <ol class="w-[60%] text-2xl">
+        <ol class="text-lg md:w-[60%] md:text-2xl">
             <li class="mb-1">
                 {{ __("store.1. Crafted by Dr") }}
             </li>

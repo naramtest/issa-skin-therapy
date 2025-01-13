@@ -1,10 +1,10 @@
 <x-store-main-layout>
     <main class="relative">
         <x-home.section.hero-swiper />
-        {{-- <x-home.section.home-collection --}}
-        {{-- :bundles="$bundles" --}}
-        {{-- :categories="$categories" --}}
-        {{-- /> --}}
+        <x-home.section.home-collection
+            :bundles="$bundles"
+            :categories="$categories"
+        />
 
         {{-- <x-home.section.best-seller-product :product="$featuredProduct" /> --}}
         {{-- <x-home.section.vedio-background /> --}}
