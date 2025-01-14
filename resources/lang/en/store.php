@@ -244,4 +244,16 @@ return [
     "Subscribe" => "Subscribe",
     "shop the collection and" => "shop the collection and",
     "save 30%" => "save 30%",
+    "Order Confirmation" => "Order Confirmation #:this_order_number",
+    "Order Confirmation1" => "Order Confirmation",
+    "Thank you for your order" => "Thank you for your order",
+    "Order Details" => "Order Details",
+    "Order Number" => "Order Number",
+    "Order Date" => "Order Date",
+    "Payment Status" => "Payment Status",
+    "Billing Address" => "Billing Address",
+    "Shipping Address" => "Shipping Address",
+    "Price" => "Price",
+    "If you have any questions about your order, please contact our customer service" =>
+        "If you have any questions about your order, please contact our customer service",
 ];
