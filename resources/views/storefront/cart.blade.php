@@ -1,1 +1,3 @@
-<x-store-main-layout></x-store-main-layout>
+<x-store-main-layout>
+    <livewire:cart-page />
+</x-store-main-layout>

@@ -1,0 +1,171 @@
+{{-- TODO: translate , Coupon , DHL rate --}}
+<div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="mb-10 flex items-center justify-between">
+        <h1 class="text-[5rem] font-bold">{{ __("store.Your Cart") }}</h1>
+        <a href="{{ route("shop.index") }}" class="block">
+            <x-general.button-black-animation class="!py-3 px-6">
+                <div class="relative z-10 flex items-center">
+                    <x-gmdi-shopping-bag-o class="mb-[2px] h-5 w-5" />
+                    <span class="ms-1">
+                        {{ __("store.Continue shopping") }}
+                    </span>
+                </div>
+            </x-general.button-black-animation>
+        </a>
+    </div>
+
+    @if (count($cartItems) > 0)
+        <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <!-- Cart Items Section -->
+            <div class="lg:col-span-2">
+                <div
+                    class="mb-4 grid grid-cols-4 border-b pb-3 text-sm font-medium"
+                >
+                    <div class="col-span-2">Product</div>
+                    <div class="text-center">Quantity</div>
+                    <div class="text-right">Subtotal</div>
+                </div>
+
+                @foreach ($cartItems as $item)
+                    <div
+                        class="grid grid-cols-4 items-center gap-4 border-b py-4"
+                    >
+                        <!-- Product Info -->
+                        <div class="col-span-2 flex items-center gap-4">
+                            <button
+                                wire:click="removeItem('{{ $item->getId() }}')"
+                                class="text-gray-400 hover:text-gray-600"
+                            >
+                                <x-heroicon-o-x-circle class="h-5 w-5" />
+                            </button>
+                            <img
+                                src="{{ \App\Helpers\Media\ImageGetter::getMediaThumbnailUrl($item->getPurchasable()) }}"
+                                class="h-16 w-16 rounded object-cover"
+                                alt="{{ $item->getPurchasable()->name }}"
+                            />
+                            <div>
+                                <h3 class="font-medium">
+                                    {{ $item->getPurchasable()->name }}
+                                </h3>
+                                <x-price
+                                    class="text-sm text-gray-500"
+                                    :money="$item->getPrice()"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="flex justify-center">
+                            <div class="flex items-center rounded-lg border">
+                                <button
+                                    wire:click="updateQuantity('{{ $item->getId() }}', 'decrement')"
+                                    class="px-3 py-1 hover:bg-gray-100"
+                                >
+                                    -
+                                </button>
+                                <span class="border-x px-3 py-1">
+                                    {{ $item->getQuantity() }}
+                                </span>
+                                <button
+                                    wire:click="updateQuantity('{{ $item->getId() }}', 'increment')"
+                                    class="px-3 py-1 hover:bg-gray-100"
+                                >
+                                    +
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Subtotal -->
+                        <x-price
+                            class="text-right font-medium"
+                            :money="$item->getSubtotal()"
+                        />
+                    </div>
+                @endforeach
+
+                <div class="mt-6">
+                    <div class="flex gap-2">
+                        <input
+                            type="text"
+                            wire:model.defer="couponCode"
+                            class="flex-1 rounded-xl bg-[#f9fafa] px-4 py-2"
+                            placeholder="Coupon code"
+                        />
+                        <button class="w-[30%]">
+                            <x-general.button-black-animation class="!py-3">
+                                <span class="relative z-10 inline-block">
+                                    {{ __("store.Apply") }}
+                                </span>
+                            </x-general.button-black-animation>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="lg:col-span-1">
+                <div class="rounded-lg bg-[#f9fafa] p-6">
+                    <h2 class="mb-4 text-lg font-medium">Cart Totals</h2>
+
+                    <!-- Subtotal -->
+                    <div class="mb-4 flex justify-between">
+                        <span>Subtotal</span>
+                        <x-price class="font-medium" :money="$subtotal" />
+                    </div>
+
+                    <!-- Shipping Options -->
+                    <div class="mb-4">
+                        <h3 class="mb-2 font-medium">Shipping</h3>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input
+                                    type="radio"
+                                    name="shipping"
+                                    value="free"
+                                    checked
+                                />
+                                <span class="ml-2">Free shipping</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input
+                                    type="radio"
+                                    name="shipping"
+                                    value="express"
+                                />
+                                <span class="ml-2">
+                                    Domestic Express - 2 business days: د.إ53.86
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Total -->
+                    <div class="mb-6 flex justify-between border-t pt-4">
+                        <span class="font-medium">Total</span>
+                        <x-price class="font-medium" :money="$total" />
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="space-y-3">
+                        <a
+                            href="{{ route("checkout.index") }}"
+                            class="block w-full"
+                        >
+                            <x-general.button-black-animation>
+                                <span class="relative z-10 inline-block">
+                                    Proceed to Checkout
+                                </span>
+                            </x-general.button-black-animation>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Coupon -->
+            </div>
+        </div>
+    @else
+        <div class="py-12 text-center">
+            <h2 class="mb-4 text-2xl font-medium">Your cart is empty</h2>
+        </div>
+    @endif
+</div>

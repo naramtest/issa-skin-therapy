@@ -268,4 +268,6 @@ return [
             "An error occurred while processing your order. Please contact our support team.",
     ],
     "Invalid order access" => "Invalid order access",
+    "Your Cart" => "Your Cart",
+    "Continue shopping" => "Continue shopping",
 ];
