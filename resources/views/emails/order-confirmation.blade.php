@@ -127,7 +127,7 @@
                         <tr>
                             <td>{{ $item->purchasable->name }}</td>
                             <td>{{ $item->quantity }}</td>
-                            <td>{{ $item->getMoneyUnitPrice() }}</td>
+                            <td>{{ $item->money_unit_price }}</td>
                             <td>{{ $item->getMoneySubtotal() }}</td>
                         </tr>
                     @endforeach
@@ -141,7 +141,7 @@
                 </p>
                 <p>
                     <strong>{{ __("store.Shipping") }}:</strong>
-                    {{ $order->getMoneyShippingCost() }}
+                    {{ $order->money_shipping_cost }}
                 </p>
                 <p>
                     <strong>{{ __("store.Total") }}:</strong>

@@ -2,50 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Checkout\OrderStatus;
-use App\Enums\Checkout\PaymentStatus;
 use App\Models\Order;
+use App\Services\Order\OrderProcessor;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Stripe\Exception\SignatureVerificationException;
-use Stripe\Webhook;
+use Stripe\WebhookSignature;
 
 class StripeWebhookController extends Controller
 {
+    public function __construct(private readonly OrderProcessor $orderProcessor)
+    {
+    }
+
     public function handleWebhook(Request $request)
     {
         $payload = $request->getContent();
         $sigHeader = $request->header("Stripe-Signature");
 
         try {
-            // Verify the webhook signature
-            $event = Webhook::constructEvent(
-                $payload,
-                $sigHeader,
-                config("services.stripe.webhook_secret")
-            );
+            $this->verifyStripeWebhook($payload, $sigHeader);
+            $event = json_decode($payload, true);
 
-            // Handle the event
-            return match ($event->type) {
+            return match ($event["type"]) {
                 "payment_intent.succeeded"
                     => $this->handlePaymentIntentSucceeded(
-                    $event->data->object
+                    $event["data"]["object"]
                 ),
                 "payment_intent.payment_failed"
-                    => $this->handlePaymentIntentFailed($event->data->object),
+                    => $this->handlePaymentIntentFailed(
+                    $event["data"]["object"]
+                ),
                 "charge.refunded" => $this->handleChargeRefunded(
-                    $event->data->object
+                    $event["data"]["object"]
                 ),
-                default => response()->json(
-                    ["status" => "Unhandled event type"],
-                    200
-                ),
+                default => response()->json([
+                    "status" => "Unhandled event type",
+                ]),
             };
         } catch (SignatureVerificationException $e) {
+            Log::error("Invalid Stripe webhook signature", [
+                "error" => $e->getMessage(),
+                "header" => $sigHeader,
+            ]);
             return response()->json(["error" => "Invalid signature"], 400);
         } catch (Exception $e) {
-            Log::error("Webhook handling failed.", [
+            Log::error("Webhook handling failed", [
                 "error" => $e->getMessage(),
                 "trace" => $e->getTraceAsString(),
             ]);
@@ -56,49 +60,61 @@ class StripeWebhookController extends Controller
         }
     }
 
-    protected function handlePaymentIntentSucceeded($paymentIntent)
-    {
-        $order = Order::where("payment_intent_id", $paymentIntent->id)->first();
-
-        if (!$order) {
-            Log::error("Order not found for payment intent", [
-                "payment_intent_id" => $paymentIntent->id,
-            ]);
-            return response()->json(["error" => "Order not found"], 404);
+    /**
+     * @throws SignatureVerificationException
+     */
+    protected function verifyStripeWebhook(
+        string $payload,
+        ?string $sigHeader
+    ): void {
+        if (!$sigHeader) {
+            throw new SignatureVerificationException(
+                "No signature provided",
+                $sigHeader,
+                "No signature provided"
+            );
         }
 
-        try {
-            $order->update([
-                "status" => OrderStatus::PROCESSING,
-                "payment_status" => PaymentStatus::PAID,
-                "payment_authorized_at" => now(),
-                "payment_captured_at" => now(),
-                "payment_method_details" => [
-                    "type" => $paymentIntent->payment_method_type,
-                    "last4" =>
-                        $paymentIntent->charges->data[0]->payment_method_details
-                            ->card->last4 ?? null,
-                    "brand" =>
-                        $paymentIntent->charges->data[0]->payment_method_details
-                            ->card->brand ?? null,
-                    "exp_month" =>
-                        $paymentIntent->charges->data[0]->payment_method_details
-                            ->card->exp_month ?? null,
-                    "exp_year" =>
-                        $paymentIntent->charges->data[0]->payment_method_details
-                            ->card->exp_year ?? null,
-                ],
-            ]);
+        WebhookSignature::verifyHeader(
+            $payload,
+            $sigHeader,
+            config("services.stripe.webhook_secret"),
+            300 // Tolerance in seconds
+        );
+    }
 
-            // You can dispatch events here
-            // event(new OrderPaid($order));
+    protected function handlePaymentIntentSucceeded(
+        array $paymentIntent
+    ): JsonResponse {
+        try {
+            $order = $this->getOrderFromPaymentIntent($paymentIntent);
+
+            $this->orderProcessor->processSuccessfulPayment($order, [
+                "type" => $paymentIntent["payment_method_type"] ?? null,
+                "last4" =>
+                    $paymentIntent["charges"]["data"][0][
+                        "payment_method_details"
+                    ]["card"]["last4"] ?? null,
+                "brand" =>
+                    $paymentIntent["charges"]["data"][0][
+                        "payment_method_details"
+                    ]["card"]["brand"] ?? null,
+                "exp_month" =>
+                    $paymentIntent["charges"]["data"][0][
+                        "payment_method_details"
+                    ]["card"]["exp_month"] ?? null,
+                "exp_year" =>
+                    $paymentIntent["charges"]["data"][0][
+                        "payment_method_details"
+                    ]["card"]["exp_year"] ?? null,
+            ]);
 
             return response()->json([
                 "status" => "Payment processed successfully",
             ]);
         } catch (Exception $e) {
-            Log::error("Failed to update order after successful payment", [
-                "order_id" => $order->id,
+            Log::error("Failed to process successful payment", [
+                "payment_intent_id" => $paymentIntent["id"],
                 "error" => $e->getMessage(),
             ]);
             return response()->json(
@@ -108,27 +124,42 @@ class StripeWebhookController extends Controller
         }
     }
 
-    protected function handlePaymentIntentFailed($paymentIntent)
+    /**
+     * @throws Exception
+     */
+    protected function getOrderFromPaymentIntent(array $paymentIntent): Order
     {
-        $order = Order::where("payment_intent_id", $paymentIntent->id)->first();
+        $order = Order::where(
+            "payment_intent_id",
+            $paymentIntent["id"]
+        )->first();
 
         if (!$order) {
-            Log::error("Order not found for failed payment intent", [
-                "payment_intent_id" => $paymentIntent->id,
+            Log::error("Order not found for payment intent", [
+                "payment_intent_id" => $paymentIntent["id"],
             ]);
-            return response()->json(["error" => "Order not found"], 404);
+            throw new Exception("Order not found");
         }
 
-        try {
-            $order->markPaymentFailed();
+        return $order;
+    }
 
-            //TODO: You can dispatch events here
-            // event(new OrderPaymentFailed($order));
+    protected function handlePaymentIntentFailed(
+        array $paymentIntent
+    ): JsonResponse {
+        try {
+            $order = $this->getOrderFromPaymentIntent($paymentIntent);
+            $this->orderProcessor->processFailedPayment($order, [
+                "error_code" =>
+                    $paymentIntent["last_payment_error"]["code"] ?? null,
+                "error_message" =>
+                    $paymentIntent["last_payment_error"]["message"] ?? null,
+            ]);
 
             return response()->json(["status" => "Payment failure recorded"]);
         } catch (Exception $e) {
-            Log::error("Failed to update order after payment failure", [
-                "order_id" => $order->id,
+            Log::error("Failed to process payment failure", [
+                "payment_intent_id" => $paymentIntent["id"],
                 "error" => $e->getMessage(),
             ]);
             return response()->json(
@@ -138,32 +169,23 @@ class StripeWebhookController extends Controller
         }
     }
 
-    protected function handleChargeRefunded($charge)
+    protected function handleChargeRefunded(array $charge): JsonResponse
     {
-        $order = Order::where(
-            "payment_intent_id",
-            $charge->payment_intent
-        )->first();
-
-        if (!$order) {
-            Log::error("Order not found for refunded charge", [
-                "payment_intent_id" => $charge->payment_intent,
-            ]);
-            return response()->json(["error" => "Order not found"], 404);
-        }
-
         try {
-            $order->markPaymentRefunded();
-
-            //TODO: You can dispatch events here
-            // event(new OrderRefunded($order));
+            $order = $this->getOrderFromPaymentIntent(
+                $charge["payment_intent"]
+            );
+            $this->orderProcessor->processRefund($order, [
+                "amount" => $charge["amount_refunded"],
+                "reason" => $charge["refunds"]["data"][0]["reason"] ?? null,
+            ]);
 
             return response()->json([
                 "status" => "Refund processed successfully",
             ]);
         } catch (Exception $e) {
-            Log::error("Failed to update order after refund", [
-                "order_id" => $order->id,
+            Log::error("Failed to process refund", [
+                "charge_id" => $charge["id"],
                 "error" => $e->getMessage(),
             ]);
             return response()->json(

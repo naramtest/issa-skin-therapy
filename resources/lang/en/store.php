@@ -218,6 +218,8 @@ return [
     "Payment verification failed" => [
         " Please contact support" =>
             "Payment verification failed. Please contact support.",
+        " Please contact our support team" =>
+            "Payment verification failed. Please contact our support team.",
     ],
     "Payment confirmation failed" => [
         " Please contact support" =>
@@ -256,4 +258,14 @@ return [
     "Price" => "Price",
     "If you have any questions about your order, please contact our customer service" =>
         "If you have any questions about your order, please contact our customer service",
+    "Unable to download the invoice" => [
+        " Please try again later" =>
+            "Unable to download the invoice. Please try again later.",
+    ],
+    "Invalid payment session" => "Invalid payment session",
+    "An error occurred while processing your order" => [
+        " Please contact our support team" =>
+            "An error occurred while processing your order. Please contact our support team.",
+    ],
+    "Invalid order access" => "Invalid order access",
 ];

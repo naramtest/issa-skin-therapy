@@ -76,6 +76,9 @@ Route::controller(AccountController::class)
 Route::controller(CheckoutController::class)->group(function () {
     Route::get("/checkout", "index")->name("checkout.index");
     Route::get("/checkout/success", "success")->name("checkout.success");
+    Route::get("orders/{order}/invoice/download", "downloadInvoice")->name(
+        "orders.invoice.download"
+    );
 });
 
 Route::controller(CartController::class)->group(function () {

@@ -11,6 +11,7 @@ use Exception;
 use Log;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
+use Stripe\PaymentMethod;
 use Stripe\Stripe;
 
 class StripePaymentService implements PaymentServiceInterface
@@ -95,8 +96,8 @@ class StripePaymentService implements PaymentServiceInterface
     {
         try {
             $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
-
             if ($paymentIntent->status !== "succeeded") {
+                Log::error("Stripe payment intent not found");
                 return false;
             }
 
@@ -106,11 +107,15 @@ class StripePaymentService implements PaymentServiceInterface
                 $paymentIntentId
             )->first();
 
-            $paymentMethod = $paymentIntent->payment_method;
+            $paymentMethod = PaymentMethod::retrieve(
+                $paymentIntent->payment_method
+            );
 
             if (!$order or !$paymentMethod) {
+                Log::error("Stripe payment method not found");
                 return false;
             }
+
             $order->update([
                 "status" => OrderStatus::PROCESSING,
                 "payment_status" => PaymentStatus::PAID,
@@ -124,6 +129,12 @@ class StripePaymentService implements PaymentServiceInterface
                     "exp_year" => $paymentMethod->card->exp_year ?? null,
                 ],
             ]);
+            Log::info(
+                "order " .
+                    $order->id .
+                    " status : " .
+                    $order->payment_status->value
+            );
 
             //TODO: event(new OrderPaid($order));
             return true;
