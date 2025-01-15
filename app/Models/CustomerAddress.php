@@ -10,18 +10,21 @@ class CustomerAddress extends Model
 {
     protected $fillable = [
         "customer_id",
+        "first_name",
+        "last_name",
         "phone",
         "address",
         "city",
+        "state",
         "country",
         "postal_code",
+        "area",
+        "building",
+        "flat",
+        "type",
         "is_default",
         "is_billing",
         "last_used_at",
-        "type",
-        "first_name",
-        "last_name",
-        "state",
     ];
 
     protected $casts = [
@@ -39,5 +42,21 @@ class CustomerAddress extends Model
     public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getFullAddressAttribute(): string
+    {
+        $parts = [
+            $this->address,
+            $this->area ? "Area: {$this->area}" : null,
+            $this->building ? "Building: {$this->building}" : null,
+            $this->flat ? "Flat: {$this->flat}" : null,
+            $this->city,
+            $this->state,
+            $this->country,
+            $this->postal_code,
+        ];
+
+        return collect($parts)->filter()->join(", ");
     }
 }

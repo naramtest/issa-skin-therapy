@@ -1,253 +1,232 @@
+{{-- TODO: finish today --}}
 <x-store-main-layout>
-    <div class="padding-from-side-menu py-12">
-        <div class="mx-auto max-w-3xl">
-            <!-- Success Message -->
-            <div class="mb-8 text-center">
+    <main class="mx-auto max-w-4xl px-4 pt-16 sm:px-6 lg:px-8">
+        <!-- Success Header -->
+        <div class="rounded-lg bg-[#1A1A1A] p-8 text-center">
+            <div class="mb-4 flex justify-center">
                 <div
-                    class="mb-4 inline-flex h-24 w-24 items-center justify-center rounded-full bg-green-100"
+                    class="flex h-16 w-16 items-center justify-center rounded-full bg-white"
                 >
                     <svg
-                        class="h-12 w-12 text-green-600"
+                        class="h-8 w-8 text-green-500"
                         fill="none"
-                        stroke="currentColor"
                         viewBox="0 0 24 24"
+                        stroke="currentColor"
                     >
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             stroke-width="2"
                             d="M5 13l4 4L19 7"
-                        ></path>
+                        />
                     </svg>
                 </div>
-                <h1 class="mb-4 text-3xl font-bold">
-                    Thank you for your order!
-                </h1>
-                <p class="text-lg text-gray-600">
-                    Your order has been confirmed and will be shipped shortly.
-                </p>
-                <p class="mt-2 text-gray-600">
-                    We have sent you an email with your order details and
-                    tracking information.
+            </div>
+            <h1 class="text-3xl font-bold text-white sm:text-4xl">
+                Thank you. Your order has been received.
+            </h1>
+        </div>
+
+        <!-- Order Information -->
+        <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="rounded-lg bg-gray-50 p-6">
+                <h2 class="text-sm font-medium text-gray-500">ORDER NUMBER:</h2>
+                <p class="mt-2 text-lg font-medium">
+                    {{ $order->order_number }}
                 </p>
             </div>
 
-            <!-- Order Information -->
-            <div class="mb-8 overflow-hidden rounded-lg bg-white shadow">
-                <div class="border-b border-gray-200 px-6 py-4">
-                    <h2 class="text-lg font-semibold">Order Details</h2>
+            <div class="rounded-lg bg-gray-50 p-6">
+                <h2 class="text-sm font-medium text-gray-500">DATE:</h2>
+                <p class="mt-2 text-lg font-medium">
+                    {{ $order->created_at->format("F j, Y") }}
+                </p>
+            </div>
+
+            <div class="rounded-lg bg-gray-50 p-6">
+                <h2 class="text-sm font-medium text-gray-500">TOTAL:</h2>
+                <p class="mt-2 text-lg font-medium">
+                    {{ \App\Services\Currency\CurrencyHelper::format($order->getMoneyTotal()) }}
+                </p>
+            </div>
+
+            <div class="rounded-lg bg-gray-50 p-6">
+                <h2 class="text-sm font-medium text-gray-500">
+                    PAYMENT METHOD:
+                </h2>
+                <p class="mt-2 text-lg font-medium">
+                    {{ strtoupper($order->payment_method_details["brand"] ?? "") }}
+                    @if (isset($order->payment_method_details["last4"]))
+                        ENDING IN
+                        {{ $order->payment_method_details["last4"] }}
+                    @endif
+                </p>
+            </div>
+        </div>
+
+        <!-- Order Details -->
+        <div class="mt-12">
+            <h2 class="text-2xl font-bold">Order Details</h2>
+
+            <div class="mt-6 overflow-hidden rounded-lg border">
+                <!-- Header -->
+                <div class="bg-[#1A1A1A] px-6 py-4">
+                    <div class="grid grid-cols-2">
+                        <div class="text-left text-sm font-medium text-white">
+                            Product
+                        </div>
+                        <div class="text-right text-sm font-medium text-white">
+                            Total
+                        </div>
+                    </div>
                 </div>
-                <div class="px-6 py-4">
-                    <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-                        <div>
+
+                <!-- Items -->
+                <div class="divide-y divide-gray-200 bg-white">
+                    @foreach ($order->items as $item)
+                        <div class="grid grid-cols-2 px-6 py-4">
+                            <div>
+                                <h3 class="text-sm font-medium">
+                                    {{ $item->purchasable->name }}
+                                </h3>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    Qty: {{ $item->quantity }}
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                {{ \App\Services\Currency\CurrencyHelper::format($item->getMoneySubtotal()) }}
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- Summary -->
+                <div class="border-t border-gray-200 bg-gray-50 px-6 py-4">
+                    <dl class="space-y-4">
+                        <div class="flex justify-between">
                             <dt class="text-sm font-medium text-gray-500">
-                                Order Number
+                                Subtotal:
                             </dt>
-                            <dd class="mt-1 text-sm text-gray-900">
-                                #{{ $order->order_number }}
+                            <dd class="text-sm font-medium">
+                                {{ \App\Services\Currency\CurrencyHelper::format($order->getMoneySubtotal()) }}
                             </dd>
                         </div>
-                        <div>
+                        {{-- TODO: show if an item has a discount --}}
+                        {{-- @if ($order->discount) --}}
+                        {{-- <div class="flex justify-between"> --}}
+                        {{-- <dt class="text-sm font-medium text-gray-500"> --}}
+                        {{-- Discount: --}}
+                        {{-- </dt> --}}
+                        {{-- <dd class="text-sm font-medium text-red-600"> --}}
+                        {{-- -{{ \App\Services\Currency\CurrencyHelper::format($order->getMoneyDiscount()) }} --}}
+                        {{-- </dd> --}}
+                        {{-- </div> --}}
+                        {{-- @endif --}}
+
+                        <div class="flex justify-between">
                             <dt class="text-sm font-medium text-gray-500">
-                                Order Date
+                                Shipping:
                             </dt>
-                            <dd class="mt-1 text-sm text-gray-900">
-                                {{ $order->created_at->format("F j, Y") }}
+                            <dd class="text-sm font-medium">
+                                {{
+                                    $order->shipping_cost > 0
+                                        ? \App\Services\Currency\CurrencyHelper::format($order->getMoneyShippingCost())
+                                        : "Free shipping"
+                                }}
                             </dd>
                         </div>
-                        <div>
-                            <dt class="text-sm font-medium text-gray-500">
-                                Email
-                            </dt>
-                            <dd class="mt-1 text-sm text-gray-900">
-                                {{ $order->email }}
-                            </dd>
-                        </div>
-                        <div>
-                            <dt class="text-sm font-medium text-gray-500">
-                                Order Status
-                            </dt>
-                            <dd class="mt-1 text-sm text-gray-900">
-                                {{ $order->status->getLabel() }}
+
+                        <div
+                            class="flex justify-between border-t border-gray-200 pt-4"
+                        >
+                            <dt class="text-base font-medium">Total:</dt>
+                            <dd class="text-base font-medium">
+                                {{ \App\Services\Currency\CurrencyHelper::format($order->getMoneyTotal()) }}
                             </dd>
                         </div>
                     </dl>
                 </div>
             </div>
-
-            <!-- Order Summary -->
-            <div class="mb-8 overflow-hidden rounded-lg bg-white shadow">
-                <div class="border-b border-gray-200 px-6 py-4">
-                    <h2 class="text-lg font-semibold">Order Summary</h2>
-                </div>
-                <div class="px-6 py-4">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b text-left">
-                                <th
-                                    class="pb-4 text-sm font-medium text-gray-500"
-                                >
-                                    Product
-                                </th>
-                                <th
-                                    class="pb-4 text-right text-sm font-medium text-gray-500"
-                                >
-                                    Total
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($order->items as $item)
-                                <tr class="border-b">
-                                    <td class="py-4">
-                                        <div class="flex items-center">
-                                            <div>
-                                                <div
-                                                    class="text-sm font-medium text-gray-900"
-                                                >
-                                                    {{ $item->purchasable->name }}
-                                                </div>
-                                                <div
-                                                    class="mt-1 text-sm text-gray-500"
-                                                >
-                                                    × {{ $item->quantity }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td
-                                        class="py-4 text-right text-sm text-gray-500"
-                                    >
-                                        {{ $item->getMoneySubtotal() }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                        <tfoot>
-                            <tr class="border-b">
-                                <th
-                                    class="py-4 text-sm font-medium text-gray-500"
-                                >
-                                    Subtotal
-                                </th>
-                                <td
-                                    class="py-4 text-right text-sm text-gray-900"
-                                >
-                                    {{ $order->getMoneySubtotal() }}
-                                </td>
-                            </tr>
-                            <tr class="border-b">
-                                <th
-                                    class="py-4 text-sm font-medium text-gray-500"
-                                >
-                                    Shipping
-                                </th>
-                                <td
-                                    class="py-4 text-right text-sm text-gray-900"
-                                >
-                                    {{ $order->money_shipping_cost }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th
-                                    class="py-4 text-base font-semibold text-gray-900"
-                                >
-                                    Total
-                                </th>
-                                <td
-                                    class="py-4 text-right text-base font-semibold text-gray-900"
-                                >
-                                    {{ $order->getMoneyTotal() }}
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Actions -->
-            <div class="flex justify-center space-x-4">
-                <!-- Invoice Download -->
-                <a
-                    href="{{ route("orders.invoice.download", $order) }}"
-                    class="inline-flex items-center rounded-full border border-black bg-white px-6 py-3 text-sm font-medium text-black hover:bg-gray-50"
-                >
-                    <svg
-                        class="mr-2 h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        ></path>
-                    </svg>
-                    Download Invoice
-                </a>
-
-                <!-- Continue Shopping -->
-                <a
-                    href="{{ route("shop.index") }}"
-                    class="rounded-full bg-black px-6 py-3 text-sm font-medium text-white hover:bg-gray-800"
-                >
-                    Continue Shopping
-                </a>
-
-                <!-- View Orders (for logged in users) -->
-                @auth
-                    <a
-                        href="{{ route("account.orders") }}"
-                        class="rounded-full border border-black px-6 py-3 text-sm font-medium text-black hover:bg-gray-100"
-                    >
-                        View Orders
-                    </a>
-                @endauth
-            </div>
-
-            <!-- Guest Registration Prompt -->
-            @if ($showRegistration)
-                <div class="mt-8 rounded-lg bg-blue-50 p-4">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <svg
-                                class="h-5 w-5 text-blue-400"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                                    clip-rule="evenodd"
-                                ></path>
-                            </svg>
-                        </div>
-                        <div class="ml-3">
-                            <h3 class="text-sm font-medium text-blue-800">
-                                Create an Account
-                            </h3>
-                            <div class="mt-2 text-sm text-blue-700">
-                                <p>
-                                    Create an account to track your orders and
-                                    get faster checkout next time.
-                                </p>
-                            </div>
-                            <div class="mt-4">
-                                <div class="-mx-2 -my-1.5 flex">
-                                    <a
-                                        href="{{ route("register") }}"
-                                        class="rounded-md bg-blue-800 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-                                    >
-                                        Register Now
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
         </div>
-    </div>
+
+        <!-- Addresses -->
+        <div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2">
+            <!-- Billing Address -->
+            <div class="rounded-lg bg-gray-50 p-6">
+                <h2 class="text-lg font-medium">Billing Address</h2>
+                <address class="mt-4 not-italic">
+                    <p class="text-sm">
+                        {{ $order->billingAddress->full_name }}
+                    </p>
+                    <p class="mt-2 text-sm">
+                        {{ $order->billingAddress->address }}
+                        <br />
+                        @if ($order->billingAddress->flat)
+                            Flat: {{ $order->billingAddress->flat }}
+                            <br />
+                        @endif
+
+                        {{ $order->billingAddress->city }}
+                        <br />
+                        {{ $order->billingAddress->state }}
+                        <br />
+                        {{ $order->billingAddress->country }}
+                        {{ $order->billingAddress->postal_code }}
+                    </p>
+                    <p class="mt-2 text-sm">
+                        {{ $order->billingAddress->phone }}
+                    </p>
+                    <p class="mt-2 text-sm">{{ $order->email }}</p>
+                </address>
+            </div>
+
+            <!-- Shipping Address -->
+            <div class="rounded-lg bg-gray-50 p-6">
+                <h2 class="text-lg font-medium">Shipping Address</h2>
+                <address class="mt-4 not-italic">
+                    <p class="text-sm">
+                        {{ $order->shippingAddress->full_name }}
+                    </p>
+                    <p class="mt-2 text-sm">
+                        {{ $order->shippingAddress->address }}
+                        <br />
+                        @if ($order->shippingAddress->flat)
+                            Flat: {{ $order->shippingAddress->flat }}
+                            <br />
+                        @endif
+
+                        {{ $order->shippingAddress->city }}
+                        <br />
+                        {{ $order->shippingAddress->state }}
+                        <br />
+                        {{ $order->shippingAddress->country }}
+                        {{ $order->shippingAddress->postal_code }}
+                    </p>
+                </address>
+            </div>
+        </div>
+
+        <!-- Return to Store Button -->
+        <div class="mt-12 text-center">
+            <a
+                href="{{ route("shop.index") }}"
+                class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+            >
+                <span>Return to store</span>
+                <svg
+                    class="ml-2 h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                </svg>
+            </a>
+        </div>
+    </main>
 </x-store-main-layout>
