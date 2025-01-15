@@ -2,14 +2,15 @@
 
 namespace App\Livewire;
 
-use App\Enums\Checkout\OrderStatus;
 use App\Livewire\Forms\CheckoutForm;
 use App\Models\Order;
 use App\Services\Cart\CartService;
 use App\Services\Checkout\CustomerCheckoutService;
 use App\Services\Checkout\OrderService;
 use App\Services\Payment\StripePaymentService;
+use App\Traits\WithShippingCalculation;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -17,10 +18,16 @@ use Log;
 
 class CheckoutComponent extends Component
 {
+    use WithShippingCalculation;
+
     public CheckoutForm $form;
+    public Collection $shippingRates;
+    public ?string $selectedShippingRate = null;
+    public bool $loadingRates = false;
     public bool $processing = false;
     public ?string $error = null;
     public ?string $currentOrderId = null;
+    public float $shippingCost = 0;
 
     protected CartService $cartService;
     protected CustomerCheckoutService $customerCheckoutService;
@@ -49,6 +56,13 @@ class CheckoutComponent extends Component
         if (auth()->check()) {
             $this->form->setFromUser(auth()->user());
         }
+
+        // Initialize shipping-related properties
+        $this->shippingRates = collect();
+        $this->loadingRates = false;
+        $this->selectedShippingRate = null;
+
+        $this->initializeWithShippingCalculation();
     }
 
     #[Computed]
@@ -66,7 +80,11 @@ class CheckoutComponent extends Component
     #[Computed]
     public function total()
     {
-        return $this->cartService->getTotal();
+        $total = $this->cartService->getTotal();
+        //        if ($this->shippingCost > 0) {
+        //            $total = $total->add(money($this->shippingCost, $total->getCurrency()));
+        //        }
+        return $total;
     }
 
     public function placeOrderAndPay(): void
@@ -76,6 +94,12 @@ class CheckoutComponent extends Component
         }
 
         $validatedData = $this->form->validate();
+
+        // Validate shipping method is selected
+        if (!$this->selectedShippingRate) {
+            $this->error = __("store.Please select a shipping method");
+            return;
+        }
 
         // Validate cart is not empty
         if ($this->cartService->isEmpty()) {
@@ -90,7 +114,6 @@ class CheckoutComponent extends Component
             if ($this->currentOrderId) {
                 $existingOrder = Order::find($this->currentOrderId);
                 if (
-                    $existingOrder &&
                     $this->orderService->isOrderPendingPayment($existingOrder)
                 ) {
                     $paymentData = $this->paymentService->getPaymentIntent(
@@ -104,7 +127,15 @@ class CheckoutComponent extends Component
                     return;
                 }
             }
+
             DB::beginTransaction();
+
+            // Get selected shipping rate
+            $shippingRate = $this->shippingRates->firstWhere(
+                "service_code",
+                $this->selectedShippingRate
+            );
+
             $order = $this->customerCheckoutService->processCheckout([
                 "email" => $validatedData["email"],
                 "billing" => [
@@ -140,15 +171,19 @@ class CheckoutComponent extends Component
                 "notes" => $validatedData["order_notes"],
                 "payment_method" => "card",
                 "create_account" => $validatedData["create_account"],
+                "shipping_method" => $shippingRate["service_code"],
+                "shipping_cost" => $shippingRate["total_price"],
+                "shipping_service_name" => $shippingRate["service_name"],
             ]);
 
             $this->currentOrderId = $order->id;
-            // 2. Create Stripe Payment Intent
+
+            // Create Stripe Payment Intent
             $paymentData = $this->paymentService->createPaymentIntent($order);
 
             DB::commit();
 
-            // 3. Return the client secret for the frontend to complete the payment
+            // Return the client secret for the frontend to complete the payment
             $this->dispatch(
                 "payment-ready",
                 clientSecret: $paymentData["clientSecret"]
@@ -168,44 +203,8 @@ class CheckoutComponent extends Component
         }
     }
 
-    public function updatedFormBillingCountry($value): void
+    public function render()
     {
-        //TODO: Here you could load states/regions for the selected country
-        // and update the shipping country if it's the same address
-        if (!$this->form->different_shipping_address) {
-            $this->form->shipping_country = $value;
-        }
-    }
-
-    public function updatedFormDifferentShippingAddress($value): void
-    {
-        if (!$value) {
-            // Copy billing address to shipping address
-            $this->form->shipping_first_name = $this->form->billing_first_name;
-            $this->form->shipping_last_name = $this->form->billing_last_name;
-            $this->form->shipping_address = $this->form->billing_address;
-            $this->form->shipping_city = $this->form->billing_city;
-            $this->form->shipping_state = $this->form->billing_state;
-            $this->form->shipping_country = $this->form->billing_country;
-            $this->form->shipping_postal_code =
-                $this->form->billing_postal_code;
-            $this->form->shipping_area = $this->form->billing_area;
-            $this->form->shipping_building = $this->form->billing_building;
-            $this->form->shipping_flat = $this->form->billing_flat;
-        }
-    }
-
-    public function cleanup(): void
-    {
-        //TODO: makes a job to cancel order and payments
-        if (!$this->currentOrderId) {
-            return;
-        }
-        $order = Order::find($this->currentOrderId);
-        $pendingOrder = $this->orderService->isOrderPendingPayment($order);
-        if ($order && $pendingOrder) {
-            $order->update(["status" => OrderStatus::CANCELLED]);
-            //TODO:  You might want to cancel the payment intent in Stripe as well
-        }
+        return view("livewire.checkout-component");
     }
 }

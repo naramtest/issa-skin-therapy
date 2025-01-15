@@ -11,8 +11,9 @@
                         :cart-items="$this->cartItems"
                         :subtotal="$this->subtotal"
                         :total="$this->total"
+                        :selected-shipping-rate="$selectedShippingRate"
+                        :shipping-rates="$shippingRates"
                     />
-
                     <!-- Coupon Code -->
                     <x-checkout.sections.coupon />
 

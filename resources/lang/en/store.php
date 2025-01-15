@@ -270,4 +270,5 @@ return [
     "Invalid order access" => "Invalid order access",
     "Your Cart" => "Your Cart",
     "Continue shopping" => "Continue shopping",
+    "business_days" => "{1} :count business day|[2,*] :count business days",
 ];

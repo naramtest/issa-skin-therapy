@@ -55,7 +55,7 @@
             wire:model.live="form.billing_country"
             required
             field="form.billing_country"
-            :options="['US','Syria']"
+            :options="['KW','AE','Syria']"
             :error="$errors->first('form.billing_country')"
         />
         <x-checkout.select-field
@@ -63,7 +63,7 @@
             wire:model="form.billing_state"
             required
             field="form.billing_state"
-            :options="['US','Syria']"
+            :options="['Kuwait','Dubai','Syria']"
             :error="$errors->first('form.billing_state')"
         />
 
@@ -178,7 +178,7 @@
                 wire:model.live="form.shipping_country"
                 required
                 field="form.shipping_country"
-                :options="['Us','Syria']"
+                :options="['AE','Syria']"
                 :error="$errors->first('form.shipping_country')"
             />
 
@@ -187,7 +187,7 @@
                 wire:model="form.shipping_state"
                 required
                 field="form.shipping_state"
-                :options="['US','Syria']"
+                :options="['AE','Syria']"
                 :error="$errors->first('form.shipping_state')"
             />
 

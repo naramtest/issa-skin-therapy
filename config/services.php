@@ -43,4 +43,12 @@ return [
         "secret_key" => env("STRIPE_SECRET_KEY"),
         "webhook_secret" => env("STRIPE_WEBHOOK_SECRET"),
     ],
+
+    "dhl" => [
+        "key" => env("DHL_API_KEY"),
+        "secret" => env("DHL_API_SECRET"),
+        "account_number" => env("DHL_ACCOUNT_NUMBER"),
+        "environment" => env("DHL_ENVIRONMENT", "test"), // 'test' or 'prod'
+        "url" => env("DHL_URL"),
+    ],
 ];

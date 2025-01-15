@@ -2,6 +2,8 @@
     "cartItems",
     "total",
     "subtotal",
+    "shippingRates",
+    "selectedShippingRate",
 ])
 
 <div class="rounded-2xl bg-[#F5F5F5] p-8">
@@ -55,7 +57,10 @@
                     {{ __("store.Shipping") }}
                 </td>
                 <td class="py-4 text-right text-darkColor">
-                    {{ __("store.Free shipping") }}
+                    <x-checkout.sections.shipping-rates
+                        :shippingRates="$shippingRates"
+                        :selectedShippingRate="$selectedShippingRate"
+                    />
                 </td>
             </tr>
             <tr class="font-medium">
