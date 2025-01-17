@@ -91,7 +91,7 @@ class DHLShippingService
                             "addressLine1" => substr($origin["address"], 0, 45),
                             "addressLine2" => $origin["building"] ?? "Unit 1",
                             "addressLine3" => $origin["flat"] ?? "Floor 1",
-                            "provinceCode" => "DU", // Dubai province code
+                            "provinceCode" => $origin["provinceCode"], // Dubai province code
                         ],
                         "receiverDetails" => [
                             "postalCode" => $destinationPostalCode,

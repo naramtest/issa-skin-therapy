@@ -6,11 +6,11 @@ use App\Services\Currency\CurrencyHelper;
 use App\ValueObjects\CartItem;
 use Money\Money;
 
-class CartPriceCalculator
+readonly class CartPriceCalculator
 {
     public function __construct(
-        private readonly CartCostsManager $costsManager,
-        private readonly CartTaxCalculator $taxCalculator
+        private CartCostsManager $costsManager,
+        private CartTaxCalculator $taxCalculator
     ) {
     }
 

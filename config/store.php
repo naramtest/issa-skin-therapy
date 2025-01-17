@@ -9,5 +9,6 @@ return [
         "phone" => "+971585957616",
         "email" => "vitadermfze@gmail.com",
         "name" => "Vitaderm",
+        "province_code" => "DU",
     ],
 ];

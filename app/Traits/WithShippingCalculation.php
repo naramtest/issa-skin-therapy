@@ -199,6 +199,7 @@ trait WithShippingCalculation
             "phone" => config("store.address.phone"),
             "email" => config("store.address.email"),
             "first_name" => config("store.name"),
+            "provinceCode" => config("store.address.province_code"),
             "last_name" => "",
         ];
     }
