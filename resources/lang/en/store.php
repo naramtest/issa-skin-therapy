@@ -277,4 +277,8 @@ return [
     "Guaranteed delivery" => "Guaranteed delivery",
     "No shipping methods available for your location" =>
         "No shipping methods available for your location",
+    "Tax" => "Tax",
+    "Handling Fee" => "Handling Fee",
+    "Discount" => "Discount",
+    "Insurance" => "Insurance",
 ];

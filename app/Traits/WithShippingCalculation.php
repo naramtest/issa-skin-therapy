@@ -2,9 +2,12 @@
 
 namespace App\Traits;
 
+use App\Enums\Checkout\CartCostType;
 use App\Services\Shipping\DHLShippingService;
 use Exception;
 use Log;
+use Money\Currency;
+use Money\Money;
 
 trait WithShippingCalculation
 {
@@ -209,10 +212,14 @@ trait WithShippingCalculation
             );
             if ($rate) {
                 $this->shippingCost = $rate["total_price"];
+                $this->cartService->addCost(
+                    CartCostType::SHIPPING,
+                    new Money(
+                        $rate["total_price"],
+                        new Currency($rate["currency"])
+                    )
+                );
                 unset($this->total);
-                logger($this->total->getAmount());
-                // Recalculate total with shipping
-                //                $this->calculateTotal();
             }
         }
     }

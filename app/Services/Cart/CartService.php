@@ -2,10 +2,12 @@
 
 namespace App\Services\Cart;
 
+use App\Enums\Checkout\CartCostType;
 use App\Enums\ProductType;
 use App\Models\Bundle;
 use App\Models\Product;
 use App\Services\Currency\CurrencyHelper;
+use App\ValueObjects\AdditionalCost;
 use App\ValueObjects\CartItem;
 use Exception;
 use Log;
@@ -15,6 +17,7 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class CartService
 {
+    private array $additionalCosts = [];
     //    TODO: add USer Currency to the final order with the current currency conversion rate
     private CartRedisService $redisService;
 
@@ -52,6 +55,21 @@ class CartService
         }
 
         return $cartId;
+    }
+
+    public function addCost(CartCostType $type, Money $amount): void
+    {
+        $this->additionalCosts[$type->value] = new AdditionalCost(
+            type: $type->value,
+            amount: $amount,
+            label: $type->getLabel(),
+            taxable: $type->isTaxable()
+        );
+    }
+
+    public function removeCost(CartCostType $type): void
+    {
+        unset($this->additionalCosts[$type->value]);
     }
 
     public function getId(): string
@@ -129,8 +147,28 @@ class CartService
 
     public function getTotal(): Money
     {
-        //TODO:add tax and shipping calculations later
-        return $this->getSubtotal();
+        // 1. Start with subtotal
+        $total = $this->getSubtotal();
+        $taxableAmount = $this->getSubtotal();
+
+        // 2. Process all costs first, keeping track of taxable amount
+        foreach ($this->additionalCosts as $cost) {
+            // Add to total
+            $total = $total->add($cost->amount);
+
+            // If taxable, add to taxable amount for tax calculation
+            if ($cost->taxable) {
+                $taxableAmount = $taxableAmount->add($cost->amount);
+            }
+        }
+
+        // 3. Calculate and add tax based on total taxable amount
+        $tax = $this->calculateTax($taxableAmount);
+        if ($tax) {
+            $total = $total->add($tax);
+        }
+
+        return $total;
     }
 
     public function getSubtotal(): Money
@@ -157,5 +195,22 @@ class CartService
             Log::error($e->getMessage());
             return [];
         }
+    }
+
+    protected function calculateTax(Money $taxableAmount): ?Money
+    {
+        //        TODO: taxes
+        //        $taxRate = $this->getTaxRate();
+        //        if ($taxRate <= 0) {
+        //            return null;
+        //        }
+
+        //        return $taxableAmount->multiply($taxRate);
+        return new Money(0, CurrencyHelper::defaultCurrency());
+    }
+
+    public function getAdditionalCosts(): array
+    {
+        return $this->additionalCosts;
     }
 }

@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Log;
-use Money\Currency;
-use Money\Money;
 
 class CheckoutComponent extends Component
 {
@@ -82,17 +80,7 @@ class CheckoutComponent extends Component
     #[Computed]
     public function total()
     {
-        $total = $this->cartService->getTotal();
-        if ($this->shippingCost > 0) {
-            $total = $total->add(
-                new Money(
-                    $this->shippingCost,
-                    new Currency($total->getCurrency())
-                )
-            );
-        }
-
-        return $total;
+        return $this->cartService->getTotal();
     }
 
     public function placeOrderAndPay(): void
@@ -209,10 +197,5 @@ class CheckoutComponent extends Component
         } finally {
             $this->processing = false;
         }
-    }
-
-    public function render()
-    {
-        return view("livewire.checkout-component");
     }
 }
