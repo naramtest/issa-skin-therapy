@@ -6,23 +6,21 @@ use App\Enums\Checkout\CartCostType;
 use App\Enums\ProductType;
 use App\Models\Bundle;
 use App\Models\Product;
-use App\Services\Currency\CurrencyHelper;
-use App\ValueObjects\AdditionalCost;
-use App\ValueObjects\CartItem;
 use Exception;
 use Log;
 use Money\Money;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-class CartService
+readonly class CartService
 {
-    private array $additionalCosts = [];
     //    TODO: add USer Currency to the final order with the current currency conversion rate
     private CartRedisService $redisService;
 
-    public function __construct()
-    {
+    public function __construct(
+        private CartPriceCalculator $priceCalculator,
+        private CartCostsManager $costsManager
+    ) {
         $this->redisService = new CartRedisService($this->resolveCartId());
     }
 
@@ -57,21 +55,6 @@ class CartService
         return $cartId;
     }
 
-    public function addCost(CartCostType $type, Money $amount): void
-    {
-        $this->additionalCosts[$type->value] = new AdditionalCost(
-            type: $type->value,
-            amount: $amount,
-            label: $type->getLabel(),
-            taxable: $type->isTaxable()
-        );
-    }
-
-    public function removeCost(CartCostType $type): void
-    {
-        unset($this->additionalCosts[$type->value]);
-    }
-
     public function getId(): string
     {
         return $this->resolveCartId();
@@ -97,9 +80,6 @@ class CartService
         }
 
         $this->redisService->addItem($purchasable, $quantity, $options);
-
-        // Additional business logic
-        // event(new ItemAddedToCart($product, $quantity));
     }
 
     public function removeItem(string $itemId): void
@@ -128,6 +108,7 @@ class CartService
     public function clear(): void
     {
         $this->redisService->clear();
+        $this->costsManager->clearCosts();
     }
 
     public function isEmpty(): bool
@@ -147,70 +128,31 @@ class CartService
 
     public function getTotal(): Money
     {
-        // 1. Start with subtotal
-        $total = $this->getSubtotal();
-        $taxableAmount = $this->getSubtotal();
-
-        // 2. Process all costs first, keeping track of taxable amount
-        foreach ($this->additionalCosts as $cost) {
-            // Add to total
-            $total = $total->add($cost->amount);
-
-            // If taxable, add to taxable amount for tax calculation
-            if ($cost->taxable) {
-                $taxableAmount = $taxableAmount->add($cost->amount);
-            }
-        }
-
-        // 3. Calculate and add tax based on total taxable amount
-        $tax = $this->calculateTax($taxableAmount);
-        if ($tax) {
-            $total = $total->add($tax);
-        }
-
-        return $total;
-    }
-
-    public function getSubtotal(): Money
-    {
-        $initial = new Money(0, CurrencyHelper::defaultCurrency());
-        try {
-            return array_reduce(
-                $this->getItems(),
-                fn(Money $carry, CartItem $item) => $carry->add(
-                    $item->getSubtotal()
-                ),
-                $initial
-            );
-        } catch (Exception) {
-            return $initial;
-        }
+        return $this->priceCalculator->calculateTotal($this->getItems());
     }
 
     public function getItems(): array
     {
-        try {
-            return $this->redisService->getItems();
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            return [];
-        }
+        return $this->redisService->getItems();
     }
 
-    protected function calculateTax(Money $taxableAmount): ?Money
+    public function getSubtotal(): Money
     {
-        //        TODO: taxes
-        //        $taxRate = $this->getTaxRate();
-        //        if ($taxRate <= 0) {
-        //            return null;
-        //        }
+        return $this->priceCalculator->calculateSubtotal($this->getItems());
+    }
 
-        //        return $taxableAmount->multiply($taxRate);
-        return new Money(0, CurrencyHelper::defaultCurrency());
+    public function addCost(CartCostType $type, Money $amount): void
+    {
+        $this->costsManager->addCost($type, $amount);
+    }
+
+    public function removeCost(CartCostType $type): void
+    {
+        $this->costsManager->removeCost($type);
     }
 
     public function getAdditionalCosts(): array
     {
-        return $this->additionalCosts;
+        return $this->costsManager->getCosts();
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\ValueObjects\CartItem;
 use Exception;
 use Illuminate\Support\Facades\Redis;
+use Log;
 
 class CartRedisService
 {
@@ -18,13 +19,18 @@ class CartRedisService
     {
     }
 
-    /**
-     * @throws Exception
-     */
     public function getItems(): array
     {
         $cartData = Redis::hgetall($this->getKey());
-        return array_map(fn($item) => $this->unserializeItem($item), $cartData);
+        try {
+            return array_map(
+                fn($item) => $this->unserializeItem($item),
+                $cartData
+            );
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return [];
+        }
     }
 
     private function getKey(): string
