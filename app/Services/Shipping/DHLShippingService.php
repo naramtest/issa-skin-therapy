@@ -2,6 +2,7 @@
 
 namespace App\Services\Shipping;
 
+use App\Services\Currency\CurrencyHelper;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Http;
@@ -164,12 +165,16 @@ class DHLShippingService
             $pricing = $product["totalPrice"][0];
 
             if (isset($pricing["price"]) && $pricing["price"] > 0) {
+                $priceInSubunits = CurrencyHelper::convertToSubunits(
+                    $pricing["price"],
+                    $pricing["priceCurrency"]
+                );
                 $rates[] = [
                     "service_code" => $product["productCode"],
                     "service_name" =>
                         $product["productName"] ??
                         "DHL " . $product["productCode"],
-                    "total_price" => floatval($pricing["price"]),
+                    "total_price" => $priceInSubunits,
                     "currency" => $pricing["priceCurrency"],
                     "estimated_days" => $this->calculateDeliveryDays($product),
                     "guaranteed" =>

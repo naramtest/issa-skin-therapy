@@ -6,7 +6,12 @@
 ])
 
 <div class="space-y-4">
-    @if ($shippingRates->isEmpty())
+    @if (! $this->canCalculateShipping)
+        <p class="text-gray-500">
+            Please complete your address details to view available shipping
+            methods
+        </p>
+    @elseif ($shippingRates->isEmpty())
         <p class="text-gray-500">
             {{ __("store.No shipping methods available for your location") }}
         </p>
@@ -38,10 +43,11 @@
                                 </div>
                                 <div class="">
                                     @if ($rate["total_price"] > 0)
-                                        <p class="font-medium text-gray-900">
-                                            {{ number_format($rate["total_price"], 2) }}
-                                            {{ $rate["currency"] }}
-                                        </p>
+                                        @php
+                                            $money = new \Money\Money($rate["total_price"], new \Money\Currency($rate["currency"]));
+                                        @endphp
+
+                                        <x-price :money="$money" />
                                     @endif
 
                                     @if ($rate["guaranteed"])

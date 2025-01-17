@@ -3,40 +3,65 @@
 namespace App\Traits;
 
 use App\Services\Shipping\DHLShippingService;
+use Exception;
 use Log;
 
 trait WithShippingCalculation
 {
+    //  TODO: Organize
+    public bool $canCalculateShipping = false;
+
     public function initializeWithShippingCalculation(): void
     {
         $this->shippingRates = collect();
+        // Check address completeness on initialization
+        $this->checkAddressCompleteness();
     }
 
-    public function updatedFormBillingCountry($value): void
+    protected function checkAddressCompleteness(): void
     {
-        if (!$this->form->different_shipping_address) {
+        $this->canCalculateShipping = $this->hasCompleteAddress();
+
+        if ($this->canCalculateShipping) {
             $this->calculateShippingRates();
+        } else {
+            $this->shippingRates = collect();
+            $this->selectedShippingRate = null;
         }
+    }
+
+    protected function hasCompleteAddress(): bool
+    {
+        if ($this->form->different_shipping_address) {
+            return !empty($this->form->shipping_country) &&
+                !empty($this->form->shipping_state) &&
+                !empty($this->form->shipping_city) &&
+                !empty($this->form->shipping_postal_code);
+        }
+
+        return !empty($this->form->billing_country) &&
+            !empty($this->form->billing_state) &&
+            !empty($this->form->billing_city) &&
+            !empty($this->form->billing_postal_code);
     }
 
     public function calculateShippingRates(): void
     {
         $this->loadingRates = true;
-        $this->shippingRates = collect();
-        $this->selectedShippingRate = null;
 
         try {
             $destination = $this->getShippingAddress();
 
-            // If we don't have the minimum required address fields, return
             if (empty($destination)) {
                 $this->shippingRates = collect();
                 return;
             }
 
-            // Add free shipping for US orders
+            $rates = collect();
+
+            // Add free shipping for UAE
             if ($destination["country"] === "AE") {
-                $this->shippingRates->push([
+                $rates->push([
                     "service_code" => "free_shipping",
                     "service_name" => __("store.Free Shipping"),
                     "total_price" => 0,
@@ -57,17 +82,20 @@ trait WithShippingCalculation
                 )
             );
 
-            // Merge DHL rates with free shipping option
-            $this->shippingRates = $this->shippingRates->concat($dhlRates);
+            // Merge rates
+            $this->shippingRates = $rates->concat($dhlRates);
 
-            // Select first available rate by default
-            if ($this->shippingRates->isNotEmpty()) {
+            // Select first rate if none selected
+            if (
+                $this->shippingRates->isNotEmpty() &&
+                empty($this->selectedShippingRate)
+            ) {
                 $this->selectedShippingRate = $this->shippingRates->first()[
                     "service_code"
                 ];
                 $this->updateTotals();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Shipping calculation failed", [
                 "error" => $e->getMessage(),
                 "trace" => $e->getTraceAsString(),
@@ -77,6 +105,7 @@ trait WithShippingCalculation
                 "error",
                 __("store.Shipping calculation failed. Please try again.")
             );
+            $this->shippingRates = collect();
         } finally {
             $this->loadingRates = false;
         }
@@ -171,59 +200,51 @@ trait WithShippingCalculation
         ];
     }
 
-    public function updateTotals(): void
+    protected function updateTotals(): void
     {
-        if ($this->selectedShippingRate) {
+        if ($this->selectedShippingRate && $this->shippingRates->isNotEmpty()) {
             $rate = $this->shippingRates->firstWhere(
                 "service_code",
                 $this->selectedShippingRate
             );
             if ($rate) {
-                // Update order shipping cost and total
                 $this->shippingCost = $rate["total_price"];
+                unset($this->total);
+                logger($this->total->getAmount());
                 // Recalculate total with shipping
                 //                $this->calculateTotal();
             }
         }
     }
 
-    public function updatedFormBillingCity($value): void
+    public function updatedSelectedShippingRate($value): void
     {
-        if (!$this->form->different_shipping_address) {
-            $this->calculateShippingRates();
+        // Don't recalculate rates when only changing selected rate
+        $this->updateTotals();
+    }
+
+    public function updated($field): void
+    {
+        // Only recalculate shipping when address fields change
+        if ($this->isAddressField($field)) {
+            $this->checkAddressCompleteness();
         }
     }
 
-    public function updatedFormBillingPostalCode($value): void
+    protected function isAddressField(string $field): bool
     {
-        if (!$this->form->different_shipping_address) {
-            $this->calculateShippingRates();
-        }
-    }
+        $addressFields = [
+            "form.billing_country",
+            "form.billing_state",
+            "form.billing_city",
+            "form.billing_postal_code",
+            "form.shipping_country",
+            "form.shipping_state",
+            "form.shipping_city",
+            "form.shipping_postal_code",
+            "form.different_shipping_address",
+        ];
 
-    public function updatedFormShippingCountry($value): void
-    {
-        if ($this->form->different_shipping_address) {
-            $this->calculateShippingRates();
-        }
-    }
-
-    public function updatedFormShippingCity($value): void
-    {
-        if ($this->form->different_shipping_address) {
-            $this->calculateShippingRates();
-        }
-    }
-
-    public function updatedFormShippingPostalCode($value): void
-    {
-        if ($this->form->different_shipping_address) {
-            $this->calculateShippingRates();
-        }
-    }
-
-    public function updatedFormDifferentShippingAddress($value): void
-    {
-        $this->calculateShippingRates();
+        return in_array($field, $addressFields);
     }
 }

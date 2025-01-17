@@ -140,4 +140,17 @@ class CurrencyHelper
 
         return $parser->parse($amount, new Currency($currency));
     }
+
+    public static function convertToSubunits(
+        float $amount,
+        string $currency
+    ): int {
+        // Get the number of decimal places for the currency
+        $currencies = new ISOCurrencies();
+        $currency = new Currency($currency);
+        $subunitDivisor = 10 ** $currencies->subunitFor($currency);
+
+        // Convert to subunits (cents)
+        return (int) round($amount * $subunitDivisor);
+    }
 }
