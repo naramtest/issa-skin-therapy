@@ -3,14 +3,10 @@
 namespace App\Traits;
 
 use App\Services\Shipping\DHLShippingService;
-use Illuminate\Support\Collection;
+use Log;
 
 trait WithShippingCalculation
 {
-    public Collection $shippingRates;
-    public ?string $selectedShippingRate = null;
-    public bool $loadingRates = false;
-
     public function initializeWithShippingCalculation(): void
     {
         $this->shippingRates = collect();
@@ -30,43 +26,41 @@ trait WithShippingCalculation
         $this->selectedShippingRate = null;
 
         try {
-            $dhlService = app(DHLShippingService::class);
-
-            // Get store address from config or database
-            $origin = [
-                "country" => config("store.address.country"),
-                "city" => config("store.address.city"),
-                "postal_code" => config("store.address.postal_code"),
-                "address" => config("store.address.address"),
-                "state" => config("store.address.state"),
-                "phone" => config("store.address.phone"),
-                "email" => config("store.address.email"),
-                "first_name" => config("store.name"),
-                "last_name" => "",
-            ];
-
-            // Get the appropriate address based on whether they're using a different shipping address
             $destination = $this->getShippingAddress();
 
-            // Get destination address
-            $destination = $this->getShippingAddress();
-
-            // If we don't have the minimum required address fields, clear rates and return
+            // If we don't have the minimum required address fields, return
             if (empty($destination)) {
                 $this->shippingRates = collect();
-                $this->selectedShippingRate = null;
-                $this->loadingRates = false;
                 return;
             }
 
-            // Calculate total package dimensions and weight
+            // Add free shipping for US orders
+            if ($destination["country"] === "AE") {
+                $this->shippingRates->push([
+                    "service_code" => "free_shipping",
+                    "service_name" => __("store.Free Shipping"),
+                    "total_price" => 0,
+                    "currency" => config("app.money_currency"),
+                    "estimated_days" => "5-7",
+                    "guaranteed" => false,
+                ]);
+            }
+
+            // Get DHL rates
+            $dhlService = app(DHLShippingService::class);
             $package = $this->calculatePackageDimensions();
+            $dhlRates = collect(
+                $dhlService->getRates(
+                    $package,
+                    $this->getStoreAddress(),
+                    $destination
+                )
+            );
 
-            // Get shipping rates from DHL
-            $rates = $dhlService->getRates($package, $origin, $destination);
+            // Merge DHL rates with free shipping option
+            $this->shippingRates = $this->shippingRates->concat($dhlRates);
 
-            $this->shippingRates = collect($rates);
-
+            // Select first available rate by default
             if ($this->shippingRates->isNotEmpty()) {
                 $this->selectedShippingRate = $this->shippingRates->first()[
                     "service_code"
@@ -74,8 +68,7 @@ trait WithShippingCalculation
                 $this->updateTotals();
             }
         } catch (\Exception $e) {
-            // Log error and show user-friendly message
-            \Log::error("Shipping calculation failed", [
+            Log::error("Shipping calculation failed", [
                 "error" => $e->getMessage(),
                 "trace" => $e->getTraceAsString(),
             ]);
@@ -160,6 +153,21 @@ trait WithShippingCalculation
             "length" => max($maxLength, 1), // Minimum 1cm
             "width" => max($maxWidth, 1), // Minimum 1cm
             "height" => max($maxHeight, 1), // Minimum 1cm
+        ];
+    }
+
+    protected function getStoreAddress(): array
+    {
+        return [
+            "country" => config("store.address.country"),
+            "city" => config("store.address.city"),
+            "postal_code" => config("store.address.postal_code"),
+            "address" => config("store.address.address"),
+            "state" => config("store.address.state"),
+            "phone" => config("store.address.phone"),
+            "email" => config("store.address.email"),
+            "first_name" => config("store.name"),
+            "last_name" => "",
         ];
     }
 

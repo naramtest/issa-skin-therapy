@@ -271,4 +271,10 @@ return [
     "Your Cart" => "Your Cart",
     "Continue shopping" => "Continue shopping",
     "business_days" => "{1} :count business day|[2,*] :count business days",
+    "Free" => "Free",
+    "Select shipping method" => "Select shipping method",
+    "Estimated delivery" => "Estimated delivery",
+    "Guaranteed delivery" => "Guaranteed delivery",
+    "No shipping methods available for your location" =>
+        "No shipping methods available for your location",
 ];

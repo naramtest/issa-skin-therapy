@@ -36,6 +36,8 @@
 //TODO: add swiper animation in home page
 //TODO: add Scale animation for the cards
 
+//TODO: Later make a full shipping zones and class system
+
 // use this for product card for seo
 //<div class="product" itemscope itemtype="https://schema.org/Product">
 //  <h2 itemprop="name">Product Name</h2>
