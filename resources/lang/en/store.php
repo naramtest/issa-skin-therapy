@@ -281,4 +281,10 @@ return [
     "Handling Fee" => "Handling Fee",
     "Discount" => "Discount",
     "Insurance" => "Insurance",
+    "Select Country" => "Select Country",
+    "Country / Region" => "Country / Region",
+    "State / County" => "State / County",
+    "Select State" => "Select State",
+    "Town / City" => "Town / City",
+    "Select City" => "Select City",
 ];

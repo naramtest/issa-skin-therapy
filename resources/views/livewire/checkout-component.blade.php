@@ -2,7 +2,12 @@
     <form wire:submit="placeOrderAndPay" class="mx-auto">
         <div class="grid grid-cols-1 gap-x-6 lg:grid-cols-[56%_auto]">
             <!-- Left Column - Information Form -->
-            <x-checkout.sections.form :form="$form" />
+            <x-checkout.sections.form
+                :form="$form"
+                :billing-cities="$billingCities"
+                :billing-state="$billingStates"
+                :countries="$countries"
+            />
 
             <!-- Right Column - Order Summary -->
             <div class="relative rounded-lg">

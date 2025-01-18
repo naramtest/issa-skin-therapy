@@ -250,11 +250,26 @@ class LocationService
             "cities.$stateId",
             now()->addDay(),
             function () use ($stateId) {
-                return City::active()
+                $cities = City::active()
                     ->where("state_id", $stateId)
                     ->orderBy("name")
                     ->select(["id", "name"])
                     ->get();
+
+                // If no cities found, create a virtual city with the state name
+                if ($cities->isEmpty()) {
+                    $state = State::find($stateId);
+                    if ($state) {
+                        return collect([
+                            (object) [
+                                "id" => $stateId,
+                                "name" => $state->name,
+                            ],
+                        ]);
+                    }
+                }
+
+                return $cities;
             }
         );
     }

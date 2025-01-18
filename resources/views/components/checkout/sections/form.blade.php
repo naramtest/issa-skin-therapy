@@ -1,5 +1,8 @@
 @props([
-    /**@var\App\Livewire\Forms\CheckoutForm*/"form",
+    "form",
+    "billingCities",
+    "billingStates",
+    "countries",
 ])
 
 <div class="rounded-2xl border bg-white p-8">
@@ -50,31 +53,29 @@
         />
 
         <!-- Billing Address Section -->
-        <x-checkout.select-field
-            label="Country / Region"
-            wire:model.live="form.billing_country"
-            required
-            field="form.billing_country"
-            :options="['KW','AE','Syria']"
-            :error="$errors->first('form.billing_country')"
-        />
-        <x-checkout.select-field
-            label="State / Region"
-            wire:model="form.billing_state"
-            required
-            field="form.billing_state"
-            :options="['Kuwait','Dubai','Syria']"
-            :error="$errors->first('form.billing_state')"
-        />
+        <div
+            x-data="{ loading: false }"
+            x-on:loading.window="loading = $event.detail.loading"
+            class="relative"
+        >
+            <!-- Loading overlay -->
+            <div
+                x-show="loading"
+                class="absolute inset-0 z-10 flex items-center justify-center bg-white bg-opacity-75"
+            >
+                <div
+                    class="h-8 w-8 animate-spin rounded-full border-b-2 border-gray-900"
+                ></div>
+            </div>
 
-        <x-checkout.input-field
-            label="City"
-            wire:model="form.billing_city"
-            required
-            place-holder="City"
-            field="form.billing_city"
-            :error="$errors->first('form.billing_city')"
-        />
+            <!-- Location selects -->
+            <x-checkout.sections.location-selects
+                type="billing"
+                :billing-cities="$billingCities"
+                :billing-states="$billingState"
+                :countries="$countries"
+            />
+        </div>
 
         <x-checkout.input-field
             label="Street Address"

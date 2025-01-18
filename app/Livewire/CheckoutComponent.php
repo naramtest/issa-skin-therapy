@@ -8,6 +8,7 @@ use App\Services\Cart\CartService;
 use App\Services\Checkout\CustomerCheckoutService;
 use App\Services\Checkout\OrderService;
 use App\Services\Payment\StripePaymentService;
+use App\Traits\Checkout\LocationHandler;
 use App\Traits\WithShippingCalculation;
 use Exception;
 use Illuminate\Support\Collection;
@@ -19,6 +20,7 @@ use Log;
 class CheckoutComponent extends Component
 {
     use WithShippingCalculation;
+    use LocationHandler;
 
     public CheckoutForm $form;
     public Collection $shippingRates;
@@ -53,8 +55,18 @@ class CheckoutComponent extends Component
             return;
         }
 
+        // Initialize location handling
+        $this->initializeLocationHandler();
         if (auth()->check()) {
             $this->form->setFromUser(auth()->user());
+
+            // Load states and cities if user has address
+            //            if ($this->form->billing_country) {
+            //                $this->updatedFormBillingCountry($this->form->billing_country);
+            //                if ($this->form->billing_state) {
+            //                    $this->updatedFormBillingState($this->form->billing_state);
+            //                }
+            //            }
         }
 
         // Initialize shipping-related properties
