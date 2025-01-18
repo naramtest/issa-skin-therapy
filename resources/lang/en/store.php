@@ -287,4 +287,22 @@ return [
     "Select State" => "Select State",
     "Town / City" => "Town / City",
     "Select City" => "Select City",
+    // Coupon Types
+    "Fixed Amount" => "Fixed Amount",
+    "Percentage" => "Percentage",
+
+    // Coupon Descriptions
+    "A fixed amount discount" => "A fixed amount discount",
+    "A percentage of cart total" => "A percentage of cart total",
+    "Free shipping on order" => "Free shipping on order",
+
+    // Validation Messages
+    "Invalid coupon code" => "Invalid coupon code",
+    "This coupon is no longer valid" => "This coupon is no longer valid",
+    "Minimum spend of :amount required" => "Minimum spend of :amount required",
+    "Maximum spend of :amount exceeded" => "Maximum spend of :amount exceeded",
+
+    // Form Labels
+    "If you have a coupon code" =>
+        "If you have a coupon code, please apply it below.",
 ];
