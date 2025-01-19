@@ -305,4 +305,6 @@ return [
     // Form Labels
     "If you have a coupon code" =>
         "If you have a coupon code, please apply it below.",
+    "Coupon" => "Coupon",
+    "Coupons" => "Coupons",
 ];
