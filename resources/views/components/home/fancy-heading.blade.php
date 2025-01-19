@@ -11,7 +11,7 @@
     }"
     class="w-fit"
 >
-    <h3 class="text-3xl font-[800] md:text-[2.75rem] md:leading-[48px]">
+    <h3 class="text-4xl font-[800] md:leading-[48px] lg:text-[2.75rem]">
         <span class="mb-1 md:block">{{ __("dashboard.Skin") }}</span>
         <span class="relative mb-1 md:block">
             {{ __("dashboard.That Defies") }}

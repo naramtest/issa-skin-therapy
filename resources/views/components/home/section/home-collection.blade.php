@@ -6,16 +6,16 @@
     class="content-x-padding mt-6 py-10 md:mt-10 md:py-14"
 >
     <div
-        class="flex flex-col justify-between gap-y-4 md:flex-row md:items-center md:px-14"
+        class="flex flex-col justify-between gap-y-4 md:flex-row md:items-center md:px-4 lg:px-14"
     >
-        <div class="md:w-[25%]">
+        <div class="md:w-[40%] lg:w-[25%]">
             <x-home.fancy-heading />
             <a
                 href="{{ route("about.index") }}"
-                class="mt-5 inline-block w-[150px] md:mt-10 md:w-[200px]"
+                class="mt-5 mt-6 inline-block w-[150px] md:w-[200px] lg:mt-10"
             >
                 <x-general.button-white-animation
-                    class="!border-[1px] !border-[#a5bbc4] py-3 md:border md:!border-black md:!py-4"
+                    class="!border-[1px] !border-[#a5bbc4] py-3 md:border md:!border-black lg:!py-4"
                 >
                     <span class="relative z-10 inline-block">
                         {{ __("store.Our Story") }}
@@ -23,7 +23,7 @@
                 </x-general.button-white-animation>
             </a>
         </div>
-        <ol class="text-lg md:w-[60%] md:text-2xl">
+        <ol class="text-lg md:w-[60%] md:text-xl lg:text-2xl">
             <li class="mb-1">
                 {{ __("store.1. Crafted by Dr") }}
             </li>

@@ -13,7 +13,7 @@
             background-size: cover;
             background-position: center center;
         "
-        class="card-hover-trigger full-rounded card-overlay relative h-[300px] rounded-[20px] md:h-[450px] md:w-[25%]"
+        class="card-hover-trigger full-rounded card-overlay relative h-[300px] rounded-[20px] md:w-[32%] lg:h-[450px] lg:w-[25%]"
     >
         <a
             aria-label="{{ $title }}"
@@ -37,7 +37,7 @@
     </div>
     <div
         x-data="collectionSwiper()"
-        class="mt-6 w-full md:ms-6 md:mt-0 md:w-[74%]"
+        class="mt-6 w-full md:ms-6 md:mt-0 md:w-[67%] lg:w-[74%]"
     >
         <div class="collection-swiper swiper h-full">
             <div class="swiper-wrapper">
@@ -60,7 +60,7 @@
                     breakpoints: {
                         // when window width is >= 320px
                         640: {
-                            slidesPerView: 1,
+                            slidesPerView: 2,
                             spaceBetween: 10,
                         },
                         // when window width is >= 480px
