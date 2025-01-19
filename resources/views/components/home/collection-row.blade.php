@@ -35,7 +35,10 @@
             </div>
         </a>
     </div>
-    <div x-data="collectionSwiper()" class="md:ms-6 w-full md:w-[74%]">
+    <div
+        x-data="collectionSwiper()"
+        class="mt-6 w-full md:ms-6 md:mt-0 md:w-[74%]"
+    >
         <div class="collection-swiper swiper h-full">
             <div class="swiper-wrapper">
                 {{ $slot }}
@@ -51,9 +54,21 @@
             return {
                 collectionSwiper: new Swiper('.collection-swiper', {
                     modules: [Autoplay],
-                    slidesPerView: 3,
+                    slidesPerView: 1,
                     spaceBetween: 10,
                     speed: 800,
+                    breakpoints: {
+                        // when window width is >= 320px
+                        640: {
+                            slidesPerView: 1,
+                            spaceBetween: 10,
+                        },
+                        // when window width is >= 480px
+                        900: {
+                            slidesPerView: 3,
+                            spaceBetween: 10,
+                        },
+                    },
                     autoplay: {
                         delay: 5000,
                         disableOnInteraction: false,
