@@ -18,9 +18,13 @@
                         :total="$this->total"
                         :selected-shipping-rate="$selectedShippingRate"
                         :shipping-rates="$shippingRates"
+                        :discount="$this->discount"
                     />
                     <!-- Coupon Code -->
-                    <x-checkout.sections.coupon />
+                    <x-checkout.sections.coupon
+                        :coupon-error="$couponError"
+                        :form="$form"
+                    />
 
                     <!-- Payment -->
                     <x-checkout.sections.payment :error="$error" />

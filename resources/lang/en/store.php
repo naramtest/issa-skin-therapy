@@ -307,4 +307,6 @@ return [
         "If you have a coupon code, please apply it below.",
     "Coupon" => "Coupon",
     "Coupons" => "Coupons",
+    "Please enter a coupon code" => "Please enter a coupon code",
+    "Coupon applied" => "Coupon applied",
 ];

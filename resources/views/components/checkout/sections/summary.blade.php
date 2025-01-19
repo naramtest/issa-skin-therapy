@@ -4,6 +4,7 @@
     "subtotal",
     "shippingRates",
     "selectedShippingRate",
+    "discount",
 ])
 
 <div class="rounded-2xl bg-[#F5F5F5] p-8">
@@ -52,6 +53,16 @@
                     <x-price :money="$subtotal" />
                 </td>
             </tr>
+            @if ($discount)
+                <tr>
+                    <td class="py-4">{{ __("store.Discount") }}</td>
+                    <td class="py-4 text-right text-green-600">
+                        -
+                        <x-price :money="$discount" />
+                    </td>
+                </tr>
+            @endif
+
             <tr>
                 <td class="py-4">
                     {{ __("store.Shipping") }}

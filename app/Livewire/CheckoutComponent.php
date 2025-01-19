@@ -9,6 +9,7 @@ use App\Services\Checkout\CustomerCheckoutService;
 use App\Services\Checkout\OrderService;
 use App\Services\Payment\StripePaymentService;
 use App\Traits\Checkout\LocationHandler;
+use App\Traits\Checkout\WithCouponHandler;
 use App\Traits\WithShippingCalculation;
 use Exception;
 use Illuminate\Support\Collection;
@@ -21,6 +22,7 @@ class CheckoutComponent extends Component
 {
     use WithShippingCalculation;
     use LocationHandler;
+    use WithCouponHandler;
 
     public CheckoutForm $form;
     public Collection $shippingRates;
@@ -57,6 +59,7 @@ class CheckoutComponent extends Component
 
         // Initialize location handling
         $this->initializeLocationHandler();
+        $this->initializeWithCouponHandler();
         if (auth()->check()) {
             $this->form->setFromUser(auth()->user());
 
@@ -209,5 +212,11 @@ class CheckoutComponent extends Component
         } finally {
             $this->processing = false;
         }
+    }
+
+    #[Computed]
+    public function discount(): ?\Money\Money
+    {
+        return $this->getCouponDiscountAmount();
     }
 }

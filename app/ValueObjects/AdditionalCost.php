@@ -10,7 +10,8 @@ readonly class AdditionalCost
         public string $type,
         public Money $amount,
         public string $label,
-        public bool $taxable = false
+        public bool $taxable = false,
+        public bool $subtract = false
     ) {
     }
 }

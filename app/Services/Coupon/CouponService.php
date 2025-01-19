@@ -85,14 +85,18 @@ class CouponService
         };
     }
 
-    protected function recordUsage(Coupon $coupon, Order $order, Customer $customer, Money $discount): void
-    {
+    public function recordUsage(
+        Coupon $coupon,
+        Order $order,
+        Customer $customer,
+        Money $discount
+    ): void {
         CouponUsage::create([
-            'coupon_id' => $coupon->id,
-            'order_id' => $order->id,
-            'customer_id' => $customer->id,
-            'discount_amount' => $discount->getAmount(),
-            'used_at' => now(),
+            "coupon_id" => $coupon->id,
+            "order_id" => $order->id,
+            "customer_id" => $customer->id,
+            "discount_amount" => $discount->getAmount(),
+            "used_at" => now(),
         ]);
 
         $coupon->incrementUsage();

@@ -10,13 +10,15 @@ use App\Models\CustomerAddress;
 use App\Models\CustomerEmail;
 use App\Models\Order;
 use App\Services\Cart\CartService;
+use App\Services\Coupon\CouponService;
 use DB;
 
 readonly class CustomerCheckoutService
 {
     public function __construct(
         private OrderService $orderService,
-        private CartService $cartService
+        private CartService $cartService,
+        private CouponService $couponService
     ) {
     }
 
@@ -54,6 +56,15 @@ readonly class CustomerCheckoutService
                 "subtotal" => $this->cartService->getSubtotal()->getAmount(),
                 "total" => $this->cartService->getTotal()->getAmount(),
             ]);
+
+            if ($coupon = $this->cartService->getAppliedCoupon()) {
+                $this->couponService->recordUsage(
+                    $coupon,
+                    $order,
+                    $order->customer,
+                    $this->cartService->getCouponDiscount()
+                );
+            }
 
             // 4. Clear the cart after successful order creation
             //            $this->cartService->clear();

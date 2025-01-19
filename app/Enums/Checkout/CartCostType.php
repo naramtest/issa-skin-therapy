@@ -28,4 +28,12 @@ enum CartCostType: string
             default => false,
         };
     }
+
+    public function isSubtract(): bool
+    {
+        return match ($this) {
+            self::DISCOUNT => true,
+            default => false,
+        };
+    }
 }

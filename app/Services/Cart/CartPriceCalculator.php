@@ -30,7 +30,9 @@ readonly class CartPriceCalculator
         // 3. Calculate total with tax
         $total = $subtotal;
         foreach ($this->costsManager->getCosts() as $cost) {
-            $total = $total->add($cost->amount);
+            $total = $cost->subtract
+                ? $total->subtract($cost->amount)
+                : $total->add($cost->amount);
         }
 
         $tax = $this->taxCalculator->calculateTax($taxableAmount);

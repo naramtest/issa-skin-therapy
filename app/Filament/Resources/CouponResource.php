@@ -42,18 +42,18 @@ class CouponResource extends Resource
 
                 Tables\Columns\TextColumn::make("discount_amount")
                     ->sortable()
-                    ->money(
-                        fn(Model $record) => $record->discount_type ===
-                        CouponType::PERCENTAGE->value
-                            ? ""
-                            : "USD"
-                    )
-                    ->suffix(
-                        fn(Model $record) => $record->discount_type ===
-                        CouponType::PERCENTAGE->value
-                            ? "%"
-                            : ""
-                    ),
+                    ->formatStateUsing(function ($state, Model $record) {
+                        if (
+                            $record->discount_type ===
+                            CouponType::PERCENTAGE->value
+                        ) {
+                            return $state . "%";
+                        }
+
+                        return CurrencyHelper::format(
+                            new Money($state, CurrencyHelper::defaultCurrency())
+                        );
+                    }),
 
                 Tables\Columns\TextColumn::make("used_count")->sortable(),
 

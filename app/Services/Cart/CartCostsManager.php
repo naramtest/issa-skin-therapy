@@ -16,7 +16,8 @@ class CartCostsManager
             type: $type->value,
             amount: $amount,
             label: $type->getLabel(),
-            taxable: $type->isTaxable()
+            taxable: $type->isTaxable(),
+            subtract: $type->isSubtract()
         );
     }
 

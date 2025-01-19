@@ -96,7 +96,7 @@ class CheckoutForm extends Form
     #[Rule("required|in:card")]
     public string $payment_method = "card";
 
-    // Coupon
+    #[Rule("nullable|string|max:50")]
     public ?string $coupon_code = null;
 
     public function setFromUser($user): void
