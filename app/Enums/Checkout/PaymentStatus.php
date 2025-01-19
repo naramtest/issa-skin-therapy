@@ -25,9 +25,9 @@ enum PaymentStatus: string implements HasLabel, HasColor
     public function getColor(): string
     {
         return match ($this) {
-            self::PENDING => "yellow",
-            self::PAID => "green",
-            self::FAILED => "red",
+            self::PENDING => "warning",
+            self::PAID => "success",
+            self::FAILED => "danger",
             self::REFUNDED => "gray",
         };
     }

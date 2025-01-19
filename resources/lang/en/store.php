@@ -309,4 +309,9 @@ return [
     "Coupons" => "Coupons",
     "Please enter a coupon code" => "Please enter a coupon code",
     "Coupon applied" => "Coupon applied",
+
+    "Order" => "order",
+    "Orders" => "orders",
+    "Customer" => "Customer",
+    "Failed" => "Failed",
 ];

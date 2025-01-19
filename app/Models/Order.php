@@ -43,13 +43,13 @@ class Order extends Model
     ];
 
     protected $casts = [
-        "status" => OrderStatus::class,
         "payment_status" => PaymentStatus::class,
         "exchange_rate" => "decimal:6",
         "payment_method_details" => "json",
         "payment_authorized_at" => "datetime",
         "payment_captured_at" => "datetime",
         "payment_refunded_at" => "datetime",
+        "status" => OrderStatus::class,
     ];
 
     public function customer(): BelongsTo

@@ -13,6 +13,8 @@ enum OrderStatus: string implements HasLabel, HasColor
     case CANCELLED = "cancelled";
     case REFUNDED = "refunded";
     case ON_HOLD = "on_hold";
+    case FAILED = "failed";
+    case DRAFT = "draft";
 
     public function getLabel(): string
     {
@@ -23,18 +25,20 @@ enum OrderStatus: string implements HasLabel, HasColor
             self::CANCELLED => __("store.Cancelled"),
             self::REFUNDED => __("store.Refunded"),
             self::ON_HOLD => __("store.On Hold"),
+            self::FAILED => __("store.Failed"),
+            self::DRAFT => __("dashboard.Draft"),
         };
     }
 
     public function getColor(): string
     {
         return match ($this) {
-            self::PENDING => "gray",
-            self::PROCESSING => "blue",
-            self::COMPLETED => "green",
-            self::CANCELLED => "red",
-            self::REFUNDED => "yellow",
-            self::ON_HOLD => "orange",
+            self::PENDING, self::DRAFT => "gray",
+            self::PROCESSING => "info", // Changed from blue
+            self::COMPLETED => "success", // Changed from green
+            self::CANCELLED, self::FAILED => "danger", // Changed from red
+            self::REFUNDED => "warning", // Changed from yellow
+            self::ON_HOLD => "orange", // Changed from orange
         };
     }
 }
