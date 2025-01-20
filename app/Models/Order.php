@@ -9,6 +9,7 @@ use Finller\Invoice\Invoice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Money\Money;
@@ -126,5 +127,10 @@ class Order extends Model
     public function invoices(): MorphMany
     {
         return $this->morphMany(Invoice::class, "invoiceable");
+    }
+
+    public function couponUsage(): HasOne
+    {
+        return $this->hasOne(CouponUsage::class);
     }
 }

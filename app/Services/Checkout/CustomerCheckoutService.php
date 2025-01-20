@@ -153,6 +153,13 @@ readonly class CustomerCheckoutService
             $existingAddress->update([
                 "last_used_at" => now(),
                 "phone" => $addressData["phone"],
+                "first_name" => $addressData["first_name"],
+                "last_name" => $addressData["last_name"],
+                "state" => $addressData["state"] ?? null,
+                "area" => $addressData["area"] ?? null,
+                "building" => $addressData["building"] ?? null,
+                "flat" => $addressData["flat"] ?? null,
+                "is_default" => !$customer->addresses()->exists(),
             ]);
             return $existingAddress;
         }
