@@ -55,7 +55,6 @@
         image="{{asset('storage/images/product-home-collection.webp')}}"
         url="{{route('shop.index')}}"
     >
-        {{-- TODO: edit images to transparent bg --}}
         @foreach ($categories as $category)
             @unless (Str::contains($category->name, "&"))
                 <x-home.collection-swiper-slide

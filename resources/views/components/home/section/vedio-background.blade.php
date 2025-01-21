@@ -1,5 +1,5 @@
 <x-home.section-container
-    class="card-overlay relative mt-10 flex h-[600px] items-center justify-center overflow-hidden"
+    class="card-overlay relative mt-3 flex min-h-[400px] items-center justify-center overflow-hidden lg:mt-8 lg:min-h-[600px]"
 >
     <video
         class="absolute inset-0 h-full w-full object-cover"
@@ -11,11 +11,13 @@
         preload="auto"
         src="{{ asset("storage/video/hoempage3.webm") }}"
     ></video>
-    <div class="z-[10] flex w-[60%] flex-col items-center text-white">
-        <h2 class="headline-font w-[60%] text-center">
+    <div
+        class="z-[10] flex w-full flex-col items-center px-4 text-white lg:w-[60%] lg:px-0"
+    >
+        <h2 class="headline-font text-center lg:w-[60%]">
             {{ __("store.Our Patent Delivery Technology (PET)") }}
         </h2>
-        <p class="font-lg mt-4 text-center">
+        <p class="font-xl mt-4 text-center">
             {{ __("store.The ISSA SKIN THERAPY team recognized PET™’s potential in") }}
         </p>
         <a class="group mt-10 w-fit" href="{{ route("about.index") }} ">

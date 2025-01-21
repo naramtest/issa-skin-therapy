@@ -126,9 +126,9 @@ body {
 }
 
 .headline-font {
-    font-size: 2.75rem;
     font-weight: 800;
-    line-height: 48px;
+    line-height: 48px !important;
+    @apply text-4xl lg:text-[2.75rem]
 }
 
 
