@@ -359,4 +359,5 @@ return [
         game-changer for my skin. My skin feels fresher, cleaner, and more
         radiant!',
     ],
+    "FAQ s" => 'FAQ\'s',
 ];

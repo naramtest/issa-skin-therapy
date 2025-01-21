@@ -31,7 +31,7 @@
                     @click="selectActive({{ $loop->index }})"
                     :aria-expanded="isActive({{ $loop->index }}) ? 'true' : 'false'"
                 >
-                    <span class="font-semibold">
+                    <span class="text-start font-semibold">
                         {{ $faq->question }}
                     </span>
 
