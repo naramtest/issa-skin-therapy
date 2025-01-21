@@ -1,5 +1,5 @@
 <x-home.section-container
-    class="card-overlay relative mt-3 flex min-h-[400px] items-center justify-center overflow-hidden lg:mt-8 lg:min-h-[600px]"
+    class="card-overlay relative mt-3 flex min-h-[450px] items-center justify-center overflow-hidden lg:mt-8 lg:min-h-[600px]"
 >
     <video
         class="absolute inset-0 h-full w-full object-cover"

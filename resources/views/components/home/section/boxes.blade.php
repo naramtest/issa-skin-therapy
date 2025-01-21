@@ -1,6 +1,8 @@
-@props(['bundles'])
+@props([
+    "bundles",
+])
 <x-home.section-container
-    class="content-x-padding relative z-10 h-[600px] -translate-y-10 bg-lightColor py-14"
+    class="content-x-padding relative z-10 h-[600px] -translate-y-4 bg-lightColor py-14 md:-translate-y-10"
 >
     <h2 class="headline-font text-center">
         {{ __("store.Stepwise Skin Therapy Collection Boxes") }}
@@ -12,10 +14,9 @@
     <div x-data="boxesSwiper()" class="mt-6 w-full">
         <div class="boxes-swiper swiper">
             <div class="swiper-wrapper !h-[400px]">
-                @foreach($bundles as $bundle)
+                @foreach ($bundles as $bundle)
                     <x-home.boxes-slide :bundle="$bundle" />
                 @endforeach
-
             </div>
 
             <!-- Navigation arrows -->
@@ -47,15 +48,27 @@
                     isEnd: false,
                     boxesSwiper: null,
                     init() {
-                        this.boxesSwiper = new Swiper(".boxes-swiper", {
+                        this.boxesSwiper = new Swiper('.boxes-swiper', {
                             modules: [Pagination],
-                            slidesPerView: 3,
-                            spaceBetween: 20,
+                            slidesPerView: 1,
+                            spaceBetween: 10,
                             loop: false,
+                            breakpoints: {
+                                // when window width is >= 320px
+                                725: {
+                                    slidesPerView: 2,
+                                    spaceBetween: 10,
+                                },
+                                // when window width is >= 480px
+                                1150: {
+                                    slidesPerView: 3,
+                                    spaceBetween: 20,
+                                },
+                            },
                             pagination: {
-                                el: ".swiper-pagination",
+                                el: '.swiper-pagination',
                                 clickable: true,
-                                type: "bullets"
+                                type: 'bullets',
                             },
                             on: {
                                 reachBeginning: () => {
@@ -66,8 +79,8 @@
                                     this.isBeginning = false;
 
                                     this.isEnd = true;
-                                }
-                            }
+                                },
+                            },
                         });
                     },
                     nextSlide() {
@@ -79,7 +92,7 @@
                         if (!this.isBeginning) {
                             this.boxesSwiper.slidePrev(1000);
                         }
-                    }
+                    },
                 };
             }
         </script>
