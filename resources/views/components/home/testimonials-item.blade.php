@@ -27,7 +27,5 @@
             alt="{{ __("store.Logo") }}"
         />
     </figure>
-    <p class="mt-4 text-lg font-light italic">
-        {{ __("store.Jonathan Smith, ISSA") }}
-    </p>
+    <p class="mt-4 text-lg font-light italic">Jonathan Smith, ISSA</p>
 </div>

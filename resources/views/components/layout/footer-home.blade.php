@@ -18,7 +18,9 @@
             class="flex w-full flex-col justify-between border-[#ffffff21] text-white lg:w-[40%] lg:border-s lg:px-10"
         >
             <div>
-                <h3 class="text-2xl font-bold lg:text-[36px] lg:leading-[43px]">
+                <h3
+                    class="text-center text-2xl font-bold lg:text-start lg:text-[36px] lg:leading-[43px]"
+                >
                     {{ __("store.Subscribe for the latest offers & updates") }}
                 </h3>
                 <div

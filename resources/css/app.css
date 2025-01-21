@@ -45,7 +45,7 @@ body {
 }
 
 .padding-from-side-menu {
-    @apply px-[5.3rem]
+    @apply px-4 lg:px-[5.3rem]
 }
 
 
@@ -109,7 +109,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #1f1f1f;
+    background-color: #333F43;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     z-index: 5;

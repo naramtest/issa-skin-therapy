@@ -359,5 +359,4 @@ return [
         game-changer for my skin. My skin feels fresher, cleaner, and more
         radiant!',
     ],
-    "Jonathan Smith, ISSA" => "Jonathan Smith, ISSA",
 ];

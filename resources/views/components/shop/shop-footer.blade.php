@@ -5,9 +5,11 @@
                 background-repeat: no-repeat;
                 background-size: cover;
             "
-    class="card-overlay relative mt-10 flex h-[600px] items-center justify-center overflow-hidden before:opacity-30"
+    class="card-overlay relative mt-10 flex h-[450px] items-center justify-center overflow-hidden before:opacity-30 lg:h-[600px]"
 >
-    <div class="z-[10] flex w-[60%] flex-col items-center text-white">
+    <div
+        class="z-[10] flex w-full flex-col items-center px-4 text-center text-white lg:w-[60%] lg:px-0"
+    >
         <p class="text-[13px] font-[200] uppercase tracking-[2px]">
             {{ __("store.Made in USA") }}
         </p>
