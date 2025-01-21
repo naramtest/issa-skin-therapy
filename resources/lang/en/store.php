@@ -360,4 +360,5 @@ return [
         radiant!',
     ],
     "FAQ s" => 'FAQ\'s',
+    "Need help? Contact us" => "Need help? Contact us",
 ];

@@ -17,7 +17,7 @@
                     return this.activeIndex == index
                 },
             }"
-            class="w-full overflow-hidden px-3"
+            class="w-full overflow-hidden lg:px-3"
         >
             <x-product.more-info-item
                 :index="0"
@@ -43,25 +43,25 @@
                 {!! $product->how_to_use !!}
             </x-product.more-info-item>
             <x-product.more-info-item
-                :index="2"
+                :index="3"
                 title="{{ __('store.Key Ingredients') }}"
             >
                 {!! $product->key_ingredients !!}
             </x-product.more-info-item>
             <x-product.more-info-item
-                :index="2"
+                :index="4"
                 title="{{ __('store.Full ingredients') }}"
             >
                 {!! $product->full_ingredients !!}
             </x-product.more-info-item>
             <x-product.more-info-item
-                :index="2"
+                :index="5"
                 title="{{ __('store.Caution') }}"
             >
                 {!! $product->caution !!}
             </x-product.more-info-item>
             <x-product.more-info-item
-                :index="2"
+                :index="6"
                 title="{{ __('store.How to store') }}"
             >
                 {!! $product->how_to_store !!}

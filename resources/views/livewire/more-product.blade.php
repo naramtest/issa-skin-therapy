@@ -7,43 +7,11 @@
 >
     <h2 class="headline-font">{{ __("store.You may also like") }}</h2>
     <div class="mt-12 flex items-center justify-between">
-        <ul class="flex flex-1 items-center gap-x-4">
-            @foreach ($categories as $category)
-                @unless ($category->slug === "protect" || $category->slug === "hydrate")
-                    <x-product.categories-item
-                        id="{{$category->id}}"
-                        name="{{$category->name}}"
-                        :is-active="$selectedCategory === $category->id"
-                    />
-                @endunless
-            @endforeach
-
-            <x-product.categories-item
-                id="-1"
-                name="The Collections"
-                :is-active="$selectedCategory === -1"
-            />
-        </ul>
-        <div class="flex items-center">
-            <div
-                @click=" pervSlide()"
-                class="cursor-pointer rounded-full border border-darkColor px-4 py-3 transition-colors duration-200 hover:border-transparent hover:bg-gray-100"
-            >
-                <img
-                    src="{{ asset("storage/icons/small-arrow-left.svg") }}"
-                    alt="{{ __("store.Arrow Left") }}"
-                />
-            </div>
-            <div
-                @click="nextSlide()"
-                class="ms-3 cursor-pointer rounded-full border border-darkColor px-4 py-3 transition-colors duration-200 hover:border-transparent hover:bg-gray-100"
-            >
-                <img
-                    src="{{ asset("storage/icons/small-arrow-right.svg") }}"
-                    alt="{{ __("store.Arrow Right") }}"
-                />
-            </div>
-        </div>
+        <x-more-product.categories
+            :categories="$categories"
+            :selectedCategory="$selectedCategory"
+        />
+        <x-more-product.navigation class="hidden items-center lg:flex" />
     </div>
     <div
         wire:loading.class="opacity-0 invisible translate-y-4 h-0"
@@ -119,6 +87,9 @@
             </style>
         </div>
     </div>
+    <x-more-product.navigation
+        class="mt-4 flex items-center justify-center lg:hidden"
+    />
 
     @pushonce("scripts")
         <script>
@@ -137,9 +108,25 @@
                         }
 
                         this.productSwiper = new Swiper('.product-swiper', {
-                            slidesPerView: 4,
+                            slidesPerView: 1,
                             loop: true,
-                            spaceBetween: 20,
+                            spaceBetween: 10,
+                            breakpoints: {
+                                // when window width is >= 320px
+                                640: {
+                                    slidesPerView: 2,
+                                    spaceBetween: 20,
+                                },
+                                // when window width is >= 480px
+                                1000: {
+                                    slidesPerView: 3,
+                                    spaceBetween: 20,
+                                },
+                                1200: {
+                                    slidesPerView: 4,
+                                    spaceBetween: 20,
+                                },
+                            },
                         });
                     },
 

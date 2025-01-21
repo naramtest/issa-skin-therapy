@@ -5,10 +5,10 @@
 ])
 
 <x-home.section-container
-    class="padding-from-side-menu flex justify-between pb-10 pt-14"
+    class="padding-from-side-menu flex flex-col justify-between gap-y-10 pb-10 pt-14 md:flex-row"
 >
     <x-product.product-gallery :media="$media" />
-    <div class="flex w-[36%] flex-col">
+    <div class="flex flex-col md:w-[36%]">
         <p class="text-sm font-[300] leading-[20px] text-darkColor">
             {{ __("store.Patented P.E.T.® Technology") }}
         </p>
@@ -24,7 +24,8 @@
             @endif
         </p>
         <div class="flex">
-            <span aria-hidden="true" class="rating-star hidden lg:block"></span>
+            <span aria-hidden="true" class="rating-star hidden md:block"></span>
+            {{-- TODO: review --}}
             <p class="ms-2 font-[300] text-darkColor">(15 customer reviews)</p>
         </div>
         <div class="no-tailwind my-5">
@@ -52,7 +53,7 @@
         <x-general.add-to-cart
             type="{{$type}}"
             :product="$product"
-            class="my-4 flex items-center"
+            class="my-4 flex w-full items-center gap-x-2"
         >
             {{-- TODO: add to cart --}}
             <label for="quantity">
@@ -68,9 +69,7 @@
                 />
             </label>
             <x-slot:button>
-                <x-general.button-black-animation
-                    class="ms-4 !flex-1 rounded-3xl !py-2"
-                >
+                <x-general.button-black-animation class="rounded-3xl !py-2">
                     <span class="z-10">
                         {{ __("store.Add to Card") }}
                     </span>
@@ -88,7 +87,9 @@
                 </span>
             </x-general.button-white-animation>
         </a>
-        <div class="mt-6 flex justify-between px-2">
+        <div
+            class="lg::flex-row mt-6 flex flex-col justify-between gap-y-2 px-2"
+        >
             <div class="flex gap-x-2">
                 <span>{{ __("store.Social:") }}</span>
                 <x-layout.header.home.social

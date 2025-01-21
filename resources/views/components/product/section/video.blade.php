@@ -1,5 +1,5 @@
 <x-home.section-container
-    class="card-overlay relative mt-10 flex h-[600px] items-center justify-center overflow-hidden"
+    class="card-overlay relative mt-10 flex h-[450px] items-center justify-center overflow-hidden lg:h-[600px]"
 >
     <video
         class="absolute inset-0 h-full w-full object-cover"
@@ -11,7 +11,7 @@
         preload="auto"
         src="{{ asset("storage/video/patent-delivery-technology.webm") }}"
     ></video>
-    <div class="z-[10] flex w-[60%] flex-col items-center text-white">
+    <div class="z-[10] flex flex-col items-center text-white lg:w-[60%]">
         <p class="text-[13px] font-[200] uppercase tracking-[2px]">
             {{ __("store.Made in USA") }}
         </p>

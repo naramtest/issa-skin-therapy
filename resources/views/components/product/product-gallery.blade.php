@@ -2,12 +2,12 @@
     "media",
 ])
 
-<div {{ $attributes->class(["w-[60%]"]) }}>
+<div {{ $attributes->class(["w-full md:w-[60%]"]) }}>
     <div
-        class="flex w-full items-center gap-12"
+        class="flex w-full flex-col items-center gap-x-12 gap-y-3 md:flex-row"
         x-data="productGallerySwiper()"
     >
-        <div class="relative h-full w-[60%]">
+        <div class="relative h-full w-full md:w-[60%]">
             <div class="product-gallery-swiper swiper">
                 <div class="swiper-wrapper h-full" id="gallery">
                     @foreach ($media as $image)
@@ -73,15 +73,14 @@
         </div>
         <!-- Thumbnails Column -->
 
-        {{-- TODO: add animation when selecting an image from thumbnails --}}
-        <div class="flex w-[30%] flex-col gap-3">
+        <div class="grid grid-cols-3 gap-3 md:flex md:w-[30%] md:flex-col">
             @foreach ($media as $image)
                 <button
                     x-show="activeIndex !== {{ $loop->index }}"
                     @click="slideTo({{ $loop->index }})"
                     class="overflow-hidden rounded-lg transition-all duration-300"
                 >
-                    {!! \App\Helpers\Media\ImageGetter::responsiveImgElement($image, config("const.media.thumbnail"), class: "h-[250px] w-full object-cover") !!}
+                    {!! \App\Helpers\Media\ImageGetter::responsiveImgElement($image, config("const.media.thumbnail"), class: "md:h-[250px] h-[180px] w-full object-cover") !!}
                 </button>
             @endforeach
         </div>

@@ -11,7 +11,9 @@
         @click="selectActive({{ $index }})"
         :aria-expanded="isActive({{ $index }}) ? 'true' : 'false'"
     >
-        <span class="text-lg font-medium">{{ $faq->question }}</span>
+        <span class="text-start text-lg font-medium">
+            {{ $faq->question }}
+        </span>
 
         <x-gmdi-add
             x-show="!isActive({{$index}})"

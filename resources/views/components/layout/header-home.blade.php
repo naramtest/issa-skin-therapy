@@ -18,13 +18,16 @@
             </button>
 
             <!-- Logo -->
-            <div class="absolute left-1/2 -translate-x-1/2">
+            <a
+                href="{{ route("storefront.index") }}"
+                class="absolute left-1/2 -translate-x-1/2"
+            >
                 <img
                     class="h-8 w-auto"
                     src="{{ asset("storage/images/issa-logo.webp") }}"
                     alt="{{ __("store.Logo") }}"
                 />
-            </div>
+            </a>
 
             <!-- Mobile Icons -->
             <div class="flex items-center gap-x-4">
