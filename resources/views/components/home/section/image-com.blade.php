@@ -1,4 +1,4 @@
-<x-home.section-container class="pt-14">
+<x-home.section-container class="mt-20 pt-8">
     <div class="flex flex-col items-center">
         <p class="text-center text-lg">
             {{ __("store.Skin That Defies Times") }}
@@ -12,20 +12,24 @@
         after-image="{{ asset('storage/images/home-after.webp') }}"
         before-alt="Product before modification"
         after-alt="Product after modification"
-        class="mt-9 h-[750px]"
+        class="mt-9 h-[400px] lg:h-[750px]"
     />
     <div class="mt-8">
         <x-marquee :repeat="15" :speed="50" :gap="50">
             <span>
                 <x-icons.bigger-sign />
             </span>
-            <span class="black-text-stroke text-nowrap text-[130px] font-bold">
+            <span
+                class="black-text-stroke text-nowrap text-[100px] font-bold lg:text-[130px]"
+            >
                 {{ __("store.A-CLEAR") }}
             </span>
             <span>
                 <x-icons.bigger-sign />
             </span>
-            <span class="black-text-stroke text-nowrap text-[130px] font-bold">
+            <span
+                class="black-text-stroke text-nowrap text-[100px] font-bold lg:text-[130px]"
+            >
                 {{ __("store.X-AGE") }}
             </span>
         </x-marquee>

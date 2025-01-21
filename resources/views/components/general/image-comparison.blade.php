@@ -18,8 +18,10 @@
         <div
             class="text-overlay px-[5rem] text-white transition-opacity duration-300"
         >
-            <p>Check out A-Luminate One Collection</p>
-            <h2 class="text-2xl font-bold">After 3 months</h2>
+            <p>{{ __("store.Check out A-Luminate One Collection") }}</p>
+            <h2 class="text-2xl font-bold">
+                {{ __("store.After 3 months") }}
+            </h2>
         </div>
     @endif
 

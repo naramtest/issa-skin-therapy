@@ -17,10 +17,8 @@
             fill="white"
         ></path>
     </svg>
-    <p class="mb-8 mt-6 text-center text-4xl">
-        I’ve been using Lumicleanse for a few months now, I can say it’s a
-        game-changer for my skin. My skin feels fresher, cleaner, and more
-        radiant!
+    <p class="mb-8 mt-6 text-center text-xl lg:text-4xl">
+        {{ __("store.I’ve been using Lumicleanse for a few months now, I can say it’s a         game-changer for my skin. My skin feels fresher, cleaner, and more         radiant!") }}
     </p>
     <figure>
         <img
@@ -29,5 +27,7 @@
             alt="{{ __("store.Logo") }}"
         />
     </figure>
-    <p class="mt-4 text-lg font-light italic">Jonathan Smith, ISSA</p>
+    <p class="mt-4 text-lg font-light italic">
+        {{ __("store.Jonathan Smith, ISSA") }}
+    </p>
 </div>

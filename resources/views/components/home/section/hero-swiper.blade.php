@@ -56,10 +56,10 @@
                         loop: true,
                         spaceBetween: 25,
                         speed: 1000,
-                        // autoplay: {
-                        //     delay: 3000,
-                        //     disableOnInteraction: false,
-                        // },
+                        autoplay: {
+                            delay: 3000,
+                            disableOnInteraction: false,
+                        },
                         grabCursor: true,
                         on: {
                             slideChange: function () {

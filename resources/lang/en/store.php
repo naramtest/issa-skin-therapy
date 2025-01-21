@@ -351,4 +351,13 @@ return [
     "Create At" => "Create At",
     "Complete" => "Complete",
     "Canceled" => "Canceled",
+    "Check out A-Luminate One Collection" =>
+        "Check out A-Luminate One Collection",
+    "After 3 months" => "After 3 months",
+    "I’ve been using Lumicleanse for a few months now, I can say it’s a         game-changer for my skin" => [
+        " My skin feels fresher, cleaner, and more         radiant!" => 'I’ve been using Lumicleanse for a few months now, I can say it’s a
+        game-changer for my skin. My skin feels fresher, cleaner, and more
+        radiant!',
+    ],
+    "Jonathan Smith, ISSA" => "Jonathan Smith, ISSA",
 ];

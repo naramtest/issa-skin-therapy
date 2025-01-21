@@ -9,12 +9,12 @@
         <x-home.section.best-seller-product :product="$featuredProduct" />
         <x-home.section.vedio-background />
         <x-home.section.boxes :bundles="$bundles" />
-        {{-- <x-home.section.image-com /> --}}
-        {{-- <x-home.section.testimonial /> --}}
+        <x-home.section.image-com />
+        <x-home.section.testimonial />
 
-        {{-- <x-home.section.blog :posts="$posts" /> --}}
+        <x-home.section.blog :posts="$posts" />
 
-        {{-- <x-home.section.shop /> --}}
+        <x-home.section.shop />
 
         <x-home.section.logos />
     </main>

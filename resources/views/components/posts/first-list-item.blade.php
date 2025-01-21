@@ -2,7 +2,7 @@
     /**@var\mixed*/"post",
 ])
 
-<article class="relative col-span-3 h-[42rem]">
+<article class="relative col-span-3 h-[36rem] lg:h-[42rem]">
     <a
         class="card-opacity-10 card-overlay relative h-full"
         href="{{ route("posts.show", $post) }}"

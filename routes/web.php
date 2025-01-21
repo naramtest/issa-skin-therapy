@@ -18,7 +18,6 @@ Route::get("/order-tracking", [HomeController::class, "index"])->name(
     "order.tracking"
 );
 
-Route::get("/blog", [HomeController::class, "index"])->name("blog.index");
 Route::get("/refund_returns", [HomeController::class, "index"])->name(
     "return.index"
 );

@@ -1,13 +1,17 @@
 <x-home.section-container
-    class="card-overlay relative mt-16 flex h-[600px] items-center justify-center overflow-hidden"
+    class="card-overlay relative mt-[20rem] flex h-[450px] items-center justify-center overflow-hidden lg:mt-16 lg:h-[600px]"
 >
     <img
         class="absolute inset-0 h-full w-full object-cover"
         src="{{ asset("storage/images/02.webp") }}"
         alt="background Image"
     />
-    <div class="z-[10] flex w-[60%] flex-col items-center text-white">
-        <h2 class="w-[70%] text-center text-5xl leading-[48px]">
+    <div
+        class="z-[10] flex w-full flex-col items-center px-0 text-white lg:w-[60%] lg:px-0"
+    >
+        <h2
+            class="w-full text-center text-3xl lg:w-[70%] lg:text-5xl lg:leading-[48px]"
+        >
             {{ __("store.Share your before and after to get a nice gift!") }}
         </h2>
 
