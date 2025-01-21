@@ -1,29 +1,31 @@
-@props(['media'])
+@props([
+    "media",
+])
 
 <div
-    {{ $attributes->class(["flex w-full gap-4 "]) }}
+    {{ $attributes->class(["flex flex-col-reverse items-center md:flex-row w-full gap-4 "]) }}
     x-data="productSwiper()"
 >
     <!-- Thumbnails Column -->
-    <div class="flex w-[120px] flex-col gap-3">
+    <div class="grid w-full grid-cols-3 gap-3 md:flex md:flex-col lg:w-[120px]">
         @foreach ($media as $image)
             <button
                 x-show="activeIndex !== {{ $loop->index }}"
                 @click="slideTo({{ $loop->index }})"
                 class="overflow-hidden rounded-lg transition-all duration-300"
             >
-                {!! \App\Helpers\Media\ImageGetter::responsiveImgElement($image, config("const.media.thumbnail"), class: "h-[180px] w-full object-cover") !!}
+                {!! \App\Helpers\Media\ImageGetter::responsiveImgElement($image, config("const.media.thumbnail"), class: "h-[180px]  w-full object-cover") !!}
             </button>
         @endforeach
     </div>
 
     <!-- Main Image -->
-    <div class="relative w-[calc(100%-150px)]">
+    <div class="relative w-[calc(100%-170px)] lg:w-[calc(100%-150px)]">
         <div class="product-swiper swiper">
             <div class="swiper-wrapper h-full" id="gallery">
                 @foreach ($media as $image)
                     <div
-                        class="swiper-slide aspect-square min-h-[600px] overflow-hidden rounded-xl bg-gray-100"
+                        class="swiper-slide aspect-square min-h-[400px] overflow-hidden rounded-xl bg-gray-100 lg:min-h-[600px]"
                     >
                         {{-- TODO:save those in the image table as custom attributes --}}
                         @php
@@ -91,19 +93,19 @@
                 activeIndex: 0,
                 productSwiper1: null,
                 init() {
-                    this.productSwiper1 = new Swiper(".product-swiper", {
+                    this.productSwiper1 = new Swiper('.product-swiper', {
                         modules: [EffectFade],
                         slidesPerView: 1,
                         speed: 800,
-                        effect: "fade",
+                        effect: 'fade',
                         on: {
                             slideChange: () => {
                                 if (this.productSwiper1) {
                                     this.activeIndex =
                                         this.productSwiper1.realIndex;
                                 }
-                            }
-                        }
+                            },
+                        },
                     });
                 },
                 slideTo(index) {
@@ -114,7 +116,7 @@
                 },
                 pervSlide() {
                     this.productSwiper1?.slidePrev(500);
-                }
+                },
             };
         }
     </script>

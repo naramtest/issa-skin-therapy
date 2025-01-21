@@ -2,7 +2,7 @@
     "product",
 ])
 <x-home.section-container
-    class="relative flex w-full flex-col items-center gap-16 px-40 py-20 lg:flex-row"
+    class="relative flex w-full flex-col items-center gap-16 px-4 py-20 lg:flex-row lg:px-40"
 >
     <x-general.product-gallery class="lg:w-[55%]" :media="$product->media" />
     <div class="flex w-full flex-col lg:w-[45%]">

@@ -64,7 +64,7 @@
                             spaceBetween: 10,
                         },
                         // when window width is >= 480px
-                        900: {
+                        150: {
                             slidesPerView: 3,
                             spaceBetween: 10,
                         },
