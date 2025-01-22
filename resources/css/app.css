@@ -336,7 +336,7 @@ body.menu-open {
 
 
 .post-width {
-    width: min(100%, 1140px);
+    @apply lg:w-[min(100%,1140px)];
 }
 
 

@@ -7,7 +7,9 @@
                 <h2 class="mb-10 text-5xl font-bold">
                     {{ __("store.Latest Stories") }}
                 </h2>
-                <div class="grid grid-cols-3 gap-10">
+                <div
+                    class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3"
+                >
                     @foreach ($latestPosts as $latestPost)
                         <x-posts.grid-item :post="$latestPost" />
                     @endforeach
