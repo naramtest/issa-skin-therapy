@@ -6,7 +6,7 @@
     class="padding-from-side-menu relative z-10 -translate-y-10 bg-lightColor py-12"
 >
     <h2 class="headline-font">{{ __("store.How to Use?") }}</h2>
-    <div class="mt-12 grid grid-cols-2 gap-24 px-4">
+    <div class="mt-12 grid grid-cols-1 gap-12 px-4 md:grid-cols-2 lg:gap-24">
         <div>
             <div class="flex items-center justify-center">
                 <div
@@ -17,7 +17,7 @@
                         alt="{{ __("store.icon") }}"
                     />
                 </div>
-                <p class="text=lg ms-4 font-medium">{{ __("store.AM") }}</p>
+                <p class="ms-4 text-lg font-medium">{{ __("store.AM") }}</p>
             </div>
             <div class="no-tailwind mt-8">
                 {!! $bundle->how_to_use_am !!}
@@ -33,7 +33,7 @@
                         alt="{{ __("store.icon") }}"
                     />
                 </div>
-                <p class="text=lg ms-4 font-medium">{{ __("store.PM") }}</p>
+                <p class="ms-4 text-lg font-medium">{{ __("store.PM") }}</p>
             </div>
             <div class="no-tailwind mt-8">
                 {!! $bundle->how_to_use_pm !!}

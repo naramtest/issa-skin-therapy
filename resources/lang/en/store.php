@@ -361,4 +361,6 @@ return [
     ],
     "FAQ s" => 'FAQ\'s',
     "Need help? Contact us" => "Need help? Contact us",
+    "decoration" => "decoration",
+    "Box Handel" => "Box Handel",
 ];

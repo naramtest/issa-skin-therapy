@@ -3,20 +3,20 @@
 ])
 
 <x-home.section-container
-    class="padding-from-side-menu flex justify-between gap-24 bg-darkColor py-12"
+    class="padding-from-side-menu flex flex-col justify-between gap-x-12 gap-y-12 bg-darkColor py-12 md:flex-row lg:gap-x-24"
 >
-    <div class="w-1/2">
+    <div class="md:w-1/2">
         <img
-            class="h-[500px] w-full rounded-xl object-cover"
-            src="https://issaskintherapy.com/wp-content/uploads/2024/07/06-576x1024.webp"
-            alt=""
+            class="h-[350px] w-full rounded-xl object-cover lg:h-[500px]"
+            src="{{ asset("storage/images/ice.webp") }}"
+            alt="{{ __("store.decoration") }}"
         />
     </div>
-    <div class="flex w-1/2 flex-col items-start justify-center">
+    <div class="flex flex-col items-start justify-center md:w-1/2">
         <h2 class="headline-font text-lightColor">
             {{ __("dashboard.Extra Tips") }}
         </h2>
-        <div class="no-tailwind mt-4 text-lightColor">
+        <div class="no-tailwind extra text-lightColor md:mt-4">
             {!! $bundle->extra_tips !!}
         </div>
     </div>
