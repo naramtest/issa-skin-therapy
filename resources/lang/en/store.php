@@ -363,4 +363,64 @@ return [
     "Need help? Contact us" => "Need help? Contact us",
     "decoration" => "decoration",
     "Box Handel" => "Box Handel",
+    "FOLLOW US" => "FOLLOW US",
+    " ISSA Skintherapy is a tribute to the unparalleled" => ' ISSA Skintherapy is a tribute to the unparalleled
+            expertise of Dr. Issa Bachour. As a trailblazing
+            dermatologist, he dedicated his career to understanding
+            the intricacies of skin health and formulating creams
+            that reflected a perfect blend of science and
+            compassion. ISSA carries forward this legacy with a
+            commitment to quality and efficacy.',
+    "Early Years and Education" => "Early Years and Education",
+    "rn with an innate passion for dermatology" => 'Born with an innate passion for dermatology, Dr.
+                Issa Bachour embarked on a journey that would leave
+                an indelible mark on the world of skincare and
+                beauty. Graduating as a board-certified
+                Dermatologist from esteemed universities in France,
+                he honed his craft in a country renowned for its
+                commitment to beauty and wellness.',
+    "The Art of Formulation" => "The Art of Formulation",
+    "With a career spanning over 30 years" => 'With a career spanning over 30 years, Dr. Issa Bachour became a
+            beacon of innovation in dermatological care. His expertise in
+            formulating creams for diverse skin conditions and beauty
+            enhancement became the cornerstone of his practice. Patients sought
+            his personalized solutions, and his formulations garnered widespread
+            recognition for their efficacy and transformative impact.',
+    "Our Core Values" => "Our Core Values",
+    "Crafted by Dermatologist" => "Crafted by Dermatologist",
+    "Crafted by Dr" => [
+        " Issa: Dermatologist-Approved Skincare" =>
+            "Crafted by Dr. Issa: Dermatologist-Approved Skincare.",
+    ],
+    "Revolutionary Patent Delivery Technology (PET Delivery)" =>
+        "Revolutionary Patent Delivery Technology (PET Delivery).",
+    "Premium Quality, Made in " => "Premium Quality, Made in USA.",
+    " A passion Turned Into A Successful Side Hustle" =>
+        " A passion Turned Into A Successful Side Hustle",
+    "Julian Bachour, Founder of ISSA" => "DR. Julian Bachour, Founder of ISSA",
+    "Our History" => "Our History",
+    "Healing in the Gulf" => "Healing in the Gulf",
+    "Venturing beyond borders" => 'Venturing beyond borders, Dr. Issa Bachour
+                    contributed significantly to the healthcare
+                    landscape in Kuwait and other countries. His
+                    compassionate care and groundbreaking
+                    formulations earned him the admiration of both
+                    patients and peers. His legacy in Kuwait is a
+                    testament to his dedication to advancing
+                    dermatological practices in diverse cultural
+                    contexts.',
+    "A Life Well-Lived" => "A Life Well-Lived",
+    "Issa Bachour left behind a legacy of healing and beauty" => 'In 2023, Dr. Issa Bachour left behind a legacy of
+                healing and beauty, having dedicated his life to the
+                well-being of others. His untimely departure marked
+                the end of a chapter, but his impact resonates
+                through the countless lives he touched and the
+                transformative creams that continue to carry his
+                expertise forward. ISSA SkinTherapy is not just a
+                brand; it’s a tribute to Dr. Issa’s commitment to
+                enhancing lives through dermatological care. Rooted
+                in his principles and passion, ISSA seeks to share
+                the magic of his formulations, ensuring that his
+                legacy lives on in the radiant skin and confident
+                smiles of those who use his products.',
 ];

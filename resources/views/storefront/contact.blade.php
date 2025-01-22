@@ -95,7 +95,9 @@
         @endif
 
         <div class="rounded-xl border border-gray-200 p-7">
-            <h3 class="text-xs font-medium text-[#B1B1B1]">FOLLOW US</h3>
+            <h3 class="text-xs font-medium text-[#B1B1B1]">
+                {{ __("store.FOLLOW US") }}
+            </h3>
             <ul class="mt-3 flex w-2/3 items-center justify-between">
                 @foreach ($info->social as $social)
                     <x-share.icon
