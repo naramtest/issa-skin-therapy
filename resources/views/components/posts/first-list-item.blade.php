@@ -2,14 +2,16 @@
     /**@var\mixed*/"post",
 ])
 
-<article class="relative col-span-3 h-[36rem] lg:h-[42rem]">
+<article
+    {{ $attributes->class(["relative h-[36rem] lg:h-[42rem]"]) }}
+>
     <a
         class="card-opacity-10 card-overlay relative h-full"
         href="{{ route("posts.show", $post) }}"
     >
         {!! \App\Helpers\Media\ImageGetter::responsiveFeaturedImg($post, class: "h-full w-full object-cover rounded-2xl") !!}
     </a>
-    <div class="absolute bottom-10 z-[100] px-8 text-white">
+    <div class="absolute bottom-10 z-[30] px-8 text-white">
         @if (count($post->categories))
             <x-blog.category-label :post="$post" class="bg-[#92E1D8]" />
 

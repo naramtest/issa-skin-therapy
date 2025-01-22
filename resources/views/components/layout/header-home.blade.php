@@ -7,7 +7,7 @@
         <x-layout.header.desktop-nav />
 
         <nav
-            class="flex items-center justify-between rounded-t-[1.25rem] bg-white px-4 py-4 lg:hidden"
+            class="relative z-[30] flex items-center justify-between rounded-t-[1.25rem] bg-white px-4 py-4 lg:hidden"
         >
             <!-- Menu Button with Animation -->
             <button

@@ -13,10 +13,15 @@
     </div>
     <div class="mt-10">
         <div class="flex flex-col gap-10 lg:grid lg:grid-cols-6">
-            <x-posts.first-list-item :post="$posts[0]" />
-            <div class="col-span-3 flex h-[42rem] flex-col justify-between">
+            <x-posts.first-list-item
+                class="col-span-6 lg:col-span-3"
+                :post="$posts[0]"
+            />
+            <div
+                class="col-span-6 flex h-[42rem] flex-col justify-between lg:col-span-3"
+            >
                 <x-posts.second-list-item :post="$posts[1]" />
-                <div class="h-[1px] w-full bg-gray-200"></div>
+                <div class="my-2 h-[1px] w-full bg-gray-200"></div>
                 <x-posts.second-list-item :post="$posts[2]" />
             </div>
         </div>
