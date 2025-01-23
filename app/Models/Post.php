@@ -28,6 +28,8 @@ class Post extends Model implements HasMedia
     use InteractsWithMedia;
     use Prunable, SoftDeletes;
 
+    //    use Searchable;
+
     public array $translatable = [
         "title",
         "body",
@@ -141,14 +143,15 @@ class Post extends Model implements HasMedia
 
     public function scopePublished($query)
     {
-        return $query->where("status", ProductStatus::PUBLISHED)
+        return $query
+            ->where("status", ProductStatus::PUBLISHED)
             ->whereNotNull("published_at")
             ->where("published_at", "<=", now());
     }
 
-    protected function pruning(): void
+    public function toSearchableArray(): array
     {
-        $this->media()->delete();
+        return $this->withoutRelations()->toArray();
     }
 
     //    TODO: add feed
@@ -164,15 +167,13 @@ class Post extends Model implements HasMedia
     //            ->authorEmail('info@alaanplus.com');
     //    }
 
-    // TODO : add Search
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status == ProductStatus::PUBLISHED;
+    }
 
-    //    public function toSearchableArray(): array
-    //    {
-    //        return $this->withoutRelations()->toArray();
-    //    }
-    //
-    //    public function shouldBeSearchable(): bool
-    //    {
-    //        return $this->status == PostStatus::PUBLISHED;
-    //    }
+    protected function pruning(): void
+    {
+        $this->media()->delete();
+    }
 }

@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\Tags\HasTags;
 use Spatie\Translatable\HasTranslations;
@@ -25,6 +26,7 @@ class Product extends Model implements HasMedia, Purchasable
     use HasTranslations;
     use HasTags;
     use HasPurchasableMedia;
+    use Searchable;
 
     public array $sortable = [
         "order_column_name" => "order",
@@ -176,5 +178,43 @@ class Product extends Model implements HasMedia, Purchasable
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            "id" => $this->id,
+            "name_en" => $this->getTranslation("name", "en"),
+            "name_ar" => $this->getTranslation("name", "ar"),
+            "description_en" => $this->getTranslation("description", "en"),
+            "description_ar" => $this->getTranslation("description", "ar"),
+            "short_description_ar" => $this->getTranslation(
+                "short_description",
+                "ar"
+            ),
+            "short_description_en" => $this->getTranslation(
+                "short_description",
+                "en"
+            ),
+            "full_ingredients_en" => $this->getTranslation(
+                "full_ingredients",
+                "en"
+            ),
+            "full_ingredients_ar" => $this->getTranslation(
+                "full_ingredients",
+                "ar"
+            ),
+            "sku" => $this->sku,
+            "status" => $this->status->value,
+            "categories" => $this->categories->pluck("name")->implode(" "),
+            "tags" => $this->tags->pluck("name")->implode(" "),
+        ];
+    }
+
+    public function shouldBeSearchable(): bool
+    {
+        return $this->status === ProductStatus::PUBLISHED and
+            !$this->published_at and
+            !$this->published_at <= now();
     }
 }
