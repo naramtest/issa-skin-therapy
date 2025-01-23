@@ -65,12 +65,12 @@ trait LocationHandler
             $this->billingCities = $cities;
 
             // If we only have one virtual city, automatically select it
-            if (
-                $cities->count() === 1 &&
-                ($cities->first()?->id ?? $this->form->billing_state)
-            ) {
-                $this->form->billing_city = $cities->first()->id;
-            }
+            //            if (
+            //                $cities->count() === 1 &&
+            //                ($cities->first()?->name ?? $this->form->billing_state)
+            //            ) {
+            //                $this->form->billing_city = $cities->first()->name;
+            //            }
         }
     }
 

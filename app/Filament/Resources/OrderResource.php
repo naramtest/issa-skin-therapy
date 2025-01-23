@@ -7,10 +7,13 @@ use App\Enums\Checkout\PaymentStatus;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\Partials\OrderForm;
 use App\Models\Order;
+use App\Services\Shipping\DHLShipmentService;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Pelmered\FilamentMoneyField\Tables\Columns\MoneyColumn;
@@ -83,6 +86,54 @@ class OrderResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Action::make("createShipment")
+                    ->label("Create DHL Shipment")
+                    ->icon("heroicon-o-truck")
+                    ->requiresConfirmation()
+                    //                    ->hidden(
+                    //                        fn(Order $record) => $record->shippingOrder ||
+                    //                            $record->payment_status !== "paid" ||
+                    //                            $record->status === "cancelled"
+                    //                    )
+                    ->action(function ($record) {
+                        try {
+                            $shipmentService = app(DHLShipmentService::class);
+                            $shipmentData = $shipmentService->createShipment(
+                                $record
+                            );
+
+                            $record->shippingOrder()->create([
+                                "carrier" => "dhl",
+                                "service_code" => $record->shipping_method,
+                                "tracking_number" =>
+                                    $shipmentData["tracking_number"],
+                                "label_url" => $shipmentData["label_url"],
+                                "shipping_label_data" =>
+                                    $shipmentData["shipping_label_data"],
+                                "carrier_response" =>
+                                    $shipmentData["raw_response"],
+                                "status" => "created",
+                                "shipped_at" => now(),
+                            ]);
+
+                            Notification::make()
+                                ->success()
+                                ->title("Shipment Created")
+                                ->body(
+                                    "Shipment has been created successfully."
+                                )
+                                ->send();
+                        } catch (\Exception $e) {
+                            Notification::make()
+                                ->danger()
+                                ->title("Error")
+                                ->body(
+                                    "Failed to create shipment: " .
+                                        $e->getMessage()
+                                )
+                                ->send();
+                        }
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

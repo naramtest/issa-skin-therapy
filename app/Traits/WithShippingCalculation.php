@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 use App\Enums\Checkout\CartCostType;
-use App\Services\Shipping\DHLShippingService;
+use App\Services\Shipping\DHLRateCheckService;
 use Exception;
 use Log;
 use Money\Currency;
@@ -24,7 +24,6 @@ trait WithShippingCalculation
     protected function checkAddressCompleteness(): void
     {
         $this->canCalculateShipping = $this->hasCompleteAddress();
-
         if ($this->canCalculateShipping) {
             $this->calculateShippingRates();
         } else {
@@ -75,7 +74,7 @@ trait WithShippingCalculation
             }
 
             // Get DHL rates
-            $dhlService = app(DHLShippingService::class);
+            $dhlService = app(DHLRateCheckService::class);
             $package = $this->calculatePackageDimensions();
             $dhlRates = collect(
                 $dhlService->getRates(
@@ -198,7 +197,7 @@ trait WithShippingCalculation
             "state" => config("store.address.state"),
             "phone" => config("store.address.phone"),
             "email" => config("store.address.email"),
-            "first_name" => config("store.name"),
+            "first_name" => config("store.address.name"),
             "provinceCode" => config("store.address.province_code"),
             "last_name" => "",
         ];

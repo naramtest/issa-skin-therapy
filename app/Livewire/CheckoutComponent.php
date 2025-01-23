@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Livewire\Forms\CheckoutForm;
 use App\Models\Order;
+use App\Models\State;
 use App\Services\Cart\CartService;
 use App\Services\Checkout\CustomerCheckoutService;
 use App\Services\Checkout\OrderService;
@@ -155,7 +156,9 @@ class CheckoutComponent extends Component
                     "phone" => $validatedData["phone"],
                     "address" => $validatedData["billing_address"],
                     "city" => $validatedData["billing_city"],
-                    "state" => $validatedData["billing_state"],
+                    "state" =>
+                        State::find($validatedData["billing_state"])->name ??
+                        null,
                     "country" => $validatedData["billing_country"],
                     "postal_code" => $validatedData["billing_postal_code"],
                     "area" => $validatedData["billing_area"],

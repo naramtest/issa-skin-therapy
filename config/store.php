@@ -11,4 +11,5 @@ return [
         "name" => "Vitaderm",
         "province_code" => "DU",
     ],
+    "unitOfMeasurement" => "metric",
 ];

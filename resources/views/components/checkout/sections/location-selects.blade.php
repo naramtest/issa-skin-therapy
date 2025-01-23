@@ -28,14 +28,6 @@
         @endforeach
     </x-checkout.select>
 
-    <div
-        wire:loading.delay
-        wire:target="form.{{ $prefix }}_country"
-        class="text-sm text-gray-500"
-    >
-        {{ __("store.Loading states...") }}
-    </div>
-
     <x-checkout.select
         label="{{ __('store.State / Region') }}"
         wire:model.live="form.{{ $prefix }}_state"
@@ -49,14 +41,6 @@
         @endforeach
     </x-checkout.select>
 
-    <div
-        wire:loading.delay
-        wire:target="form.{{ $prefix }}_state"
-        class="text-sm text-gray-500"
-    >
-        {{ __("store.Loading cities...") }}
-    </div>
-
     <x-checkout.select
         label="{{ __('store.City') }}"
         wire:model.live="form.{{ $prefix }}_city"
@@ -66,7 +50,7 @@
     >
         <option value="">{{ __("store.Select City") }}</option>
         @foreach ($cities as $city)
-            <option value="{{ $city->id }}">{{ $city->name }}</option>
+            <option value="{{ $city->name }}">{{ $city->name }}</option>
         @endforeach
     </x-checkout.select>
 </div>

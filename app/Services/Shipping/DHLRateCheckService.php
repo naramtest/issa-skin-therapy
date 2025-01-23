@@ -8,9 +8,9 @@ use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class DHLShippingService
+class DHLRateCheckService
 {
-    protected string $baseUrl = "https://express.api.dhl.com/mydhlapi/test/"; // Change to prod URL in production
+    protected string $baseUrl; // Change to prod URL in production
     protected string $apiKey;
     protected string $apiSecret;
 
@@ -26,6 +26,7 @@ class DHLShippingService
     {
         $this->apiKey = config("services.dhl.key");
         $this->apiSecret = config("services.dhl.secret");
+        $this->baseUrl = config("services.dhl.url");
     }
 
     public function getRates(
@@ -33,6 +34,7 @@ class DHLShippingService
         array $origin,
         array $destination
     ): array {
+        dd(app(DHLProductService::class)->getProducts($package, $destination));
         try {
             // Determine if this is a domestic shipment
             $isDomestic = $origin["country"] === $destination["country"];

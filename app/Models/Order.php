@@ -133,4 +133,9 @@ class Order extends Model
     {
         return $this->hasOne(CouponUsage::class);
     }
+
+    public function shippingOrder(): HasOne
+    {
+        return $this->hasOne(ShippingOrder::class);
+    }
 }
