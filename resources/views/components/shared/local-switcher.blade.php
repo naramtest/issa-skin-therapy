@@ -1,13 +1,20 @@
 <x-dynamic-component :component="'general.' . $location . '-dropdown'">
-    {{-- TODO:add locale package and change label and dropdown Items --}}
     <x-slot:button>
         <x-icons.local class="h-6 w-6 pe-1" />
-        English
+        {{ App::getLocale() == "en" ? "English" : "العربية" }}
         <x-icons.drop-down class="mt-1 h-3 w-3" />
     </x-slot>
     <x-slot:dropdown>
-        <li class="cursor-pointer rounded-md px-2 py-1 hover:bg-gray-100">
-            First Menu
-        </li>
+        @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+            <li class="rounded px-4 py-1 text-sm hover:bg-gray-700">
+                <a
+                    rel="alternate"
+                    hreflang="{{ $localeCode }}"
+                    href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}"
+                >
+                    {{ $properties["native"] }}
+                </a>
+            </li>
+        @endforeach
     </x-slot>
 </x-dynamic-component>

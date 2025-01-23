@@ -13,6 +13,79 @@ use App\Http\Controllers\Content\ProductController;
 use App\Http\Controllers\Content\ShopController;
 use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+
+Route::group(
+    [
+        "prefix" => LaravelLocalization::setLocale(),
+        "middleware" => [
+            "localeSessionRedirect",
+            "localizationRedirect",
+            "localeViewPath",
+        ],
+    ],
+    function () {
+        Route::get("/faq", [FaqController::class, "index"])->name("faq.index");
+        Route::get("/", [HomeController::class, "index"])->name(
+            "storefront.index"
+        );
+
+        Route::controller(ShopController::class)->group(function () {
+            Route::get("/shop", "index")->name("shop.index");
+            Route::get("/collections-page", "collection")->name(
+                "bundles.index"
+            );
+        });
+
+        Route::controller(CartController::class)->group(function () {
+            Route::get("/cart", "index")->name("cart.index");
+        });
+
+        Route::controller(CheckoutController::class)->group(function () {
+            Route::get("/checkout", "index")->name("checkout.index");
+            Route::get("/checkout/success", "success")->name(
+                "checkout.success"
+            );
+        });
+
+        Route::get("/about", [AboutController::class, "index"])->name(
+            "about.index"
+        );
+        Route::get("/contact-us", [ContactUsController::class, "index"])->name(
+            "contact.index"
+        );
+
+        Route::controller(AuthController::class)
+            ->middleware("guest")
+            ->group(function () {
+                Route::get("/login", "login")->name("login");
+                Route::get("/register", "register")->name("register");
+            });
+
+        Route::controller(AccountController::class)
+            ->prefix("/my-account")
+            ->middleware(["verified"])
+            ->group(function () {
+                Route::get("/", "show")->name("account.index");
+                Route::get("edit-account", "edit")->name("account.edit");
+            });
+
+        Route::controller(PostController::class)->group(function () {
+            Route::get("/post/{post:slug}", "show")->name("posts.show");
+            Route::get("/blog", "index")->name("posts.index");
+            Route::get("/blog/preview/{id}", "preview")->name("post.preview");
+        });
+        Route::controller(ProductController::class)->group(function () {
+            Route::get("/product/{product:slug}", "show")->name("product.show");
+            Route::get("/collection/{bundle:slug}", "showBundle")->name(
+                "product.bundle"
+            );
+            Route::get("product-category/{slug}", "showProductCategory")->name(
+                "product.category"
+            );
+        });
+    }
+);
 
 Route::get("/order-tracking", [HomeController::class, "index"])->name(
     "order.tracking"
@@ -29,59 +102,10 @@ Route::get("/privacy-policy", [HomeController::class, "index"])->name(
     "privacy.index"
 );
 
-Route::get("/faq", [FaqController::class, "index"])->name("faq.index");
-Route::get("/", [HomeController::class, "index"])->name("storefront.index");
-
-Route::controller(ShopController::class)->group(function () {
-    Route::get("/shop", "index")->name("shop.index");
-    Route::get("/collections-page", "collection")->name("bundles.index");
-});
-
-Route::controller(PostController::class)->group(function () {
-    Route::get("/post/{post:slug}", "show")->name("posts.show");
-    Route::get("/blog", "index")->name("posts.index");
-    Route::get("/blog/preview/{id}", "preview")->name("post.preview");
-});
-Route::controller(ProductController::class)->group(function () {
-    Route::get("/product/{product:slug}", "show")->name("product.show");
-    Route::get("/collection/{bundle:slug}", "showBundle")->name(
-        "product.bundle"
-    );
-    Route::get("product-category/{slug}", "showProductCategory")->name(
-        "product.category"
-    );
-});
-
-Route::get("/about", [AboutController::class, "index"])->name("about.index");
-Route::get("/contact-us", [ContactUsController::class, "index"])->name(
-    "contact.index"
-);
-
-Route::controller(AuthController::class)
-    ->middleware("guest")
-    ->group(function () {
-        Route::get("/login", "login")->name("login");
-        Route::get("/register", "register")->name("register");
-    });
-
-Route::controller(AccountController::class)
-    ->prefix("/my-account")
-    ->middleware(["verified"])
-    ->group(function () {
-        Route::get("/", "show")->name("account.index");
-        Route::get("edit-account", "edit")->name("account.edit");
-    });
-
 Route::controller(CheckoutController::class)->group(function () {
-    Route::get("/checkout", "index")->name("checkout.index");
-    Route::get("/checkout/success", "success")->name("checkout.success");
     Route::get("orders/{order}/invoice/download", "downloadInvoice")->name(
         "orders.invoice.download"
     );
-});
-
-Route::controller(CartController::class)->group(function () {
-    Route::get("/cart", "index")->name("cart.index");
 });
 
 Route::post("stripe/webhook", [

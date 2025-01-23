@@ -14,10 +14,19 @@
     transform: rotate(180deg);
 }
 
-body {
+:lang(ar) body {
+    font-family: "Alexandria", serif;
+}
+
+:lang(en) body {
     font-family: "Inter", sans-serif;
+}
+
+body {
     font-optical-sizing: auto;
+
     @apply text-darkColor;
+
 }
 
 [x-cloak] {

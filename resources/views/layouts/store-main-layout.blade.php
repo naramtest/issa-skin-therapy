@@ -3,7 +3,7 @@
 ])
 <!DOCTYPE html>
 <html
-    lang="{{ str_replace("_", "-", app()->getLocale()) }} "
+    lang="{{ str_replace("_", "-", app()->getLocale()) }}"
     dir="{{ app()->getLocale() == "en" ? "ltr" : "rtl" }}"
 >
     <head>
@@ -14,7 +14,12 @@
         {{ $seo ?? null }}
         {{ $graph ?? null }}
         {{ $keywords ?? null }}
-        @googlefonts
+
+        @if (app()->getLocale() == "en")
+            @googlefonts
+        @else
+            @googlefonts("alexandria")
+        @endif
         <!-- Styles -->
         @stack("styles")
         @livewireStyles
