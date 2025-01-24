@@ -61,7 +61,7 @@
                     {{ __("store.Visit Shop") }}
                 </h2>
             </div>
-            <x-icons.arrow-right class="h-5 w-5" />
+            <x-icons.arrow-right class="h-5 w-5 rtl:rotate-180" />
         </a>
     </div>
 
@@ -85,7 +85,9 @@
                             {{ __("store.Shop by collection") }}
                         </p>
                     </div>
-                    <x-icons.card-arrow-right class="arrow h-5 w-5" />
+                    <x-icons.card-arrow-right
+                        class="arrow h-5 w-5 rtl:rotate-180"
+                    />
                 </div>
             </a>
 
@@ -107,7 +109,9 @@
                             {{ __("store.Check out all our products") }}
                         </p>
                     </div>
-                    <x-icons.card-arrow-right class="arrow h-5 w-5" />
+                    <x-icons.card-arrow-right
+                        class="arrow h-5 w-5 rtl:rotate-180"
+                    />
                 </div>
             </a>
         </div>

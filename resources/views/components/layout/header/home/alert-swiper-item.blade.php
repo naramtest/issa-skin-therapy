@@ -6,7 +6,7 @@
         src="{{ asset("storage/icons/truck.svg") }}"
         alt="{{ __("store.Truck Icon") }}"
     />
-    <p class="line-clamp-1">
-        Free shipping in UAE over 270 AED and worldwide over $180
+    <p class="line-clamp-1 rtl:text-xs">
+        {{ __('store.Free shipping in UAE over 270 AED and worldwide over $180') }}
     </p>
 </div>

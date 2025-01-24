@@ -423,4 +423,6 @@ return [
                 the magic of his formulations, ensuring that his
                 legacy lives on in the radiant skin and confident
                 smiles of those who use his products.',
+    'Free shipping in UAE over 270 AED and worldwide over $180' =>
+        'Free shipping in UAE over 270 AED and worldwide over $180',
 ];
