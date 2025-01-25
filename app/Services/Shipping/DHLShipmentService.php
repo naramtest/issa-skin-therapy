@@ -32,7 +32,7 @@ class DHLShipmentService
                     "isRequested" => false,
                 ],
                 "productCode" => $this->getProductCode($order),
-                "localProductCode" => $this->getLocalProductCode($order),
+
                 "getRateEstimates" => false,
                 "accounts" => [
                     [
@@ -73,7 +73,7 @@ class DHLShipmentService
                             ],
                         ],
                     ],
-                    "isCustomsDeclarable" => true,
+                    "isCustomsDeclarable" => false,
                     "declaredValue" => floatval($order->total),
                     "declaredValueCurrency" => $order->currency_code,
                     "description" => "Order #" . $order->order_number,
@@ -127,12 +127,12 @@ class DHLShipmentService
             ])->post($this->baseUrl . "shipments", $request);
 
             if (!$response->successful()) {
-                Log::error("DHL Shipment Creation Failed", [
-                    "order_id" => $order->id,
-                    "response" => $response->json(),
-                    "status" => $response->status(),
-                    "request" => $request,
-                ]);
+                //                Log::error("DHL Shipment Creation Failed", [
+                //                    "order_id" => $order->id,
+                //                    "response" => $response->json(),
+                //                    "status" => $response->status(),
+                //                    "request" => $request,
+                //                ]);
 
                 throw new Exception(
                     "Failed to create DHL shipment: " .
@@ -164,19 +164,6 @@ class DHLShipmentService
         // You can implement logic to determine the appropriate product code
         // based on the shipping method selected during checkout
         return $order->shipping_method ?? "D"; // P = EXPRESS WORLDWIDE
-    }
-
-    protected function getLocalProductCode(Order $order): string
-    {
-        // Map global product codes to local ones if needed
-        $productCodeMap = [
-            "P" => "P",
-            "N" => "N",
-            "D" => "D",
-            // Add more mappings as needed
-        ];
-
-        return $productCodeMap[$this->getProductCode($order)] ?? "D";
     }
 
     protected function getCustomerDetails(Order $order): array
@@ -358,5 +345,18 @@ class DHLShipmentService
             ]);
             throw $e;
         }
+    }
+
+    protected function getLocalProductCode(Order $order): string
+    {
+        // Map global product codes to local ones if needed
+        $productCodeMap = [
+            "P" => "P",
+            "N" => "N",
+            "D" => "D",
+            // Add more mappings as needed
+        ];
+
+        return $productCodeMap[$this->getProductCode($order)] ?? "D";
     }
 }

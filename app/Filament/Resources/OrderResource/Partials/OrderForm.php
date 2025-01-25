@@ -251,7 +251,6 @@ class OrderForm
                                     ->label("Test Action")
                                     ->color("success")
                                     ->action(function () {
-                                        logger("naram");
                                         return Notification::make()
                                             ->title("Action triggered!")
                                             ->success()

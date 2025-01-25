@@ -14,14 +14,6 @@ class DHLRateCheckService
     protected string $apiKey;
     protected string $apiSecret;
 
-    protected array $domesticProducts = [
-        "DOMESTIC EXPRESS" => "N",
-    ];
-
-    protected array $internationalProducts = [
-        "EXPRESS WORLDWIDE" => "P",
-    ];
-
     public function __construct()
     {
         $this->apiKey = config("services.dhl.key");
@@ -34,13 +26,13 @@ class DHLRateCheckService
         array $origin,
         array $destination
     ): array {
-        dd(app(DHLProductService::class)->getProducts($package, $destination));
         try {
             // Determine if this is a domestic shipment
             $isDomestic = $origin["country"] === $destination["country"];
-            $productCodes = $isDomestic
-                ? $this->domesticProducts
-                : $this->internationalProducts;
+            $productCodes = app(DHLProductService::class)->getProducts(
+                $package,
+                $destination
+            );
 
             // Format postal codes for UAE (ensure they're 5 digits)
             $originPostalCode = $this->formatUAEPostalCode(
@@ -51,85 +43,77 @@ class DHLRateCheckService
             );
 
             $rates = [];
-
-            foreach ($productCodes as $productName => $productCode) {
-                $request = [
-                    "plannedShippingDateAndTime" => now()->format(
-                        "Y-m-d\TH:i:s\Z"
-                    ),
-                    "unitOfMeasurement" => "metric",
-                    "productCode" => $productCode,
-                    "isCustomsDeclarable" => !$isDomestic,
-
-                    "packages" => [
-                        [
-                            "weight" => max(0.1, floatval($package["weight"])),
-                            "dimensions" => [
-                                "length" => max(
-                                    1,
-                                    floatval($package["length"])
-                                ),
-                                "width" => max(1, floatval($package["width"])),
-                                "height" => max(
-                                    1,
-                                    floatval($package["height"])
-                                ),
-                            ],
-                        ],
-                    ],
-
-                    "accounts" => [
-                        [
-                            "typeCode" => "shipper",
-                            "number" => config("services.dhl.account_number"),
-                        ],
-                    ],
-
-                    "customerDetails" => [
-                        "shipperDetails" => [
-                            "postalCode" => $originPostalCode,
-                            "cityName" => $origin["city"],
-                            "countryCode" => $origin["country"],
-                            "addressLine1" => substr($origin["address"], 0, 45),
-                            "addressLine2" => $origin["building"] ?? "Unit 1",
-                            "addressLine3" => $origin["flat"] ?? "Floor 1",
-                            "provinceCode" => $origin["provinceCode"], // Dubai province code
-                        ],
-                        "receiverDetails" => [
-                            "postalCode" => $destinationPostalCode,
-                            "cityName" => $destination["city"],
-                            "countryCode" => $destination["country"],
-                            "addressLine1" => $destination["address"],
-                            "addressLine2" =>
-                                $destination["building"] ?? "Unit 1",
-                            "addressLine3" => $destination["flat"] ?? "Floor 1",
-                            "provinceCode" => "DU",
-                        ],
-                    ],
+            $products = [];
+            foreach ($productCodes as $productCode) {
+                $products[] = [
+                    "productCode" => $productCode["productCode"],
+                    "localProductCode" => $productCode["localProductCode"],
                 ];
+            }
+            $request = [
+                "plannedShippingDateAndTime" => now()->format("Y-m-d\TH:i:s\Z"),
+                "unitOfMeasurement" => "metric",
+                "isCustomsDeclarable" => !$isDomestic,
+                "productsAndServices" => $products,
+                "packages" => [
+                    [
+                        "weight" => max(0.1, floatval($package["weight"])),
+                        "dimensions" => [
+                            "length" => max(1, floatval($package["length"])),
+                            "width" => max(1, floatval($package["width"])),
+                            "height" => max(1, floatval($package["height"])),
+                        ],
+                    ],
+                ],
 
-                $response = Http::withHeaders([
-                    "Authorization" =>
-                        "Basic " .
-                        base64_encode($this->apiKey . ":" . $this->apiSecret),
-                    "Content-Type" => "application/json",
-                    "Accept" => "application/json",
-                ])->post($this->baseUrl . "rates", $request);
+                "accounts" => [
+                    [
+                        "typeCode" => "shipper",
+                        "number" => config("services.dhl.account_number"),
+                    ],
+                ],
 
-                if ($response->successful()) {
-                    $responseData = $response->json();
-                    $formattedRates = $this->formatRateResponse($responseData);
-                    $rates = array_merge($rates, $formattedRates);
-                } else {
-                    Log::warning(
-                        "DHL Rate Request Failed for product $productCode",
-                        [
-                            "status" => $response->status(),
-                            "response" => $response->json(),
-                            "request" => $request,
-                        ]
-                    );
-                }
+                "customerDetails" => [
+                    "shipperDetails" => [
+                        "postalCode" => $originPostalCode,
+                        "cityName" => $origin["city"],
+                        "countryCode" => $origin["country"],
+                        "addressLine1" => substr($origin["address"], 0, 45),
+                        "addressLine2" => $origin["building"] ?? "Unit 1",
+                        "addressLine3" => $origin["flat"] ?? "Floor 1",
+                        "provinceCode" => $origin["provinceCode"], // Dubai province code
+                    ],
+                    "receiverDetails" => [
+                        "postalCode" => $destinationPostalCode,
+                        "cityName" => $destination["city"],
+                        "countryCode" => $destination["country"],
+                        "addressLine1" => $destination["address"],
+                        "addressLine2" => $destination["building"] ?? "Unit 1",
+                        "addressLine3" => $destination["flat"] ?? "Floor 1",
+                        "provinceCode" => "DU",
+                    ],
+                ],
+            ];
+
+            $response = Http::withHeaders([
+                "Authorization" =>
+                    "Basic " .
+                    base64_encode($this->apiKey . ":" . $this->apiSecret),
+                "Content-Type" => "application/json",
+                "Accept" => "application/json",
+            ])->post($this->baseUrl . "rates", $request);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                $formattedRates = $this->formatRateResponse($responseData);
+                $rates = array_merge($rates, $formattedRates);
+            } else {
+                Log::warning("DHL Rate Request Failed for product ", [
+                    "status" => $response->status(),
+                    "response" => $response->json(),
+                    "request" => $request,
+                ]);
             }
 
             return array_values(array_filter($rates));

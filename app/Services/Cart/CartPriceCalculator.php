@@ -2,6 +2,7 @@
 
 namespace App\Services\Cart;
 
+use App\Services\Cart\Redis\CartCostsRedisService;
 use App\Services\Currency\CurrencyHelper;
 use App\ValueObjects\CartItem;
 use Money\Money;
@@ -9,8 +10,8 @@ use Money\Money;
 readonly class CartPriceCalculator
 {
     public function __construct(
-        private CartCostsManager $costsManager,
-        private CartTaxCalculator $taxCalculator
+        private CartTaxCalculator $taxCalculator,
+        private CartCostsRedisService $cartCostsRedisService
     ) {
     }
 
@@ -20,8 +21,9 @@ readonly class CartPriceCalculator
         $subtotal = $this->calculateSubtotal($items);
         $taxableAmount = $subtotal;
 
+        $costs = $this->cartCostsRedisService->getCosts();
         // 2. Process additional costs
-        foreach ($this->costsManager->getCosts() as $cost) {
+        foreach ($costs as $cost) {
             $taxableAmount = $cost->taxable
                 ? $taxableAmount->add($cost->amount)
                 : $taxableAmount;
@@ -29,7 +31,7 @@ readonly class CartPriceCalculator
 
         // 3. Calculate total with tax
         $total = $subtotal;
-        foreach ($this->costsManager->getCosts() as $cost) {
+        foreach ($costs as $cost) {
             $total = $cost->subtract
                 ? $total->subtract($cost->amount)
                 : $total->add($cost->amount);
@@ -39,7 +41,6 @@ readonly class CartPriceCalculator
         if ($tax) {
             $total = $total->add($tax);
         }
-
         return $total;
     }
 

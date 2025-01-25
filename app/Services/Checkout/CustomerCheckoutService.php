@@ -15,11 +15,13 @@ use DB;
 
 readonly class CustomerCheckoutService
 {
-    public function __construct(
-        private OrderService $orderService,
-        private CartService $cartService,
-        private CouponService $couponService
-    ) {
+    private OrderService $orderService;
+    private CouponService $couponService;
+
+    public function __construct(private CartService $cartService)
+    {
+        $this->orderService = new OrderService();
+        $this->couponService = new CouponService();
     }
 
     public function processCheckout(array $data): Order

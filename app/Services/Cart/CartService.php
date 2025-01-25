@@ -7,6 +7,8 @@ use App\Enums\ProductType;
 use App\Models\Bundle;
 use App\Models\Coupon;
 use App\Models\Product;
+use App\Services\Cart\Redis\CartCostsRedisService;
+use App\Services\Cart\Redis\CartItemsRedisService;
 use Exception;
 use Log;
 use Money\Money;
@@ -16,17 +18,19 @@ use Psr\Container\NotFoundExceptionInterface;
 class CartService
 {
     //    TODO: add USer Currency to the final order with the current currency conversion rate
-    protected ?Coupon $appliedCoupon;
-    protected ?Money $couponDiscount;
-    private CartRedisService $redisService;
+    protected ?Coupon $appliedCoupon = null;
+    protected ?Money $couponDiscount = null;
 
     public function __construct(
         private readonly CartPriceCalculator $priceCalculator,
-        private readonly CartCostsManager $costsManager
+        private readonly CartItemsRedisService $itemsService,
+        private readonly CartCostsRedisService $costsService
     ) {
-        $this->redisService = new CartRedisService($this->resolveCartId());
-        $this->appliedCoupon = null;
-        $this->couponDiscount = null;
+    }
+
+    public function getId(): string
+    {
+        return $this->resolveCartId();
     }
 
     private function resolveCartId(): string
@@ -60,11 +64,6 @@ class CartService
         return $cartId;
     }
 
-    public function getId(): string
-    {
-        return $this->resolveCartId();
-    }
-
     /**
      * @throws Exception
      */
@@ -84,12 +83,12 @@ class CartService
             throw new Exception(__("store.Insufficient stock"));
         }
 
-        $this->redisService->addItem($purchasable, $quantity, $options);
+        $this->itemsService->addItem($purchasable, $quantity, $options);
     }
 
     public function removeItem(string $itemId): void
     {
-        $this->redisService->removeItem($itemId);
+        $this->itemsService->removeItem($itemId);
     }
 
     /**
@@ -97,7 +96,7 @@ class CartService
      */
     public function updateItemQuantity(string $itemId, int $quantity): void
     {
-        $item = $this->redisService->getItem($itemId);
+        $item = $this->itemsService->getItem($itemId);
 
         if (!$item) {
             throw new Exception(__("store.Item not found in cart"));
@@ -107,28 +106,17 @@ class CartService
             throw new Exception(__("store.Insufficient stock"));
         }
 
-        $this->redisService->updateItem($itemId, $quantity);
-    }
-
-    public function clear(): void
-    {
-        $this->redisService->clear();
-        $this->costsManager->clearCosts();
+        $this->itemsService->updateItem($itemId, $quantity);
     }
 
     public function isEmpty(): bool
     {
-        return !$this->exists();
-    }
-
-    public function exists(): bool
-    {
-        return $this->redisService->exists();
+        return !$this->itemsService->exists();
     }
 
     public function itemCount(): int
     {
-        return $this->redisService->count();
+        return $this->itemsService->count();
     }
 
     public function getTotal(): Money
@@ -138,7 +126,7 @@ class CartService
 
     public function getItems(): array
     {
-        return $this->redisService->getItems();
+        return $this->itemsService->getItems();
     }
 
     public function getSubtotal(): Money
@@ -148,31 +136,37 @@ class CartService
 
     public function getAdditionalCosts(): array
     {
-        return $this->costsManager->getCosts();
+        return $this->costsService->getCosts();
     }
 
+    /**
+     * @throws Exception
+     */
     public function applyCoupon(Coupon $coupon, Money $discount): void
     {
         $this->appliedCoupon = $coupon;
         $this->couponDiscount = $discount;
-        $this->costsManager->addCost(CartCostType::DISCOUNT, $discount);
+        $this->addCost(CartCostType::DISCOUNT, $discount);
     }
 
+    /**
+     * @throws Exception
+     */
     public function addCost(CartCostType $type, Money $amount): void
     {
-        $this->costsManager->addCost($type, $amount);
+        $this->costsService->addCost($type, $amount);
     }
 
     public function removeCoupon(): void
     {
         $this->appliedCoupon = null;
         $this->couponDiscount = null;
-        $this->costsManager->removeCost(CartCostType::DISCOUNT);
+        $this->removeCost(CartCostType::DISCOUNT);
     }
 
     public function removeCost(CartCostType $type): void
     {
-        $this->costsManager->removeCost($type);
+        $this->costsService->removeCost($type);
     }
 
     public function getAppliedCoupon(): ?Coupon
@@ -183,5 +177,23 @@ class CartService
     public function getCouponDiscount(): ?Money
     {
         return $this->couponDiscount;
+    }
+
+    public function clearItems(): void
+    {
+        $this->itemsService->clear();
+    }
+
+    public function clear(): void
+    {
+        $this->itemsService->clear();
+        $this->costsService->clear();
+    }
+
+    // Clear only costs
+
+    public function clearCosts(): void
+    {
+        $this->costsService->clear();
     }
 }

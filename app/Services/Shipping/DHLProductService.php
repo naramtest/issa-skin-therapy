@@ -3,6 +3,8 @@
 namespace App\Services\Shipping;
 
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -20,6 +22,9 @@ class DHLProductService
         $this->accountNumber = config("services.dhl.account_number");
     }
 
+    /**
+     * @throws ConnectionException
+     */
     public function getProducts(array $package, array $destination): array
     {
         $address = config("store.address");
@@ -68,17 +73,23 @@ class DHLProductService
                     "response" => $response->json(),
                     "request" => $request,
                 ]);
+
+                throw new Exception(
+                    "Failed to Get DHL Product Response: " .
+                        ($response->json()["detail"] ?? "Unknown error")
+                );
             }
 
-            $shipmentData = $response->json();
-            dd($shipmentData);
-            return [
-                "tracking_number" => $shipmentData["shipmentTrackingNumber"],
-                "label_url" => $shipmentData["documents"][0]["url"] ?? null,
-                "shipping_label_data" =>
-                    $shipmentData["documents"][0]["content"] ?? null,
-                "raw_response" => $shipmentData,
-            ];
+            $shipmentData = $response->json()["products"];
+            $products = [];
+            foreach ($shipmentData as $shipment) {
+                $products[] = [
+                    "productName" => $shipment["productName"],
+                    "productCode" => $shipment["productCode"],
+                    "localProductCode" => $shipment["localProductCode"],
+                ];
+            }
+            return $products;
         } catch (Exception $e) {
             Log::error("DHL Product Request Error", [
                 "error" => $e->getMessage(),
