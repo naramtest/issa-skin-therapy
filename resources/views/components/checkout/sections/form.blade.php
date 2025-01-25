@@ -1,7 +1,11 @@
+{{-- resources/views/components/checkout/sections/form.blade.php --}}
+
 @props([
     "form",
     "billingCities",
     "billingStates",
+    "shippingCities",
+    "shippingStates",
     "countries",
 ])
 
@@ -70,10 +74,11 @@
 
             <!-- Location selects -->
             <x-checkout.sections.location-selects
-                type="billing"
-                :billing-cities="$billingCities"
-                :billing-states="$billingState"
+                prefix="billing"
+                :cities="$billingCities"
+                :states="$billingState"
                 :countries="$countries"
+                :form="$form"
             />
         </div>
 
@@ -174,31 +179,13 @@
                 />
             </div>
 
-            <x-checkout.select-field
-                label="Country / Region"
-                wire:model.live="form.shipping_country"
-                required
-                field="form.shipping_country"
-                :options="['AE','Syria']"
-                :error="$errors->first('form.shipping_country')"
-            />
-
-            <x-checkout.select-field
-                label="State / Region"
-                wire:model="form.shipping_state"
-                required
-                field="form.shipping_state"
-                :options="['AE','Syria']"
-                :error="$errors->first('form.shipping_state')"
-            />
-
-            <x-checkout.input-field
-                label="City"
-                wire:model="form.shipping_city"
-                required
-                place-holder="City"
-                field="form.shipping_city"
-                :error="$errors->first('form.shipping_city')"
+            <!-- Location selects -->
+            <x-checkout.sections.location-selects
+                prefix="shipping"
+                :cities="$shippingCities"
+                :states="$shippingStates"
+                :countries="$countries"
+                :form="$form"
             />
 
             <x-checkout.input-field

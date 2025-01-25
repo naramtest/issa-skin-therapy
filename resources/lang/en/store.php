@@ -425,4 +425,5 @@ return [
                 smiles of those who use his products.',
     'Free shipping in UAE over 270 AED and worldwide over $180' =>
         'Free shipping in UAE over 270 AED and worldwide over $180',
+    "No results found" => "No results found",
 ];

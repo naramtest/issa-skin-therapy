@@ -18,7 +18,7 @@ trait LocationHandler
 
     protected LocationService $locationService;
 
-    public function initializeLocationHandler(): void
+    public function setupLocationHandler(): void
     {
         $this->locationService = app(LocationService::class);
         $this->countries = $this->locationService->getCountries();

@@ -3,6 +3,8 @@
 namespace App\Livewire\Forms;
 
 use App\Enums\AddressType;
+use App\Models\Country;
+use App\Models\State;
 use Livewire\Attributes\Rule;
 use Livewire\Form;
 
@@ -122,7 +124,13 @@ class CheckoutForm extends Form
         $this->billing_last_name = $address->last_name;
         $this->billing_address = $address->address;
         $this->billing_city = $address->city;
-        $this->billing_state = $address->state;
+        $country = Country::select(["id", "iso2"])
+            ->where("iso2", $address->country)
+            ->first();
+        $state = State::where("name", $address->state)
+            ->where("country_id", $country->id)
+            ->first();
+        $this->billing_state = $state->id;
         $this->billing_country = $address->country;
         $this->billing_postal_code = $address->postal_code;
         $this->billing_area = $address->area;

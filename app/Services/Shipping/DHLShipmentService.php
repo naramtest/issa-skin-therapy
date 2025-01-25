@@ -73,7 +73,9 @@ class DHLShipmentService
                             ],
                         ],
                     ],
-                    "isCustomsDeclarable" => false,
+                    "isCustomsDeclarable" =>
+                        $order->shippingAddress->country !=
+                        config("store.address.country"),
                     "declaredValue" => floatval($order->total),
                     "declaredValueCurrency" => $order->currency_code,
                     "description" => "Order #" . $order->order_number,

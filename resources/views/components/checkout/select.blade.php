@@ -31,6 +31,9 @@
             Livewire.on('locationUpdated', () => {
                 this.$nextTick(() => this.updateOption())
             })
+            Livewire.hook('message.processed', () => {
+                this.$nextTick(() => this.updateOption())
+            })
         },
         get filteredOptions() {
             return this.options.filter((option) =>
@@ -127,7 +130,7 @@
                     x-show="filteredOptions.length === 0"
                     class="px-4 py-2 text-sm text-gray-500"
                 >
-                    No results found
+                    {{ __("store.No results found") }}
                 </div>
             </div>
         </div>

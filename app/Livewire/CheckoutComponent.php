@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Log;
+use Money\Money;
 
 class CheckoutComponent extends Component
 {
@@ -58,21 +59,13 @@ class CheckoutComponent extends Component
             return;
         }
 
-        // Initialize location handling
-        $this->initializeLocationHandler();
-        $this->initializeWithCouponHandler();
         if (auth()->check()) {
             $this->form->setFromUser(auth()->user());
-
-            // Load states and cities if user has address
-            //            if ($this->form->billing_country) {
-            //                $this->updatedFormBillingCountry($this->form->billing_country);
-            //                if ($this->form->billing_state) {
-            //                    $this->updatedFormBillingState($this->form->billing_state);
-            //                }
-            //            }
         }
 
+        // Initialize location handling
+        $this->setupLocationHandler();
+        $this->initializeWithCouponHandler();
         // Initialize shipping-related properties
         $this->shippingRates = collect();
         $this->loadingRates = false;
@@ -218,7 +211,7 @@ class CheckoutComponent extends Component
     }
 
     #[Computed]
-    public function discount(): ?\Money\Money
+    public function discount(): ?Money
     {
         return $this->getCouponDiscountAmount();
     }

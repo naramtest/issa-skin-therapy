@@ -23,6 +23,7 @@ trait WithShippingCalculation
 
     protected function checkAddressCompleteness(): void
     {
+        logger("called");
         $this->canCalculateShipping = $this->hasCompleteAddress();
         if ($this->canCalculateShipping) {
             $this->calculateShippingRates();
@@ -62,7 +63,7 @@ trait WithShippingCalculation
             $rates = collect();
 
             // Add free shipping for UAE
-            if ($destination["country"] === "AE") {
+            if ($destination["country"] === config("store.address.country")) {
                 $rates->push([
                     "service_code" => "free_shipping",
                     "service_name" => __("store.Free Shipping"),
@@ -230,11 +231,14 @@ trait WithShippingCalculation
         $this->updateTotals();
     }
 
-    public function updated($field): void
+    public function updating($property, $newValue): void
     {
         // Only recalculate shipping when address fields change
-        if ($this->isAddressField($field)) {
-            $this->checkAddressCompleteness();
+
+        if (data_get($this, $property) !== $newValue) {
+            if ($this->isAddressField($property)) {
+                $this->checkAddressCompleteness();
+            }
         }
     }
 
