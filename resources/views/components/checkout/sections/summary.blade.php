@@ -7,7 +7,7 @@
     "discount",
 ])
 
-<div class="rounded-2xl bg-[#F5F5F5] p-8">
+<div class="relative rounded-2xl bg-[#F5F5F5] p-8">
     <h2 class="mb-6 text-lg font-semibold">
         {{ __("store. Order Summary") }}
     </h2>
@@ -84,4 +84,11 @@
             </tr>
         </tfoot>
     </table>
+
+    <div
+        wire:loading.class="!flex"
+        class="rounded-inherit absolute inset-0 hidden items-center justify-center overflow-hidden bg-gray-100/70"
+    >
+        <span class="loader"></span>
+    </div>
 </div>

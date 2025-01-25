@@ -41,6 +41,12 @@ trait WithShippingCalculation
                 !empty($this->form->shipping_postal_code);
         }
 
+        logger(
+            "result:" . !empty($this->form->billing_country) &&
+                !empty($this->form->billing_state) &&
+                !empty($this->form->billing_city) &&
+                !empty($this->form->billing_postal_code)
+        );
         return !empty($this->form->billing_country) &&
             !empty($this->form->billing_state) &&
             !empty($this->form->billing_city) &&
@@ -53,6 +59,8 @@ trait WithShippingCalculation
 
         try {
             $destination = $this->getShippingAddress();
+            logger("destination: ");
+            logger($destination);
 
             if (empty($destination)) {
                 $this->shippingRates = collect();
@@ -230,14 +238,13 @@ trait WithShippingCalculation
         $this->updateTotals();
     }
 
-    public function updating($property, $newValue): void
+    public function updated($property): void
     {
         // Only recalculate shipping when address fields change
-
-        if (data_get($this, $property) !== $newValue) {
-            if ($this->isAddressField($property)) {
-                $this->checkAddressCompleteness();
-            }
+        //TODO: don't request new rate if the updated field is the same as the old one
+        //TODO: when country updated the state and city should update before asking for rate
+        if ($this->isAddressField($property)) {
+            $this->checkAddressCompleteness();
         }
     }
 

@@ -16,8 +16,6 @@ trait LocationHandler
     public Collection $shippingStates;
     public Collection $shippingCities;
 
-    protected LocationService $locationService;
-
     public function setupLocationHandler(): void
     {
         $this->locationService = app(LocationService::class);
