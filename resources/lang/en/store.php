@@ -426,4 +426,7 @@ return [
     'Free shipping in UAE over 270 AED and worldwide over $180' =>
         'Free shipping in UAE over 270 AED and worldwide over $180',
     "No results found" => "No results found",
+    "and get" => "and get",
+    "Share your before and after" => "Share your before and after",
+    "a nice gift!" => "a nice gift!",
 ];

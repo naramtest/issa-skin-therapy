@@ -35,6 +35,16 @@
         <livewire:cart-component />
         <x-layout.footer-home />
 
+        <!-- Custom Cursor -->
+        <div
+            id="custom-cursor"
+            class="pointer-events-none fixed left-0 top-0 z-[9999] hidden h-8 w-8 rounded-full bg-white"
+            style="transform: translate(-50%, -50%)"
+        >
+            <div class="flex h-full w-full items-center justify-center">
+                <x-gmdi-close class="h-3 w-3 text-gray-600" />
+            </div>
+        </div>
         @livewireScriptConfig
         @stack("scripts")
     </body>

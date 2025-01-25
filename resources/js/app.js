@@ -1,5 +1,8 @@
 import "./bootstrap";
-import { Alpine, Livewire } from "../../vendor/livewire/livewire/dist/livewire.esm";
+import {
+    Alpine,
+    Livewire,
+} from "../../vendor/livewire/livewire/dist/livewire.esm";
 import { initLightbox } from "./feature/lightbox.js";
 
 import Swiper from "swiper";

@@ -2,7 +2,53 @@
 <div
     x-data="{
         show: false,
+        cursor: null,
         init() {
+            // Reference to the custom cursor element
+            this.cursor = document.getElementById('custom-cursor')
+
+            // Track mouse movement for the custom cursor
+            window.addEventListener('mousemove', (e) => {
+                gsap.to(this.cursor, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0.1,
+                    ease: 'power2.out',
+                })
+            })
+
+            // Overlay element reference
+            const overlay = document.querySelector('.fixed.inset-0.bg-black\\/50')
+
+            // Hover effect on 'mouseenter'
+            overlay.addEventListener('mouseenter', () => {
+                gsap.to(this.cursor, {
+                    scale: 2,
+                    backgroundColor: 'rgba(255, 255, 255)',
+                    duration: 0.3,
+                })
+
+                // Ensure the custom cursor remains visible
+                this.cursor.style.display = 'block'
+
+                // Hide the default cursor
+                overlay.style.cursor = 'none'
+            })
+
+            // Remove custom effect on 'mouseleave'
+            overlay.addEventListener('mouseleave', () => {
+                gsap.to(this.cursor, {
+                    scale: 1,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    duration: 0.3,
+                })
+
+                // Restore the default cursor
+                overlay.style.cursor = 'pointer'
+
+                // Hide the custom cursor
+                this.cursor.style.display = 'none'
+            })
             setTimeout(() => {
                 this.show = @entangle("showModal")
 
@@ -122,12 +168,14 @@
     <div class="fixed inset-0 bg-black/50" @click="close()"></div>
 
     <!-- Modal -->
-    <div class="fixed bottom-8 right-8 flex h-[55vh] w-[55vw] flex-col">
+    <div
+        class="fixed bottom-0 end-0 flex flex-col md:bottom-6 md:end-6 md:h-[50vh] md:w-[55vw]"
+    >
         <!-- Content -->
         <div class="flex h-full overflow-hidden">
             <!-- Left side - Image -->
             <div
-                class="modal-image relative h-full w-[40%] origin-right overflow-hidden opacity-0"
+                class="modal-image relative hidden h-full w-[40%] origin-right overflow-hidden opacity-0 md:block"
                 style="transform-style: preserve-3d"
             >
                 <img
@@ -139,11 +187,11 @@
 
             <!-- Right side - Content -->
             <div
-                class="modal-content flex w-[60%] flex-col justify-between rounded-e-[20px] bg-white p-8 shadow-xl"
+                class="modal-content flex w-full flex-col justify-between gap-y-8 rounded-t-[20px] bg-white p-4 shadow-xl md:w-[60%] md:gap-y-0 md:!rounded-e-[20px] md:rounded-t-none md:p-8"
             >
                 <button
                     @click="close()"
-                    class="absolute end-4 top-4 z-10 flex h-12 w-12 items-center justify-center rounded-full border border-gray-400 bg-white transition-transform hover:scale-110"
+                    class="absolute end-4 top-4 z-10 hidden h-12 w-12 items-center justify-center rounded-full border border-gray-400 bg-white transition-transform hover:scale-110 md:flex"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -158,10 +206,13 @@
                         <path d="M18 6L6 18M6 6l12 12" />
                     </svg>
                 </button>
+                <div
+                    class="mx-auto h-[4px] w-[70px] rounded bg-[#1717171a] md:hidden"
+                ></div>
                 <h2 class="mt-2 w-[95%] text-3xl font-bold">
-                    Share your before and after
+                    {{ __("store.Share your before and after") }}
                     <br />
-                    and get
+                    {{ __("store.and get") }}
                     <span
                         x-data="{
                             startAnimation: false,
@@ -175,7 +226,7 @@
                         }"
                         class="relative inline-block"
                     >
-                        a nice gift!
+                        {{ __("store.a nice gift!") }}
                         <svg
                             x-show="startAnimation"
                             x-transition:enter="transition duration-100 ease-out"
