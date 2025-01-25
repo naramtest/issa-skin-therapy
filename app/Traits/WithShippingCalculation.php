@@ -23,7 +23,6 @@ trait WithShippingCalculation
 
     protected function checkAddressCompleteness(): void
     {
-        logger("called");
         $this->canCalculateShipping = $this->hasCompleteAddress();
         if ($this->canCalculateShipping) {
             $this->calculateShippingRates();

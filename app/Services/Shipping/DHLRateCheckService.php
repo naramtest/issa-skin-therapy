@@ -14,6 +14,22 @@ class DHLRateCheckService
     protected string $apiKey;
     protected string $apiSecret;
 
+    protected array $domesticProducts = [
+        [
+            "productName" => "DOMESTIC EXPRESS",
+            "productCode" => "N",
+            "localProductCode" => "N",
+        ],
+    ];
+
+    protected array $internationalProducts = [
+        [
+            "productName" => "EXPRESS WORLDWIDE",
+            "productCode" => "P",
+            "localProductCode" => "P",
+        ],
+    ];
+
     public function __construct()
     {
         $this->apiKey = config("services.dhl.key");
@@ -29,10 +45,14 @@ class DHLRateCheckService
         try {
             // Determine if this is a domestic shipment
             $isDomestic = $origin["country"] === $destination["country"];
-            $productCodes = app(DHLProductService::class)->getProducts(
-                $package,
-                $destination
-            );
+            $productCodes = $isDomestic
+                ? $this->domesticProducts
+                : $this->internationalProducts;
+            //
+            //            $productCodes = app(DHLProductService::class)->getProducts(
+            //                $package,
+            //                $destination
+            //            );
 
             // Format postal codes for UAE (ensure they're 5 digits)
             $originPostalCode = $this->formatUAEPostalCode(
