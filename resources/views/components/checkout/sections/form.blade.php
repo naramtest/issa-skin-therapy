@@ -35,7 +35,7 @@
                 :error="$errors->first('form.billing_last_name')"
             />
         </div>
-
+        {{-- TODO: phone number --}}
         <x-checkout.input-field
             label="Phone"
             wire:model="form.phone"
