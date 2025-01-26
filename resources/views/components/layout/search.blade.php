@@ -7,9 +7,7 @@
     }"
     x-show="mobileMenu"
     x-cloak
-    class="menu-panel fixed inset-x-0 bottom-0 z-50 h-[91vh] transform rounded-t-[20px] bg-white shadow-lg md:h-[80vh]"
-    style="transform: translateY(100%)"
-    :style="mobileMenu ? 'transform: translateY(0)' : 'transform: translateY(100%)'"
+    class="menu-panel fixed inset-x-0 bottom-0 z-50 h-[91vh] translate-y-full transform rounded-t-[20px] bg-white shadow-lg md:h-[80vh]"
 >
     <div class="relative h-full overflow-y-auto px-6 pt-6">
         <!-- Drag Handle -->

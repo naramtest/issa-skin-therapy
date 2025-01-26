@@ -72,7 +72,6 @@ export const initHeaderAnimations = () => {
                 y: "0%",
                 duration: 0.5,
                 ease: "power3.out",
-                delay: 0.05,
             });
 
             // Menu items stagger animation
