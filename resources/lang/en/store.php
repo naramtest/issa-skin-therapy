@@ -432,4 +432,8 @@ return [
     "Menu" => "Menu",
     "Language" => "Language",
     "Account" => "Account",
+    "Search" => "Search",
+    "about" => "about",
+    "Contact" => "Contact",
+    "POPULAR CATEGORIES" => "POPULAR CATEGORIES",
 ];

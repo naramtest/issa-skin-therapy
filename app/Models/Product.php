@@ -28,6 +28,8 @@ class Product extends Model implements HasMedia, Purchasable
     use HasPurchasableMedia;
     use Searchable;
 
+    public bool $asYouType = true;
+
     public array $sortable = [
         "order_column_name" => "order",
     ];
@@ -213,8 +215,9 @@ class Product extends Model implements HasMedia, Purchasable
 
     public function shouldBeSearchable(): bool
     {
-        return $this->status === ProductStatus::PUBLISHED and
-            !$this->published_at and
-            !$this->published_at <= now();
+        return true;
+        //        return $this->status === ProductStatus::PUBLISHED and
+        //            !$this->published_at and
+        //            !$this->published_at <= now();
     }
 }

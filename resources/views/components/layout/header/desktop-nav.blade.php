@@ -30,7 +30,17 @@
             >
                 <x-icons.person class="h-7 w-7" />
             </a>
-            <x-icons.search class="h-6 w-6" />
+            <div
+                x-data="{
+                    openSearch() {
+                        this.$dispatch('open-search')
+                    },
+                }"
+                @click="openSearch()"
+            >
+                <x-icons.search class="h-6 w-6 cursor-pointer" />
+            </div>
+
             {{-- <x-icons.bookmark class="h-7 w-7" /> --}}
             <x-icons.cart-icon
                 x-data

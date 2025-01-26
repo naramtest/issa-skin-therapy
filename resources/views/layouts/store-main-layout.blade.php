@@ -37,6 +37,8 @@
         <x-bottom.bottom-nav-bar />
         <x-bottom.language-modal />
 
+        <livewire:search-component />
+
         <!-- Custom Cursor -->
         <div
             id="custom-cursor"
