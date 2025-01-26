@@ -102,7 +102,7 @@
 
         <x-checkout.input-field
             label="Postal Code"
-            wire:model="form.billing_postal_code"
+            wire:model.blur="form.billing_postal_code"
             required
             place-holder="{{ __('store.Postal Code') }}"
             field="form.billing_postal_code"
@@ -208,7 +208,7 @@
 
             <x-checkout.input-field
                 label="Postal Code"
-                wire:model="form.shipping_postal_code"
+                wire:model.blur="form.shipping_postal_code"
                 required
                 place-holder="Postal Code"
                 field="form.shipping_postal_code"

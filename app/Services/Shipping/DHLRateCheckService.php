@@ -71,7 +71,9 @@ class DHLRateCheckService
                 ];
             }
             $request = [
-                "plannedShippingDateAndTime" => now()->format("Y-m-d\TH:i:s\Z"),
+                "plannedShippingDateAndTime" => now()
+                    ->addDay()
+                    ->format("Y-m-d\TH:i:s\Z"),
                 "unitOfMeasurement" => "metric",
                 "isCustomsDeclarable" => !$isDomestic,
                 "productsAndServices" => $products,
@@ -108,9 +110,6 @@ class DHLRateCheckService
                         "cityName" => $destination["city"],
                         "countryCode" => $destination["country"],
                         "addressLine1" => $destination["address"],
-                        "addressLine2" => $destination["building"] ?? "Unit 1",
-                        "addressLine3" => $destination["flat"] ?? "Floor 1",
-                        "provinceCode" => "DU",
                     ],
                 ],
             ];

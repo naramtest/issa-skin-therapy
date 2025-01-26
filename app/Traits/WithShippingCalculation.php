@@ -41,12 +41,6 @@ trait WithShippingCalculation
                 !empty($this->form->shipping_postal_code);
         }
 
-        logger(
-            "result:" . !empty($this->form->billing_country) &&
-                !empty($this->form->billing_state) &&
-                !empty($this->form->billing_city) &&
-                !empty($this->form->billing_postal_code)
-        );
         return !empty($this->form->billing_country) &&
             !empty($this->form->billing_state) &&
             !empty($this->form->billing_city) &&
@@ -59,8 +53,6 @@ trait WithShippingCalculation
 
         try {
             $destination = $this->getShippingAddress();
-            logger("destination: ");
-            logger($destination);
 
             if (empty($destination)) {
                 $this->shippingRates = collect();
