@@ -172,7 +172,7 @@
     }"
     x-show="show"
     x-cloak
-    class="fixed inset-0 z-50"
+    class="fixed inset-0 z-[200]"
 >
     <!-- Overlay -->
     <div class="fixed inset-0 bg-black/50" @click="close()"></div>

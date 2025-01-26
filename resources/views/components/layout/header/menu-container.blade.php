@@ -1,5 +1,6 @@
 <div
     id="nav"
+    @toggle-mobile-menu.window="mobileMenu = !mobileMenu"
     class="relative bg-darkColor"
     x-data="{
         searchOpen: false,
@@ -18,6 +19,8 @@
             scrollPosition = window.scrollY
             sticky = scrollPosition > navOffset
         })
+        // Listen for the custom event and update mobileMenu value
+
         $watch('mobileMenu', (value) => {
             if (value) {
                 openMenu()

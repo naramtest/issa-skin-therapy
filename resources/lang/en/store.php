@@ -429,4 +429,7 @@ return [
     "and get" => "and get",
     "Share your before and after" => "Share your before and after",
     "a nice gift!" => "a nice gift!",
+    "Menu" => "Menu",
+    "Language" => "Language",
+    "Account" => "Account",
 ];

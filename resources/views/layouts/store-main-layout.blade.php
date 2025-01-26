@@ -34,6 +34,8 @@
         {{ $slot }}
         <livewire:cart-component />
         <x-layout.footer-home />
+        <x-bottom.bottom-nav-bar />
+        <x-bottom.language-modal />
 
         <!-- Custom Cursor -->
         <div
