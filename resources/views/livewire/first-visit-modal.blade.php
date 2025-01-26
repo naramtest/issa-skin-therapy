@@ -3,7 +3,14 @@
     x-data="{
         show: false,
         cursor: null,
-        init() {
+        showCursor() {
+            this.isTouchDevice =
+                'ontouchstart' in window || navigator.maxTouchPoints > 0
+
+            // Do not initialize the custom cursor for touch devices
+            if (this.isTouchDevice) {
+                return
+            }
             // Reference to the custom cursor element
             this.cursor = document.getElementById('custom-cursor')
 
@@ -49,6 +56,9 @@
                 // Hide the custom cursor
                 this.cursor.style.display = 'none'
             })
+        },
+        init() {
+            this.showCursor()
             setTimeout(() => {
                 this.show = @entangle("showModal")
 
