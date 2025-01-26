@@ -1,6 +1,6 @@
-<footer {{ $attributes->class(["relative bg-footerColor"]) }}>
-    {{-- TODO: add nav item and links --}}
-    {{-- TODO: bottom nav bar in small screen --}}
+<footer
+    {{ $attributes->class(["relative bg-footerColor pb-[80px] md:pb-0"]) }}
+>
     <x-layout.footer.home.top class="relative z-[20]" />
     <div
         class="content-x-padding relative z-[10] flex -translate-y-4 flex-col items-center gap-8 rounded-b-[20px] bg-darkColor py-14 text-white lg:flex-row lg:items-start"
