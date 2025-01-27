@@ -1,7 +1,7 @@
 <section
-    class="content-x-padding mt-16 flex flex-col gap-5 rounded-b-[20px] border-b-[1px] border-[#A6BCC599] pb-20 text-[17px] md:mt-[80px] md:flex-row"
+    class="padding-from-side-menu mt-16 flex flex-col gap-5 rounded-b-[20px] border-b-[1px] border-[#A6BCC599] pb-20 text-[17px] md:mt-[80px] md:flex-row"
 >
-    <div class="md:w-[30%]">
+    <div class="flex flex-col justify-center md:w-[30%]">
         <div>{{ __("store.Our Core Values") }}</div>
         <h2 class="headline-font mt-[20px]">
             {{ __("store.Crafted by Dermatologist") }}

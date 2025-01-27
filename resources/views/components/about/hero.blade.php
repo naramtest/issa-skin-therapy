@@ -9,10 +9,10 @@
         class="card-overlay card-opacity-10 relative h-full w-full rounded-t-[1.25rem]"
     >
         <div
-            class="padding-from-side-menu absolute bottom-[20%] start-0 z-[10] text-lightColor lg:bottom-[9%]"
+            class="padding-from-side-menu absolute bottom-[20%] start-0 z-[10] text-lightColor lg:bottom-[13%]"
         >
             <p class="text-[17px]">{{ __("store.Our Story") }}</p>
-            <h1 class="mt-2 text-4xl font-bold lg:mt-0 lg:text-[75px]">
+            <h1 class="mt-2 text-4xl font-bold lg:mt-6 lg:text-[75px]">
                 {{ __("store.Skin That Defies Time") }}
             </h1>
         </div>

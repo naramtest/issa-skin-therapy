@@ -3,7 +3,7 @@
         class="flex flex-col-reverse items-start gap-12 rounded-2xl bg-black p-4 md:flex-row md:p-[60px]"
     >
         <div
-            class="rounded-xl px-4 text-white md:w-[45%] md:bg-[#454242] md:p-[30px] md:px-0"
+            class="rounded-xl px-4 text-white md:w-[45%] md:bg-[#454242] md:p-[30px] md:px-6"
         >
             <h2 class="headline-font">
                 {{ __("store.Early Years and Education") }}
