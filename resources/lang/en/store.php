@@ -436,4 +436,5 @@ return [
     "about" => "about",
     "Contact" => "Contact",
     "POPULAR CATEGORIES" => "POPULAR CATEGORIES",
+    "Follow Us" => "Follow Us",
 ];

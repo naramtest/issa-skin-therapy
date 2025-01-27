@@ -9,12 +9,10 @@
         />
     @endforeach
 
-    <ul>
-        <a
-            class="vertical-text mt-6 rounded-[3rem] bg-[#DDE0E2] px-[10px] py-[30px] text-sm font-medium hover:bg-[#FAFAFA]"
-            href=""
-        >
-            <span>{{ __("store.Subscribe") }}</span>
-        </a>
-    </ul>
+    <div
+        class="vertical-text mt-6 cursor-default rounded-[3rem] bg-[#DDE0E2] px-[10px] py-[30px] text-sm font-medium hover:bg-[#FAFAFA]"
+        href=""
+    >
+        <span>{{ __("store.Follow Us") }}</span>
+    </div>
 </ul>

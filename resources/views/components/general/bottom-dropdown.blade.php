@@ -2,7 +2,15 @@
     {{ $attributes }}
     x-data="{
         open: false,
+        isMobile: false,
+        init() {
+            this.isMobile = window.innerWidth < 1024
+            window.addEventListener('resize', () => {
+                this.isMobile = window.innerWidth < 1024
+            })
+        },
         isInsideComponent(event) {
+            if (this.isMobile) return false
             const dropdown = $refs.dropdownList
             const button = $refs.button
             return button.contains(event.relatedTarget)
@@ -14,17 +22,38 @@
                 {
                     x: 0,
                     opacity: 1,
-                    duration: 0.4,
+                    duration: 0.6,
                     stagger: 0.03,
                     ease: 'power2.out',
                     clearProps: 'all',
                 },
             )
         },
+        handleMouseEnter() {
+            if (! this.isMobile) {
+                this.open = true
+                this.$nextTick(() => this.animateItems())
+            }
+        },
+        handleMouseLeave(event) {
+            if (! this.isMobile && ! this.isInsideComponent(event)) {
+                this.open = false
+            }
+        },
+        handleClickAway(event) {
+            // Check if the clicked element is outside both the button and dropdown
+            if (
+                ! $refs.button.contains(event.target) &&
+                ! $refs.dropdownList.contains(event.target)
+            ) {
+                this.open = false
+            }
+        },
     }"
     class="relative py-2"
-    @mouseenter="open = true; $nextTick(() => animateItems())"
-    @mouseleave="if (!isInsideComponent($event)) open = false"
+    @mouseenter="handleMouseEnter()"
+    @mouseleave="handleMouseLeave($event)"
+    @click.away="handleClickAway($event)"
 >
     <button
         x-ref="button"
@@ -38,10 +67,10 @@
         x-ref="dropdownList"
         x-bind:class="open ? 'pointer-events-auto' : 'pointer-events-none'"
         class="absolute right-0 top-0 z-[1000] flex w-[max-content] -translate-y-[98%] flex-col gap-y-[1px] rounded-t-lg bg-darkColor p-3 text-lightColor shadow [&[x-cloak]]:hidden"
-        x-transition:enter="transition duration-200 ease-out"
+        x-transition:enter="transition duration-[.5s] ease-out"
         x-transition:enter-start="translate-y-0 opacity-0"
         x-transition:enter-end="-translate-y-[98%] opacity-100"
-        x-transition:leave="transition duration-150 ease-in"
+        x-transition:leave="transition duration-[.45s] ease-in"
         x-transition:leave-start="-translate-y-[98%] opacity-100"
         x-transition:leave-end="translate-y-0 opacity-0"
         x-show="open"

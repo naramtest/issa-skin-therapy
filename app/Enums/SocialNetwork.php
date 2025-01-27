@@ -11,6 +11,7 @@ enum SocialNetwork: string implements HasLabel
     case TWITTER = "twitter";
     case TIKTOK = "tiktok";
     case INSTAGRAM = "instagram";
+    case WHATSAPP = "whatsapp";
 
     public function getLabel(): ?string
     {
@@ -19,7 +20,8 @@ enum SocialNetwork: string implements HasLabel
             self::YOUTUBE => "Youtube",
             self::TWITTER => "Twitter",
             self::INSTAGRAM => "Instagram",
-            self::TIKTOK => 'TikTok',
+            self::TIKTOK => "TikTok",
+            self::WHATSAPP => "WhatsApp",
         };
     }
 }
