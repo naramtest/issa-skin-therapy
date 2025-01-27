@@ -1,9 +1,9 @@
 <div
     class="absolute left-0 top-[100%] z-[20] flex w-full gap-12 overflow-hidden bg-lightColor bg-white px-24 py-10 pe-10 text-[#1f1f1f] shadow-lg"
-    x-transition:enter="transform transition duration-300 ease-in"
+    x-transition:enter="transform transition duration-500 ease-in"
     x-transition:enter-start="-translate-y-full "
     x-transition:enter-end=" translate-y-0 opacity-100"
-    x-transition:leave="transition duration-200 ease-out"
+    x-transition:leave="transition duration-500 ease-out"
     x-transition:leave-start="translate-y-0 opacity-100"
     x-transition:leave-end="-translate-y-full opacity-50"
     x-show="open"

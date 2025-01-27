@@ -9,10 +9,13 @@
             <li class="rounded px-4 py-1 text-sm hover:bg-gray-700">
                 <a
                     rel="alternate"
+                    @class(["arabic" => $localeCode === "ar"])
                     hreflang="{{ $localeCode }}"
                     href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}"
                 >
-                    {{ $properties["native"] }}
+                    <span>
+                        {{ $properties["native"] }}
+                    </span>
                 </a>
             </li>
         @endforeach

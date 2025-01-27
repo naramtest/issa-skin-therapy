@@ -11,7 +11,10 @@ use Clockwork\Support\Laravel\ClockworkServiceProvider;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use Livewire;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Money\Money;
+use Route;
 use Swap\Builder;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Psr16Cache;
@@ -75,5 +78,10 @@ class AppServiceProvider extends ServiceProvider
         }
         Model::preventsLazyLoading();
         Model::preventAccessingMissingAttributes();
+        Livewire::setUpdateRoute(function ($handle) {
+            return Route::post("/livewire/update", $handle)
+                ->middleware("web")
+                ->prefix(LaravelLocalization::setLocale());
+        });
     }
 }

@@ -17,9 +17,10 @@
 
         @if (app()->getLocale() == "en")
             @googlefonts
-        @else
-            @googlefonts("alexandria")
         @endif
+
+        @googlefonts("alexandria")
+
         <!-- Styles -->
         @stack("styles")
         @livewireStyles

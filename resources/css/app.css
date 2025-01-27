@@ -18,6 +18,10 @@
     font-family: "Alexandria", serif;
 }
 
+.arabic {
+    font-family: "Alexandria", serif;
+}
+
 :lang(en) body {
     font-family: "Inter", sans-serif;
 }
