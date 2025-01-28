@@ -441,4 +441,7 @@ return [
             methods',
     "DOMESTIC EXPRESS" => "DOMESTIC EXPRESS",
     "EXPRESS WORLDWIDE" => "EXPRESS WORLDWIDE",
+    "Proceed to Checkout" => "Proceed to Checkout",
+    "Cart Totals" => "Cart Totals",
+    "Or" => "Or",
 ];

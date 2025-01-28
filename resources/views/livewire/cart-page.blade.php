@@ -1,8 +1,10 @@
-{{-- TODO: translate , Coupon , DHL rate --}}
+{{-- TODO: Coupon --}}
 <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     <div class="mb-10 flex items-center justify-between">
-        <h1 class="text-[5rem] font-bold">{{ __("store.Your Cart") }}</h1>
-        <a href="{{ route("shop.index") }}" class="block">
+        <h1 class="text-4xl font-bold md:text-[5rem] rtl:md:text-4xl">
+            {{ __("store.Your Cart") }}
+        </h1>
+        <a href="{{ route("shop.index") }}" class="hidden md:block">
             <x-general.button-black-animation class="!py-3 px-6">
                 <div class="relative z-10 flex items-center">
                     <x-gmdi-shopping-bag-o class="mb-[2px] h-5 w-5" />
@@ -21,14 +23,16 @@
                 <div
                     class="mb-4 grid grid-cols-4 border-b pb-3 text-sm font-medium"
                 >
-                    <div class="col-span-2">Product</div>
-                    <div class="text-center">Quantity</div>
-                    <div class="text-right">Subtotal</div>
+                    <div class="col-span-2">{{ __("dashboard.Product") }}</div>
+                    <div class="text-center">
+                        {{ __("dashboard.Quantity") }}
+                    </div>
+                    <div class="text-right">{{ __("store.Subtotal") }}</div>
                 </div>
 
                 @foreach ($cartItems as $item)
                     <div
-                        class="grid grid-cols-4 items-center gap-4 border-b py-4"
+                        class="grid grid-cols-2 items-center gap-4 border-b py-4 md:grid-cols-4"
                     >
                         <!-- Product Info -->
                         <div class="col-span-2 flex items-center gap-4">
@@ -105,7 +109,9 @@
             <!-- Cart Summary -->
             <div class="lg:col-span-1">
                 <div class="rounded-lg bg-[#f9fafa] p-6">
-                    <h2 class="mb-4 text-lg font-medium">Cart Totals</h2>
+                    <h2 class="mb-4 text-lg font-medium">
+                        {{ __("store.Cart Totals") }}
+                    </h2>
 
                     <!-- Subtotal -->
                     <div class="mb-4 flex justify-between">
@@ -113,31 +119,31 @@
                         <x-price class="font-medium" :money="$subtotal" />
                     </div>
 
-                    <!-- Shipping Options -->
-                    <div class="mb-4">
-                        <h3 class="mb-2 font-medium">Shipping</h3>
-                        <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input
-                                    type="radio"
-                                    name="shipping"
-                                    value="free"
-                                    checked
-                                />
-                                <span class="ml-2">Free shipping</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input
-                                    type="radio"
-                                    name="shipping"
-                                    value="express"
-                                />
-                                <span class="ml-2">
-                                    Domestic Express - 2 business days: د.إ53.86
-                                </span>
-                            </label>
-                        </div>
-                    </div>
+                    <!-- Shipping Options TODO: shipping -->
+                    {{-- <div class="mb-4"> --}}
+                    {{-- <h3 class="mb-2 font-medium">Shipping</h3> --}}
+                    {{-- <div class="space-y-2"> --}}
+                    {{-- <label class="flex items-center"> --}}
+                    {{-- <input --}}
+                    {{-- type="radio" --}}
+                    {{-- name="shipping" --}}
+                    {{-- value="free" --}}
+                    {{-- checked --}}
+                    {{-- /> --}}
+                    {{-- <span class="ml-2">Free shipping</span> --}}
+                    {{-- </label> --}}
+                    {{-- <label class="flex items-center"> --}}
+                    {{-- <input --}}
+                    {{-- type="radio" --}}
+                    {{-- name="shipping" --}}
+                    {{-- value="express" --}}
+                    {{-- /> --}}
+                    {{-- <span class="ml-2"> --}}
+                    {{-- Domestic Express - 2 business days: د.إ53.86 --}}
+                    {{-- </span> --}}
+                    {{-- </label> --}}
+                    {{-- </div> --}}
+                    {{-- </div> --}}
 
                     <!-- Total -->
                     <div class="mb-6 flex justify-between border-t pt-4">
@@ -153,7 +159,7 @@
                         >
                             <x-general.button-black-animation>
                                 <span class="relative z-10 inline-block">
-                                    Proceed to Checkout
+                                    {{ __("store.Proceed to Checkout") }}
                                 </span>
                             </x-general.button-black-animation>
                         </a>
@@ -161,11 +167,32 @@
                 </div>
 
                 <!-- Coupon -->
+
+                <div class="mt-8 flex flex-col items-center justify-center">
+                    <p class="text-xl font-semibold">{{ __("store.Or") }}</p>
+                    <a
+                        href="{{ route("shop.index") }}"
+                        class="mt-4 block md:hidden"
+                    >
+                        <x-general.button-black-animation class="!py-3 px-6">
+                            <div class="relative z-10 flex items-center">
+                                <x-gmdi-shopping-bag-o
+                                    class="mb-[2px] h-5 w-5"
+                                />
+                                <span class="ms-1">
+                                    {{ __("store.Continue shopping") }}
+                                </span>
+                            </div>
+                        </x-general.button-black-animation>
+                    </a>
+                </div>
             </div>
         </div>
     @else
         <div class="py-12 text-center">
-            <h2 class="mb-4 text-2xl font-medium">Your cart is empty</h2>
+            <h2 class="mb-4 text-2xl font-medium">
+                {{ __("store.Your cart is empty") }}
+            </h2>
         </div>
     @endif
 </div>

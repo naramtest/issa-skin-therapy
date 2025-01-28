@@ -228,7 +228,7 @@
                                     </span>
                                 </a>
                                 <a
-                                    href="/"
+                                    href="{{ route("cart.index") }}"
                                     class="flex flex-1 items-center justify-center rounded-full bg-[#1f1f1f] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#2f2f2f]"
                                 >
                                     {{ __("store.View Cart") }}

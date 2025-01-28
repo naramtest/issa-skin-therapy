@@ -67,11 +67,12 @@ class AppServiceProvider extends ServiceProvider
         Blade::stringable(function (Money $money) {
             return CurrencyHelper::moneyObjectInBlade($money);
         });
-        View::composer(["components.layout.*", "storefront.contact"], function (
-            $view
-        ) {
-            $view->with("info", app(InfoCacheService::class)->getInfo());
-        });
+        View::composer(
+            ["components.layout.*", "storefront.contact", "storefront.legal.*"],
+            function ($view) {
+                $view->with("info", app(InfoCacheService::class)->getInfo());
+            }
+        );
 
         if ($this->app->isLocal()) {
             $kernel->prependMiddleware(ClockworkMiddleware::class);

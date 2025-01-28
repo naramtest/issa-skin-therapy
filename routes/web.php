@@ -11,6 +11,7 @@ use App\Http\Controllers\Content\HomeController;
 use App\Http\Controllers\Content\PostController;
 use App\Http\Controllers\Content\ProductController;
 use App\Http\Controllers\Content\ShopController;
+use App\Http\Controllers\LegalController;
 use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -87,19 +88,14 @@ Route::group(
     }
 );
 
+Route::controller(LegalController::class)->group(function () {
+    Route::get("/refund_returns", "refund")->name("return.index");
+    Route::get("/terms-conditions", "terms")->name("terms.index");
+    Route::get("/privacy-policy", "privacy")->name("privacy.index");
+});
+
 Route::get("/order-tracking", [HomeController::class, "index"])->name(
     "order.tracking"
-);
-
-Route::get("/refund_returns", [HomeController::class, "index"])->name(
-    "return.index"
-);
-
-Route::get("/terms-conditions", [HomeController::class, "index"])->name(
-    "terms.index"
-);
-Route::get("/privacy-policy", [HomeController::class, "index"])->name(
-    "privacy.index"
 );
 
 Route::controller(CheckoutController::class)->group(function () {
