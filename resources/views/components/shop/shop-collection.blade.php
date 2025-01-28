@@ -14,7 +14,7 @@
             <h3 class="text-underline text-underline-black text-xl font-bold">
                 {{ preg_replace("/\bcollection\b/i", "", $bundle->name) }}
             </h3>
-            <x-icons.card-arrow-right class="arrow h-5 w-5" />
+            <x-icons.card-arrow-right class="arrow h-5 w-5 rtl:rotate-180" />
         </div>
         <p class="mt-2">{{ $bundle->subtitle }}</p>
     </div>

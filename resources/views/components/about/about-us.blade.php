@@ -8,7 +8,9 @@
     />
     <div>
         <h2 class="headline-font">{{ __("store.About Us") }}</h2>
-        <p class="mt-[15px] text-[19px] leading-[26px] md:mt-[30px]">
+        <p
+            class="mt-[15px] text-[19px] leading-[26px] md:mt-[30px] rtl:leading-[40px]"
+        >
             {{ __("store. ISSA Skintherapy is a tribute to the unparalleled") }}
         </p>
     </div>

@@ -8,7 +8,9 @@
             <h2 class="headline-font">
                 {{ __("store.Early Years and Education") }}
             </h2>
-            <p class="mt-[30px] text-[19px] leading-[26px] md:mb-[100px]">
+            <p
+                class="mt-[30px] text-[19px] leading-[26px] md:mb-[100px] rtl:leading-[40px]"
+            >
                 {{ __("store.rn with an innate passion for dermatology") }}
             </p>
         </div>

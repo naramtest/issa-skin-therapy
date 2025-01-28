@@ -10,13 +10,17 @@
     <div
         class="z-[10] flex w-full flex-col items-center px-4 text-center text-white lg:w-[60%] lg:px-0"
     >
-        <p class="text-[13px] font-[200] uppercase tracking-[2px]">
+        <p
+            class="text-[13px] font-[200] uppercase ltr:tracking-[2px] rtl:text-sm rtl:font-normal"
+        >
             {{ __("store.Made in USA") }}
         </p>
         <h2 class="headline-font mt-4 text-center">
             {{ __("store.Patent Delivery Technology") }}
         </h2>
-        <p class="mt-10 text-[13px] font-[200] uppercase tracking-[2px]">
+        <p
+            class="mt-10 text-[13px] font-[200] uppercase ltr:tracking-[2px] rtl:text-sm rtl:font-normal"
+        >
             {{ __("store.Crafted By Dermatologist and make a slide of nice photos folder") }}
         </p>
 

@@ -1,9 +1,9 @@
 <section
-    class="mt-[40px] rounded-[20px] bg-black px-4 py-6 text-white lg:p-[40px] lg:p-[80px] lg:px-0 lg:py-0"
+    class="padding-from-side-menu mt-[40px] rounded-[20px] bg-black py-6 text-white lg:py-[80px]"
 >
     <div class="flex flex-col gap-4 lg:flex-row lg:gap-8">
         <h2
-            class="text-3xl font-[600] lg:w-[30%] lg:pb-10 lg:text-[95px] lg:font-[800] lg:leading-[100px]"
+            class="text-3xl font-[600] lg:w-[30%] lg:pb-10 lg:text-[95px] lg:font-[800] lg:leading-[100px] rtl:text-[60px]"
         >
             {{ __("store.Our History") }}
         </h2>
@@ -19,7 +19,7 @@
                 <h3 class="text-[24px] font-medium">
                     {{ __("store.Healing in the Gulf") }}
                 </h3>
-                <p class="mt-6">
+                <p class="mt-6 rtl:leading-[30px]">
                     {{ __("store.Venturing beyond borders") }}
                 </p>
             </div>
@@ -32,7 +32,7 @@
             <h3 class="text-[24px] font-medium">
                 {{ __("store.A Life Well-Lived") }}
             </h3>
-            <p class="mt-6">
+            <p class="mt-6 rtl:leading-[30px]">
                 {{ __("store.Issa Bachour left behind a legacy of healing and beauty") }}
             </p>
         </div>

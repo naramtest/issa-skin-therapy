@@ -17,7 +17,7 @@
         </ol>
     </div>
     <div
-        class="grid grid-cols-1 gap-[20px] text-white md:w-[70%] md:grid-cols-3"
+        class="grid grid-cols-1 gap-[20px] text-2xl font-medium text-white md:w-[70%] md:grid-cols-3 rtl:text-base"
     >
         <div class="relative overflow-hidden">
             <img
@@ -29,7 +29,7 @@
                 style="backdrop-filter: blur(5px)"
                 class="absolute bottom-0 w-full rounded-2xl bg-[#ADADAD3D] px-7 py-5"
             >
-                <p class="text-2xl font-medium">
+                <p class="">
                     {{ __("store.Crafted by Dermatologist") }}
                 </p>
             </div>
@@ -44,7 +44,7 @@
                 style="backdrop-filter: blur(5px)"
                 class="absolute bottom-0 w-full rounded-2xl bg-[#ADADAD3D] px-7 py-5"
             >
-                <p class="text-2xl font-medium">
+                <p class="">
                     {{ __("store.Patent Delivery Technology") }}
                 </p>
             </div>
@@ -59,7 +59,7 @@
                 style="backdrop-filter: blur(5px)"
                 class="absolute bottom-0 w-full rounded-2xl bg-[#ADADAD3D] px-7 py-5"
             >
-                <p class="text-2xl font-medium">
+                <p class="">
                     {{ __("store.Premium Quality, Made in ") }}
                 </p>
             </div>

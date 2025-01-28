@@ -3,7 +3,7 @@
         class="padding-from-side-menu flex flex-col gap-8 pt-12 md:flex-row lg:pt-24"
     >
         <div class="md:w-[50%]">
-            <h1 class="text-4xl font-[800] lg:text-[95px]">
+            <h1 class="text-4xl font-[800] lg:text-[95px] rtl:text-[60px]">
                 {{ __("store.Contact Us") }}
             </h1>
             <form class="mt-10 md:mt-12">
