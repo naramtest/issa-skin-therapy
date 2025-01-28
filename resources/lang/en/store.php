@@ -437,4 +437,8 @@ return [
     "Contact" => "Contact",
     "POPULAR CATEGORIES" => "POPULAR CATEGORIES",
     "Follow Us" => "Follow Us",
+    "Please complete your address details to view available shipping             methods" => 'Please complete your address details to view available shipping
+            methods',
+    "DOMESTIC EXPRESS" => "DOMESTIC EXPRESS",
+    "EXPRESS WORLDWIDE" => "EXPRESS WORLDWIDE",
 ];

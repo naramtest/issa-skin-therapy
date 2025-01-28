@@ -8,8 +8,7 @@
 <div class="space-y-4">
     @if (! $this->canCalculateShipping)
         <p class="text-gray-500">
-            Please complete your address details to view available shipping
-            methods
+            {{ __("store.Please complete your address details to view available shipping             methods") }}
         </p>
     @elseif ($shippingRates->isEmpty())
         <p class="text-gray-500">
@@ -30,32 +29,29 @@
                                 wire:model.live="selectedShippingRate"
                                 class="text-primary focus:ring-primary h-4 w-4 border-gray-300"
                             />
-                            <div class="text-sm">
-                                <div class="ms-3">
-                                    <p class="text-gray-900">
-                                        {{ $rate["service_name"] }}
+                            <div class="flex flex-col items-end ps-3 text-sm">
+                                <p class="text-gray-900">
+                                    {{ $rate["service_name"] }}
+                                </p>
+                                @if ($rate["total_price"] > 0)
+                                    <p class="text-gray-500">
+                                        {{ $rate["estimated_days"] ?? __("store.N/A") }}
                                     </p>
-                                    @if ($rate["total_price"] > 0)
-                                        <p class="text-gray-500">
-                                            {{ $rate["estimated_days"] ?? __("store.N/A") }}
-                                        </p>
-                                    @endif
-                                </div>
-                                <div class="">
-                                    @if ($rate["total_price"] > 0)
-                                        @php
-                                            $money = new \Money\Money($rate["total_price"], new \Money\Currency($rate["currency"]));
-                                        @endphp
+                                @endif
 
-                                        <x-price :money="$money" />
-                                    @endif
+                                @if ($rate["total_price"] > 0)
+                                    @php
+                                        $money = new \Money\Money($rate["total_price"], new \Money\Currency($rate["currency"]));
+                                    @endphp
 
-                                    @if ($rate["guaranteed"])
-                                        <span class="text-xs text-green-600">
-                                            {{ __("store.Guaranteed delivery") }}
-                                        </span>
-                                    @endif
-                                </div>
+                                    <x-price :money="$money" />
+                                @endif
+
+                                @if ($rate["guaranteed"])
+                                    <span class="text-xs text-green-600">
+                                        {{ __("store.Guaranteed delivery") }}
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     </div>

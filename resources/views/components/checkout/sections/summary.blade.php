@@ -49,7 +49,7 @@
                 <td class="py-4">
                     {{ __("store.Subtotal") }}
                 </td>
-                <td class="py-4 text-right">
+                <td class="py-4 text-end">
                     <x-price :money="$subtotal" />
                 </td>
             </tr>
@@ -78,7 +78,7 @@
                 <td class="py-4">
                     {{ __("store.Total") }}
                 </td>
-                <td class="py-4 text-right">
+                <td class="py-4 text-end">
                     <x-price :money="$total" />
                 </td>
             </tr>

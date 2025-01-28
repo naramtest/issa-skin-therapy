@@ -14,27 +14,25 @@ class DHLRateCheckService
     protected string $apiKey;
     protected string $apiSecret;
 
-    protected array $domesticProducts = [
-        [
-            "productName" => "DOMESTIC EXPRESS",
-            "productCode" => "N",
-            "localProductCode" => "N",
-        ],
-    ];
+    protected array $domesticProducts = [];
 
-    protected array $internationalProducts = [
-        [
-            "productName" => "EXPRESS WORLDWIDE",
-            "productCode" => "P",
-            "localProductCode" => "P",
-        ],
-    ];
+    protected array $internationalProducts = [];
 
     public function __construct()
     {
         $this->apiKey = config("services.dhl.key");
         $this->apiSecret = config("services.dhl.secret");
         $this->baseUrl = config("services.dhl.url");
+        $this->domesticProducts[] = [
+            "productName" => __("store.DOMESTIC EXPRESS"),
+            "productCode" => "N",
+            "localProductCode" => "N",
+        ];
+        $this->internationalProducts[] = [
+            "productName" => __("store.EXPRESS WORLDWIDE"),
+            "productCode" => "P",
+            "localProductCode" => "P",
+        ];
     }
 
     public function getRates(

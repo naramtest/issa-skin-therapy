@@ -19,7 +19,7 @@
         >
             <div>
                 <h3
-                    class="text-center text-2xl font-bold lg:text-start lg:text-[36px] lg:leading-[43px]"
+                    class="text-center text-2xl font-bold lg:text-start lg:text-[36px] lg:leading-[43px] rtl:lg:text-2xl rtl:lg:leading-[45px]"
                 >
                     {{ __("store.Subscribe for the latest offers & updates") }}
                 </h3>
@@ -39,7 +39,7 @@
                 </div>
             </div>
             <x-layout.header.home.social
-                class="mt-4 !justify-center gap-x-6 lg:flex-row-reverse lg:!justify-end"
+                class="mt-6 !justify-center gap-x-6 lg:flex-row-reverse lg:!justify-end"
             />
         </div>
     </div>

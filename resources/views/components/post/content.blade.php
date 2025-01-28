@@ -19,16 +19,20 @@
             />
         </div>
         {{-- Posts Navigation --}}
-        <div class="mt-10 flex items-center divide-x-2 divide-[#B9B9B9]">
+        <div
+            class="mt-10 flex flex-col items-center gap-y-4 divide-[#B9B9B9] md:flex-row md:divide-x-2 rtl:divide-x-reverse"
+        >
             @if ($past)
                 <a
                     href="{{ route("posts.show", $past) }}"
-                    class="group flex w-1/2 cursor-pointer items-center pe-3"
+                    class="group flex cursor-pointer items-center pe-3 md:w-1/2"
                 >
                     <x-gmdi-arrow-back
-                        class="h-7 w-7 text-darkColor transition-transform duration-300 group-hover:-translate-x-4"
+                        class="h-7 w-7 text-darkColor transition-transform duration-300 group-hover:-translate-x-4 rtl:rotate-180"
                     />
-                    <p class="ms-2 line-clamp-1 text-2xl font-bold">
+                    <p
+                        class="ms-2 line-clamp-1 text-2xl font-bold rtl:text-base"
+                    >
                         {{ $past->title }}
                     </p>
                 </a>
@@ -39,13 +43,13 @@
             @if ($next)
                 <a
                     href="{{ route("posts.show", $next) }}"
-                    class="group flex w-1/2 cursor-pointer items-center ps-3"
+                    class="group flex cursor-pointer items-center ps-3 md:w-1/2"
                 >
-                    <p class="line-clamp-1 text-2xl font-bold">
+                    <p class="line-clamp-1 text-2xl font-bold rtl:text-base">
                         {{ $next->title }}
                     </p>
                     <x-gmdi-arrow-forward
-                        class="ms-2 h-7 w-7 text-darkColor transition-transform duration-300 group-hover:translate-x-4"
+                        class="ms-2 h-7 w-7 text-darkColor transition-transform duration-300 group-hover:translate-x-4 rtl:rotate-180"
                     />
                 </a>
             @else

@@ -1,5 +1,7 @@
 <div>
-    <ul class="my-2 flex items-center justify-center divide-x divide-[#B9B9B9]">
+    <ul
+        class="my-2 flex items-center justify-center divide-x divide-[#B9B9B9] rtl:pt-6"
+    >
         @foreach ($categories as $category)
             <li
                 wire:click="filterByCategory({{ $category->id }})"
