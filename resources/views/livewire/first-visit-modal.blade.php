@@ -269,7 +269,9 @@
                             wire:click="subscribe"
                             class="absolute end-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-darkColor"
                         >
-                            <x-icons.arrow-right class="h-5 w-5 text-white" />
+                            <x-icons.arrow-right
+                                class="h-5 w-5 text-white rtl:rotate-180"
+                            />
                         </button>
                     </div>
                     @error("email")

@@ -31,11 +31,11 @@
             <div
                 x-show="show"
                 x-transition:enter="duration-500 ease-out"
-                x-transition:enter-start="translate-x-full opacity-0"
+                x-transition:enter-start="translate-x-full opacity-0 rtl:-translate-x-full"
                 x-transition:enter-end="translate-x-0 opacity-100"
                 x-transition:leave="duration-200 ease-in"
                 x-transition:leave-start="translate-x-0 opacity-100"
-                x-transition:leave-end="translate-x-full opacity-0"
+                x-transition:leave-end="translate-x-full opacity-0 rtl:-translate-x-full"
                 class="fixed end-0 flex h-full w-[85vw] flex-col rounded-s-[30px] bg-white p-4 md:w-[35%]"
             >
                 <div

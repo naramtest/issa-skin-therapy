@@ -5,7 +5,7 @@
 >
     <img
         @click="nextSlide()"
-        class="hidden h-6 w-6 cursor-pointer md:block"
+        class="hidden h-6 w-6 cursor-pointer md:block rtl:rotate-180"
         src="{{ asset("storage/icons/icon-left.svg") }}"
         alt="{{ __("store.arrow") }}"
     />
@@ -18,7 +18,7 @@
     </div>
     <img
         @click="pervSlide()"
-        class="hidden h-6 w-6 cursor-pointer md:block"
+        class="hidden h-6 w-6 cursor-pointer md:block rtl:rotate-180"
         src="{{ asset("storage/icons/icon-right.svg") }}"
         alt="{{ __("store.arrow") }}"
     />

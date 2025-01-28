@@ -1,5 +1,5 @@
 <div>
-    {{-- TODO: and Promo code --}}
+    {{-- TODO:Promo code --}}
     <!-- Cart Overlay -->
     <div
         @toggle-cart.window="open = !open"
@@ -28,11 +28,11 @@
         <div
             x-show="open"
             x-transition:enter="transform transition duration-500 ease-in-out"
-            x-transition:enter-start="translate-x-full"
+            x-transition:enter-start="translate-x-full rtl:-translate-x-full"
             x-transition:enter-end="translate-x-0"
             x-transition:leave="transform transition duration-500 ease-in-out"
             x-transition:leave-start="translate-x-0"
-            x-transition:leave-end="translate-x-full"
+            x-transition:leave-end="translate-x-full rtl:-translate-x-full"
             class="fixed inset-y-0 end-0 flex max-w-full"
         >
             <div class="w-[85vw] max-w-md md:w-screen">
@@ -94,7 +94,7 @@
                                     />
                                     <button
                                         wire:click="removeItem('{{ $item->getId() }}')"
-                                        class="absolute start-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#dedfea] p-[2px] text-gray-500 hover:text-gray-600"
+                                        class="absolute start-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#dedfea] p-[2px] text-gray-500 hover:text-gray-600 rtl:translate-x-1/2"
                                     >
                                         <span class="sr-only">
                                             {{ __("store.Remove") }}
@@ -113,7 +113,7 @@
                                     </button>
                                 </div>
 
-                                <div class="ml-4 flex flex-1 flex-col">
+                                <div class="ms-4 flex flex-1 flex-col">
                                     <div class="flex justify-between">
                                         <h3 class="text-sm font-semibold">
                                             {{ $item->getPurchasable()->name }}
@@ -243,7 +243,9 @@
                                     @click="open = false"
                                 >
                                     {{ __("store.Continue Shopping") }}
-                                    <span aria-hidden="true">&rarr;</span>
+                                    <x-gmdi-arrow-forward
+                                        class="inline h-3 w-3 text-black rtl:rotate-180"
+                                    />
                                 </button>
                             </div>
                         </div>
