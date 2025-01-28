@@ -47,7 +47,7 @@
         <!-- Navigation Buttons -->
         <button
             @click="pervSlide()"
-            class="absolute left-0 top-1/2 z-10 me-4 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-lg transition-colors hover:bg-white disabled:opacity-50"
+            class="absolute start-0 top-1/2 z-10 me-4 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-lg transition-colors hover:bg-white disabled:opacity-50 rtl:rotate-180"
             :disabled="activeIndex === 0"
         >
             <svg
@@ -66,7 +66,7 @@
         </button>
         <button
             @click="nextSlide()"
-            class="absolute end-0 top-1/2 z-10 ms-4 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-lg transition-colors hover:bg-white disabled:opacity-50"
+            class="absolute end-0 top-1/2 z-10 ms-4 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-lg transition-colors hover:bg-white disabled:opacity-50 rtl:rotate-180"
             :disabled="activeIndex === {{ count($media) }} - 1"
         >
             <svg

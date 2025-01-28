@@ -10,7 +10,7 @@
         class="z-[10] flex w-full flex-col items-center px-0 text-white lg:w-[60%] lg:px-0"
     >
         <h2
-            class="w-full text-center text-3xl lg:w-[70%] lg:text-5xl lg:leading-[48px]"
+            class="w-full text-center text-3xl lg:w-[70%] lg:text-5xl lg:leading-[48px] rtl:lg:leading-[60px]"
         >
             {{ __("store.Share your before and after to get a nice gift!") }}
         </h2>
@@ -20,7 +20,7 @@
             href="{{ route("shop.index") }}"
         >
             <span>{{ __("store.Explore Sales") }}</span>
-            <x-icons.arrow-right class="ms-3 h-4 w-4" />
+            <x-icons.arrow-right class="ms-3 h-4 w-4 rtl:rotate-180" />
         </a>
     </div>
 </x-home.section-container>

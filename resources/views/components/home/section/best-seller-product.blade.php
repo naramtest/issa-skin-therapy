@@ -45,7 +45,7 @@
             class="mt-6 flex flex-col items-center justify-between gap-y-4 px-2 md:flex-row md:items-start"
         >
             <div class="flex gap-x-2">
-                <span>{{ __("store.Social:") }}</span>
+                <span class="rtl:text-xs">{{ __("store.Social:") }}</span>
                 <x-layout.header.home.social
                     width="w-5"
                     height="h-5"
@@ -53,11 +53,11 @@
                     class="gap-x-2"
                 />
             </div>
-            <div class="flex gap-x-2">
+            <div class="flex gap-x-2 rtl:text-xs">
                 <x-icons.qustion-mark />
-                <span>{{ __("store.Need help?") }}</span>
+                <span class="text-nowrap">{{ __("store.Need help?") }}</span>
                 <a
-                    class="transition-transform duration-300 hover:scale-105"
+                    class="text-nowrap transition-transform duration-300 hover:scale-105"
                     href="{{ route("contact.index") }}"
                 >
                     {{ __("store.Contact us") }}
@@ -72,7 +72,7 @@
             <p class="text-sm font-semibold">
                 {{ __("store.View full details") }}
             </p>
-            <x-icons.arrow-right class="h-5 w-5" />
+            <x-icons.arrow-right class="h-5 w-5 rtl:rotate-180" />
         </a>
     </div>
 </x-home.section-container>

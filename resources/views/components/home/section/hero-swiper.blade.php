@@ -30,13 +30,13 @@
     >
         <img
             @click="pervSlide()"
-            class="h-[25px] w-[25px] cursor-pointer"
+            class="h-[25px] w-[25px] cursor-pointer rtl:rotate-180"
             src="{{ asset("storage/icons/icon-left.svg") }}"
             alt="{{ __("store.Next Arrow") }}"
         />
         <img
             @click="nextSlide()"
-            class="h-[25px] w-[25px] cursor-pointer"
+            class="h-[25px] w-[25px] cursor-pointer rtl:rotate-180"
             src="{{ asset("storage/icons/icon-right.svg") }}"
             alt="{{ __("store.Previous Arrow") }}"
         />

@@ -17,7 +17,9 @@
             fill="white"
         ></path>
     </svg>
-    <p class="mb-8 mt-6 text-center text-xl lg:text-4xl">
+    <p
+        class="mb-8 mt-6 text-center text-xl lg:text-4xl rtl:leading-[35px] rtl:lg:leading-[50px]"
+    >
         {{ __("store.I’ve been using Lumicleanse for a few months now, I can say it’s a         game-changer for my skin. My skin feels fresher, cleaner, and more         radiant!") }}
     </p>
     <figure>

@@ -28,7 +28,7 @@
                         {{ $title }}
                     </h3>
                     <x-icons.card-arrow-right
-                        class="arrow h-5 w-5 text-white"
+                        class="arrow h-5 w-5 text-white rtl:rotate-180"
                     />
                 </div>
                 <p class="mt-2">{{ $subtitle }}</p>

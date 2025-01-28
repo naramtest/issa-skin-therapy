@@ -1,4 +1,10 @@
-export default function marquee({ speed = 50, gap = 24, direction = "left" }) {
+// resources/js/components/marquee.js
+export default function marquee({
+    speed = 50,
+    gap = 24,
+    direction = "left",
+    isRtl = false,
+}) {
     return {
         init() {
             this.setupMarquee();
@@ -9,23 +15,38 @@ export default function marquee({ speed = 50, gap = 24, direction = "left" }) {
             const contentWidth = content.offsetWidth;
             const duration = contentWidth / speed;
 
-            // Set initial position based on direction
-            const startX = direction === "left" ? 0 : -contentWidth / 2;
-            const endX = direction === "left" ? -contentWidth / 2 : 0;
+            // Adjust direction for RTL
+            let effectiveDirection = direction;
+            if (isRtl) {
+                effectiveDirection = direction === "left" ? "right" : "left";
+            }
 
-            // Reset position
-            gsap.set(content, { x: startX });
+            // Calculate positions based on effective direction
+            const startX =
+                effectiveDirection === "left" ? 0 : -contentWidth / 2;
+            const endX = effectiveDirection === "left" ? -contentWidth / 2 : 0;
 
-            // Create GSAP timeline for smooth infinite animation
-            const tl = gsap.timeline({ repeat: -1 });
+            // Reset position and handle RTL
+            gsap.set(content, {
+                x: startX,
+                force3D: true, // Improve performance
+            });
+
+            // Create GSAP timeline
+            const tl = gsap.timeline({
+                repeat: -1,
+                defaults: {
+                    ease: "none",
+                    force3D: true,
+                },
+            });
 
             tl.to(content, {
                 x: endX,
                 duration: duration,
-                ease: "none",
             });
 
-            // Pause animation when not in viewport for performance
+            // Pause animation when not in viewport
             const observer = new IntersectionObserver(
                 (entries) => {
                     entries.forEach((entry) => {
@@ -36,15 +57,27 @@ export default function marquee({ speed = 50, gap = 24, direction = "left" }) {
                         }
                     });
                 },
-                { threshold: 0 },
+                {
+                    threshold: 0,
+                    rootMargin: "50px", // Add some margin for smoother transitions
+                },
             );
 
             observer.observe(content);
+
+            // Handle resize
+            const handleResize = () => {
+                tl.kill();
+                this.setupMarquee();
+            };
+
+            window.addEventListener("resize", handleResize);
 
             // Cleanup
             return () => {
                 observer.disconnect();
                 tl.kill();
+                window.removeEventListener("resize", handleResize);
             };
         },
     };

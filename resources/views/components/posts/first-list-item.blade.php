@@ -15,7 +15,7 @@
         @if (count($post->categories))
             <x-blog.category-label :post="$post" class="bg-[#92E1D8]" />
 
-            <div class="mt-4 flex divide-x-2 divide-white">
+            <div class="mt-4 flex divide-x-2 divide-white rtl:divide-x-reverse">
                 <div class="flex items-center pe-3">
                     <img
                         class="h-4 w-4"

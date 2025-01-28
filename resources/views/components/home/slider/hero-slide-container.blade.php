@@ -17,7 +17,7 @@
                 "
             >
                 <h2
-                    class="translate-y-full text-4xl uppercase text-white transition-transform duration-700 md:text-4xl lg:px-3 lg:text-[3rem] lg:leading-[48px]"
+                    class="translate-y-full text-4xl uppercase text-white transition-transform duration-700 md:text-4xl lg:px-3 lg:text-[3rem] lg:leading-[48px] rtl:lg:leading-[60px]"
                     :class="isActive ? '!translate-y-0' : '-translate-y-full'"
                 >
                     {{ $content }}

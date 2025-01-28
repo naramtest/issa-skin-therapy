@@ -13,7 +13,8 @@
 >
     <h3 class="text-4xl font-[800] md:leading-[48px] lg:text-[2.75rem]">
         <span class="mb-1 md:block">{{ __("dashboard.Skin") }}</span>
-        <span class="relative mb-1 md:block">
+
+        <span class="relative mb-1 md:block rtl:hidden">
             {{ __("dashboard.That Defies") }}
             <svg
                 x-show="startAnimation"
@@ -33,6 +34,9 @@
                 ></path>
             </svg>
         </span>
-        <span class="md:block">{{ __("dashboard.Time") }}</span>
+        <span class="md:block rtl:hidden">{{ __("dashboard.Time") }}</span>
+        <span class="md:block ltr:hidden">
+            {{ __("dashboard.That Defies") }} {{ __("dashboard.Time") }}
+        </span>
     </h3>
 </div>

@@ -154,8 +154,15 @@ body {
 
 .headline-font {
     font-weight: 800;
+    @apply text-4xl rtl:text-2xl lg:text-[2.75rem]
+}
+
+:lang(ar) .headline-font {
+    @apply lg:leading-[60px] leading-[40px]
+}
+
+:lang(en) .headline-font {
     line-height: 48px !important;
-    @apply text-4xl lg:text-[2.75rem]
 }
 
 

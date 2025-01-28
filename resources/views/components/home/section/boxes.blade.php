@@ -26,7 +26,7 @@
                     :class="{ 'text-gray-300 cursor-default': isBeginning, 'cursor-pointer': !isBeginning }"
                     class="duration-4 00 transition-colors"
                 >
-                    <x-icons.arrow-right class="h-6 w-6 rotate-180" />
+                    <x-icons.arrow-right class="lt:rotate-180 h-6 w-6" />
                 </div>
                 <div class="swiper-pagination !static"></div>
 
@@ -35,7 +35,7 @@
                     :class="{ 'text-gray-300 cursor-default': isEnd, 'cursor-pointer': !isEnd }"
                     class="duration-4 00 transition-colors"
                 >
-                    <x-icons.arrow-right class="h-6 w-6" />
+                    <x-icons.arrow-right class="h-6 w-6 rtl:rotate-180" />
                 </div>
             </div>
         </div>
