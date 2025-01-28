@@ -87,7 +87,7 @@
             </x-general.button-white-animation>
         </a>
         <div
-            class="lg::flex-row mt-6 flex flex-col justify-between gap-y-2 px-2"
+            class="mt-6 flex flex-col justify-between gap-y-2 px-2 lg:flex-row rtl:text-xs"
         >
             <div class="flex gap-x-2">
                 <span>{{ __("store.Social:") }}</span>

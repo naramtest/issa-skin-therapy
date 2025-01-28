@@ -8,7 +8,9 @@
     >
         <div class="h-auto bg-darkColor px-4 py-12 lg:w-[70%] lg:px-8">
             <div class="flex flex-row items-center justify-between gap-x-2">
-                <h2 class="text-2xl font-[800] text-lightColor md:text-6xl">
+                <h2
+                    class="text-2xl font-[800] text-lightColor md:text-6xl rtl:md:text-4xl"
+                >
                     {{ __("store.FAQs") }}
                 </h2>
                 <div

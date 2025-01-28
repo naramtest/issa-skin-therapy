@@ -3,7 +3,7 @@
     "selectedCategory",
 ])
 
-<div x-data="categoriesSwiper()">
+<div class="w-full" x-data="categoriesSwiper()">
     <div class="categories-swiper swiper">
         <ul class="swiper-wrapper flex flex-1 items-center gap-x-4">
             @foreach ($categories as $category)
