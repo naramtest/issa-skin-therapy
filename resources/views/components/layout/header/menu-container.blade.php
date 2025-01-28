@@ -1,5 +1,3 @@
-{{-- TODO: fix on mobile --}}
-
 <div
     id="nav"
     @toggle-mobile-menu.window="mobileMenu = !mobileMenu"

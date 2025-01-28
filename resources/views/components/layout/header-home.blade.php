@@ -7,7 +7,7 @@
         <x-layout.header.desktop-nav />
 
         <nav
-            class="relative z-[30] flex items-center justify-between rounded-t-[1.25rem] bg-white px-4 py-4 lg:hidden"
+            class="relative z-[200] flex items-center justify-between rounded-t-[1.25rem] bg-white px-4 py-4 md:z-[30] lg:hidden"
         >
             <!-- Menu Button with Animation -->
             <button
@@ -31,11 +31,14 @@
 
             <!-- Mobile Icons -->
             <div class="flex items-center gap-x-4">
-                <button @click="searchOpen = !searchOpen">
+                <button @click="$dispatch('open-search')">
                     <x-icons.search class="h-6 w-6" />
                 </button>
                 <button class="relative">
-                    <x-icons.cart-icon class="h-6 w-6" />
+                    <x-icons.cart-icon
+                        @click="$dispatch('toggle-cart')"
+                        class="h-6 w-6"
+                    />
                     {{-- TODO: add cart count here and on the desktop --}}
                     {{-- <span --}}
                     {{-- class="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-darkColor text-xs text-white" --}}

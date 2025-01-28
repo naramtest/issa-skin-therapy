@@ -1,4 +1,7 @@
 <?php
+
+//TODO: social Icons below the Product should be share to not our social media links
+
 //Important Section
 //1- Newsletter
 //2- Add To Cart Button So when Item Already on the cart show something on the button
@@ -17,6 +20,8 @@
 // TODO: fix slug in the product , model
 // TODO: exporter for all tables
 // TODO: clockwork on production
+
+//TODO: price field in admin panel change its value when switching between arabic and english
 
 //14/11
 //TODO: like Product page

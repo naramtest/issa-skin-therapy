@@ -1,12 +1,13 @@
 <div>
-    {{-- TODO: Cart Page and Promo code --}}
+    {{-- TODO: and Promo code --}}
     <!-- Cart Overlay -->
     <div
-        x-data="{ open: $wire.entangle('isOpen') }"
+        @toggle-cart.window="open = !open"
+        x-data="{ open: false }"
         x-show="open"
         x-cloak
         @keydown.escape.window="open = false"
-        class="relative z-50"
+        class="relative z-[200]"
         role="dialog"
         aria-modal="true"
     >
@@ -34,7 +35,7 @@
             x-transition:leave-end="translate-x-full"
             class="fixed inset-y-0 end-0 flex max-w-full"
         >
-            <div class="w-screen max-w-md">
+            <div class="w-[85vw] max-w-md md:w-screen">
                 <div
                     class="flex h-full flex-col rounded-s-2xl bg-white px-4 shadow-xl"
                 >

@@ -11,7 +11,7 @@
         <livewire:currency-selector location="bottom" />
     </div>
     <img
-        class="block lg:w-[200px]"
+        class="block lg:w-[300px]"
         src="{{ asset("storage/images/payment-methods.webp") }}"
         alt="{{ __("store.Payment methods") }}"
     />

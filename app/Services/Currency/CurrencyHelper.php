@@ -84,10 +84,11 @@ class CurrencyHelper
         //TODO : use only to number after period
         //TODO: check if it changes when the language changes
         // TODO: check if it bad for performance
+
         return app()
             ->makeWith(IntlMoneyFormatter::class, [
                 "formatter" => new NumberFormatter(
-                    app()->getLocale(),
+                    app()->getLocale() == "ar" ? "ar-MA" : app()->getLocale(),
                     NumberFormatter::CURRENCY
                 ),
                 "currencies" => new ISOCurrencies(),

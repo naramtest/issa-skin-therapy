@@ -41,7 +41,9 @@
             </x-slot>
         </x-general.add-to-cart>
 
-        <div class="mt-6 flex justify-between px-2">
+        <div
+            class="mt-6 flex flex-col items-center justify-between gap-y-4 px-2 md:flex-row md:items-start"
+        >
             <div class="flex gap-x-2">
                 <span>{{ __("store.Social:") }}</span>
                 <x-layout.header.home.social

@@ -1,6 +1,10 @@
 {{-- resources/views/livewire/first-visit-modal.blade.php --}}
 
-<div @open-search.window="show = !show" x-data="{ show: false }">
+<div
+    class="relative z-[200]"
+    @open-search.window="show = !show"
+    x-data="{ show: false }"
+>
     <div
         x-show="show"
         x-cloak
@@ -32,14 +36,14 @@
                 x-transition:leave="duration-200 ease-in"
                 x-transition:leave-start="translate-x-0 opacity-100"
                 x-transition:leave-end="translate-x-full opacity-0"
-                class="fixed end-0 flex h-full w-[35%] flex-col rounded-s-[30px] bg-white p-4"
+                class="fixed end-0 flex h-full w-[85vw] flex-col rounded-s-[30px] bg-white p-4 md:w-[35%]"
             >
                 <div
                     class="relative flex w-full items-end justify-end pe-4 pt-4"
                 >
                     <button
                         @click="show = false"
-                        class="z-10 hidden h-12 w-12 items-center justify-center rounded-full border border-gray-400 bg-white transition-transform hover:scale-110 md:flex"
+                        class="z-10 flex h-12 w-12 items-center justify-center rounded-full border border-gray-400 bg-white transition-transform hover:scale-110"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

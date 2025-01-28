@@ -38,7 +38,9 @@
                 }"
                 @click="openSearch()"
             >
-                <x-icons.search class="h-6 w-6 cursor-pointer" />
+                <x-icons.search
+                    class="h-6 w-6 cursor-pointer transition-transform duration-300 hover:scale-110"
+                />
             </div>
 
             {{-- <x-icons.bookmark class="h-7 w-7" /> --}}

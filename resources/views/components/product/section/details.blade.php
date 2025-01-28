@@ -77,7 +77,6 @@
             </x-slot>
         </x-general.add-to-cart>
 
-        {{-- TODO: button animation --}}
         <a href="{{ route("checkout.index") }}" class="">
             <x-general.button-white-animation
                 class="border !border-darkColor !py-2"

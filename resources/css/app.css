@@ -61,11 +61,17 @@ body {
     @apply px-4 lg:px-[5.3rem]
 }
 
-
 .no-tailwind * {
     all: revert;
     max-width: 100%;
+}
+
+:lang(en) .no-tailwind * {
     font-family: "Inter", sans-serif;
+}
+
+:lang(ar) .no-tailwind * {
+    font-family: "Alexandria", serif;
 }
 
 .no-tailwind ul, .no-tailwind ol {

@@ -1,4 +1,4 @@
-<x-home.section-container class="mt-20 pt-8">
+<x-home.section-container class="mt-32 pt-8 md:mt-20">
     <div class="flex flex-col items-center">
         <p class="text-center text-lg">
             {{ __("store.Skin That Defies Times") }}
