@@ -6,7 +6,9 @@
 >
     <x-general.product-gallery class="lg:w-[55%]" :media="$product->media" />
     <div class="flex w-full flex-col lg:w-[45%]">
-        <p class="font-[300] leading-[20px] text-darkColor">Our Best Seller</p>
+        <p class="font-[300] leading-[20px] text-darkColor">
+            {{ __("store.Our Best Seller") }}
+        </p>
         <h2 class="mb-3 mt-3 text-4xl font-bold">{{ $product->name }}</h2>
         <p class="mb-3 text-lg">
             <x-price

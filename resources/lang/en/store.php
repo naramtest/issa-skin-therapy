@@ -444,4 +444,6 @@ return [
     "Proceed to Checkout" => "Proceed to Checkout",
     "Cart Totals" => "Cart Totals",
     "Or" => "Or",
+    "Our Best Seller" => "Our Best Seller",
+    "footer-email" => "Enter Your Email",
 ];

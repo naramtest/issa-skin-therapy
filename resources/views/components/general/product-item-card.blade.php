@@ -20,9 +20,18 @@
             <x-gmdi-visibility-o class="h-5 w-5 text-gray-500" />
         </button>
         <button
-            @click="Livewire.dispatch('add-to-cart' , {type :'{{ \App\Enums\ProductType::PRODUCT->value }}' , id: {{ $product->id }} , quantity : 1 })"
-            class="absolute bottom-16 start-1/2 -translate-x-1/2 translate-y-full scale-0 rounded-[50px] bg-darkColor px-5 py-2 text-sm text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100"
-            href="/"
+            x-data="{
+                addToCart() {
+                    Livewire.dispatch('add-to-cart', {
+                        type: '{{ \App\Enums\ProductType::PRODUCT->value }}',
+                        id: {{ $product->id }},
+                        quantity: 1,
+                    })
+                    this.$dispatch('toggle-cart')
+                },
+            }"
+            @click="addToCart()"
+            class="absolute bottom-16 start-1/2 -translate-x-1/2 translate-y-full scale-0 rounded-[50px] bg-darkColor px-5 py-2 text-sm text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 rtl:translate-x-1/2"
         >
             {{ __("store.Add to cart") }}
         </button>

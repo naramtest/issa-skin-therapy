@@ -32,7 +32,7 @@
                             type="email"
                             name="email"
                             id="email"
-                            placeholder="Enter Your Email ...."
+                            placeholder="{{ __("store.footer-email") }} ...."
                             value="{{ old("email") }}"
                         />
                     </label>

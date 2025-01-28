@@ -1,6 +1,6 @@
 <x-store-main-layout>
     <main class="padding-from-side-menu pb-24 pt-10">
-        <h1 class="text-4xl font-bold lg:text-[95px]">
+        <h1 class="text-4xl font-bold lg:text-[95px] rtl:text-[60px]">
             {{ __("dashboard.Collections") }}
         </h1>
         <section class="mt-6 lg:mt-20">

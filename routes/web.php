@@ -85,14 +85,14 @@ Route::group(
                 "product.category"
             );
         });
+
+        Route::controller(LegalController::class)->group(function () {
+            Route::get("/refund_returns", "refund")->name("return.index");
+            Route::get("/terms-conditions", "terms")->name("terms.index");
+            Route::get("/privacy-policy", "privacy")->name("privacy.index");
+        });
     }
 );
-
-Route::controller(LegalController::class)->group(function () {
-    Route::get("/refund_returns", "refund")->name("return.index");
-    Route::get("/terms-conditions", "terms")->name("terms.index");
-    Route::get("/privacy-policy", "privacy")->name("privacy.index");
-});
 
 Route::get("/order-tracking", [HomeController::class, "index"])->name(
     "order.tracking"

@@ -8,7 +8,7 @@
         @foreach ($items as $item)
             <li class="mt-3 hover:text-secondaryColor">
                 <a href="{{ route($item["route"]) }}">
-                    <span>{{ $item["name"] }}</span>
+                    <span>{{ $item["title"] }}</span>
                 </a>
             </li>
         @endforeach

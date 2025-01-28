@@ -1,9 +1,11 @@
 <x-home.section-container class="mt-32 pt-8 md:mt-20">
-    <div class="flex flex-col items-center">
+    <div class="mb-4 flex flex-col items-center">
         <p class="text-center text-lg">
             {{ __("store.Skin That Defies Times") }}
         </p>
-        <h2 class="headline-font gradient-text mt-2 text-[#333F43]">
+        <h2
+            class="headline-font gradient-text mt-2 text-[#333F43] rtl:!text-2xl rtl:!leading-[70px] rtl:md:!text-[2.5rem]"
+        >
             {{ __("store.See The Difference") }}
         </h2>
     </div>
