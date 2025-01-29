@@ -7,6 +7,7 @@ use App\Enums\StockStatus;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Helpers\Filament\Component\CategoryFilament;
 use App\Helpers\Filament\Component\CustomNameSlugField;
+use App\Helpers\Filament\CustomMoneyInput;
 use App\Helpers\Filament\Purchasable\Form\BasicInformation;
 use App\Helpers\Filament\Purchasable\Form\MediaSection;
 use App\Helpers\Filament\Purchasable\Form\ShippingSection;
@@ -24,7 +25,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
-use Pelmered\FilamentMoneyField\Forms\Components\MoneyInput;
 
 class ProductResource extends Resource
 {
@@ -141,12 +141,20 @@ class ProductResource extends Resource
                     ]),
                     Section::make(__("dashboard.Prices"))->schema([
                         //TODO: add why to currency conversion
-                        MoneyInput::make("regular_price")
+                        CustomMoneyInput::make("regular_price", function (
+                            Product $record
+                        ) {
+                            return $record->money_regular_price;
+                        })
                             ->label(__("dashboard.Regular Price"))
                             ->required(),
-                        MoneyInput::make("sale_price")
+                        CustomMoneyInput::make("sale_price", function (
+                            Product $record
+                        ) {
+                            return $record->money_sale_price;
+                        })
                             ->label(__("dashboard.Sale Price"))
-                            ->nullable(),
+                            ->required(),
 
                         Forms\Components\Toggle::make("is_sale_scheduled")
                             ->label(__("dashboard.Schedule Sale"))
