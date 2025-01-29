@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Enums\Checkout\OrderStatus;
-use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\ShippingOrder;
 use App\Services\Shipping\DHLShipmentService;
@@ -17,6 +16,11 @@ class ShippingController extends Controller
     public function __construct(
         private readonly DHLShipmentService $shipmentService
     ) {
+    }
+
+    public function showTracking()
+    {
+        return view("storefront.shipping.tracking");
     }
 
     public function createShipment(Request $request, Order $order)

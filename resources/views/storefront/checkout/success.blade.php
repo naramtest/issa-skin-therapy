@@ -130,7 +130,7 @@
                             <dd class="text-sm font-medium">
                                 {{
                                     $order->shipping_cost > 0
-                                        ? \App\Services\Currency\CurrencyHelper::format($order->getMoneyShippingCost())
+                                        ? \App\Services\Currency\CurrencyHelper::format($order->money_shipping_cost)
                                         : "Free shipping"
                                 }}
                             </dd>

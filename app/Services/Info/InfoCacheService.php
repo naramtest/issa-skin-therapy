@@ -23,21 +23,15 @@ class InfoCacheService
      */
     public function getInfo(): App\Models\Info
     {
-        $query = App\Models\Info::first();
-        if (App::isLocal()) {
-            return $query;
-        }
         return Cache::remember(
             self::CACHE_KEY_INFO,
             self::CACHE_DURATION,
-            fn() => $query
+            fn() => App\Models\Info::first()
         );
     }
-
 
     public function clearInfoCache(): void
     {
         Cache::forget(self::CACHE_KEY_INFO);
     }
-
 }

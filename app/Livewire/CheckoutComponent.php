@@ -180,7 +180,7 @@ class CheckoutComponent extends Component
                 "different_shipping_address" =>
                     $validatedData["different_shipping_address"],
                 "notes" => $validatedData["order_notes"],
-                "payment_method" => "card",
+                "payment_method" => "card", //TODO: make this dynamic
                 "create_account" => $validatedData["create_account"],
                 "shipping_method" => $shippingRate["service_code"],
                 "shipping_cost" => $shippingRate["total_price"],

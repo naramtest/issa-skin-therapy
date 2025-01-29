@@ -446,4 +446,21 @@ return [
     "Or" => "Or",
     "Our Best Seller" => "Our Best Seller",
     "footer-email" => "Enter Your Email",
+    "Order ID" => "Order ID",
+    "To track your order please enter your Order ID in the box below" => 'To track your order please enter your Order ID in the box below
+                and press the "Track" button. This was given to you on your
+                receipt and in the confirmation email you should have received.',
+    "track" => "track",
+    "Order details" => "Order details",
+    "ENDING IN" => "Ending in",
+    "Payment method" => "Payment method",
+    "via" => "via",
+    "Order again" => "Order again",
+    "Tracking Information" => "Tracking Information",
+    "Provider" => "Provider",
+    "Tracking Number" => "Tracking Number",
+    "Date" => "Date",
+    "was placed on" => "was placed on",
+    "and is currently" => "and is currently",
+    "Track" => "Track",
 ];

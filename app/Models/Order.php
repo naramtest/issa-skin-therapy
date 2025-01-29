@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
+use App\Enums\ShippingMethod;
 use App\Services\Currency\CurrencyHelper;
 use Finller\Invoice\Invoice;
 use Illuminate\Database\Eloquent\Model;
@@ -51,6 +52,7 @@ class Order extends Model
         "payment_captured_at" => "datetime",
         "payment_refunded_at" => "datetime",
         "status" => OrderStatus::class,
+        "shipping_method" => ShippingMethod::class,
     ];
 
     public function customer(): BelongsTo

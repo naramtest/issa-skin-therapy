@@ -31,7 +31,7 @@ class OrderService
             "payment_status" => $data["payment_status"],
             "shipping_method" => $data["shipping_method"],
             "subtotal" => $data["subtotal"],
-            "shipping_cost" => 0, // Will be calculated with DHL integration
+            "shipping_cost" => $data["shipping_cost"],
             "total" => $data["total"],
             "notes" => $data["notes"],
             "currency_code" => app(CurrencyHelper::class)->getUserCurrency(),

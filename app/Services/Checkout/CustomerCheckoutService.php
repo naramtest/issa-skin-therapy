@@ -53,6 +53,7 @@ readonly class CustomerCheckoutService
                 "status" => OrderStatus::PENDING,
                 "payment_status" => PaymentStatus::PENDING,
                 "shipping_method" => $data["shipping_method"] ?? null,
+                "shipping_cost" => $data["shipping_cost"] ?? null,
                 "notes" => $data["notes"] ?? null,
                 "cart_items" => $this->cartService->getItems(),
                 "subtotal" => $this->cartService->getSubtotal()->getAmount(),

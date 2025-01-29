@@ -12,6 +12,7 @@ use App\Http\Controllers\Content\PostController;
 use App\Http\Controllers\Content\ProductController;
 use App\Http\Controllers\Content\ShopController;
 use App\Http\Controllers\LegalController;
+use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -91,11 +92,12 @@ Route::group(
             Route::get("/terms-conditions", "terms")->name("terms.index");
             Route::get("/privacy-policy", "privacy")->name("privacy.index");
         });
-    }
-);
 
-Route::get("/order-tracking", [HomeController::class, "index"])->name(
-    "order.tracking"
+        Route::get("/order-tracking", [
+            ShippingController::class,
+            "showTracking",
+        ])->name("order.tracking");
+    }
 );
 
 Route::controller(CheckoutController::class)->group(function () {
