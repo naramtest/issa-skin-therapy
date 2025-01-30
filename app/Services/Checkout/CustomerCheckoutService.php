@@ -2,6 +2,7 @@
 
 namespace App\Services\Checkout;
 
+use App\Data\Orders\CreateOrderData;
 use App\Enums\AddressType;
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
@@ -15,13 +16,11 @@ use DB;
 
 readonly class CustomerCheckoutService
 {
-    private OrderService $orderService;
-    private CouponService $couponService;
-
-    public function __construct(private CartService $cartService)
-    {
-        $this->orderService = new OrderService();
-        $this->couponService = new CouponService();
+    public function __construct(
+        private CartService $cartService,
+        private OrderService $orderService,
+        private CouponService $couponService
+    ) {
     }
 
     public function processCheckout(array $data): Order
@@ -43,22 +42,23 @@ readonly class CustomerCheckoutService
                     AddressType::SHIPPING
                 )
                 : $billingAddress;
-
             // 3. Create Order via OrderService
-            $order = $this->orderService->createOrder([
-                "customer_id" => $customer->id,
-                "email" => $data["email"], // Store checkout email directly in order
-                "billing_address_id" => $billingAddress->id,
-                "shipping_address_id" => $shippingAddress->id,
-                "status" => OrderStatus::PENDING,
-                "payment_status" => PaymentStatus::PENDING,
-                "shipping_method" => $data["shipping_method"] ?? null,
-                "shipping_cost" => $data["shipping_cost"] ?? null,
-                "notes" => $data["notes"] ?? null,
-                "cart_items" => $this->cartService->getItems(),
-                "subtotal" => $this->cartService->getSubtotal()->getAmount(),
-                "total" => $this->cartService->getTotal()->getAmount(),
-            ]);
+            $order = $this->orderService->createOrder(
+                new CreateOrderData(
+                    customerId: $customer->id,
+                    email: $data["email"],
+                    billingAddressId: $billingAddress->id,
+                    shippingAddressId: $shippingAddress->id,
+                    status: OrderStatus::PENDING,
+                    paymentStatus: PaymentStatus::PENDING,
+                    shippingMethod: $data["shipping_method"] ?? null,
+                    subtotal: $this->cartService->getSubtotal()->getAmount(),
+                    shippingCost: $data["shipping_cost"] ?? null,
+                    total: $this->cartService->getTotal()->getAmount(),
+                    notes: $data["notes"] ?? null,
+                    cartItems: $this->cartService->getItems()
+                )
+            );
 
             if ($coupon = $this->cartService->getAppliedCoupon()) {
                 $this->couponService->recordUsage(
@@ -68,10 +68,6 @@ readonly class CustomerCheckoutService
                     $this->cartService->getCouponDiscount()
                 );
             }
-
-            // 4. Clear the cart after successful order creation
-            //            $this->cartService->clear();
-
             return $order;
         });
     }

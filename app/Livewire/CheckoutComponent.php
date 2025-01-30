@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\AddressType;
 use App\Livewire\Forms\CheckoutForm;
 use App\Models\Order;
 use App\Models\State;
@@ -145,37 +146,18 @@ class CheckoutComponent extends Component
                 $this->selectedShippingRate
             );
 
+            //TODO: convert data to DTO like in the OrderService
             $order = $this->customerCheckoutService->processCheckout([
                 "email" => $validatedData["email"],
-                "billing" => [
-                    "first_name" => $validatedData["billing_first_name"],
-                    "last_name" => $validatedData["billing_last_name"],
-                    "phone" => $validatedData["phone"],
-                    "address" => $validatedData["billing_address"],
-                    "city" => $validatedData["billing_city"],
-                    "state" =>
-                        State::find($validatedData["billing_state"])->name ??
-                        null,
-                    "country" => $validatedData["billing_country"],
-                    "postal_code" => $validatedData["billing_postal_code"],
-                    "area" => $validatedData["billing_area"],
-                    "building" => $validatedData["billing_building"],
-                    "flat" => $validatedData["billing_flat"],
-                ],
+                "billing" => $this->getAddress(
+                    $validatedData,
+                    AddressType::BILLING->value
+                ),
                 "shipping" => $validatedData["different_shipping_address"]
-                    ? [
-                        "first_name" => $validatedData["shipping_first_name"],
-                        "last_name" => $validatedData["shipping_last_name"],
-                        "phone" => $validatedData["phone"],
-                        "address" => $validatedData["shipping_address"],
-                        "city" => $validatedData["shipping_city"],
-                        "state" => $validatedData["shipping_state"],
-                        "country" => $validatedData["shipping_country"],
-                        "postal_code" => $validatedData["shipping_postal_code"],
-                        "area" => $validatedData["shipping_area"],
-                        "building" => $validatedData["shipping_building"],
-                        "flat" => $validatedData["shipping_flat"],
-                    ]
+                    ? $this->getAddress(
+                        $validatedData,
+                        AddressType::SHIPPING->value
+                    )
                     : null,
                 "different_shipping_address" =>
                     $validatedData["different_shipping_address"],
@@ -212,6 +194,29 @@ class CheckoutComponent extends Component
         } finally {
             $this->processing = false;
         }
+    }
+
+    /**
+     * @param array $validatedData
+     * @param string $type
+     * @return array
+     */
+    public function getAddress(array $validatedData, string $type): array
+    {
+        return [
+            "first_name" => $validatedData[$type . "_first_name"],
+            "last_name" => $validatedData[$type . "_last_name"],
+            "phone" => $validatedData["phone"],
+            "address" => $validatedData[$type . "_address"],
+            "city" => $validatedData[$type . "_city"],
+            "state" =>
+                State::find($validatedData[$type . "_state"])->name ?? null,
+            "country" => $validatedData[$type . "_country"],
+            "postal_code" => $validatedData[$type . "_postal_code"],
+            "area" => $validatedData[$type . "_area"],
+            "building" => $validatedData[$type . "_building"],
+            "flat" => $validatedData[$type . "_flat"],
+        ];
     }
 
     #[Computed]

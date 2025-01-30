@@ -33,6 +33,7 @@ class Order extends Model
         "notes",
         "currency_code",
         "exchange_rate",
+        "default_currency",
         "email",
 
         //payment columns

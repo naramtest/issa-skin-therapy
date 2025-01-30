@@ -7,12 +7,22 @@ use App\Services\Cart\CartService;
 use App\Services\Cart\CartTaxCalculator;
 use App\Services\Cart\Redis\CartCostsRedisService;
 use App\Services\Cart\Redis\CartItemsRedisService;
+use App\Services\Checkout\OrderService;
+use App\Services\Currency\CurrencyService;
 use Illuminate\Support\ServiceProvider;
 
-class CartServiceProvider extends ServiceProvider
+class SingletonProvider extends ServiceProvider
 {
+    /**
+     * Register services.
+     */
     public function register(): void
     {
+        $this->app->singleton(OrderService::class, function ($app) {
+            return new OrderService($app->make(CurrencyService::class));
+        });
+
+        // Cart Services
         // Register Redis Services
         $this->app->singleton(CartCostsRedisService::class);
         $this->app->singleton(CartItemsRedisService::class);
@@ -36,5 +46,13 @@ class CartServiceProvider extends ServiceProvider
                 $app->make(CartCostsRedisService::class)
             );
         });
+    }
+
+    /**
+     * Bootstrap services.
+     */
+    public function boot(): void
+    {
+        //
     }
 }

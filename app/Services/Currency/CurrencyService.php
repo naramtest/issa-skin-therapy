@@ -124,10 +124,11 @@ class CurrencyService
                 return $money;
             }
 
-            $this->rate ??= $this->getCachedExchangeRate(
+            $rate ??= $this->getCachedExchangeRate(
                 $money->getCurrency(),
                 $userCurrency
             );
+
             // Adjust for decimal places of source and target currencies
             $fromDecimals = $this->getCurrencyDecimals($money->getCurrency());
             $toDecimals = $this->getCurrencyDecimals($userCurrency);

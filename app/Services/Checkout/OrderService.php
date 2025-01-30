@@ -2,44 +2,59 @@
 
 namespace App\Services\Checkout;
 
+use App\Data\Orders\CreateOrderData;
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
 use App\Models\Order;
 use App\Services\Currency\CurrencyHelper;
+use App\Services\Currency\CurrencyService;
 use App\ValueObjects\CartItem;
 use InvalidArgumentException;
 use Str;
 
-class OrderService
+readonly class OrderService
 {
-    public function createOrder(array $data): Order
+    public function __construct(private CurrencyService $currencyService)
+    {
+    }
+
+    public function createOrder(CreateOrderData $data): Order
     {
         // Validate order data
-        $this->validateOrderData($data);
+        if (empty($data->cartItems)) {
+            throw new InvalidArgumentException("Cart cannot be empty");
+        }
 
         // Generate unique order number
         $orderNumber = $this->generateOrderNumber();
 
         // Create the order
+        $userCurrency = CurrencyHelper::getUserCurrency();
+        $defaultCurrency = CurrencyHelper::defaultCurrency();
         $order = Order::create([
             "order_number" => $orderNumber,
-            "customer_id" => $data["customer_id"],
-            "email" => $data["email"],
-            "billing_address_id" => $data["billing_address_id"],
-            "shipping_address_id" => $data["shipping_address_id"],
-            "status" => $data["status"],
-            "payment_status" => $data["payment_status"],
-            "shipping_method" => $data["shipping_method"],
-            "subtotal" => $data["subtotal"],
-            "shipping_cost" => $data["shipping_cost"],
-            "total" => $data["total"],
-            "notes" => $data["notes"],
-            "currency_code" => app(CurrencyHelper::class)->getUserCurrency(),
-            "exchange_rate" => 1, //TODO: Will be set based on the currency service
+            "customer_id" => $data->customerId,
+            "email" => $data->email,
+            "billing_address_id" => $data->billingAddressId,
+            "shipping_address_id" => $data->shippingAddressId,
+            "status" => $data->status,
+            "payment_status" => $data->paymentStatus,
+            "shipping_method" => $data->shippingMethod,
+            "subtotal" => $data->subtotal,
+            "shipping_cost" => $data->shippingCost,
+            "total" => $data->total,
+            "notes" => $data->notes,
+            "currency_code" => $userCurrency,
+            "default_currency" => $defaultCurrency,
+            "exchange_rate" => $this->currencyService->getExchangeRate(
+                $defaultCurrency,
+                $userCurrency
+            ),
         ]);
 
         // Create order items
-        foreach ($data["cart_items"] as $item) {
+        //TODO: can be improved
+        foreach ($data->cartItems as $item) {
             $order->items()->create([
                 "purchasable_id" => $item->getPurchasable()->getId(),
                 "purchasable_type" => get_class($item->getPurchasable()),
@@ -60,33 +75,6 @@ class OrderService
         //event(new OrderCreated($order));
 
         return $order;
-    }
-
-    private function validateOrderData(array $data): void
-    {
-        $requiredFields = [
-            "customer_id",
-            "email",
-            "billing_address_id",
-            "shipping_address_id",
-            "status",
-            "payment_status",
-            "subtotal",
-            "total",
-            "cart_items",
-        ];
-
-        foreach ($requiredFields as $field) {
-            if (!isset($data[$field])) {
-                throw new InvalidArgumentException(
-                    "Missing required field: {$field}"
-                );
-            }
-        }
-
-        if (empty($data["cart_items"])) {
-            throw new InvalidArgumentException("Cart cannot be empty");
-        }
     }
 
     private function generateOrderNumber(): string
