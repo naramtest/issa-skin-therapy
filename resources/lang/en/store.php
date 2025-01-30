@@ -311,7 +311,7 @@ return [
     "Coupon applied" => "Coupon applied",
 
     "Order" => "order",
-    "Orders" => "orders",
+    "Orders" => "Orders",
     "Customer" => "Customer",
     "Failed" => "Failed",
     "Unit Price" => "Unit Price",
@@ -466,4 +466,20 @@ return [
     "Flat Rate" => "Flat Rate",
     "Local Pickup" => "Local Pickup",
     "DHL Express" => "DHL Express",
+    "FAQ Sections" => "FAQ Sections",
+    "FAQ" => "FAQ",
+    "Street Address" => "Street Address",
+    "Area/Block" => "Area/Block",
+    "Area and/or Block Number" => "Area and/or Block Number",
+    "Building" => "Building",
+    "Building Name/Number" => "Building Name/Number",
+    "Flat/Unit" => "Flat/Unit",
+    "Flat/Unit Number" => "Flat/Unit Number",
+    "Order Notes" => "Order Notes",
+    "Notes about your order, e" => [
+        "g" => [
+            " special notes for delivery" =>
+                "Notes about your order, e.g. special notes for delivery.",
+        ],
+    ],
 ];

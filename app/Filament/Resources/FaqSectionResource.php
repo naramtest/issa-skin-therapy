@@ -20,7 +20,7 @@ class FaqSectionResource extends Resource
 
     protected static ?string $model = FaqSection::class;
     protected static ?string $navigationIcon = "heroicon-o-question-mark-circle";
-    protected static ?string $navigationGroup = "Content";
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -155,5 +155,35 @@ class FaqSectionResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->withCount("faqs");
+    }
+
+    public static function getLabel(): ?string
+    {
+        return __("store.FAQ");
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __("store.FAQ");
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __("store.FAQ Sections");
+    }
+
+    public static function getPluralLabel(): ?string
+    {
+        return __("store.FAQ Sections");
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __("store.FAQ Sections");
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __("dashboard.Content");
     }
 }

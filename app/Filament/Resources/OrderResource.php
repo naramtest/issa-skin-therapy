@@ -22,7 +22,7 @@ class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
     protected static ?string $navigationIcon = "gmdi-shopping-cart-o";
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 1;
 
     public static function table(Table $table): Table
     {
@@ -87,16 +87,17 @@ class OrderResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Action::make("createShipment")
-                    ->label("Create DHL Shipment")
+                    ->label("DHL")
                     ->icon("heroicon-o-truck")
                     ->requiresConfirmation()
-                    //                    ->hidden(
-                    //                        fn(Order $record) => $record->shippingOrder ||
-                    //                            $record->payment_status !== "paid" ||
-                    //                            $record->status === "cancelled"
-                    //                    )
+                    ->hidden(
+                        fn(Order $record) => $record->shippingOrder ||
+                            $record->payment_status !== PaymentStatus::PAID ||
+                            $record->status === OrderStatus::CANCELLED
+                    )
                     ->action(function ($record) {
                         try {
+                            // TODO: add this to the webhook and success page
                             $shipmentService = app(DHLShipmentService::class);
                             $shipmentData = $shipmentService->createShipment(
                                 $record
@@ -192,6 +193,6 @@ class OrderResource extends Resource
 
     public static function getPluralLabel(): ?string
     {
-        return __("store.orders");
+        return __("store.Orders");
     }
 }

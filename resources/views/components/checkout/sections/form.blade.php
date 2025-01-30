@@ -13,7 +13,6 @@
     <h2 class="mb-6 text-xl font-semibold">
         {{ __("store.Information") }}
     </h2>
-    {{-- TODO: fix labels --}}
     <!-- Personal Information Section -->
     <div class="space-y-8">
         <div class="grid grid-cols-2 gap-4">
@@ -37,26 +36,27 @@
         </div>
         {{-- TODO: phone number --}}
         <x-checkout.input-field
-            label="Phone"
+            label="{{ __('dashboard.info.phone') }}"
             wire:model="form.phone"
             required
-            place-holder="Phone"
+            place-holder="{{ __('dashboard.info.phone') }}"
             field="form.phone"
             :error="$errors->first('form.phone')"
             helper-text="{{ __('store.Use english letters') }}"
         />
 
         <x-checkout.input-field
-            label="Email Address"
+            label="{{ __('store.Email Address') }}"
             wire:model="form.email"
             required
-            place-holder="Email Address"
+            place-holder="{{ __('store.Email Address') }}"
             field="form.email"
             :error="$errors->first('form.email')"
             type="email"
         />
 
         <!-- Billing Address Section -->
+        {{-- TODO: add loading --}}
         <div
             x-data="{ loading: false }"
             x-on:loading.window="loading = $event.detail.loading"
@@ -83,25 +83,25 @@
         </div>
 
         <x-checkout.input-field
-            label="Street Address"
+            label="{{ __('store.Street Address') }}"
             wire:model="form.billing_address"
             required
-            place-holder="Street Address"
+            place-holder="{{ __('store.Street Address') }}"
             field="form.billing_address"
             :error="$errors->first('form.billing_address')"
         />
 
         <x-checkout.input-field
-            label="Area/Block"
+            label="{{ __('store.Area/Block') }}"
             wire:model="form.billing_area"
             required
-            place-holder="Area and/or Block Number"
+            place-holder="{{ __('store.Area and/or Block Number') }}"
             field="form.billing_area"
             :error="$errors->first('form.billing_area')"
         />
 
         <x-checkout.input-field
-            label="Postal Code"
+            label="{{ __('store.Postal Code') }}"
             wire:model.blur="form.billing_postal_code"
             required
             place-holder="{{ __('store.Postal Code') }}"
@@ -111,19 +111,19 @@
         />
 
         <x-checkout.input-field
-            label="Building"
+            label="{{ __('store.Building') }}"
             wire:model="form.billing_building"
             required
-            place-holder="Building Name/Number"
+            place-holder="{{ __('store.Building Name/Number') }}"
             field="form.billing_building"
             :error="$errors->first('form.billing_building')"
         />
 
         <x-checkout.input-field
-            label="Flat/Unit"
+            label="{{ __('store.Flat/Unit') }}"
             wire:model="form.billing_flat"
             required
-            place-holder="Flat/Unit Number"
+            place-holder="{{ __('store.Flat/Unit Number') }}"
             field="form.billing_flat"
             :error="$errors->first('form.billing_flat')"
         />
@@ -161,19 +161,19 @@
         <div class="mt-8 space-y-6 border-t pt-6">
             <div class="grid grid-cols-2 gap-4">
                 <x-checkout.input-field
-                    label="First Name"
+                    label="{{ __('store.First Name') }}"
                     wire:model="form.shipping_first_name"
-                    place-holder="First Name"
+                    place-holder="{{ __('store.First Name') }}"
                     required
                     field="form.shipping_first_name"
                     :error="$errors->first('form.shipping_first_name')"
                 />
 
                 <x-checkout.input-field
-                    label="Last Name"
+                    label="{{ __('store.Last Name') }}"
                     wire:model="form.shipping_last_name"
                     required
-                    place-holder="Last Name"
+                    place-holder="{{ __('store.Last Name') }}"
                     field="form.shipping_last_name"
                     :error="$errors->first('form.shipping_last_name')"
                 />
@@ -189,47 +189,47 @@
             />
 
             <x-checkout.input-field
-                label="Street Address"
+                label="{{ __('store.Street Address') }}"
                 wire:model="form.shipping_address"
                 required
-                place-holder="Street Address"
+                place-holder="{{ __('store.Street Address') }}"
                 field="form.shipping_address"
                 :error="$errors->first('form.shipping_address')"
             />
 
             <x-checkout.input-field
-                label="Area/Block"
+                label="{{ __('store.Area/Block') }}"
                 wire:model="form.shipping_area"
                 required
-                place-holder="Area and/or Block Number"
+                place-holder="{{ __('store.Area and/or Block Number') }}"
                 field="form.shipping_area"
                 :error="$errors->first('form.shipping_area')"
             />
 
             <x-checkout.input-field
-                label="Postal Code"
+                label="{{ __('store.Postal Code') }}"
                 wire:model.blur="form.shipping_postal_code"
                 required
-                place-holder="Postal Code"
+                place-holder="{{ __('store.Postal Code') }}"
                 field="form.shipping_postal_code"
                 :error="$errors->first('form.shipping_postal_code')"
                 helper-text="Type *000* if unknown"
             />
 
             <x-checkout.input-field
-                label="Building"
+                label="{{ __('store.Building') }}"
                 wire:model="form.shipping_building"
                 required
-                place-holder="Building Name/Number"
+                place-holder="{{ __('store.Building Name/Number') }}"
                 field="form.shipping_building"
                 :error="$errors->first('form.shipping_building')"
             />
 
             <x-checkout.input-field
-                label="Flat/Unit"
+                label="{{ __('store.Flat/Unit') }}"
                 wire:model="form.shipping_flat"
                 required
-                place-holder="Flat/Unit Number"
+                place-holder="{{ __('store.Flat/Unit Number') }}"
                 field="form.shipping_flat"
                 :error="$errors->first('form.shipping_flat')"
             />
@@ -239,10 +239,10 @@
     <!-- Order Notes -->
     <div class="mt-8">
         <x-checkout.text-area-field
-            label="Order Notes"
+            label="{{ __('store.Order Notes') }}"
             wire:model="form.order_notes"
             field="form.order_notes"
-            place-holder="Notes about your order, e.g. special notes for delivery."
+            place-holder="{{ __('store.Notes about your order, e.g. special notes for delivery.') }}"
         />
     </div>
     <!-- Error Messages -->

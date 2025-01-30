@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class DHLProductService
 {
-    protected string $baseUrl = "https://express.api.dhl.com/mydhlapi/test/"; // Change to prod URL in production
+    protected string $baseUrl;
     protected string $apiKey;
     protected string $apiSecret;
     protected string $accountNumber;
@@ -20,6 +20,7 @@ class DHLProductService
         $this->apiKey = config("services.dhl.key");
         $this->apiSecret = config("services.dhl.secret");
         $this->accountNumber = config("services.dhl.account_number");
+        $this->baseUrl = config("services.dhl.base_url");
     }
 
     /**

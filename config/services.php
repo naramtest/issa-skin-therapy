@@ -49,6 +49,6 @@ return [
         "secret" => env("DHL_API_SECRET"),
         "account_number" => env("DHL_ACCOUNT_NUMBER"),
         "environment" => env("DHL_ENVIRONMENT", "test"), // 'test' or 'prod'
-        "url" => env("DHL_URL"),
+        "base_url" => env("DHL_URL"),
     ],
 ];

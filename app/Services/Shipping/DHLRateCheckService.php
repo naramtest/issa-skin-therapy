@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class DHLRateCheckService
 {
-    protected string $baseUrl; // Change to prod URL in production
+    protected string $baseUrl;
     protected string $apiKey;
     protected string $apiSecret;
 
@@ -23,7 +23,7 @@ class DHLRateCheckService
     {
         $this->apiKey = config("services.dhl.key");
         $this->apiSecret = config("services.dhl.secret");
-        $this->baseUrl = config("services.dhl.url");
+        $this->baseUrl = config("services.dhl.base_url");
         $this->domesticProducts[] = ShippingMethod::DOMESTIC_EXPRESS->toArray();
         $this->internationalProducts[] = ShippingMethod::EXPRESS_WORLDWIDE->toArray();
     }
@@ -45,7 +45,7 @@ class DHLRateCheckService
             //                $destination
             //            );
 
-            // Format postal codes for UAE (ensure they're 5 digits)
+            // Format postal codes for the UAE (ensure they're 5 digits)
             $originPostalCode = $this->formatUAEPostalCode(
                 $origin["postal_code"]
             );

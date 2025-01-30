@@ -24,7 +24,7 @@ class InfoResource extends Resource
     protected static ?string $model = Info::class;
 
     protected static ?string $navigationIcon = "gmdi-info-o";
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -167,6 +167,6 @@ class InfoResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('dashboard.Settings');
+        return __("dashboard.Settings");
     }
 }

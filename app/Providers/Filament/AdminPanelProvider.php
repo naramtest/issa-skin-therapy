@@ -7,6 +7,7 @@ use Exception;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -59,9 +60,18 @@ class AdminPanelProvider extends PanelProvider
                 in: app_path("Filament/Widgets"),
                 for: "App\\Filament\\Widgets"
             )
-            ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+            ->widgets([Widgets\AccountWidget::class])
+            ->navigationGroups([
+                NavigationGroup::make()->label(
+                    fn(): string => __("store.Shop")
+                ),
+                NavigationGroup::make()->label(
+                    fn(): string => __("dashboard.Content")
+                ),
+
+                NavigationGroup::make()->label(
+                    fn(): string => __("dashboard.Settings")
+                ),
             ])
             ->middleware([
                 EncryptCookies::class,

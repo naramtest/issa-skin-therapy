@@ -5,12 +5,13 @@ namespace App\Services\Shipping;
 use App\Models\Order;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class DHLShipmentService
 {
-    protected string $baseUrl = "https://express.api.dhl.com/mydhlapi/test/"; // Change to prod URL in production
+    protected string $baseUrl;
     protected string $apiKey;
     protected string $apiSecret;
     protected string $accountNumber;
@@ -20,8 +21,12 @@ class DHLShipmentService
         $this->apiKey = config("services.dhl.key");
         $this->apiSecret = config("services.dhl.secret");
         $this->accountNumber = config("services.dhl.account_number");
+        $this->baseUrl = config("services.dhl.base_url");
     }
 
+    /**
+     * @throws ConnectionException
+     */
     public function createShipment(Order $order): array
     {
         try {
@@ -44,28 +49,7 @@ class DHLShipmentService
                 "content" => [
                     "packages" => [
                         [
-                            "weight" => floatval(
-                                $this->calculatePackageDimensions(
-                                    $order->items
-                                )["weight"]
-                            ),
-                            "dimensions" => [
-                                "length" => floatval(
-                                    $this->calculatePackageDimensions(
-                                        $order->items
-                                    )["length"]
-                                ),
-                                "width" => floatval(
-                                    $this->calculatePackageDimensions(
-                                        $order->items
-                                    )["width"]
-                                ),
-                                "height" => floatval(
-                                    $this->calculatePackageDimensions(
-                                        $order->items
-                                    )["height"]
-                                ),
-                            ],
+                            ...$this->weightAndDimensions($order),
                             "customerReferences" => [
                                 [
                                     "value" => $order->order_number,
@@ -129,13 +113,6 @@ class DHLShipmentService
             ])->post($this->baseUrl . "shipments", $request);
 
             if (!$response->successful()) {
-                //                Log::error("DHL Shipment Creation Failed", [
-                //                    "order_id" => $order->id,
-                //                    "response" => $response->json(),
-                //                    "status" => $response->status(),
-                //                    "request" => $request,
-                //                ]);
-
                 throw new Exception(
                     "Failed to create DHL shipment: " .
                         ($response->json()["detail"] ?? "Unknown error")
@@ -161,11 +138,11 @@ class DHLShipmentService
         }
     }
 
-    protected function getProductCode(Order $order): string
+    protected function getProductCode(Order $order): ?string
     {
         // You can implement logic to determine the appropriate product code
         // based on the shipping method selected during checkout
-        return $order->shipping_method ?? "D"; // P = EXPRESS WORLDWIDE
+        return $order->shipping_method->value; // P = EXPRESS WORLDWIDE
     }
 
     protected function getCustomerDetails(Order $order): array
@@ -209,6 +186,21 @@ class DHLShipmentService
                     "companyName" => "Personal",
                     "fullName" => $order->shippingAddress->full_name,
                 ],
+            ],
+        ];
+    }
+
+    public function weightAndDimensions(Order $order): array
+    {
+        $calculatePackageDimensions = $this->calculatePackageDimensions(
+            $order->items
+        );
+        return [
+            "weight" => floatval($calculatePackageDimensions["weight"]),
+            "dimensions" => [
+                "length" => floatval($calculatePackageDimensions["length"]),
+                "width" => floatval($calculatePackageDimensions["width"]),
+                "height" => floatval($calculatePackageDimensions["height"]),
             ],
         ];
     }
@@ -347,18 +339,5 @@ class DHLShipmentService
             ]);
             throw $e;
         }
-    }
-
-    protected function getLocalProductCode(Order $order): string
-    {
-        // Map global product codes to local ones if needed
-        $productCodeMap = [
-            "P" => "P",
-            "N" => "N",
-            "D" => "D",
-            // Add more mappings as needed
-        ];
-
-        return $productCodeMap[$this->getProductCode($order)] ?? "D";
     }
 }
