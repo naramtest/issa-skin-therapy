@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\Shipping;
+namespace App\Services\Shipping\DHL;
 
-use App\Enums\ShippingMethod;
+use App\Enums\Checkout\DHLProduct;
 use App\Services\Currency\CurrencyHelper;
 use Carbon\Carbon;
 use Exception;
@@ -24,8 +24,8 @@ class DHLRateCheckService
         $this->apiKey = config("services.dhl.key");
         $this->apiSecret = config("services.dhl.secret");
         $this->baseUrl = config("services.dhl.base_url");
-        $this->domesticProducts[] = ShippingMethod::DOMESTIC_EXPRESS->toArray();
-        $this->internationalProducts[] = ShippingMethod::EXPRESS_WORLDWIDE->toArray();
+        $this->domesticProducts[] = DHLProduct::DOMESTIC_EXPRESS->toArray();
+        $this->internationalProducts[] = DHLProduct::EXPRESS_WORLDWIDE->toArray();
     }
 
     public function getRates(

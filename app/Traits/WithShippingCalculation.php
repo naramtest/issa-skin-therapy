@@ -3,7 +3,8 @@
 namespace App\Traits;
 
 use App\Enums\Checkout\CartCostType;
-use App\Services\Shipping\DHLRateCheckService;
+use App\Services\Shipping\DHL\DHLRateCheckService;
+use App\Services\Shipping\ShippingZoneService;
 use Exception;
 use Log;
 use Money\Currency;
@@ -53,24 +54,33 @@ trait WithShippingCalculation
 
         try {
             $destination = $this->getShippingAddress();
+            $this->shippingRates = collect();
 
             if (empty($destination)) {
-                $this->shippingRates = collect();
                 return;
             }
 
-            $rates = collect();
+            $zoneService = app(ShippingZoneService::class);
+            $methods = $zoneService->getAvailableMethodsForCountry(
+                $destination["country"]
+            );
 
-            // Add free shipping for UAE
-            if ($destination["country"] === config("store.address.country")) {
-                $rates->push([
-                    "service_code" => "free_shipping",
-                    "service_name" => __("store.Free Shipping"),
-                    "total_price" => 0,
-                    "currency" => config("app.money_currency"),
-                    "estimated_days" => "5-7",
-                    "guaranteed" => false,
-                ]);
+            foreach ($methods as $method) {
+                // Skip methods that don't meet minimum order requirements
+                if (
+                    !$method->meetsMinimumOrderRequirement(
+                        $this->cartService->getSubtotal()
+                    )
+                ) {
+                    continue;
+                }
+
+                $this->shippingRates->push(
+                    $zoneService->formatMethodToRate(
+                        $method,
+                        $this->cartService->itemCount()
+                    )
+                );
             }
 
             // Get DHL rates
@@ -85,9 +95,12 @@ trait WithShippingCalculation
             );
 
             // Merge rates
-            $this->shippingRates = $rates->concat($dhlRates);
 
-            // Select first rate if none selected
+            foreach ($dhlRates as $dhlRate) {
+                $this->shippingRates->push($dhlRate);
+            }
+
+            // Select first-rate if none selected
             if (
                 $this->shippingRates->isNotEmpty() &&
                 empty($this->selectedShippingRate)
@@ -203,6 +216,9 @@ trait WithShippingCalculation
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     protected function updateTotals(): void
     {
         if ($this->selectedShippingRate && $this->shippingRates->isNotEmpty()) {

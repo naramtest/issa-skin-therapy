@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Checkout\OrderStatus;
 use App\Models\Order;
 use App\Models\ShippingOrder;
-use App\Services\Shipping\DHLShipmentService;
+use App\Services\Shipping\DHL\DHLShipmentService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

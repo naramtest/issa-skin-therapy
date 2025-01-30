@@ -7,7 +7,7 @@ use App\Enums\Checkout\PaymentStatus;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\Partials\OrderForm;
 use App\Models\Order;
-use App\Services\Shipping\DHLShipmentService;
+use App\Services\Shipping\DHL\DHLShipmentService;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;

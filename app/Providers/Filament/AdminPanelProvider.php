@@ -66,6 +66,9 @@ class AdminPanelProvider extends PanelProvider
                     fn(): string => __("store.Shop")
                 ),
                 NavigationGroup::make()->label(
+                    fn(): string => __("store.Store Settings")
+                ),
+                NavigationGroup::make()->label(
                     fn(): string => __("dashboard.Content")
                 ),
 

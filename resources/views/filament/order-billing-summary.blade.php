@@ -14,7 +14,7 @@
         <div class="flex justify-between">
             <span class="text-gray-600">{{ __("store.Shipping") }}</span>
             <span class="font-medium">
-                <x-price :money="$getRecord()->getMoneyShippingCost()" />
+                <x-price :money="$getRecord()->money_shipping_cost" />
             </span>
         </div>
     @endif

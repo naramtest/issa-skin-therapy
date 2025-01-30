@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Shipping;
+namespace App\Services\Shipping\DHL;
 
 use App\Models\Order;
 use Carbon\Carbon;

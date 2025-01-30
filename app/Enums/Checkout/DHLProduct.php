@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enums\Checkout;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum ShippingMethod: string implements HasLabel
+enum DHLProduct: string implements HasLabel
 {
     case EXPRESS_WORLDWIDE = "P";
     case DOMESTIC_EXPRESS = "N";

@@ -118,4 +118,5 @@ return [
     "Forget Password?" => "Forget Password?",
     "Remember Me" => "Remember Me",
     "Send Reset Link" => "Send Reset Link",
+    "Collapse All" => "Collapse All",
 ];
