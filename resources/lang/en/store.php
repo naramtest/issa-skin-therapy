@@ -463,4 +463,7 @@ return [
     "was placed on" => "was placed on",
     "and is currently" => "and is currently",
     "Track" => "Track",
+    "Flat Rate" => "Flat Rate",
+    "Local Pickup" => "Local Pickup",
+    "DHL Express" => "DHL Express",
 ];
