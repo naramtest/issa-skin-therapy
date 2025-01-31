@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Checkout\PaymentStatus;
 use App\Models\Order;
 use App\Services\Cart\CartService;
+use App\Services\Coupon\CouponService;
 use App\Services\Payment\StripePaymentService;
 use Exception;
 use Illuminate\Http\Request;
@@ -15,7 +16,8 @@ class CheckoutController extends Controller
 {
     public function __construct(
         private readonly CartService $cartService,
-        private readonly StripePaymentService $paymentService
+        private readonly StripePaymentService $paymentService,
+        private readonly CouponService $couponService
     ) {
     }
 
@@ -46,6 +48,12 @@ class CheckoutController extends Controller
                     ->with("error", __("store.Invalid order access"));
             }
 
+            $discount = $order->couponUsage
+                ? $this->couponService->calculateDiscount(
+                    $order->couponUsage,
+                    $order->getMoneySubtotal()
+                )
+                : null;
             // Clear cart
             $this->cartService->clear();
 
@@ -54,6 +62,7 @@ class CheckoutController extends Controller
                 "showRegistration" =>
                     !auth()->check() &&
                     $order->customer->is_registered === false,
+                "discount" => $discount,
             ]);
         } catch (Exception $e) {
             Log::error("Error processing checkout success", [

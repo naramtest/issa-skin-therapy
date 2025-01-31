@@ -493,4 +493,12 @@ return [
     "Shipping Zones" => "Shipping Zones",
     "Store Settings" => "Store Settings",
     "All" => "All",
+    "Thank you Your order has been received" =>
+        "Thank you. Your order has been received.",
+    "ORDER NUMBER" => "ORDER NUMBER:",
+    "DATE" => "DATE",
+    "TOTAL" => "TOTAL",
+    "PAYMENT METHOD" => "PAYMENT METHOD",
+    "Flat" => "Flat",
+    "Return to store" => "Return to store",
 ];
