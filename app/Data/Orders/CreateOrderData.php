@@ -4,6 +4,7 @@ namespace App\Data\Orders;
 
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
+use App\Enums\Checkout\ShippingMethodType;
 
 readonly class CreateOrderData
 {
@@ -14,12 +15,13 @@ readonly class CreateOrderData
         public int $shippingAddressId,
         public OrderStatus $status,
         public PaymentStatus $paymentStatus,
-        public ?string $shippingMethod,
+        public ?ShippingMethodType $shippingMethod,
         public int $subtotal,
         public ?int $shippingCost,
         public int $total,
         public ?string $notes,
-        public array $cartItems
+        public array $cartItems,
+        public ?string $dhlProduct
     ) {
     }
 
@@ -37,7 +39,8 @@ readonly class CreateOrderData
             shippingCost: $data["shipping_cost"] ?? null,
             total: $data["total"],
             notes: $data["notes"] ?? null,
-            cartItems: $data["cart_items"]
+            cartItems: $data["cart_items"],
+            dhlProduct: $data["dhl_product"] ?? null
         );
     }
 }

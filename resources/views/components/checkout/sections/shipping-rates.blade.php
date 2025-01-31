@@ -31,7 +31,7 @@
                             />
                             <div class="flex flex-col items-end ps-3 text-sm">
                                 <p class="text-gray-900">
-                                    {{ $rate["service_name"] }}
+                                    {{ $rate["service_name"] instanceof \App\Enums\Checkout\ShippingMethodType ? $rate["service_name"]->getLabel() : $rate["service_name"] }}
                                 </p>
                                 @if ($rate["total_price"] > 0)
                                     <p class="text-gray-500">

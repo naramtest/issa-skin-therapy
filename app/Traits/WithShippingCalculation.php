@@ -60,6 +60,7 @@ trait WithShippingCalculation
                 return;
             }
 
+            // TODO: change to var in checkout component
             $zoneService = app(ShippingZoneService::class);
             $methods = $zoneService->getAvailableMethodsForCountry(
                 $destination["country"]

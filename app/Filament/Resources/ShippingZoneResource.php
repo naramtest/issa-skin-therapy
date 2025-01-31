@@ -61,6 +61,7 @@ class ShippingZoneResource extends Resource
             Forms\Components\Repeater::make("methods")
                 ->relationship()
                 ->schema([
+                    //TODO: remove dhl from here
                     Forms\Components\Select::make("method_type")
                         ->options(ShippingMethodType::class)
                         ->required()

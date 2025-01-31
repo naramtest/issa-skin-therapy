@@ -74,7 +74,7 @@ class ShippingZoneService
 
         return [
             "service_code" => $method->method_type->value,
-            "service_name" => $method->title,
+            "service_name" => $method->method_type,
             "total_price" => $cost->getAmount(),
             "currency" => $cost->getCurrency()->getCode(),
             "guaranteed" => false,

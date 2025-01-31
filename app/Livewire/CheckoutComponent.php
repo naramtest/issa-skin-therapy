@@ -3,6 +3,8 @@
 namespace App\Livewire;
 
 use App\Enums\AddressType;
+use App\Enums\Checkout\DHLProduct;
+use App\Enums\Checkout\ShippingMethodType;
 use App\Livewire\Forms\CheckoutForm;
 use App\Models\Order;
 use App\Models\State;
@@ -146,6 +148,17 @@ class CheckoutComponent extends Component
                 $this->selectedShippingRate
             );
 
+            $dhlProduct = null;
+            if (
+                in_array(
+                    $shippingRate["service_code"],
+                    array_column(DHLProduct::cases(), "value")
+                )
+            ) {
+                $dhlProduct = DHLProduct::tryFrom(
+                    $shippingRate["service_code"]
+                );
+            }
             //TODO: convert data to DTO like in the OrderService
             $order = $this->customerCheckoutService->processCheckout([
                 "email" => $validatedData["email"],
@@ -164,7 +177,10 @@ class CheckoutComponent extends Component
                 "notes" => $validatedData["order_notes"],
                 "payment_method" => "card", //TODO: make this dynamic
                 "create_account" => $validatedData["create_account"],
-                "shipping_method" => $shippingRate["service_code"],
+                "shipping_method" => $dhlProduct
+                    ? ShippingMethodType::DHL_EXPRESS
+                    : $shippingRate["service_name"],
+                "dhl_product" => $dhlProduct?->value,
                 "shipping_cost" => $shippingRate["total_price"],
                 "shipping_service_name" => $shippingRate["service_name"],
             ]);

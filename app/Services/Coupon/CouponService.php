@@ -76,9 +76,9 @@ class CouponService
                 $coupon->discount_amount,
                 CurrencyHelper::defaultCurrency()
             ),
-            CouponType::PERCENTAGE => $cartTotal->multiply(
-                $coupon->discount_amount / 100
-            ),
+            CouponType::PERCENTAGE => $cartTotal
+                ->multiply($coupon->discount_amount)
+                ->divide(100),
             CouponType::SHIPPING => Money::USD(
                 0
             ), // We'll handle shipping discounts separately

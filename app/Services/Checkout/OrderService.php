@@ -46,6 +46,7 @@ readonly class OrderService
             "notes" => $data->notes,
             "currency_code" => $userCurrency,
             "default_currency" => $defaultCurrency,
+            "dhl_product" => $data->dhlProduct,
             "exchange_rate" => $this->currencyService->getExchangeRate(
                 $defaultCurrency,
                 $userCurrency

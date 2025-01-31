@@ -56,7 +56,8 @@ readonly class CustomerCheckoutService
                     shippingCost: $data["shipping_cost"] ?? null,
                     total: $this->cartService->getTotal()->getAmount(),
                     notes: $data["notes"] ?? null,
-                    cartItems: $this->cartService->getItems()
+                    cartItems: $this->cartService->getItems(),
+                    dhlProduct: $data["dhl_product"] ?? null
                 )
             );
 

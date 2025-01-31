@@ -59,14 +59,15 @@ class OrderResource extends Resource
                 ),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\DeleteAction::make(),
                 Tables\Actions\EditAction::make(),
                 Action::make("createShipment")
                     ->label("DHL")
                     ->icon("heroicon-o-truck")
                     ->requiresConfirmation()
                     ->hidden(
-                        fn(Order $record) => $record->shippingOrder ||
+                        fn(Order $record) => !$record->dhl_product ||
+                            $record->shippingOrder ||
                             $record->payment_status !== PaymentStatus::PAID ||
                             $record->status === OrderStatus::CANCELLED
                     )
@@ -74,23 +75,8 @@ class OrderResource extends Resource
                         try {
                             // TODO: add this to the webhook and success page
                             $shipmentService = app(DHLShipmentService::class);
-                            $shipmentData = $shipmentService->createShipment(
-                                $record
-                            );
 
-                            $record->shippingOrder()->create([
-                                "carrier" => "dhl",
-                                "service_code" => $record->shipping_method,
-                                "tracking_number" =>
-                                    $shipmentData["tracking_number"],
-                                "label_url" => $shipmentData["label_url"],
-                                "shipping_label_data" =>
-                                    $shipmentData["shipping_label_data"],
-                                "carrier_response" =>
-                                    $shipmentData["raw_response"],
-                                "status" => "created",
-                                "shipped_at" => now(),
-                            ]);
+                            $shipmentService->createDHLShippingOrder($record);
 
                             Notification::make()
                                 ->success()

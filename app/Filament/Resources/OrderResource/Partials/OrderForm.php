@@ -56,7 +56,7 @@ class OrderForm
                                     TextInput::make("currency_code")
                                         ->disabled()
                                         ->label(__("store.Currency")),
-                                    TextInput::make("base_currency_code")
+                                    TextInput::make("default_currency")
                                         ->disabled()
                                         ->label(__("store.Base on Currency")),
                                     TextInput::make("exchange_rate")
@@ -102,7 +102,7 @@ class OrderForm
                 Forms\Components\Group::make()
                     ->columnSpan(1)
                     ->schema([
-                        Section::make("Info")
+                        Section::make(__("store.Info"))
                             ->schema([
                                 Placeholder::make("created_at")
                                     ->label(__("store.Create At"))

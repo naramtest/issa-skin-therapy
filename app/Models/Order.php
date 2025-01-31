@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Checkout\DHLProduct;
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
+use App\Enums\Checkout\ShippingMethodType;
 use App\Services\Currency\CurrencyHelper;
 use Finller\Invoice\Invoice;
 use Illuminate\Database\Eloquent\Model;
@@ -26,15 +27,18 @@ class Order extends Model
         "shipping_address_id",
         "status",
         "payment_status",
-        "shipping_method",
         "subtotal",
-        "shipping_cost",
         "total",
         "notes",
         "currency_code",
         "exchange_rate",
         "default_currency",
         "email",
+
+        //Shipping
+        "shipping_method",
+        "dhl_product",
+        "shipping_cost",
 
         //payment columns
         "payment_provider",
@@ -53,7 +57,8 @@ class Order extends Model
         "payment_captured_at" => "datetime",
         "payment_refunded_at" => "datetime",
         "status" => OrderStatus::class,
-        "shipping_method" => DHLProduct::class,
+        "dhl_product" => DHLProduct::class,
+        "shipping_method" => ShippingMethodType::class,
     ];
 
     public function customer(): BelongsTo

@@ -3,6 +3,7 @@
 namespace App\Services\Shipping\DHL;
 
 use App\Models\Order;
+use App\Models\ShippingOrder;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Client\ConnectionException;
@@ -27,8 +28,31 @@ class DHLShipmentService
     /**
      * @throws ConnectionException
      */
+    public function createDHLShippingOrder(Order $order): ?ShippingOrder
+    {
+        $shipmentData = $this->createShipment($order);
+
+        return $order->shippingOrder()->create([
+            "carrier" => "dhl",
+            "service_code" => $order->shipping_method,
+            "tracking_number" => $shipmentData["tracking_number"],
+            "label_url" => $shipmentData["label_url"],
+            "shipping_label_data" => $shipmentData["shipping_label_data"],
+            "carrier_response" => $shipmentData["raw_response"],
+            "status" => "created",
+            "shipped_at" => now(),
+        ]);
+    }
+
+    /**
+     * @throws ConnectionException
+     * @throws Exception
+     */
     public function createShipment(Order $order): array
     {
+        if (!$order->dhl_product) {
+            throw new Exception("Order doesn't have a DHL Shipping product");
+        }
         try {
             $request = [
                 "plannedShippingDateAndTime" =>
@@ -36,7 +60,7 @@ class DHLShipmentService
                 "pickup" => [
                     "isRequested" => false,
                 ],
-                "productCode" => $this->getProductCode($order),
+                "productCode" => $order->dhl_product->value,
 
                 "getRateEstimates" => false,
                 "accounts" => [
@@ -136,13 +160,6 @@ class DHLShipmentService
             ]);
             throw $e;
         }
-    }
-
-    protected function getProductCode(Order $order): ?string
-    {
-        // You can implement logic to determine the appropriate product code
-        // based on the shipping method selected during checkout
-        return $order->shipping_method->value; // P = EXPRESS WORLDWIDE
     }
 
     protected function getCustomerDetails(Order $order): array

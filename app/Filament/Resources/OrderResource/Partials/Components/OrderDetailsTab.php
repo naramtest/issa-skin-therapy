@@ -40,8 +40,9 @@ class OrderDetailsTab
                             if ($dhlProduct !== null) {
                                 return $dhlProduct->getLabel();
                             }
-                            return $state;
                         }
+
+                        return \Str::title(\Str::replace("_", " ", $state));
                     })
                     ->maxLength(255)
                     ->columnSpan(2),
