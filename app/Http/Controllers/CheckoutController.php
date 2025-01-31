@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Checkout\PaymentStatus;
+use App\Enums\Checkout\ShippingMethodType;
 use App\Models\Order;
 use App\Services\Cart\CartService;
 use App\Services\Coupon\CouponService;
 use App\Services\Payment\StripePaymentService;
+use App\Services\Shipping\DHL\DHLShipmentService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +19,8 @@ class CheckoutController extends Controller
     public function __construct(
         private readonly CartService $cartService,
         private readonly StripePaymentService $paymentService,
-        private readonly CouponService $couponService
+        private readonly CouponService $couponService,
+        private readonly DHLShipmentService $shipmentService
     ) {
     }
 
@@ -46,6 +49,13 @@ class CheckoutController extends Controller
                 return redirect()
                     ->route("checkout.index")
                     ->with("error", __("store.Invalid order access"));
+            }
+
+            if (
+                $order->shipping_method == ShippingMethodType::DHL_EXPRESS and
+                !$order->shippingOrder
+            ) {
+                $this->shipmentService->createDHLShippingOrder($order);
             }
 
             $discount = $order->couponUsage

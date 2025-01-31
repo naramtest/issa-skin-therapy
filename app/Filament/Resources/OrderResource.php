@@ -5,11 +5,10 @@ namespace App\Filament\Resources;
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
 use App\Filament\Resources\OrderResource\Pages;
+use App\Filament\Resources\OrderResource\Partials\Components\DHLAction;
 use App\Filament\Resources\OrderResource\Partials\OrderForm;
 use App\Models\Order;
-use App\Services\Shipping\DHL\DHLShipmentService;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -65,39 +64,8 @@ class OrderResource extends Resource
                     ->label("DHL")
                     ->icon("heroicon-o-truck")
                     ->requiresConfirmation()
-                    ->hidden(
-                        fn(Order $record) => !$record->dhl_product ||
-                            $record->shippingOrder ||
-                            $record->payment_status !== PaymentStatus::PAID ||
-                            $record->status === OrderStatus::CANCELLED
-                    )
-                    ->action(function ($record) {
-                        try {
-                            // TODO: add this to the webhook and success page
-                            $shipmentService = app(DHLShipmentService::class);
-
-                            $shipmentService->createDHLShippingOrder($record);
-
-                            Notification::make()
-                                ->success()
-                                ->title(__("store.Shipment Created"))
-                                ->body(
-                                    __(
-                                        "store.Shipment has been created successfully."
-                                    )
-                                )
-                                ->send();
-                        } catch (\Exception $e) {
-                            Notification::make()
-                                ->danger()
-                                ->title("Error")
-                                ->body(
-                                    "Failed to create shipment: " .
-                                        $e->getMessage()
-                                )
-                                ->send();
-                        }
-                    }),
+                    ->hidden(fn(Order $record) => DHLAction::hidden($record))
+                    ->action(fn(Order $record) => DHLAction::action($record)),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -157,5 +125,13 @@ class OrderResource extends Resource
     public static function getPluralLabel(): ?string
     {
         return __("store.Orders");
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()
+            ::where("status", "=", OrderStatus::PENDING)
+            ->orWhere("status", "=", OrderStatus::PROCESSING)
+            ->count();
     }
 }

@@ -34,7 +34,7 @@ class DHLShipmentService
 
         return $order->shippingOrder()->create([
             "carrier" => "dhl",
-            "service_code" => $order->shipping_method,
+            "service_code" => $order->dhl_product ?? $order->shipping_method,
             "tracking_number" => $shipmentData["tracking_number"],
             "label_url" => $shipmentData["label_url"],
             "shipping_label_data" => $shipmentData["shipping_label_data"],

@@ -509,4 +509,5 @@ return [
     "Shipment Created" => "Shipment Created",
     "Shipment has been created successfully" =>
         "Shipment has been created successfully.",
+    "Error" => "Error",
 ];

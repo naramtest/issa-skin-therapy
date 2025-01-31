@@ -4,6 +4,7 @@ namespace App\Filament\Resources\OrderResource\Partials;
 
 use App\Filament\Resources\OrderResource\Partials\Components\AddressFieldset;
 use App\Filament\Resources\OrderResource\Partials\Components\CustomerTab;
+use App\Filament\Resources\OrderResource\Partials\Components\DHLAction;
 use App\Filament\Resources\OrderResource\Partials\Components\FormAction;
 use App\Filament\Resources\OrderResource\Partials\Components\OrderDetailsTab;
 use App\Filament\Resources\OrderResource\Partials\Components\PaymentTab;
@@ -121,7 +122,25 @@ class OrderForm
                                     ->label(__("store.Order Status"))
                                     ->inlineLabel(),
                             ])
-                            ->footerActions(FormAction::actions()),
+                            ->footerActions(FormAction::actions())
+                            ->headerActions([
+                                Forms\Components\Actions\Action::make(
+                                    "createShipment"
+                                )
+                                    ->label("DHL")
+                                    ->icon("heroicon-o-truck")
+                                    ->requiresConfirmation()
+                                    ->hidden(
+                                        fn(Order $record) => DHLAction::hidden(
+                                            $record
+                                        )
+                                    )
+                                    ->action(
+                                        fn(Order $record) => DHLAction::action(
+                                            $record
+                                        )
+                                    ),
+                            ]),
                         Section::make(__("store.Summary"))->schema([
                             ViewField::make("billing_summary")
                                 ->view("filament.order-billing-summary")
