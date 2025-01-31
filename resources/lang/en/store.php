@@ -501,4 +501,12 @@ return [
     "PAYMENT METHOD" => "PAYMENT METHOD",
     "Flat" => "Flat",
     "Return to store" => "Return to store",
+    "Order Completed" => "Order Completed",
+    "Something went wrong! try again later" =>
+        "Something went wrong! try again later",
+    "Done" => "Done!",
+    "Cancel" => "Cancel",
+    "Shipment Created" => "Shipment Created",
+    "Shipment has been created successfully" =>
+        "Shipment has been created successfully.",
 ];

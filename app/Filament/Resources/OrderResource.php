@@ -8,14 +8,13 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\Partials\OrderForm;
 use App\Models\Order;
 use App\Services\Shipping\DHL\DHLShipmentService;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 use Pelmered\FilamentMoneyField\Tables\Columns\MoneyColumn;
 
 class OrderResource extends Resource
@@ -24,6 +23,9 @@ class OrderResource extends Resource
     protected static ?string $navigationIcon = "gmdi-shopping-cart-o";
     protected static ?int $navigationSort = 1;
 
+    /**
+     * @throws \Exception
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -52,36 +54,9 @@ class OrderResource extends Resource
                 Tables\Filters\SelectFilter::make("payment_status")->options(
                     PaymentStatus::class
                 ),
-                Tables\Filters\Filter::make("created_at")
-                    ->form([
-                        Forms\Components\DatePicker::make("created_from"),
-                        Forms\Components\DatePicker::make("created_until"),
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data["created_from"],
-                                fn(
-                                    Builder $query,
-                                    $date
-                                ): Builder => $query->whereDate(
-                                    "created_at",
-                                    ">=",
-                                    $date
-                                )
-                            )
-                            ->when(
-                                $data["created_until"],
-                                fn(
-                                    Builder $query,
-                                    $date
-                                ): Builder => $query->whereDate(
-                                    "created_at",
-                                    "<=",
-                                    $date
-                                )
-                            );
-                    }),
+                DateRangeFilter::make("created_at")->label(
+                    __("dashboard.Created At")
+                ),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -119,9 +94,11 @@ class OrderResource extends Resource
 
                             Notification::make()
                                 ->success()
-                                ->title("Shipment Created")
+                                ->title(__("store.Shipment Created"))
                                 ->body(
-                                    "Shipment has been created successfully."
+                                    __(
+                                        "store.Shipment has been created successfully."
+                                    )
                                 )
                                 ->send();
                         } catch (\Exception $e) {

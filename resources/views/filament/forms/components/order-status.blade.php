@@ -3,7 +3,7 @@
 
     $colorClasses = [
         OrderStatus::PENDING->value => "--c-50:var(--gray-50);--c-400:var(--gray-400);--c-600:var(--gray-600);",
-        OrderStatus::DRAFT->value => "--c-50:var(--gray-50);--c-400:var(--gray-400);--c-600:var(--gray-600);",
+        //        OrderStatus::DRAFT->value => "--c-50:var(--gray-50);--c-400:var(--gray-400);--c-600:var(--gray-600);",
         OrderStatus::PROCESSING->value => "--c-50:var(--info-50);--c-400:var(--info-400);--c-600:var(--info-600);",
         OrderStatus::COMPLETED->value => "--c-50:var(--success-50);--c-400:var(--success-400);--c-600:var(--success-600);",
         OrderStatus::CANCELLED->value => "--c-50:var(--danger-50);--c-400:var(--danger-400);--c-600:var(--danger-600);",
