@@ -59,7 +59,7 @@ class CheckoutController extends Controller
 
             $discount = $order->couponUsage
                 ? $this->couponService->calculateDiscount(
-                    $order->couponUsage,
+                    $order->couponUsage->coupon,
                     $order->getMoneySubtotal()
                 )
                 : null;

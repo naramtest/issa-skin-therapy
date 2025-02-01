@@ -8,6 +8,7 @@ use App\Models\Bundle;
 use App\Models\Coupon;
 use App\Models\Product;
 use App\Services\Cart\Redis\CartCostsRedisService;
+use App\Services\Cart\Redis\CartCouponRedisService;
 use App\Services\Cart\Redis\CartItemsRedisService;
 use Exception;
 use Log;
@@ -15,17 +16,54 @@ use Money\Money;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-class CartService
+readonly class CartService
 {
-    //    TODO: add USer Currency to the final order with the current currency conversion rate
-    protected ?Coupon $appliedCoupon = null;
-    protected ?Money $couponDiscount = null;
-
     public function __construct(
-        private readonly CartPriceCalculator $priceCalculator,
-        private readonly CartItemsRedisService $itemsService,
-        private readonly CartCostsRedisService $costsService
+        private CartPriceCalculator $priceCalculator,
+        private CartItemsRedisService $itemsService,
+        private CartCostsRedisService $costsService,
+        private CartCouponRedisService $couponService
     ) {
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function applyCoupon(Coupon $coupon, Money $discount): void
+    {
+        $this->couponService->saveCoupon($coupon, $discount);
+        $this->addCost(CartCostType::DISCOUNT, $discount);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function addCost(CartCostType $type, Money $amount): void
+    {
+        $this->costsService->addCost($type, $amount);
+    }
+
+    public function removeCoupon(): void
+    {
+        $this->couponService->removeCoupon();
+        $this->removeCost(CartCostType::DISCOUNT);
+    }
+
+    public function removeCost(CartCostType $type): void
+    {
+        $this->costsService->removeCost($type);
+    }
+
+    public function getAppliedCoupon(): ?Coupon
+    {
+        $couponData = $this->couponService->getCoupon();
+        return $couponData ? $couponData["coupon"] : null;
+    }
+
+    public function getCouponDiscount(): ?Money
+    {
+        $couponData = $this->couponService->getCoupon();
+        return $couponData ? $couponData["discount"] : null;
     }
 
     public function getId(): string
@@ -137,46 +175,6 @@ class CartService
     public function getAdditionalCosts(): array
     {
         return $this->costsService->getCosts();
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function applyCoupon(Coupon $coupon, Money $discount): void
-    {
-        $this->appliedCoupon = $coupon;
-        $this->couponDiscount = $discount;
-        $this->addCost(CartCostType::DISCOUNT, $discount);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function addCost(CartCostType $type, Money $amount): void
-    {
-        $this->costsService->addCost($type, $amount);
-    }
-
-    public function removeCoupon(): void
-    {
-        $this->appliedCoupon = null;
-        $this->couponDiscount = null;
-        $this->removeCost(CartCostType::DISCOUNT);
-    }
-
-    public function removeCost(CartCostType $type): void
-    {
-        $this->costsService->removeCost($type);
-    }
-
-    public function getAppliedCoupon(): ?Coupon
-    {
-        return $this->appliedCoupon;
-    }
-
-    public function getCouponDiscount(): ?Money
-    {
-        return $this->couponDiscount;
     }
 
     public function clearItems(): void
