@@ -1,3 +1,5 @@
+{{-- TODO: title --}}
+
 <x-account.layout :user="$user">
     <div class="mt-8 text-[1.1rem] text-[#787c8a]">
         <div class="inline-block">

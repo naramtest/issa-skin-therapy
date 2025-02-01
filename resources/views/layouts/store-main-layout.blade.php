@@ -14,7 +14,11 @@
         />
 
         <meta name="csrf-token" content="{{ csrf_token() }}" />
-        <title>{{ $title ?? config("app.name") }}</title>
+        @if (isset($title))
+            {{ $title }}
+        @else
+            <title>{{ config("app.name") }}</title>
+        @endif
 
         <link
             rel="icon"

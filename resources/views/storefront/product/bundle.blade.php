@@ -1,4 +1,8 @@
 <x-store-main-layout>
+    <x-slot name="title">
+        <title>{{ getPageTitle($bundle->name) }}</title>
+    </x-slot>
+
     <main>
         <x-product.section.details
             :type="\App\Enums\ProductType::BUNDLE->value"

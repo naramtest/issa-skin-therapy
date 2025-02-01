@@ -528,4 +528,6 @@ return [
     "Generated URL" => "Generated URL",
     "Copy" => "Copy",
     "Marketing" => "Marketing",
+    "Collection" => "Collection",
+    "Success" => "Success",
 ];

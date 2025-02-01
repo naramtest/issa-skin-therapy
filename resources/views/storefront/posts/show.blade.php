@@ -1,4 +1,7 @@
 <x-store-main-layout>
+    <x-slot name="title">
+        <title>{{ getPageTitle($post->title) }}</title>
+    </x-slot>
     <main>
         <x-post.header :post="$post" />
         <x-post.content :post="$post" :next="$nextPost" :past="$pastPost" />

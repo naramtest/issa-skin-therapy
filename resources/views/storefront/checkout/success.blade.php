@@ -1,4 +1,7 @@
 <x-store-main-layout>
+    <x-slot name="title">
+        <title>{{ getPageTitle(__("store.Success")) }}</title>
+    </x-slot>
     <main class="mx-auto max-w-4xl px-4 pb-10 pt-16 sm:px-6 lg:px-8">
         <!-- Success Header -->
         <div class="rounded-lg bg-[#1A1A1A] p-8 text-center">

@@ -1,4 +1,7 @@
 <x-store-main-layout>
+    <x-slot name="title">
+        <title>{{ getPageTitle(__("store.Collection")) }}</title>
+    </x-slot>
     <main class="padding-from-side-menu pb-24 pt-10">
         <h1 class="text-4xl font-bold lg:text-[95px] rtl:text-[60px]">
             {{ __("dashboard.Collections") }}

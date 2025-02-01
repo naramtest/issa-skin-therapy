@@ -13,6 +13,8 @@ return [
     */
 
     "name" => env("APP_NAME", "Laravel"),
+    "name_en" => env("APP_NAME", "ISSA Skin Therapy"),
+    "name_ar" => env("APP_NAME_AR", "ISSA Skin Therapy"),
 
     /*
     |--------------------------------------------------------------------------

@@ -1,4 +1,9 @@
+{{-- TODO: translate --}}
+
 <x-store-main-layout>
+    <x-slot name="title">
+        <title>{{ getPageTitle(__("legal.terms_conditions")) }}</title>
+    </x-slot>
     @php
         $name = $info->name;
         $email = count($info->email) ? $info->email[0]["email"] : "";
@@ -211,8 +216,9 @@
                 that Vitaderm FZE will not be held liable for any losses or
                 damages you may incur as a result of using the Site to look for
                 content or create a link to another website. Kindly contact info
-                @issaskintherapy.com to report any issues you may be having with
-                a link from the Site.
+                @issaskintherapy.com
+                to report any issues you may be having with a link from the
+                Site.
             </li>
         </x-legal.ol>
         <x-legal.h2 content="Copyright Policy" />

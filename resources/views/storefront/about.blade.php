@@ -1,4 +1,7 @@
 <x-store-main-layout>
+    <x-slot name="title">
+        <title>{{ getPageTitle(__("store.About Us")) }}</title>
+    </x-slot>
     <main class="relative">
         <x-about.hero />
         <x-home.section-container

@@ -1,4 +1,7 @@
 <x-store-main-layout>
+    <x-slot name="title">
+        <title>{{ getPageTitle($collectionType->name) }}</title>
+    </x-slot>
     <main class="relative">
         <x-shop.section.hero label="{{$collectionType->name}}" />
         <section class="padding-from-side-menu py-12">

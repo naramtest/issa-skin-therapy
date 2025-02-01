@@ -1,3 +1,5 @@
+{{-- TODO: there is a litle glitche - don't re start the animation when hovering on shop if the mega menu is already opens --}}
+
 <div
     class="absolute left-0 top-[100%] z-[20] flex w-full gap-12 overflow-hidden bg-lightColor bg-white px-24 py-10 pe-10 text-[#1f1f1f] shadow-lg"
     x-transition:enter="transform transition duration-500 ease-in"

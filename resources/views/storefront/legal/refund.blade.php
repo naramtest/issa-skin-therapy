@@ -1,4 +1,7 @@
 <x-store-main-layout>
+    <x-slot name="title">
+        <title>{{ getPageTitle(__("legal.refund_returns_policy")) }}</title>
+    </x-slot>
     @php
         $name = $info->name;
         $email = count($info->email) ? $info->email[0]["email"] : "";
