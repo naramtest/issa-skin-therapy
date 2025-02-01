@@ -140,7 +140,6 @@ class ProductResource extends Resource
                             ->default(false),
                     ]),
                     Section::make(__("dashboard.Prices"))->schema([
-                        //TODO: add why to currency conversion
                         CustomMoneyInput::make("regular_price", function (
                             Product $record
                         ) {
@@ -152,10 +151,7 @@ class ProductResource extends Resource
                             Product $record
                         ) {
                             return $record->money_sale_price;
-                        })
-                            ->label(__("dashboard.Sale Price"))
-                            ->required(),
-
+                        })->label(__("dashboard.Sale Price")),
                         Forms\Components\Toggle::make("is_sale_scheduled")
                             ->label(__("dashboard.Schedule Sale"))
                             ->reactive(),
