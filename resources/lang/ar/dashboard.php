@@ -118,4 +118,5 @@ return [
     "Forget Password?" => "هل نسيت كلمة المرور؟",
     "Remember Me" => "تذكرني",
     "Send Reset Link" => "إرسال رابط إعادة التعيين",
+    "Collapse All" => "طي الكل",
 ];
