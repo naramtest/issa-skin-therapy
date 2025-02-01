@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Checkout\PaymentStatus;
-use App\Enums\Checkout\ShippingMethodType;
 use App\Models\Order;
 use App\Services\Cart\CartService;
 use App\Services\Coupon\CouponService;
@@ -51,12 +50,12 @@ class CheckoutController extends Controller
                     ->with("error", __("store.Invalid order access"));
             }
 
-            if (
-                $order->shipping_method == ShippingMethodType::DHL_EXPRESS and
-                !$order->shippingOrder
-            ) {
-                $this->shipmentService->createDHLShippingOrder($order);
-            }
+            //            if (
+            //                $order->shipping_method == ShippingMethodType::DHL_EXPRESS and
+            //                !$order->shippingOrder
+            //            ) {
+            //                $this->shipmentService->createDHLShippingOrder($order);
+            //            }
 
             $discount = $order->couponUsage
                 ? $this->couponService->calculateDiscount(

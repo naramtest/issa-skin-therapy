@@ -6,12 +6,14 @@ use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\Partials\Components\DHLAction;
+use App\Filament\Resources\OrderResource\Partials\Components\EmailAction;
 use App\Filament\Resources\OrderResource\Partials\OrderForm;
 use App\Models\Order;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Table;
 use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 use Pelmered\FilamentMoneyField\Tables\Columns\MoneyColumn;
@@ -66,6 +68,23 @@ class OrderResource extends Resource
                     ->requiresConfirmation()
                     ->hidden(fn(Order $record) => DHLAction::hidden($record))
                     ->action(fn(Order $record) => DHLAction::action($record)),
+                ActionGroup::make([
+                    EmailAction::make(
+                        "processing_email",
+                        __("store.Processing Email"),
+                        OrderStatus::PROCESSING
+                    ),
+                    EmailAction::make(
+                        "completed_email",
+                        __("store.Completed Email"),
+                        OrderStatus::COMPLETED
+                    ),
+                    EmailAction::make(
+                        "canceled_email",
+                        __("store.Canceled Email"),
+                        OrderStatus::CANCELLED
+                    ),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

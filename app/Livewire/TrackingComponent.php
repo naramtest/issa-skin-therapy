@@ -10,9 +10,9 @@ use Livewire\Component;
 class TrackingComponent extends Component
 {
     #[Validate("required|min:3|string")]
-    public string $orderId = "ORD-20250124-HTNIE";
+    public string $orderId = "";
     #[Validate("required|min:3|string|email")]
-    public string $email = "naramalkoht123@gmail.com";
+    public string $email = "";
 
     public function render()
     {

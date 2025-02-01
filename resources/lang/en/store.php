@@ -510,4 +510,17 @@ return [
     "Shipment has been created successfully" =>
         "Shipment has been created successfully.",
     "Error" => "Error",
+    "Track Your Order" => "Track Your Order",
+    "Sending" => "Sending ......",
+    "Processing Email" => "Processing Email",
+    "Completed Email" => "Completed Email",
+    "Canceled Email" => "Canceled Email",
+    "Contact Support" => "Contact Support",
+    "Refund Information" => "Refund Information",
+    "Your refund has been processed and should be reflected in your account within 5-7 business days" =>
+        "Your refund has been processed and should be reflected in your account within 5-7 business days",
+    "How was your experience?" => "How was your experience?",
+    "We would love to hear your feedback" =>
+        "We would love to hear your feedback",
+    "Leave a Review" => "Leave a Review",
 ];
