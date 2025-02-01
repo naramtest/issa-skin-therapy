@@ -523,4 +523,8 @@ return [
     "We would love to hear your feedback" =>
         "We would love to hear your feedback",
     "Leave a Review" => "Leave a Review",
+    "Cart Link Generator" => "Cart Link Generator",
+    "Generate Link" => "Generate Link",
+    "Generated URL" => "Generated URL",
+    "Copy" => "Copy",
 ];

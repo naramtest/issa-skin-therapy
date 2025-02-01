@@ -4,6 +4,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CartPrefillController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\Content\FaqController;
@@ -110,3 +111,7 @@ Route::post("stripe/webhook", [
     StripeWebhookController::class,
     "handleWebhook",
 ])->name("cashier.webhook");
+
+Route::get("/cart/prefill", CartPrefillController::class)
+    ->name("cart.prefill")
+    ->middleware("signed");

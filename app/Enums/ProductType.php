@@ -2,7 +2,9 @@
 
 namespace App\Enums;
 
-enum ProductType: string
+use Filament\Support\Contracts\HasLabel;
+
+enum ProductType: string implements hasLabel
 {
     case PRODUCT = "product";
     case BUNDLE = "bundle";
@@ -13,6 +15,14 @@ enum ProductType: string
             "product" => self::PRODUCT,
             "bundle" => self::BUNDLE,
             default => null,
+        };
+    }
+
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::PRODUCT => "Product",
+            self::BUNDLE => "Bundle",
         };
     }
 }

@@ -39,7 +39,7 @@ class DHLRateCheckService
             $productCodes = $isDomestic
                 ? $this->domesticProducts
                 : $this->internationalProducts;
-            //
+
             //            $productCodes = app(DHLProductService::class)->getProducts(
             //                $package,
             //                $destination
@@ -62,9 +62,7 @@ class DHLRateCheckService
                 ];
             }
             $request = [
-                "plannedShippingDateAndTime" => now()
-                    ->addDay()
-                    ->format("Y-m-d\TH:i:s\Z"),
+                "plannedShippingDateAndTime" => now()->format("Y-m-d\TH:i:s\Z"),
                 "unitOfMeasurement" => "metric",
                 "isCustomsDeclarable" => !$isDomestic,
                 "productsAndServices" => $products,
