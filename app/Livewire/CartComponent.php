@@ -5,17 +5,22 @@ namespace App\Livewire;
 use App\Enums\ProductType;
 use App\Services\Cart\CartService;
 use App\Services\Currency\CurrencyHelper;
+use App\Traits\Checkout\WithCouponHandler;
 use Exception;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Money\Money;
 
 class CartComponent extends Component
 {
+    use WithCouponHandler;
+
     public $isOpen = false;
     public $cartItems = [];
     public string $subtotalString = "";
     public $itemCount = 0;
+    public ?string $coupon_code;
 
     protected Money $subtotal;
     protected Money $total;
@@ -136,5 +141,21 @@ class CartComponent extends Component
         } catch (\Exception $e) {
             $this->dispatch("error", message: $e->getMessage());
         }
+    }
+
+    public function getCouponCode(): ?string
+    {
+        return $this->coupon_code;
+    }
+
+    public function setCouponCode(?string $code): void
+    {
+        $this->coupon_code = $code;
+    }
+
+    #[Computed]
+    public function discount(): ?Money
+    {
+        return $this->getCouponDiscountAmount();
     }
 }

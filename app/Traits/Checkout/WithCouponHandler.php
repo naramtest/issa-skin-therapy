@@ -3,6 +3,7 @@
 namespace App\Traits\Checkout;
 
 use App\Services\Coupon\CouponService;
+use Exception;
 use Money\Money;
 
 trait WithCouponHandler
@@ -14,19 +15,35 @@ trait WithCouponHandler
     public function initializeWithCouponHandler(): void
     {
         $this->couponService = app(CouponService::class);
+        $coupon = $this->cartService->getAppliedCoupon();
+        if ($coupon) {
+            $this->setCouponCode($coupon->code);
+            try {
+                $this->applyCoupon();
+            } catch (Exception $e) {
+                $this->couponError = $e->getMessage();
+            }
+        }
     }
 
+    abstract protected function setCouponCode(?string $code): void;
+
+    /**
+     * @throws Exception
+     */
     public function applyCoupon(): void
     {
         $this->couponError = null;
 
-        if (empty($this->form->coupon_code)) {
+        $couponCode = $this->getCouponCode(); // Call abstract method
+
+        if (empty($couponCode)) {
             $this->couponError = __("store.Please enter a coupon code");
             return;
         }
 
         $validation = $this->couponService->validateCoupon(
-            $this->form->coupon_code,
+            $couponCode,
             $this->cartService->getSubtotal()
         );
 
@@ -45,9 +62,13 @@ trait WithCouponHandler
         $this->dispatch("coupon-applied");
     }
 
+    abstract protected function getCouponCode(): ?string;
+
+    // Abstract methods to be implemented in the component
+
     public function removeCoupon(): void
     {
-        $this->form->coupon_code = null;
+        $this->setCouponCode(null); // Call setter method
         $this->couponDiscount = null;
         $this->cartService->removeCoupon();
         $this->dispatch("coupon-removed");

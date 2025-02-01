@@ -240,4 +240,14 @@ class CheckoutComponent extends Component
     {
         return $this->getCouponDiscountAmount();
     }
+
+    public function getCouponCode(): ?string
+    {
+        return $this->form->coupon_code;
+    }
+
+    public function setCouponCode(?string $code): void
+    {
+        $this->form->coupon_code = $code;
+    }
 }

@@ -91,11 +91,11 @@
                     <div class="flex gap-2">
                         <input
                             type="text"
-                            wire:model.defer="couponCode"
+                            wire:model="coupon_code"
                             class="flex-1 rounded-xl bg-[#f9fafa] px-4 py-2"
                             placeholder="Coupon code"
                         />
-                        <button class="w-[30%]">
+                        <button wire:click="applyCoupon()" class="w-[30%]">
                             <x-general.button-black-animation class="!py-3">
                                 <span class="relative z-10 inline-block">
                                     {{ __("store.Apply") }}
@@ -115,9 +115,33 @@
 
                     <!-- Subtotal -->
                     <div class="mb-4 flex justify-between">
-                        <span>Subtotal</span>
-                        <x-price class="font-medium" :money="$subtotal" />
+                        <span>{{ __("store.Subtotal") }}</span>
+                        <x-price
+                            class="font-medium"
+                            :money="$this->subtotal"
+                        />
                     </div>
+
+                    @if ($this->discount)
+                        <div class="mb-4 flex justify-between">
+                            <div class="flex items-center">
+                                <p class="text-gray-600">
+                                    {{ __("store.Coupon") }}
+                                </p>
+                                <p class="ms-2 text-green-600">
+                                    {{ $coupon_code }}
+                                </p>
+                                <x-gmdi-close
+                                    wire:click="removeCoupon()"
+                                    class="h-4 w-4 cursor-pointer text-red-600"
+                                />
+                            </div>
+                            <x-price
+                                class="font-medium"
+                                :money="$this->discount"
+                            />
+                        </div>
+                    @endif
 
                     <!-- Shipping Options TODO: shipping -->
                     {{-- <div class="mb-4"> --}}
@@ -147,8 +171,10 @@
 
                     <!-- Total -->
                     <div class="mb-6 flex justify-between border-t pt-4">
-                        <span class="font-medium">Total</span>
-                        <x-price class="font-medium" :money="$total" />
+                        <span class="font-medium">
+                            {{ __("store.Total") }}
+                        </span>
+                        <x-price class="font-medium" :money="$this->total" />
                     </div>
 
                     <!-- Actions -->
@@ -165,9 +191,6 @@
                         </a>
                     </div>
                 </div>
-
-                <!-- Coupon -->
-
                 <div class="mt-8 flex flex-col items-center justify-center">
                     <p class="text-xl font-semibold">{{ __("store.Or") }}</p>
                     <a

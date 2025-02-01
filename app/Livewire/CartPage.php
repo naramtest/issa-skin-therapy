@@ -3,17 +3,20 @@
 namespace App\Livewire;
 
 use App\Services\Cart\CartService;
+use App\Traits\Checkout\WithCouponHandler;
 use Exception;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Money\Money;
 
 class CartPage extends Component
 {
+    use WithCouponHandler;
+
     public $cartItems = [];
     public string $subtotalString = "";
+    public ?string $coupon_code;
 
-    protected Money $subtotal;
-    protected Money $total;
     protected CartService $cartService;
 
     public function boot(CartService $cartService): void
@@ -61,8 +64,6 @@ class CartPage extends Component
     {
         try {
             $this->cartItems = $this->cartService->getItems();
-            $this->subtotal = $this->cartService->getSubtotal();
-            $this->total = $this->cartService->getTotal();
         } catch (Exception $e) {
             $this->dispatch(
                 "error",
@@ -78,9 +79,34 @@ class CartPage extends Component
 
     public function render()
     {
-        return view("livewire.cart-page", [
-            "subtotal" => $this->subtotal,
-            "total" => $this->total,
-        ]);
+        return view("livewire.cart-page");
+    }
+
+    public function getCouponCode(): ?string
+    {
+        return $this->coupon_code;
+    }
+
+    public function setCouponCode(?string $code): void
+    {
+        $this->coupon_code = $code;
+    }
+
+    #[Computed]
+    public function discount(): ?Money
+    {
+        return $this->getCouponDiscountAmount();
+    }
+
+    #[Computed]
+    public function subtotal()
+    {
+        return $this->cartService->getSubtotal();
+    }
+
+    #[Computed]
+    public function total()
+    {
+        return $this->cartService->getTotal();
     }
 }

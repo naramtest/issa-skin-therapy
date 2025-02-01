@@ -1,5 +1,4 @@
 <div>
-    {{-- TODO:Promo code --}}
     <!-- Cart Overlay -->
     <div
         @toggle-cart.window="open = !open"
@@ -198,10 +197,12 @@
                                 >
                                     <input
                                         type="text"
+                                        wire:model="coupon_code"
                                         class="min-w-0 flex-1 rounded-s-[50px] border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         placeholder="{{ __("store.Enter coupon code") }}"
                                     />
                                     <button
+                                        wire:click="applyCoupon"
                                         class="rounded-e-[50px] bg-[#1f1f1f] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2f2f2f]"
                                     >
                                         {{ __("store.Apply") }}
@@ -215,6 +216,30 @@
                                 <p>{{ __("store.Subtotal") }}</p>
                                 <p>{{ $subtotalString }}</p>
                             </div>
+                            @if ($this->discount)
+                                <div
+                                    class="flex justify-between pt-3 text-base font-medium text-gray-900"
+                                >
+                                    <div class="flex items-center">
+                                        <p class="text-gray-600">
+                                            {{ __("store.Coupon") }}
+                                        </p>
+                                        <x-gmdi-sell-o class="h-4 w-4" />
+                                        <p class="ms-2 text-green-600">
+                                            {{ $coupon_code }}
+                                        </p>
+                                        <x-gmdi-close
+                                            wire:click="removeCoupon()"
+                                            class="h-4 w-4 cursor-pointer text-red-600"
+                                        />
+                                    </div>
+                                    <x-price
+                                        class="text-green-600"
+                                        :money="$this->discount"
+                                    />
+                                </div>
+                            @endif
+
                             <div class="mt-4 flex gap-x-6">
                                 <a
                                     href="{{ route("checkout.index") }}"
