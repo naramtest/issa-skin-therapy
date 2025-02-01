@@ -27,7 +27,7 @@ class CouponResource extends Resource
 
     protected static ?string $navigationIcon = "gmdi-local-offer-o";
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 1;
 
     /**
      * @throws \Exception
@@ -217,6 +217,6 @@ class CouponResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __("store.Shop");
+        return __("store.Marketing");
     }
 }

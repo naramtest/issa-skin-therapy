@@ -527,4 +527,5 @@ return [
     "Generate Link" => "Generate Link",
     "Generated URL" => "Generated URL",
     "Copy" => "Copy",
+    "Marketing" => "Marketing",
 ];

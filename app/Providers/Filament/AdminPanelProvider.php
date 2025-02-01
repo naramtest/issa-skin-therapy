@@ -67,15 +67,18 @@ class AdminPanelProvider extends PanelProvider
                     fn(): string => __("store.Shop")
                 ),
                 NavigationGroup::make()->label(
-                    fn(): string => __("store.Store Settings")
+                    fn(): string => __("store.Marketing")
                 ),
-                NavigationGroup::make()->label(
-                    fn(): string => __("dashboard.Content")
-                ),
+                NavigationGroup::make()
+                    ->label(fn(): string => __("store.Store Settings"))
+                    ->collapsed(),
+                NavigationGroup::make()
+                    ->label(fn(): string => __("dashboard.Content"))
+                    ->collapsed(),
 
-                NavigationGroup::make()->label(
-                    fn(): string => __("dashboard.Settings")
-                ),
+                NavigationGroup::make()
+                    ->label(fn(): string => __("dashboard.Settings"))
+                    ->collapsed(),
             ])
             ->middleware([
                 EncryptCookies::class,

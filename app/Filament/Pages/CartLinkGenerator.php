@@ -21,7 +21,6 @@ class CartLinkGenerator extends Page implements HasForms
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = "heroicon-o-link";
-    protected static ?string $navigationGroup = "Marketing";
     protected static ?int $navigationSort = 2;
     protected static string $view = "filament.pages.cart-link-generator";
 
@@ -31,6 +30,11 @@ class CartLinkGenerator extends Page implements HasForms
     public static function getNavigationLabel(): string
     {
         return "Cart Link Generator";
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __("store.Marketing");
     }
 
     public function mount(): void
