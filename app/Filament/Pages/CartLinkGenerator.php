@@ -29,7 +29,7 @@ class CartLinkGenerator extends Page implements HasForms
 
     public static function getNavigationLabel(): string
     {
-        return "Cart Link Generator";
+        return __("store.Cart Link Generator");
     }
 
     public static function getNavigationGroup(): ?string
@@ -50,6 +50,10 @@ class CartLinkGenerator extends Page implements HasForms
     protected function getFormSchema(): array
     {
         return [
+            Select::make("currency")
+                ->options($this->getCurrencyOptions())
+                ->columnSpan(1)
+                ->label(__("store.Currency")),
             Repeater::make("items")
                 ->schema([
                     Select::make("type")
@@ -72,12 +76,22 @@ class CartLinkGenerator extends Page implements HasForms
                             return match ($type) {
                                 ProductType::PRODUCT => Product::query()
                                     ->published()
-                                    ->orderBy("name")
+                                    ->get()
+                                    ->filter(function ($bundle) {
+                                        return $bundle
+                                            ->inventory()
+                                            ->canBePurchased(1);
+                                    })
                                     ->pluck("name", "id"),
 
                                 ProductType::BUNDLE => Bundle::query()
                                     ->published()
-                                    ->orderBy("name")
+                                    ->get()
+                                    ->filter(function ($bundle) {
+                                        return $bundle
+                                            ->inventory()
+                                            ->canBePurchased(1);
+                                    })
                                     ->pluck("name", "id"),
                             };
                         })
@@ -123,6 +137,19 @@ class CartLinkGenerator extends Page implements HasForms
         ];
     }
 
+    protected function getCurrencyOptions(): array
+    {
+        return collect(config("currency"))
+            ->mapWithKeys(function ($currency) {
+                return [
+                    $currency[
+                        "code"
+                    ] => "{$currency["name"]} - {$currency["code"]}",
+                ];
+            })
+            ->toArray();
+    }
+
     public function generateUrl(): void
     {
         $items = collect($this->data["items"] ?? []);
@@ -143,10 +170,14 @@ class CartLinkGenerator extends Page implements HasForms
             })
             ->toArray();
 
-        // Generate signed URL that expires in 7 days
-        $this->generatedUrl = URL::signedRoute("cart.prefill", [
+        $attr = [
             "items" => $queryParams,
-        ]);
+        ];
+        if ($this->data["currency"]) {
+            $attr["currency"] = $this->data["currency"];
+        }
+        // Generate signed URL that expires in 7 days
+        $this->generatedUrl = URL::signedRoute("cart.prefill", $attr);
         //
         //        Notification::make()
         //            ->success()

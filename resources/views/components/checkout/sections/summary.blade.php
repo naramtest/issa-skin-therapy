@@ -37,9 +37,7 @@
                         </div>
                     </td>
                     <td class="py-2 text-end">
-                        <bdi>
-                            {{ $item->getSubtotal() }}
-                        </bdi>
+                        <x-price :money="$item->getSubtotal()" />
                     </td>
                 </tr>
             @endforeach

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\ProductType;
 use App\Services\Cart\CartService;
+use App\Services\Currency\CurrencyHelper;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
@@ -15,6 +16,13 @@ class CartPrefillController extends Controller
         try {
             // Validate the items array
             $items = collect($request->input("items", []));
+            if ($request->has("currency")) {
+                $currency = $request->input(
+                    "currency",
+                    CurrencyHelper::defaultCurrency()->getCode()
+                );
+                CurrencyHelper::setUserCurrency($currency);
+            }
 
             // Clear existing cart
             $cartService->clear();
