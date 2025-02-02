@@ -3,6 +3,8 @@
 namespace App\Traits;
 
 use App\Enums\Checkout\CartCostType;
+use App\Enums\Checkout\ShippingMethodType;
+use App\Services\Currency\CurrencyHelper;
 use App\Services\Shipping\DHL\DHLRateCheckService;
 use App\Services\Shipping\ShippingZoneService;
 use Exception;
@@ -65,6 +67,8 @@ trait WithShippingCalculation
             $methods = $zoneService->getAvailableMethodsForCountry(
                 $destination["country"]
             );
+
+            $this->freeShippingCoupon($destination["country"], $methods);
 
             foreach ($methods as $method) {
                 // Skip methods that don't meet minimum order requirements
@@ -167,6 +171,46 @@ trait WithShippingCalculation
                 "last_name" => $this->form->billing_last_name,
             ];
         }
+    }
+
+    public function freeShippingCoupon($country, $methods): void
+    {
+        $appliedCoupon = $this->cartService->getAppliedCoupon();
+
+        if (!$appliedCoupon) {
+            return;
+        }
+
+        if (
+            !$this->couponService->validateShippingEligibility(
+                $appliedCoupon,
+                $country
+            )
+        ) {
+            return;
+        }
+
+        // Check if the free shipping method already exists using firstWhere as a shorthand.
+        $method = $methods->firstWhere(
+            "method_type",
+            ShippingMethodType::FREE_SHIPPING
+        );
+        if (
+            $method and
+            $method->meetsMinimumOrderRequirement(
+                $this->cartService->getSubtotal()
+            )
+        ) {
+            return;
+        }
+
+        $this->shippingRates->push([
+            "service_code" => ShippingMethodType::FREE_SHIPPING->value,
+            "service_name" => ShippingMethodType::FREE_SHIPPING,
+            "total_price" => 0,
+            "currency" => CurrencyHelper::userCurrency()->getCode(),
+            "guaranteed" => false,
+        ]);
     }
 
     protected function calculatePackageDimensions(): array

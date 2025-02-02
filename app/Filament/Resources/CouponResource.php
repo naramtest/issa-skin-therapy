@@ -4,10 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Enums\CouponType;
 use App\Filament\Resources\CouponResource\Pages;
+use App\Models\Country;
 use App\Models\Coupon;
 use App\Services\Currency\CurrencyHelper;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -121,7 +123,7 @@ class CouponResource extends Resource
 
                             if (
                                 $record->discount_type ===
-                                CouponType::PERCENTAGE->value
+                                CouponType::PERCENTAGE
                             ) {
                                 return $state;
                             }
@@ -153,7 +155,7 @@ class CouponResource extends Resource
                         }),
 
                     MoneyInput::make("minimum_spend")->required(),
-                    MoneyInput::make("maximum_spend")->required(),
+                    MoneyInput::make("maximum_spend"),
 
                     Forms\Components\TextInput::make("usage_limit")
                         ->numeric()
@@ -165,6 +167,20 @@ class CouponResource extends Resource
                     Forms\Components\Toggle::make("is_active")
                         ->required()
                         ->default(true),
+                    Forms\Components\Toggle::make("includes_free_shipping")
+                        ->label("Include Free Shipping")
+                        ->live(),
+
+                    Forms\Components\Select::make("allowed_shipping_countries")
+                        ->label("Restrict Free Shipping to Countries")
+                        ->multiple()
+                        ->searchable()
+                        ->options(function () {
+                            return Country::pluck("name", "iso2")->toArray();
+                        })
+                        ->visible(
+                            fn(Get $get) => $get("includes_free_shipping")
+                        ),
 
                     Forms\Components\Textarea::make("description")
                         ->maxLength(65535)

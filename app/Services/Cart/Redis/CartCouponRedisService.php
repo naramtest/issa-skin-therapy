@@ -15,6 +15,7 @@ class CartCouponRedisService extends BaseRedisService
 
     public function saveCoupon(Coupon $coupon, Money $discount): void
     {
+        $this->removeCoupon();
         try {
             Redis::pipeline(function ($pipe) use ($coupon, $discount) {
                 $pipe->hset($this->getCouponKey(), "coupon_id", $coupon->id);
@@ -30,11 +31,6 @@ class CartCouponRedisService extends BaseRedisService
                 );
                 $pipe->expire($this->getCouponKey(), self::CART_EXPIRATION);
             });
-
-            Log::debug("Saved coupon to cart", [
-                "coupon_code" => $coupon->code,
-                "discount" => $discount->getAmount(),
-            ]);
         } catch (Exception $e) {
             Log::error("Failed to save coupon", [
                 "error" => $e->getMessage(),
@@ -44,14 +40,14 @@ class CartCouponRedisService extends BaseRedisService
         }
     }
 
-    private function getCouponKey(): string
-    {
-        return $this->getKey(self::COUPON_PREFIX);
-    }
-
     public function removeCoupon(): void
     {
         $this->clearKey($this->getCouponKey());
+    }
+
+    private function getCouponKey(): string
+    {
+        return $this->getKey(self::COUPON_PREFIX);
     }
 
     public function getCoupon(): ?array

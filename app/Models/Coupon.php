@@ -26,6 +26,8 @@ class Coupon extends Model
         "is_active",
         "starts_at",
         "expires_at",
+        "includes_free_shipping",
+        "allowed_shipping_countries",
     ];
 
     protected $casts = [
@@ -36,6 +38,8 @@ class Coupon extends Model
         "is_active" => "boolean",
         "starts_at" => "datetime",
         "expires_at" => "datetime",
+        "includes_free_shipping" => "boolean",
+        "allowed_shipping_countries" => "json",
     ];
 
     public function isValid(): bool

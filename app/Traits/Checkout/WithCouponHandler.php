@@ -15,11 +15,11 @@ trait WithCouponHandler
     public function initializeWithCouponHandler(): void
     {
         $this->couponService = app(CouponService::class);
-        $coupon = $this->cartService->getAppliedCoupon();
+        $coupon = $this->cartService->getAppliedCoupon(); // TODO: in the checkout try to get the coupon once
         if ($coupon) {
             $this->setCouponCode($coupon->code);
             try {
-                $this->applyCoupon();
+                $this->applyCoupon(); // TODO : this line resave the coupon every time try to get the coupon without saving it
             } catch (Exception $e) {
                 $this->couponError = $e->getMessage();
             }

@@ -31,6 +31,7 @@ class ShippingZoneService
 
         // Process each zone's methods, giving priority to specific zones
         foreach ($zones as $zone) {
+            // TODO: check this line I think it need fix
             $zoneMethods = $zone
                 ->methods()
                 ->where("is_active", true)

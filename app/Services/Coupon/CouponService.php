@@ -85,6 +85,23 @@ class CouponService
         };
     }
 
+    public function validateShippingEligibility(
+        Coupon $coupon,
+        string $countryCode
+    ): bool {
+        if (!$coupon->includes_free_shipping) {
+            return false;
+        }
+        if (
+            !empty($coupon->allowed_shipping_countries) &&
+            !in_array($countryCode, $coupon->allowed_shipping_countries)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function recordUsage(
         Coupon $coupon,
         Order $order,
