@@ -48,15 +48,21 @@ class DHLShipmentService
      * @throws ConnectionException
      * @throws Exception
      */
-    public function createShipment(Order $order): array
+    public function createShipment(Order $order, int $additionalDays): array
     {
         if (!$order->dhl_product) {
             throw new Exception("Order doesn't have a DHL Shipping product");
         }
+        $plannedDate = now()->addDays($additionalDays);
+        if ($plannedDate->hour > 12) {
+            $plannedDate = $plannedDate->addDay();
+        }
         try {
             $request = [
                 "plannedShippingDateAndTime" =>
-                    now()->format("Y-m-d\TH:i:s") . " GMT" . now()->format("P"),
+                    $plannedDate->format("Y-m-d\TH:i:s") .
+                    " GMT" .
+                    now()->format("P"),
                 "pickup" => [
                     "isRequested" => false,
                 ],

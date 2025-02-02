@@ -11,13 +11,12 @@ use Illuminate\Support\Facades\Log;
 
 class DHLRateCheckService
 {
+    protected const MAX_RETRY_DAYS = 5;
     protected string $baseUrl;
     protected string $apiKey;
     protected string $apiSecret;
-
     protected array $domesticProducts = [];
-
-    protected array $internationalProducts = [];
+    protected array $internationalProducts = []; // Prevent infinite loop
 
     public function __construct()
     {
@@ -31,7 +30,8 @@ class DHLRateCheckService
     public function getRates(
         array $package,
         array $origin,
-        array $destination
+        array $destination,
+        int $additionalDays = 0
     ): array {
         try {
             // Determine if this is a domestic shipment
@@ -55,6 +55,10 @@ class DHLRateCheckService
 
             $rates = [];
             $products = [];
+            $plannedDate = now()->addDays($additionalDays);
+            if ($plannedDate->hour > 12) {
+                $plannedDate = $plannedDate->addDay();
+            }
             foreach ($productCodes as $productCode) {
                 $products[] = [
                     "productCode" => $productCode["productCode"],
@@ -62,7 +66,9 @@ class DHLRateCheckService
                 ];
             }
             $request = [
-                "plannedShippingDateAndTime" => now()->format("Y-m-d\TH:i:s\Z"),
+                "plannedShippingDateAndTime" => $plannedDate->format(
+                    "Y-m-d\TH:i:s\Z"
+                ),
                 "unitOfMeasurement" => "metric",
                 "isCustomsDeclarable" => !$isDomestic,
                 "productsAndServices" => $products,
@@ -110,17 +116,33 @@ class DHLRateCheckService
                 "Content-Type" => "application/json",
                 "Accept" => "application/json",
             ])->post($this->baseUrl . "rates", $request);
-
             if ($response->successful()) {
                 $responseData = $response->json();
 
                 $formattedRates = $this->formatRateResponse($responseData);
                 $rates = array_merge($rates, $formattedRates);
             } else {
-                Log::warning("DHL Rate Request Failed for product ", [
+                $errorDetail = $response->json()["detail"] ?? "Unknown error";
+
+                // Check if error message indicates no available products
+                if (str_contains($errorDetail, "product(s) not available")) {
+                    logger(1);
+                    if ($additionalDays >= self::MAX_RETRY_DAYS) {
+                        return [];
+                    }
+
+                    return $this->getRates(
+                        $package,
+                        $origin,
+                        $destination,
+                        $additionalDays + 1
+                    );
+                }
+
+                Log::warning("DHL Rate Request Failed", [
                     "status" => $response->status(),
-                    "response" => $response->json(),
-                    "request" => $request,
+                    "error" => $errorDetail,
+                    "date" => $plannedDate->format("Y-m-d"),
                 ]);
             }
 
@@ -196,7 +218,8 @@ class DHLRateCheckService
             $deliveryDate = Carbon::parse(
                 $product["deliveryCapabilities"]["estimatedDeliveryDateAndTime"]
             );
-            $days = ceil(now()->diffInDays($deliveryDate));
+
+            $days = floor(now()->diffInDays($deliveryDate));
             return trans_choice("store.business_days", $days, [
                 "count" => $days,
             ]);
