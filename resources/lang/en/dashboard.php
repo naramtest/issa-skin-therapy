@@ -119,4 +119,6 @@ return [
     "Remember Me" => "Remember Me",
     "Send Reset Link" => "Send Reset Link",
     "Collapse All" => "Collapse All",
+    "Admins" => "Admins",
+    "Admin" => "Admin",
 ];

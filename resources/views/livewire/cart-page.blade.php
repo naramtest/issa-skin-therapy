@@ -191,7 +191,9 @@
                         </a>
                     </div>
                 </div>
-                <div class="mt-8 flex flex-col items-center justify-center">
+                <div
+                    class="mt-8 flex flex-col items-center justify-center md:hidden"
+                >
                     <p class="text-xl font-semibold">{{ __("store.Or") }}</p>
                     <a
                         href="{{ route("shop.index") }}"

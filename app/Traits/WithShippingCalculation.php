@@ -208,7 +208,7 @@ trait WithShippingCalculation
             "service_code" => ShippingMethodType::FREE_SHIPPING->value,
             "service_name" => ShippingMethodType::FREE_SHIPPING,
             "total_price" => 0,
-            "currency" => CurrencyHelper::userCurrency()->getCode(),
+            "currency" => CurrencyHelper::defaultCurrency()->getCode(),
             "guaranteed" => false,
         ]);
     }

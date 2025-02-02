@@ -16,15 +16,12 @@
                     <div class="space-y-4">
                         <div>
                             <h3 class="text-base font-medium">Generated URL</h3>
-                            <p class="text-sm text-gray-500">
-                                Share this link with your customers. It will
-                                expire in 7 days.
-                            </p>
                         </div>
 
                         <div
                             x-data="{
                                 copy() {
+                                    console.log($wire.generatedUrl)
                                     Livewire.dispatch('copy-to-clipboard')
                                     navigator.clipboard.writeText('{{ $generatedUrl }}')
                                 },

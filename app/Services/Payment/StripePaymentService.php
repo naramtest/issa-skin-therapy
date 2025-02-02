@@ -40,7 +40,7 @@ class StripePaymentService implements PaymentServiceInterface
                     "order_id" => $order->id,
                     "order_number" => $order->order_number,
                 ],
-                "receipt_email" => $order->email,
+                //                "receipt_email" => $order->email,
                 "shipping" => $this->formatShippingData($order),
             ]);
 

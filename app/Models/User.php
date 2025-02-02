@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -25,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         "password",
         "first_name",
         "last_name",
+        "is_admin",
     ];
 
     // Accessor for full name
@@ -68,6 +70,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function customer(): HasOne
     {
         return $this->hasOne(Customer::class);
+    }
+
+    public function scopeAdmins(Builder $query): void
+    {
+        $query->where("is_admin", "=", 1);
     }
 
     /**
