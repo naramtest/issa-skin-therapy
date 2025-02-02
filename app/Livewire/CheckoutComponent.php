@@ -11,6 +11,7 @@ use App\Models\State;
 use App\Services\Cart\CartService;
 use App\Services\Checkout\CustomerCheckoutService;
 use App\Services\Checkout\OrderService;
+use App\Services\Coupon\CouponService;
 use App\Services\LocationService;
 use App\Services\Payment\StripePaymentService;
 use App\Traits\Checkout\LocationHandler;
@@ -44,19 +45,22 @@ class CheckoutComponent extends Component
     protected StripePaymentService $paymentService;
     protected OrderService $orderService;
     protected LocationService $locationService;
+    protected CouponService $couponService;
 
     public function boot(
         CartService $cartService,
         CustomerCheckoutService $customerCheckoutService,
         StripePaymentService $paymentService,
         OrderService $orderService,
-        LocationService $locationService
+        LocationService $locationService,
+        CouponService $couponService
     ): void {
         $this->cartService = $cartService;
         $this->customerCheckoutService = $customerCheckoutService;
         $this->paymentService = $paymentService;
         $this->orderService = $orderService;
         $this->locationService = $locationService;
+        $this->couponService = $couponService;
     }
 
     public function mount(): void

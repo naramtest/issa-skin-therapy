@@ -2,7 +2,6 @@
 
 namespace App\Traits\Checkout;
 
-use App\Services\Coupon\CouponService;
 use Exception;
 use Money\Money;
 
@@ -10,11 +9,9 @@ trait WithCouponHandler
 {
     public ?string $couponError = null;
     protected ?Money $couponDiscount = null;
-    protected CouponService $couponService;
 
     public function initializeWithCouponHandler(): void
     {
-        $this->couponService = app(CouponService::class);
         $coupon = $this->cartService->getAppliedCoupon(); // TODO: in the checkout try to get the coupon once
         if ($coupon) {
             $this->setCouponCode($coupon->code);
