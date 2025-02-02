@@ -86,6 +86,7 @@ class CartComponent extends Component
                 "success",
                 message: __("store.Item added to cart successfully")
             );
+            $this->dispatch("toggle-cart");
         } catch (Exception $e) {
             $this->dispatch("error", message: $e->getMessage());
         }

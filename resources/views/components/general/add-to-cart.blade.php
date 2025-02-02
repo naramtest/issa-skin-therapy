@@ -11,7 +11,6 @@
                 id: {{ $product->id }},
                 quantity: this.quantity,
             })
-            this.$dispatch('toggle-cart')
         },
     }"
     {{ $attributes }}
