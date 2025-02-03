@@ -92,11 +92,10 @@ return [
             "orientation" => "portrait",
         ],
 
-        //        TODO: add logo
         /**
          * The logo displayed in the PDF
          */
-        "logo" => null,
+        "logo" => public_path("storage/images/issa-logo.webp"),
 
         /**
          * The color displayed at the top of the PDF

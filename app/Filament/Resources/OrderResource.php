@@ -68,22 +68,33 @@ class OrderResource extends Resource
                     ->requiresConfirmation()
                     ->hidden(fn(Order $record) => DHLAction::hidden($record))
                     ->action(fn(Order $record) => DHLAction::action($record)),
+
                 ActionGroup::make([
-                    EmailAction::make(
-                        "processing_email",
-                        __("store.Processing Email"),
-                        OrderStatus::PROCESSING
-                    ),
-                    EmailAction::make(
-                        "completed_email",
-                        __("store.Completed Email"),
-                        OrderStatus::COMPLETED
-                    ),
-                    EmailAction::make(
-                        "canceled_email",
-                        __("store.Canceled Email"),
-                        OrderStatus::CANCELLED
-                    ),
+                    Action::make("download")
+                        ->label("Action")
+                        ->icon("gmdi-download-o")
+                        ->url(function (Order $record) {
+                            return route("orders.invoice.download", [
+                                "order" => $record,
+                            ]);
+                        }),
+                    ActionGroup::make([
+                        EmailAction::make(
+                            "processing_email",
+                            __("store.Processing Email"),
+                            OrderStatus::PROCESSING
+                        ),
+                        EmailAction::make(
+                            "completed_email",
+                            __("store.Completed Email"),
+                            OrderStatus::COMPLETED
+                        ),
+                        EmailAction::make(
+                            "canceled_email",
+                            __("store.Canceled Email"),
+                            OrderStatus::CANCELLED
+                        ),
+                    ])->dropdown(false),
                 ]),
             ])
             ->bulkActions([

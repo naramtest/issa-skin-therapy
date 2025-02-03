@@ -6,6 +6,7 @@ use App\Enums\Checkout\PaymentStatus;
 use App\Models\Order;
 use App\Services\Cart\CartService;
 use App\Services\Coupon\CouponService;
+use App\Services\Invoice\InvoiceService;
 use App\Services\Payment\StripePaymentService;
 use App\Services\Shipping\DHL\DHLShipmentService;
 use Exception;
@@ -133,8 +134,12 @@ class CheckoutController extends Controller
             $order->payment_status === PaymentStatus::PAID;
     }
 
-    public function downloadInvoice(Request $request, Order $order)
+    public function downloadInvoice(Order $order)
     {
+        return app(InvoiceService::class)
+            ->generateInvoice($order)
+            ->toPdfInvoice()
+            ->download();
         try {
             if (!$this->canAccessOrder($order)) {
                 abort(403, "Unauthorized access to invoice");

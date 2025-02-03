@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{{-- TODO: style this and add logo --}}
 <html>
     <head>
         <meta charset="utf-8" />
