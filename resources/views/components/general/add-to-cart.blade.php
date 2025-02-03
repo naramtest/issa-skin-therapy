@@ -1,6 +1,7 @@
 @props([
     "type",
     "product",
+    "outOfStock" => false,
 ])
 <div
     @finish-loading.window="offLoading()"
@@ -25,7 +26,7 @@
     {{ $attributes }}
 >
     {{ $slot }}
-    <button class="w-full cursor-pointer" @click="addToCart()">
+    <button @disabled($outOfStock) class="w-full" @click="addToCart()">
         {{ $button }}
     </button>
 </div>

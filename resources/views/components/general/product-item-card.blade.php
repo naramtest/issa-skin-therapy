@@ -19,34 +19,36 @@
         >
             <x-gmdi-visibility-o class="h-5 w-5 text-gray-500" />
         </button>
-        <button
-            @finish-loading.window="offLoading()"
-            x-data="{
-                isLoading: false,
+        @php
+            $outOfStock = ! $product->inventory()->canBePurchased(1);
+        @endphp
 
-                offLoading() {
-                    this.isLoading = false
-                },
-
-                addToCart() {
-                    this.isLoading = true
-
-                    Livewire.dispatch('add-to-cart', {
-                        type: '{{ \App\Enums\ProductType::PRODUCT->value }}',
-                        id: {{ $product->id }},
-                        quantity: 1,
-                    })
-                },
-            }"
-            @click="addToCart()"
-            x-bind:disabled="isLoading"
-            class="absolute bottom-16 start-1/2 -translate-x-1/2 translate-y-full scale-0 rounded-[50px] bg-darkColor px-5 py-2 text-sm text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 rtl:translate-x-1/2"
+        <x-general.add-to-cart
+            :type="\App\Enums\ProductType::PRODUCT->value"
+            :product="$product"
+            :out-of-stock="$outOfStock"
+            @class([
+                "absolute bottom-16 start-1/2 -translate-x-1/2 translate-y-full scale-0 rounded-[50px] px-5 py-2 text-sm text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 rtl:translate-x-1/2",
+                "bg-darkColor" => ! $outOfStock,
+                "bg-[#6c6c6c]" => $outOfStock,
+            ])
         >
-            <span x-show="!isLoading">{{ __("store.Add to cart") }}</span>
-            <div class="px-6">
-                <div x-show="isLoading" class="add-to-cart-loader w-"></div>
-            </div>
-        </button>
+            <x-slot:button>
+                <span x-show="!isLoading">
+                    @if ($outOfStock)
+                        {{ __("store.Out Of Stock") }}
+                    @else
+                        {{ __("store.Add to cart") }}
+                    @endif
+                </span>
+                <div class="px-6">
+                    <div
+                        x-show="isLoading"
+                        class="add-to-cart-loader w-"
+                    ></div>
+                </div>
+            </x-slot>
+        </x-general.add-to-cart>
     </div>
     <div class="h-full px-2 pb-3 pt-5">
         <div class="flex h-full flex-col justify-between">

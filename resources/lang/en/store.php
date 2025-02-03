@@ -530,4 +530,5 @@ return [
     "Marketing" => "Marketing",
     "Collection" => "Collection",
     "Success" => "Success",
+    "Out Of Stock" => "Out Of Stock",
 ];

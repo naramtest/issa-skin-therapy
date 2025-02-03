@@ -29,13 +29,20 @@
                 {!! $product->short_description !!}
             </div>
         </div>
+        @php
+            $outOfStock = ! $product->inventory()->canBePurchased(1);
+        @endphp
+
         <x-general.add-to-cart
             :type="\App\Enums\ProductType::PRODUCT->value"
             :product="$product"
             class="mt-4 w-full"
         >
             <x-slot:button>
-                <x-general.button-black-animation class="!py-2">
+                <x-general.button-black-animation
+                    :disable="$outOfStock"
+                    class="!py-2"
+                >
                     <span
                         class="relative z-10 inline-block flex items-center gap-x-4"
                     >
@@ -43,7 +50,11 @@
                             x-show="isLoading"
                             class="add-to-cart-loader"
                         ></div>
-                        {{ __("store.Add to Card") }}
+                        @if ($outOfStock)
+                            {{ __("store.Out Of Stock") }}
+                        @else
+                            {{ __("store.Add to Card") }}
+                        @endif
                     </span>
                 </x-general.button-black-animation>
             </x-slot>

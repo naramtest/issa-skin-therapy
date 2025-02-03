@@ -49,26 +49,36 @@
         {{-- alt="{{ __("store.Tabby") }}" --}}
         {{-- /> --}}
         {{-- </div> --}}
-        {{-- TODO:  Remove when Out of Stock --}}
+
+        @php
+            $outOfStock = ! $product->inventory()->canBePurchased(1);
+        @endphp
+
         <x-general.add-to-cart
             type="{{$type}}"
             :product="$product"
             class="my-4 flex w-full items-center gap-x-2"
         >
-            <label for="quantity">
-                <input
-                    x-model="quantity"
-                    class="rounded-[50px] border-[1px] border-[#D1D5DB] px-2 py-2 text-center focus-visible:outline-0"
-                    type="number"
-                    name="quantity"
-                    id="quantity"
-                    value="1"
-                    min="1"
-                    max="30"
-                />
-            </label>
+            @unless ($outOfStock)
+                <label for="quantity">
+                    <input
+                        x-model="quantity"
+                        class="rounded-[50px] border-[1px] border-[#D1D5DB] px-2 py-2 text-center focus-visible:outline-0"
+                        type="number"
+                        name="quantity"
+                        id="quantity"
+                        value="1"
+                        min="1"
+                        max="30"
+                    />
+                </label>
+            @endunless
+
             <x-slot:button>
-                <x-general.button-black-animation class="rounded-3xl !py-2">
+                <x-general.button-black-animation
+                    :disable="$outOfStock"
+                    class="rounded-3xl !py-2"
+                >
                     <span
                         class="relative z-10 inline-block flex items-center gap-x-4"
                     >
@@ -76,7 +86,11 @@
                             x-show="isLoading"
                             class="add-to-cart-loader"
                         ></div>
-                        {{ __("store.Add to Card") }}
+                        @if ($outOfStock)
+                            {{ __("store.Out Of Stock") }}
+                        @else
+                            {{ __("store.Add to Card") }}
+                        @endif
                     </span>
                 </x-general.button-black-animation>
             </x-slot>

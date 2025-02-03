@@ -84,6 +84,7 @@ class CartComponent extends Component
             $this->dispatch("toggle-cart");
             $this->dispatch("finish-loading");
         } catch (Exception $e) {
+            //TODO: add a error notification
             $this->dispatch("error", message: $e->getMessage());
         }
     }

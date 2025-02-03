@@ -45,6 +45,8 @@ class ProductCacheService
         "sale_price",
         "quantity",
         "stock_status",
+        "track_quantity",
+        "allow_backorders",
     ];
 
     public function getPaginatedProduct(int $perPage = 9): LengthAwarePaginator
