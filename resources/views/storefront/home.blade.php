@@ -18,5 +18,7 @@
 
         <x-home.section.logos />
     </main>
-    <livewire:first-visit-modal />
+    @if (App::isProduction())
+        <livewire:first-visit-modal />
+    @endif
 </x-store-main-layout>

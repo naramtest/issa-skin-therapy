@@ -34,28 +34,27 @@
             </div>
         </div>
         {{-- TODO: tabby payment --}}
-        <div
-            class="flex gap-x-8 rounded-[10px] border-[1px] border-[#D1D5DB] px-5 py-5"
-        >
-            <div class="flex-1 text-sm text-darkColor">
-                <span>4 interest-free payments of</span>
-                <strong>AED 55.00</strong>
-                <span>. No fees. Shariah-compliant.</span>
-                <a class="underline" href="/">Learn more</a>
-            </div>
-            <img
-                class="h-[30px] w-[80px]"
-                src="{{ asset("storage/icons/tabby.svg") }}"
-                alt="{{ __("store.Tabby") }}"
-            />
-        </div>
+        {{-- <div --}}
+        {{-- class="flex gap-x-8 rounded-[10px] border-[1px] border-[#D1D5DB] px-5 py-5" --}}
+        {{-- > --}}
+        {{-- <div class="flex-1 text-sm text-darkColor"> --}}
+        {{-- <span>4 interest-free payments of</span> --}}
+        {{-- <strong>AED 55.00</strong> --}}
+        {{-- <span>. No fees. Shariah-compliant.</span> --}}
+        {{-- <a class="underline" href="/">Learn more</a> --}}
+        {{-- </div> --}}
+        {{-- <img --}}
+        {{-- class="h-[30px] w-[80px]" --}}
+        {{-- src="{{ asset("storage/icons/tabby.svg") }}" --}}
+        {{-- alt="{{ __("store.Tabby") }}" --}}
+        {{-- /> --}}
+        {{-- </div> --}}
         {{-- TODO:  Remove when Out of Stock --}}
         <x-general.add-to-cart
             type="{{$type}}"
             :product="$product"
             class="my-4 flex w-full items-center gap-x-2"
         >
-            {{-- TODO: add to cart --}}
             <label for="quantity">
                 <input
                     x-model="quantity"
@@ -70,7 +69,13 @@
             </label>
             <x-slot:button>
                 <x-general.button-black-animation class="rounded-3xl !py-2">
-                    <span class="z-10">
+                    <span
+                        class="relative z-10 inline-block flex items-center gap-x-4"
+                    >
+                        <div
+                            x-show="isLoading"
+                            class="add-to-cart-loader"
+                        ></div>
                         {{ __("store.Add to Card") }}
                     </span>
                 </x-general.button-black-animation>

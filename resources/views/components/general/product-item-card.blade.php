@@ -20,20 +20,32 @@
             <x-gmdi-visibility-o class="h-5 w-5 text-gray-500" />
         </button>
         <button
+            @finish-loading.window="offLoading()"
             x-data="{
+                isLoading: false,
+
+                offLoading() {
+                    this.isLoading = false
+                },
+
                 addToCart() {
+                    this.isLoading = true
+
                     Livewire.dispatch('add-to-cart', {
                         type: '{{ \App\Enums\ProductType::PRODUCT->value }}',
                         id: {{ $product->id }},
                         quantity: 1,
                     })
-                    this.$dispatch('toggle-cart')
                 },
             }"
             @click="addToCart()"
+            x-bind:disabled="isLoading"
             class="absolute bottom-16 start-1/2 -translate-x-1/2 translate-y-full scale-0 rounded-[50px] bg-darkColor px-5 py-2 text-sm text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 rtl:translate-x-1/2"
         >
-            {{ __("store.Add to cart") }}
+            <span x-show="!isLoading">{{ __("store.Add to cart") }}</span>
+            <div class="px-6">
+                <div x-show="isLoading" class="add-to-cart-loader w-"></div>
+            </div>
         </button>
     </div>
     <div class="h-full px-2 pb-3 pt-5">

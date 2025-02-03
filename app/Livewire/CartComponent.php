@@ -81,12 +81,8 @@ class CartComponent extends Component
             $this->refreshCart();
             $this->isOpen = true;
             $this->dispatch("cart-updated");
-            //TODO: for notification
-            $this->dispatch(
-                "success",
-                message: __("store.Item added to cart successfully")
-            );
             $this->dispatch("toggle-cart");
+            $this->dispatch("finish-loading");
         } catch (Exception $e) {
             $this->dispatch("error", message: $e->getMessage());
         }

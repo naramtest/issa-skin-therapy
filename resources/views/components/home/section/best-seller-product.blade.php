@@ -36,7 +36,13 @@
         >
             <x-slot:button>
                 <x-general.button-black-animation class="!py-2">
-                    <span class="relative z-10 inline-block">
+                    <span
+                        class="relative z-10 inline-block flex items-center gap-x-4"
+                    >
+                        <div
+                            x-show="isLoading"
+                            class="add-to-cart-loader"
+                        ></div>
                         {{ __("store.Add to Card") }}
                     </span>
                 </x-general.button-black-animation>
