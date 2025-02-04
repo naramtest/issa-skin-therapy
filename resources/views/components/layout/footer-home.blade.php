@@ -7,7 +7,7 @@
     >
         <div class="lg:w-[10%]">
             <img
-                class="h-[50px] w-[100px]"
+                class="h-[50px] w-full"
                 src="{{ asset("storage/images/issa-white.webp") }}"
                 alt="{{ __("store.Logo") }}"
             />

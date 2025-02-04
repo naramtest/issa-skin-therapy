@@ -25,11 +25,22 @@
             @endforeach
         </ul>
         <div class="flex w-[20%] items-center justify-end gap-x-5">
-            <a
-                href="{{ Auth::check() ? route("account.index") : route("login") }}"
-            >
-                <x-icons.person class="h-7 w-7" />
-            </a>
+            @auth
+                <a
+                    href="{{ route("account.index") }}"
+                    class="flex items-center gap-2 text-gray-700 hover:text-gray-900"
+                >
+                    <x-gmdi-account-circle-o class="h-7 w-7" />
+                    <span class="hidden text-sm font-medium lg:inline">
+                        {{ Auth::user()->name }}
+                    </span>
+                </a>
+            @else
+                <a href="{{ route("login") }}">
+                    <x-icons.person class="h-7 w-7" />
+                </a>
+            @endauth
+
             <div
                 x-data="{
                     openSearch() {
