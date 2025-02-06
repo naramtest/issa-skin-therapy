@@ -1,9 +1,13 @@
 <x-store-main-layout>
-    <main class="flex h-full w-full flex-col items-center justify-center py-20">
-        <h1 class="text-[95px] font-bold">{{ __("store.Login") }}</h1>
+    <main
+        class="flex h-full w-full flex-col items-center justify-center py-10 md:py-20"
+    >
+        <h1 class="text-5xl font-bold md:text-[95px]">
+            {{ __("store.Login") }}
+        </h1>
         <div
             style="box-shadow: 0 0 38px 14px rgba(2, 8, 53, 0.06)"
-            class="mt-6 w-[30%] rounded-2xl p-8"
+            class="mt-6 w-[80%] rounded-2xl p-4 md:w-[50%] md:p-8 lg:w-[30%]"
         >
             <form method="POST" action="{{ route("login.store") }}">
                 @csrf
@@ -21,7 +25,9 @@
                     type="password"
                     :is-required="true"
                 />
-                <div class="mt-6 flex w-full items-center justify-between">
+                <div
+                    class="mt-6 flex w-full items-center justify-between gap-x-6"
+                >
                     <div>
                         <input
                             class="accent-black"
@@ -38,7 +44,7 @@
                     </a>
                 </div>
                 <x-general.button-black-animation
-                    class="mt-4 !w-fit !py-2 px-6"
+                    class="mx-auto mt-4 !w-fit !py-2 px-6 md:mx-0"
                 >
                     <button class="relative z-10" type="submit">
                         {{ __("store.Login") }}
@@ -46,7 +52,7 @@
                 </x-general.button-black-animation>
             </form>
         </div>
-        <div class="mt-6 w-[30%]">
+        <div class="mt-6 md:w-[30%]">
             <x-general.button-white-animation
                 class="!w-fit !border-black !py-2 px-8 !normal-case"
             >

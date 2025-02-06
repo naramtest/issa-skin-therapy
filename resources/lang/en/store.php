@@ -531,4 +531,5 @@ return [
     "Collection" => "Collection",
     "Success" => "Success",
     "Out Of Stock" => "Out Of Stock",
+    "If you already have an account?" => "If you already have an account?",
 ];

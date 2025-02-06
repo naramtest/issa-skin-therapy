@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Enums\Checkout\CartCostType;
 use App\Enums\Checkout\ShippingMethodType;
+use App\Helpers\DHL\DHLHelper;
 use App\Services\Currency\CurrencyHelper;
 use App\Services\Shipping\DHL\DHLRateCheckService;
 use App\Services\Shipping\ShippingZoneService;
@@ -90,10 +91,10 @@ trait WithShippingCalculation
 
             // Get DHL rates
             $dhlService = app(DHLRateCheckService::class);
-            $package = $this->calculatePackageDimensions();
+
             $dhlRates = collect(
                 $dhlService->getRates(
-                    $package,
+                    DHLHelper::weightAndDimensions($this->cartItems),
                     $this->getStoreAddress(),
                     $destination
                 )
@@ -211,38 +212,6 @@ trait WithShippingCalculation
             "currency" => CurrencyHelper::defaultCurrency()->getCode(),
             "guaranteed" => false,
         ]);
-    }
-
-    protected function calculatePackageDimensions(): array
-    {
-        $totalWeight = 0;
-        $maxLength = 0;
-        $maxWidth = 0;
-        $maxHeight = 0;
-
-        foreach ($this->cartItems as $item) {
-            $purchasable = $item->getPurchasable();
-            $quantity = $item->getQuantity();
-
-            // Ensure we have numeric values
-            $weight = floatval($purchasable->weight ?? 0);
-            $length = floatval($purchasable->length ?? 0);
-            $width = floatval($purchasable->width ?? 0);
-            $height = floatval($purchasable->height ?? 0);
-
-            $totalWeight += $weight * $quantity;
-            $maxLength = max($maxLength, $length);
-            $maxWidth = max($maxWidth, $width);
-            $maxHeight = max($maxHeight, $height);
-        }
-
-        // Ensure minimum values to avoid API errors
-        return [
-            "weight" => max($totalWeight, 0.1), // Minimum 100g
-            "length" => max($maxLength, 1), // Minimum 1cm
-            "width" => max($maxWidth, 1), // Minimum 1cm
-            "height" => max($maxHeight, 1), // Minimum 1cm
-        ];
     }
 
     protected function getStoreAddress(): array

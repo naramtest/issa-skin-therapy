@@ -1,10 +1,10 @@
 <x-store-main-layout>
     <main class="flex h-full w-full flex-col items-center justify-center py-20">
-        <h1 class="text-4xl font-bold">
+        <h1 class="text-center text-4xl font-bold">
             {{ __("Verify Your Email Address") }}
         </h1>
         <div
-            class="mt-6 w-[30%] rounded-2xl px-8 py-14"
+            class="mt-6 w-[80%] rounded-2xl p-4 md:w-[50%] md:p-8 lg:w-[30%]"
             style="box-shadow: 0 0 38px 14px rgba(2, 8, 53, 0.06)"
         >
             @if (session("status") == "verification-link-sent")

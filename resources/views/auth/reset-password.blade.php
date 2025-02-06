@@ -1,9 +1,11 @@
 <x-store-main-layout>
     <main class="flex h-full w-full flex-col items-center justify-center py-20">
-        <h1 class="text-[95px] font-bold">{{ __("New Password") }}</h1>
+        <h1 class="text-5xl font-bold md:text-[95px]">
+            {{ __("New Password") }}
+        </h1>
         <div
             style="box-shadow: 0 0 38px 14px rgba(2, 8, 53, 0.06)"
-            class="mt-6 w-[30%] rounded-2xl p-8"
+            class="mt-6 w-[80%] rounded-2xl p-8 md:w-[50%] lg:w-[30%]"
         >
             <form method="POST" action="{{ route("password.update") }}">
                 @csrf

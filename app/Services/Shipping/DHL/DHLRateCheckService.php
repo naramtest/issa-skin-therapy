@@ -3,6 +3,8 @@
 namespace App\Services\Shipping\DHL;
 
 use App\Enums\Checkout\DHLProduct;
+use App\Helpers\DHL\DHLAddress;
+use App\Helpers\DHL\DHLHelper;
 use App\Services\Currency\CurrencyHelper;
 use Carbon\Carbon;
 use Exception;
@@ -40,23 +42,15 @@ class DHLRateCheckService
                 ? $this->domesticProducts
                 : $this->internationalProducts;
 
-            //            $productCodes = app(DHLProductService::class)->getProducts(
-            //                $package,
-            //                $destination
-            //            );
-
             // Format postal codes for the UAE (ensure they're 5 digits)
-            $originPostalCode = $this->formatUAEPostalCode(
-                $origin["postal_code"]
-            );
-            $destinationPostalCode = $this->formatUAEPostalCode(
+            $destinationPostalCode = DHLAddress::formatUAEPostalCode(
                 $destination["postal_code"]
             );
 
             $rates = [];
             $products = [];
             $plannedDate = now()->addDays($additionalDays);
-            if ($plannedDate->hour > 12) {
+            if ($plannedDate->isToday() and $plannedDate->hour > 12) {
                 $plannedDate = $plannedDate->addDay();
             }
             foreach ($productCodes as $productCode) {
@@ -66,22 +60,13 @@ class DHLRateCheckService
                 ];
             }
             $request = [
-                "plannedShippingDateAndTime" => $plannedDate->format(
-                    "Y-m-d\TH:i:s\Z"
+                "plannedShippingDateAndTime" => DHLHelper::getDate(
+                    $plannedDate
                 ),
                 "unitOfMeasurement" => "metric",
                 "isCustomsDeclarable" => !$isDomestic,
                 "productsAndServices" => $products,
-                "packages" => [
-                    [
-                        "weight" => max(0.1, floatval($package["weight"])),
-                        "dimensions" => [
-                            "length" => max(1, floatval($package["length"])),
-                            "width" => max(1, floatval($package["width"])),
-                            "height" => max(1, floatval($package["height"])),
-                        ],
-                    ],
-                ],
+                "packages" => [$package],
 
                 "accounts" => [
                     [
@@ -91,15 +76,7 @@ class DHLRateCheckService
                 ],
 
                 "customerDetails" => [
-                    "shipperDetails" => [
-                        "postalCode" => $originPostalCode,
-                        "cityName" => $origin["city"],
-                        "countryCode" => $origin["country"],
-                        "addressLine1" => substr($origin["address"], 0, 45),
-                        "addressLine2" => $origin["building"] ?? "Unit 1",
-                        "addressLine3" => $origin["flat"] ?? "Floor 1",
-                        "provinceCode" => $origin["provinceCode"], // Dubai province code
-                    ],
+                    "shipperDetails" => DHLAddress::shipperAddress(),
                     "receiverDetails" => [
                         "postalCode" => $destinationPostalCode,
                         "cityName" => $destination["city"],
@@ -126,7 +103,6 @@ class DHLRateCheckService
 
                 // Check if error message indicates no available products
                 if (str_contains($errorDetail, "product(s) not available")) {
-                    logger(1);
                     if ($additionalDays >= self::MAX_RETRY_DAYS) {
                         return [];
                     }
@@ -154,15 +130,6 @@ class DHLRateCheckService
             ]);
             return [];
         }
-    }
-
-    protected function formatUAEPostalCode(string $postalCode): string
-    {
-        // Clean up the postal code
-        $cleanPostal = preg_replace("/[^0-9]/", "", $postalCode);
-
-        // Pad with zeros if needed (UAE postal codes are 5 digits)
-        return str_pad($cleanPostal, 5, "0", STR_PAD_LEFT);
     }
 
     protected function formatRateResponse(array $response): array

@@ -14,8 +14,8 @@ class CartItem implements Wireable
 {
     public function __construct(
         private readonly string $id,
-        private readonly Purchasable $purchasable,
-        private int $quantity,
+        public readonly Purchasable $purchasable,
+        public int $quantity,
         private readonly array $options = [],
         private readonly ?Money $fixedPrice = null
     ) {

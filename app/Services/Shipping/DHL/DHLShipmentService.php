@@ -2,6 +2,9 @@
 
 namespace App\Services\Shipping\DHL;
 
+use App\Helpers\DHL\DHLAddress;
+use App\Helpers\DHL\DHLHelper;
+use App\Helpers\DHL\PaperlessTradeHelper;
 use App\Models\Order;
 use App\Models\ShippingOrder;
 use Carbon\Carbon;
@@ -48,38 +51,55 @@ class DHLShipmentService
      * @throws ConnectionException
      * @throws Exception
      */
-    public function createShipment(Order $order, int $additionalDays): array
+    public function createShipment(Order $order, int $additionalDays = 0): array
     {
         if (!$order->dhl_product) {
             throw new Exception("Order doesn't have a DHL Shipping product");
         }
         $plannedDate = now()->addDays($additionalDays);
-        if ($plannedDate->hour > 12) {
+        if ($plannedDate->isToday() and $plannedDate->hour > 12) {
             $plannedDate = $plannedDate->addDay();
         }
+
         try {
+            $isDomestic =
+                $order->shippingAddress->country !=
+                config("store.address.country");
             $request = [
-                "plannedShippingDateAndTime" =>
-                    $plannedDate->format("Y-m-d\TH:i:s") .
-                    " GMT" .
-                    now()->format("P"),
+                "plannedShippingDateAndTime" => DHLHelper::getDate(
+                    $plannedDate
+                ),
                 "pickup" => [
                     "isRequested" => false,
                 ],
                 "productCode" => $order->dhl_product->value,
-
-                "getRateEstimates" => false,
+                "localProductCode" => $order->dhl_product->getLocalCode(),
                 "accounts" => [
                     [
                         "typeCode" => "shipper",
                         "number" => $this->accountNumber,
                     ],
                 ],
-                "customerDetails" => $this->getCustomerDetails($order),
+                "valueAddedServices" => $this->getValueAddedServices(
+                    $order,
+                    !$isDomestic
+                ),
+
+                "getRateEstimates" => false,
+                "customerReferences" => [
+                    [
+                        "value" => "Customer reference",
+                        "typeCode" => "CU",
+                    ],
+                ],
+
+                "customerDetails" => DHLAddress::shipmentCustomerDetails(
+                    $order
+                ),
                 "content" => [
                     "packages" => [
                         [
-                            ...$this->weightAndDimensions($order),
+                            ...DHLHelper::weightAndDimensions($order->items),
                             "customerReferences" => [
                                 [
                                     "value" => $order->order_number,
@@ -87,12 +107,11 @@ class DHLShipmentService
                             ],
                         ],
                     ],
-                    "isCustomsDeclarable" =>
-                        $order->shippingAddress->country !=
-                        config("store.address.country"),
+                    "isCustomsDeclarable" => $isDomestic,
                     "declaredValue" => floatval($order->total),
                     "declaredValueCurrency" => $order->currency_code,
                     "description" => "Order #" . $order->order_number,
+                    "incoterm" => "DDP",
                     "unitOfMeasurement" => config("store.unitOfMeasurement"),
                     "exportDeclaration" => [
                         "lineItems" => $this->getExportLineItems($order),
@@ -106,19 +125,52 @@ class DHLShipmentService
                                 ],
                             ],
                         ],
-                        "exportReason" => "PERMANENT",
-                        "shipmentType" => "commercial", // P for Permanent
+                        "exportReasonType" => "permanent",
+
+                        //"shipmentType" => "commercial", // P for Permanent
+                    ],
+                ],
+                "estimatedDeliveryDate" => [
+                    "isRequested" => true,
+                    "typeCode" => "QDDC",
+                ],
+                "getAdditionalInformation" => [
+                    [
+                        "typeCode" => "pickupDetails",
+                        "isRequested" => true,
                     ],
                 ],
                 "outputImageProperties" => [
                     "printerDPI" => 300,
+                    "encodingFormat" => "pdf",
                     "imageOptions" => [
+                        [
+                            "typeCode" => "invoice",
+                            "templateName" => "COMMERCIAL_INVOICE_L_10",
+                            "isRequested" => true,
+                            "invoiceType" => "commercial",
+                            "languageCode" => "eng",
+                            "languageCountryCode" => "US",
+                        ],
+                        [
+                            "typeCode" => "waybillDoc",
+                            "hideAccountNumber" => false,
+                            "templateName" => "ARCH_8x4",
+                            "numberOfCopies" => 1,
+                            "isRequested" => true,
+                        ],
                         [
                             "typeCode" => "label",
                             "templateName" => "ECOM26_84_001",
-                            "isRequested" => true,
+                            "renderDHLLogo" => true,
+                            "fitLabelsToA4" => true,
                         ],
                     ],
+                    "splitTransportAndWaybillDocLabels" => true,
+                    "allDocumentsInOneImage" => false,
+                    "splitDocumentsByPages" => false,
+                    "splitInvoiceAndReceipt" => true,
+                    "receiptAndLabelsInOneImage" => false,
                 ],
             ];
 
@@ -168,88 +220,28 @@ class DHLShipmentService
         }
     }
 
-    protected function getCustomerDetails(Order $order): array
+    /**
+     * @param Order $order
+     * @return array[]
+     */
+    public function getValueAddedServices(Order $order, bool $isDomestic): array
     {
-        $storeAddress = config("store.address");
-
-        // Ensure addresses are no longer than 45 characters
-        $shipperAddress1 = substr($storeAddress["address"], 0, 45);
-        $receiverAddress1 = substr($order->shippingAddress->address, 0, 45);
-
-        return [
-            "shipperDetails" => [
-                "postalAddress" => [
-                    "postalCode" => $storeAddress["postal_code"],
-                    "cityName" => $storeAddress["city"],
-                    "countryCode" => $storeAddress["country"],
-                    "addressLine1" => $shipperAddress1,
-                    "addressLine2" => $storeAddress["building"] ?? "Building 1",
-                    "addressLine3" => $storeAddress["flat"] ?? "Unit 1",
-                ],
-                "contactInformation" => [
-                    "email" => $storeAddress["email"],
-                    "phone" => $storeAddress["phone"],
-                    "companyName" => config("store.address.name"),
-                    "fullName" => config("store.address.name"),
-                ],
-            ],
-            "receiverDetails" => [
-                "postalAddress" => [
-                    "postalCode" => $order->shippingAddress->postal_code,
-                    "cityName" => $order->shippingAddress->city,
-                    "countryCode" => $order->shippingAddress->country,
-                    "addressLine1" => $receiverAddress1,
-                    "addressLine2" =>
-                        $order->shippingAddress->building ?? "Building 1",
-                    "addressLine3" => $order->shippingAddress->flat ?? "Unit 1",
-                ],
-                "contactInformation" => [
-                    "email" => $order->email,
-                    "phone" => $order->shippingAddress->phone,
-                    "companyName" => "Personal",
-                    "fullName" => $order->shippingAddress->full_name,
-                ],
-            ],
-        ];
-    }
-
-    public function weightAndDimensions(Order $order): array
-    {
-        $calculatePackageDimensions = $this->calculatePackageDimensions(
-            $order->items
-        );
-        return [
-            "weight" => floatval($calculatePackageDimensions["weight"]),
-            "dimensions" => [
-                "length" => floatval($calculatePackageDimensions["length"]),
-                "width" => floatval($calculatePackageDimensions["width"]),
-                "height" => floatval($calculatePackageDimensions["height"]),
-            ],
-        ];
-    }
-
-    protected function calculatePackageDimensions($items): array
-    {
-        // Basic implementation - you might want to improve this based on your needs
-        $maxLength = 0;
-        $maxWidth = 0;
-        $maxHeight = 0;
-        $totalWeight = 0;
-
-        foreach ($items as $item) {
-            $purchasable = $item->purchasable;
-            $maxLength = max($maxLength, $purchasable->length ?? 0);
-            $maxWidth = max($maxWidth, $purchasable->width ?? 0);
-            $maxHeight = max($maxHeight, $purchasable->height ?? 0);
-            $totalWeight += ($purchasable->weight ?? 0) * $item->quantity;
+        if ($isDomestic) {
+            return [];
         }
-
-        return [
-            "length" => max($maxLength, 1),
-            "width" => max($maxWidth, 1),
-            "height" => max($maxHeight, 1),
-            "weight" => max($totalWeight, 0.1), // Minimum 100g
+        $valueAddedServices = [
+            ["serviceCode" => "DD"], // Duty Tax Paid
         ];
+
+        // Check if the receiver's country supports Paperless Trade (WY)
+        if (
+            PaperlessTradeHelper::isPaperlessTradeCountry(
+                $order->shippingAddress->country
+            )
+        ) {
+            $valueAddedServices[] = ["serviceCode" => "WY"];
+        }
+        return $valueAddedServices;
     }
 
     protected function getExportLineItems(Order $order): array
@@ -269,15 +261,18 @@ class DHLShipmentService
                             "typeCode" => "outbound",
                             "value" => $item->purchasable->hs_code ?? "000000",
                         ],
+                        [
+                            "typeCode" => "inbound",
+                            "value" => $item->purchasable->hs_code ?? "000000", // Example inbound code
+                        ],
                     ],
                     "manufacturerCountry" =>
                         $item->purchasable->country_of_origin ?? "AE",
                     "weight" => [
                         "netValue" => floatval($item->purchasable->weight),
-                        "grossValue" => floatval(
-                            $item->purchasable->weight * 1.1
-                        ), // Add 10% for packaging
+                        "grossValue" => $item->purchasable->weight * 1.1, // Add 10% for packaging
                     ],
+                    "exportReasonType" => "permanent",
                 ];
             })
             ->all();
