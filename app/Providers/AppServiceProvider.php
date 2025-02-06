@@ -14,6 +14,7 @@ use Illuminate\Support\ServiceProvider;
 use Livewire;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Money\Money;
+use Opcodes\LogViewer\Facades\LogViewer;
 use Route;
 use Swap\Builder;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -83,6 +84,11 @@ class AppServiceProvider extends ServiceProvider
             return Route::post("/livewire/update", $handle)
                 ->middleware("web")
                 ->prefix(LaravelLocalization::setLocale());
+        });
+        //TODO: change to checking for superadmin
+        LogViewer::auth(function ($request) {
+            return $request->user() &&
+                in_array($request->user()->email, ["admin@admin.com"]);
         });
     }
 }
