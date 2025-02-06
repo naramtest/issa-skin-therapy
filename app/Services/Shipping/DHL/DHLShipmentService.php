@@ -249,6 +249,9 @@ class DHLShipmentService
     {
         return $order->items
             ->map(function ($item) {
+                $netWeight = round(floatval($item->purchasable->weight), 3);
+                $grossWeight = round($netWeight * 1.1, 3); // Round to exactly 3 decimal places
+
                 return [
                     "number" => $item->id,
                     "description" => substr($item->purchasable->name, 0, 50),
@@ -270,8 +273,8 @@ class DHLShipmentService
                     "manufacturerCountry" =>
                         $item->purchasable->country_of_origin ?? "AE",
                     "weight" => [
-                        "netValue" => floatval($item->purchasable->weight),
-                        "grossValue" => $item->purchasable->weight * 1.1, // Add 10% for packaging
+                        "netValue" => $netWeight,
+                        "grossValue" => $grossWeight,
                     ],
                     "exportReasonType" => "permanent",
                 ];

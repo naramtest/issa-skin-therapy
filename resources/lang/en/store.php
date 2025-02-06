@@ -532,4 +532,10 @@ return [
     "Success" => "Success",
     "Out Of Stock" => "Out Of Stock",
     "If you already have an account?" => "If you already have an account?",
+    "New Order Received" => "New Order Received",
+    "This order requires your attention" =>
+        "This order requires your attention",
+    "New Order Notification" => "New Order Notification",
+    "Customer Information" => "Customer Information",
+    "View Order Details" => "View Order Details",
 ];

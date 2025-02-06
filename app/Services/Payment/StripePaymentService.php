@@ -5,9 +5,12 @@ namespace App\Services\Payment;
 use App\Contracts\PaymentServiceInterface;
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
+use App\Mail\NewOrderAdminNotification;
+use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
 use App\Services\Currency\Currency;
 use Exception;
+use Illuminate\Support\Facades\Mail;
 use Log;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
@@ -129,14 +132,11 @@ class StripePaymentService implements PaymentServiceInterface
                     "exp_year" => $paymentMethod->card->exp_year ?? null,
                 ],
             ]);
-            Log::info(
-                "order " .
-                    $order->id .
-                    " status : " .
-                    $order->payment_status->value
+            Mail::to($order->email)->queue(new OrderConfirmationMail($order));
+            //TODO: make it dynamic from the dashboard (setting page)
+            Mail::to("info@issaskintherapy.com")->queue(
+                new NewOrderAdminNotification($order)
             );
-
-            //TODO: event(new OrderPaid($order));
             return true;
         } catch (ApiErrorException $e) {
             Log::error("Failed to confirm payment", [

@@ -41,7 +41,7 @@
                     // Create Elements instance without specifying payment methods
                     this.elements = this.stripe.elements({
                         mode: 'payment',
-                        amount: 1000, // Will be set when creating PaymentIntent
+                        amount: 1000, //TODO:  get that from checkoutComponent Totals
                         currency: currency,
                         appearance: {
                             theme: 'stripe',

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Services\Order\OrderProcessor;
-use App\Services\Shipping\DHL\DHLShipmentService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,17 +13,14 @@ use Stripe\WebhookSignature;
 
 class StripeWebhookController extends Controller
 {
-    public function __construct(
-        private readonly OrderProcessor $orderProcessor,
-        private readonly DHLShipmentService $shipmentService
-    ) {
+    public function __construct(private readonly OrderProcessor $orderProcessor)
+    {
     }
 
     public function handleWebhook(Request $request)
     {
         $payload = $request->getContent();
         $sigHeader = $request->header("Stripe-Signature");
-
         try {
             $this->verifyStripeWebhook($payload, $sigHeader);
             $event = json_decode($payload, true);
@@ -91,13 +87,6 @@ class StripeWebhookController extends Controller
     ): JsonResponse {
         try {
             $order = $this->getOrderFromPaymentIntent($paymentIntent);
-
-            //            if (
-            //                $order->shipping_method == ShippingMethodType::DHL_EXPRESS and
-            //                !$order->shippingOrder
-            //            ) {
-            //                $this->shipmentService->createDHLShippingOrder($order);
-            //            }
             $this->orderProcessor->processSuccessfulPayment($order, [
                 "type" => $paymentIntent["payment_method_type"] ?? null,
                 "last4" =>
