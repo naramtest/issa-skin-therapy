@@ -98,9 +98,9 @@ class ProductCacheService
     public function allProducts(): Collection
     {
         $query = $this->queryPosts()->get();
-        if (App::isLocal()) {
-            return $query;
-        }
+        //        if (App::isLocal()) {
+        //            return $query;
+        //        }
         return Cache::remember(
             self::CACHE_KEY_ALL_PRODUCTS,
             self::CACHE_DURATION,
@@ -120,11 +120,11 @@ class ProductCacheService
             ->where("is_featured", true)
             ->with(["media"])
             ->first();
-        if (App::isLocal()) {
-            return $query;
-        }
+        //        if (App::isLocal()) {
+        //            return $query;
+        //        }
         return Cache::remember(
-            self::CACHE_KEY_ALL_PRODUCTS,
+            self::CACHE_KEY_FEATURED_PRODUCT,
             self::CACHE_DURATION,
             fn() => $query ?? Collection::make()
         );
