@@ -4,6 +4,7 @@ namespace App\Services\Checkout;
 
 use App\Data\Orders\CreateOrderData;
 use App\Enums\AddressType;
+use App\Enums\Checkout\DHLProduct;
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
 use App\Models\Customer;
@@ -57,7 +58,8 @@ readonly class CustomerCheckoutService
                     total: $this->cartService->getTotal()->getAmount(),
                     notes: $data["notes"] ?? null,
                     cartItems: $this->cartService->getItems(),
-                    dhlProduct: $data["dhl_product"] ?? null
+                    dhlProduct: $data["dhl_product"] ??
+                        DHLProduct::getProduct($shippingAddress->country)->value
                 )
             );
 
@@ -103,27 +105,25 @@ readonly class CustomerCheckoutService
                     ["last_used_at" => now()]
                 );
             }
-
-            return $customer;
+        } else {
+            // For guests, find or create customer
+            $customer = Customer::firstOrCreate(
+                [
+                    "email" => $data["email"],
+                    "is_registered" => false,
+                ],
+                [
+                    "first_name" => $data["billing"]["first_name"],
+                    "last_name" => $data["billing"]["last_name"],
+                    "name" =>
+                        $data["billing"]["first_name"] .
+                        " " .
+                        $data["billing"]["last_name"],
+                    "orders_count" => 0,
+                    "total_spent" => 0,
+                ]
+            );
         }
-
-        // For guests, find or create customer
-        $customer = Customer::firstOrCreate(
-            [
-                "email" => $data["email"],
-                "is_registered" => false,
-            ],
-            [
-                "first_name" => $data["billing"]["first_name"],
-                "last_name" => $data["billing"]["last_name"],
-                "name" =>
-                    $data["billing"]["first_name"] .
-                    " " .
-                    $data["billing"]["last_name"],
-                "orders_count" => 0,
-                "total_spent" => 0,
-            ]
-        );
 
         // Update customer metrics
         $customer->update([

@@ -12,6 +12,7 @@ class CreateUser extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data["is_admin"] = true;
+        $data["email_verified_at"] = now();
         return parent::mutateFormDataBeforeCreate($data);
     }
 }

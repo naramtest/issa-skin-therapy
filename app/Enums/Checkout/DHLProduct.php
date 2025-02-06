@@ -9,6 +9,11 @@ enum DHLProduct: string implements HasLabel
     case EXPRESS_WORLDWIDE = "P";
     case DOMESTIC_EXPRESS = "N";
 
+    public static function getProduct(bool $isDomestic): DHLProduct
+    {
+        return $isDomestic ? self::DOMESTIC_EXPRESS : self::EXPRESS_WORLDWIDE;
+    }
+
     public function toArray(): array
     {
         return [

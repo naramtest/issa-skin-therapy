@@ -63,7 +63,7 @@ class DHLShipmentService
 
         try {
             $isDomestic =
-                $order->shippingAddress->country !=
+                $order->shippingAddress->country ==
                 config("store.address.country");
             $request = [
                 "plannedShippingDateAndTime" => DHLHelper::getDate(
@@ -82,7 +82,7 @@ class DHLShipmentService
                 ],
                 "valueAddedServices" => $this->getValueAddedServices(
                     $order,
-                    !$isDomestic
+                    $isDomestic
                 ),
 
                 "getRateEstimates" => false,
@@ -107,7 +107,7 @@ class DHLShipmentService
                             ],
                         ],
                     ],
-                    "isCustomsDeclarable" => $isDomestic,
+                    "isCustomsDeclarable" => !$isDomestic,
                     "declaredValue" => floatval($order->total),
                     "declaredValueCurrency" => $order->currency_code,
                     "description" => "Order #" . $order->order_number,
@@ -222,6 +222,7 @@ class DHLShipmentService
 
     /**
      * @param Order $order
+     * @param bool $isDomestic
      * @return array[]
      */
     public function getValueAddedServices(Order $order, bool $isDomestic): array

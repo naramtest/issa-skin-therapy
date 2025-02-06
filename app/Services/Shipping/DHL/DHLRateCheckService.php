@@ -17,35 +17,23 @@ class DHLRateCheckService
     protected string $baseUrl;
     protected string $apiKey;
     protected string $apiSecret;
-    protected array $domesticProducts = [];
-    protected array $internationalProducts = []; // Prevent infinite loop
 
     public function __construct()
     {
         $this->apiKey = config("services.dhl.key");
         $this->apiSecret = config("services.dhl.secret");
         $this->baseUrl = config("services.dhl.base_url");
-        $this->domesticProducts[] = DHLProduct::DOMESTIC_EXPRESS->toArray();
-        $this->internationalProducts[] = DHLProduct::EXPRESS_WORLDWIDE->toArray();
     }
 
     public function getRates(
         array $package,
-        array $origin,
         array $destination,
         int $additionalDays = 0
     ): array {
         try {
             // Determine if this is a domestic shipment
-            $isDomestic = $origin["country"] === $destination["country"];
-            $productCodes = $isDomestic
-                ? $this->domesticProducts
-                : $this->internationalProducts;
-
-            // Format postal codes for the UAE (ensure they're 5 digits)
-            $destinationPostalCode = DHLAddress::formatUAEPostalCode(
-                $destination["postal_code"]
-            );
+            $isDomestic = DHLAddress::getIsDomestic($destination["country"]);
+            $productCodes = [DHLProduct::getProduct($isDomestic)->toArray()];
 
             $rates = [];
             $products = [];
@@ -78,7 +66,9 @@ class DHLRateCheckService
                 "customerDetails" => [
                     "shipperDetails" => DHLAddress::shipperAddress(),
                     "receiverDetails" => [
-                        "postalCode" => $destinationPostalCode,
+                        "postalCode" => DHLAddress::formatUAEPostalCode(
+                            $destination["postal_code"]
+                        ),
                         "cityName" => $destination["city"],
                         "countryCode" => $destination["country"],
                         "addressLine1" => $destination["address"],
@@ -109,7 +99,6 @@ class DHLRateCheckService
 
                     return $this->getRates(
                         $package,
-                        $origin,
                         $destination,
                         $additionalDays + 1
                     );

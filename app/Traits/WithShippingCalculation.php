@@ -95,7 +95,6 @@ trait WithShippingCalculation
             $dhlRates = collect(
                 $dhlService->getRates(
                     DHLHelper::weightAndDimensions($this->cartItems),
-                    $this->getStoreAddress(),
                     $destination
                 )
             );
@@ -212,22 +211,6 @@ trait WithShippingCalculation
             "currency" => CurrencyHelper::defaultCurrency()->getCode(),
             "guaranteed" => false,
         ]);
-    }
-
-    protected function getStoreAddress(): array
-    {
-        return [
-            "country" => config("store.address.country"),
-            "city" => config("store.address.city"),
-            "postal_code" => config("store.address.postal_code"),
-            "address" => config("store.address.address"),
-            "state" => config("store.address.state"),
-            "phone" => config("store.address.phone"),
-            "email" => config("store.address.email"),
-            "first_name" => config("store.address.name"),
-            "provinceCode" => config("store.address.province_code"),
-            "last_name" => "",
-        ];
     }
 
     /**

@@ -7,6 +7,11 @@ use App\Models\Order;
 
 class DHLAddress
 {
+    public static function getIsDomestic(string $country): bool
+    {
+        return config("store.address.country") == $country;
+    }
+
     public static function shipmentCustomerDetails(Order $order): array
     {
         $storeAddress = config("store.address");
