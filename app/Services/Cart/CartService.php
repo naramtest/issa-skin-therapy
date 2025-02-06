@@ -186,6 +186,7 @@ readonly class CartService
     {
         $this->itemsService->clear();
         $this->costsService->clear();
+        $this->couponService->clear();
     }
 
     // Clear only costs
