@@ -38,4 +38,12 @@ enum DHLProduct: string implements HasLabel
             self::EXPRESS_WORLDWIDE => "P",
         };
     }
+
+    public function getCommerceCode(): string
+    {
+        return match ($this) {
+            self::DOMESTIC_EXPRESS => "DOM",
+            self::EXPRESS_WORLDWIDE => "WPX",
+        };
+    }
 }

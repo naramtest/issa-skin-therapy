@@ -7,7 +7,6 @@ use Illuminate\Console\Command;
 
 class RefreshExchangeRates extends Command
 {
-    //    TODO: made a schedule
     /**
      * The name and signature of the console command.
      *

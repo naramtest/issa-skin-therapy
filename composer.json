@@ -31,6 +31,7 @@
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
+        "maatwebsite/excel": "^3.1",
         "malzariey/filament-daterangepicker-filter": "^3.1",
         "mcamara/laravel-localization": "^2.2",
         "mohamedsabil83/filament-forms-tinyeditor": "^2.3",
