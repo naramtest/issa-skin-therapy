@@ -39,6 +39,7 @@ class Order extends Model
         "shipping_method",
         "dhl_product",
         "shipping_cost",
+        "dhl_exported_at",
 
         //payment columns
         "payment_provider",
