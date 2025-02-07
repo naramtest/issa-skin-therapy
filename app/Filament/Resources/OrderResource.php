@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
 use App\Filament\Resources\OrderResource\Pages;
-use App\Filament\Resources\OrderResource\Partials\Components\DHLAction;
 use App\Filament\Resources\OrderResource\Partials\Components\EmailAction;
 use App\Filament\Resources\OrderResource\Partials\OrderForm;
 use App\Models\Order;
@@ -62,12 +61,12 @@ class OrderResource extends Resource
             ->actions([
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\EditAction::make(),
-                Action::make("createShipment")
-                    ->label("DHL")
-                    ->icon("heroicon-o-truck")
-                    ->requiresConfirmation()
-                    ->hidden(fn(Order $record) => DHLAction::hidden($record))
-                    ->action(fn(Order $record) => DHLAction::action($record)),
+                //                Action::make("createShipment")
+                //                    ->label("DHL")
+                //                    ->icon("heroicon-o-truck")
+                //                    ->requiresConfirmation()
+                //                    ->hidden(fn(Order $record) => DHLAction::hidden($record))
+                //                    ->action(fn(Order $record) => DHLAction::action($record)),
 
                 ActionGroup::make([
                     Action::make("download")
