@@ -15,6 +15,7 @@ use App\Http\Controllers\Content\ShopController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Services\UrlShortenerService;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -115,3 +116,13 @@ Route::post("stripe/webhook", [
 Route::get("/cart/prefill", CartPrefillController::class)
     ->name("cart.prefill")
     ->middleware("signed");
+
+Route::get("/s/{code}", function (string $code) {
+    $url = app(UrlShortenerService::class)->getOriginalUrl($code);
+
+    if (!$url) {
+        abort(404);
+    }
+
+    return redirect($url);
+})->name("short.redirect");

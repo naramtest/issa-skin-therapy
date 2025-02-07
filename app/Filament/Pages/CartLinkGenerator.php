@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Enums\ProductType;
 use App\Models\Bundle;
 use App\Models\Product;
+use App\Services\UrlShortenerService;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -176,13 +177,15 @@ class CartLinkGenerator extends Page implements HasForms
         if ($this->data["currency"]) {
             $attr["currency"] = $this->data["currency"];
         }
-        // Generate signed URL that expires in 7 days
-        $this->generatedUrl = URL::signedRoute("cart.prefill", $attr);
-        //
-        //        Notification::make()
-        //            ->success()
-        //            ->title("Cart link generated successfully!")
-        //            ->send();
+        $logUrl = URL::signedRoute("cart.prefill", $attr);
+
+        // Shorten the URL
+        $shortUrl = app(UrlShortenerService::class)->shorten($logUrl);
+
+        // Store the shortened URL
+        $this->generatedUrl = route("short.redirect", [
+            "code" => $shortUrl->code,
+        ]);
     }
 
     #[On("copy-to-clipboard")]
