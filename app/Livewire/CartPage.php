@@ -15,7 +15,7 @@ class CartPage extends Component
 
     public $cartItems = [];
     public string $subtotalString = "";
-    public ?string $coupon_code;
+    public ?string $coupon_code = "";
 
     protected CartService $cartService;
 

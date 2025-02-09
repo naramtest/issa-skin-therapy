@@ -105,10 +105,10 @@ class CheckoutForm extends Form
     {
         if ($user) {
             $this->email = $user->email;
-            $this->billing_first_name = $user->first_name;
-            $this->billing_last_name = $user->last_name;
-            $this->shipping_first_name = $user->first_name;
-            $this->shipping_last_name = $user->last_name;
+            $this->billing_first_name = $user->first_name ?? "";
+            $this->billing_last_name = $user->last_name ?? "";
+            $this->shipping_first_name = $user->first_name ?? "";
+            $this->shipping_last_name = $user->last_name ?? "";
 
             if ($user->customer && $user->customer->defaultAddress) {
                 $this->setFromAddress($user->customer->defaultAddress);
