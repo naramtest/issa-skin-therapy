@@ -10,7 +10,7 @@ Schedule::command("queue:work --stop-when-empty")
     ->withoutOverlapping();
 // Prepare new orders for DHL every 10 minutes
 Schedule::command("dhl:prepare-orders")
-    ->everyTenMinutes()
+    ->everyMinute()
     ->withoutOverlapping()
     ->appendOutputTo(storage_path("logs/dhl-export.log"));
 
