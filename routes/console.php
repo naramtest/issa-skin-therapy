@@ -15,7 +15,7 @@ Schedule::command("dhl:prepare-orders")
     ->appendOutputTo(storage_path("logs/dhl-export.log"));
 
 // Process tracking updates from DHL every 5 minutes
-Schedule::command("dhl:process-tracking")
-    ->everyFiveMinutes()
-    ->withoutOverlapping()
-    ->appendOutputTo(storage_path("logs/dhl-tracking.log"));
+//Schedule::command("dhl:process-tracking")
+//    ->everyFiveMinutes()
+//    ->withoutOverlapping()
+//    ->appendOutputTo(storage_path("logs/dhl-tracking.log"));
