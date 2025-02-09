@@ -1,5 +1,6 @@
 @props([
     "error",
+    "stripeAmount",
 ])
 
 <div class="mt-8 rounded-[15px] border p-8">
@@ -8,7 +9,7 @@
     </h3>
 
     <div class="mb-4">
-        <x-checkout.stripe-payment-element />
+        <x-checkout.stripe-payment-element :stripe-amount="$stripeAmount" />
     </div>
 
     <!-- Terms and Place Order -->

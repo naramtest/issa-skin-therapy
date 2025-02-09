@@ -1,3 +1,7 @@
+@props([
+    "stripeAmount",
+])
+
 @php
     $stripeKey = config("services.stripe.api_key");
     $userCurrency = \App\Services\Currency\CurrencyHelper::getUserCurrency();
@@ -6,7 +10,13 @@
 <div
     wire:ignore
     x-data="stripePayment()"
-    x-init="mount('{{ $stripeKey }}', '{{ strtolower($userCurrency) }}')"
+    x-init="
+        mount(
+            '{{ $stripeKey }}',
+            '{{ strtolower($userCurrency) }}',
+            {{ $stripeAmount }},
+        )
+    "
     class="w-full"
 >
     <div class="space-y-4">
@@ -29,19 +39,20 @@
                 paymentElement: null,
                 errorMessage: '',
 
-                mount(key, currency) {
+                mount(key, currency, amount) {
                     if (this.stripe) return;
 
                     this.stripe = Stripe(key);
                     window.stripe = this.stripe;
-                    this.initializeElements(currency);
+                    this.initializeElements(currency, amount);
                 },
 
-                async initializeElements(currency) {
+                async initializeElements(currency, amount) {
                     // Create Elements instance without specifying payment methods
+                    console.log(amount);
                     this.elements = this.stripe.elements({
                         mode: 'payment',
-                        amount: 1000, //TODO:  get that from checkoutComponent Totals
+                        amount: amount, //TODO:  get that from checkoutComponent Totals
                         currency: currency,
                         appearance: {
                             theme: 'stripe',

@@ -103,6 +103,12 @@ class CheckoutComponent extends Component
         return $this->cartService->getTotal();
     }
 
+    #[Computed]
+    public function stripeAmount(): int
+    {
+        return $this->total->getAmount();
+    }
+
     public function placeOrderAndPay(): void
     {
         if ($this->processing) {

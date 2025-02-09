@@ -30,7 +30,10 @@
                     />
 
                     <!-- Payment -->
-                    <x-checkout.sections.payment :error="$error" />
+                    <x-checkout.sections.payment
+                        :error="$error"
+                        :stripe-amount="$this->stripeAmount"
+                    />
                 </div>
             </div>
         </div>

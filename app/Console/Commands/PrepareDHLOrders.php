@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Enums\Checkout\OrderStatus;
-use App\Enums\Checkout\ShippingMethodType;
 use App\Models\Order;
 use App\Services\Export\FTPServerService;
 use Illuminate\Console\Command;
@@ -21,7 +20,6 @@ class PrepareDHLOrders extends Command
         // Get orders that need to be prepared for DHL
         $orderIds = Order::query()
             ->whereNull("dhl_exported_at")
-            ->where("shipping_method", ShippingMethodType::DHL_EXPRESS)
             ->whereNotNull("shipping_address_id")
             ->where("status", OrderStatus::PROCESSING)
             ->pluck("id")
