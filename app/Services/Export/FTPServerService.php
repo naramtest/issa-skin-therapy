@@ -25,20 +25,28 @@ class FTPServerService
 
     protected function ensureDirectoriesExist(): void
     {
-        $disk = Storage::disk("dhl");
+        // Create directories for both DHL and team disks
+        $disks = ["dhl", "team"];
 
-        foreach (
-            [$this->inDirectory, $this->outDirectory, $this->historyDirectory]
-            as $dir
-        ) {
-            if (!$disk->exists($dir)) {
-                $disk->makeDirectory($dir);
+        foreach ($disks as $disk) {
+            $storage = Storage::disk($disk);
+            foreach (
+                [
+                    $this->inDirectory,
+                    $this->outDirectory,
+                    $this->historyDirectory,
+                ]
+                as $dir
+            ) {
+                if (!$storage->exists($dir)) {
+                    $storage->makeDirectory($dir);
+                }
             }
         }
     }
 
     /**
-     * Place new orders in the IN directory for DHL to pick up
+     * Place new orders in the IN directory for both DHL and team to pick up
      */
     public function exportOrders(array $orderIds): void
     {
@@ -53,23 +61,16 @@ class FTPServerService
             }
 
             $filename = "orders_" . now()->format("Y-m-d_His") . ".csv";
+            $export = new DHLOrderExport($orders);
 
-            // Store the file using the dedicated DHL disk
-            Excel::store(
-                new DHLOrderExport($orders),
-                $this->inDirectory . "/" . $filename,
-                "dhl"
-            );
+            // Store the file in both DHL and team directories
+            Excel::store($export, $this->inDirectory . "/" . $filename, "dhl");
+            Excel::store($export, $this->inDirectory . "/" . $filename, "team");
 
             // Mark orders as exported
             $orders->each->update(["dhl_exported_at" => now()]);
-
-            Log::info("Orders exported for DHL pickup", [
-                "filename" => $filename,
-                "order_count" => $orders->count(),
-            ]);
         } catch (\Exception $e) {
-            Log::error("Failed to export orders for DHL", [
+            Log::error("Failed to export orders", [
                 "error" => $e->getMessage(),
                 "trace" => $e->getTraceAsString(),
             ]);
@@ -79,6 +80,7 @@ class FTPServerService
 
     /**
      * Process tracking files that DHL has placed in the OUT directory
+     * @throws \Exception
      */
     public function processTrackingUpdates(): void
     {
@@ -168,24 +170,31 @@ class FTPServerService
     }
 
     /**
-     * Get the base path for DHL FTP directories
+     * Get the base paths for both DHL and team FTP directories
      */
-    public function getBasePath(): string
+    public function getBasePaths(): array
     {
-        return Storage::disk("dhl")->path("");
+        return [
+            "dhl" => Storage::disk("dhl")->path(""),
+            "team" => Storage::disk("team")->path(""),
+        ];
     }
 
     /**
-     * Get all directory paths
+     * Get all directory paths for both DHL and team
      */
     public function getDirectories(): array
     {
-        $disk = Storage::disk("dhl");
-        return [
-            "base" => $disk->path(""),
-            "in" => $disk->path($this->inDirectory),
-            "out" => $disk->path($this->outDirectory),
-            "history" => $disk->path($this->historyDirectory),
-        ];
+        $paths = [];
+        foreach (["dhl", "team"] as $disk) {
+            $storage = Storage::disk($disk);
+            $paths[$disk] = [
+                "base" => $storage->path(""),
+                "in" => $storage->path($this->inDirectory),
+                "out" => $storage->path($this->outDirectory),
+                "history" => $storage->path($this->historyDirectory),
+            ];
+        }
+        return $paths;
     }
 }

@@ -48,6 +48,11 @@ return [
             "root" => storage_path("app/private/ftp/dhl"),
             "throw" => false,
         ],
+        "team" => [
+            "driver" => "local",
+            "root" => storage_path("app/private/ftp/team"),
+            "throw" => false,
+        ],
 
         "s3" => [
             "driver" => "s3",
