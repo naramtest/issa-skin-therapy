@@ -73,13 +73,13 @@ class DHLOrderExport implements
                     DHLFieldDefinitions::TO_NAME->getMaxLength()
                 ),
                 DHLFieldDefinitions::DESTINATION_BUILDING->value => Str::limit(
-                    $order->shippingAddress->building,
+                    $order->shippingAddress->building .
+                        " Flat: " .
+                        $order->shippingAddress->flat,
                     DHLFieldDefinitions::DESTINATION_BUILDING->getMaxLength()
                 ),
                 DHLFieldDefinitions::DESTINATION_STREET->value => Str::limit(
-                    $order->shippingAddress->address .
-                        "Flat: " .
-                        $order->shippingAddress->flat,
+                    $order->shippingAddress->address,
                     DHLFieldDefinitions::DESTINATION_STREET->getMaxLength()
                 ),
                 DHLFieldDefinitions::DESTINATION_SUBURB->value => Str::limit(
