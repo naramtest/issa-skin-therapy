@@ -129,10 +129,7 @@ class DHLOrderExport implements
                     2
                 ),
                 //TODO: check to see if it will work like this
-                //                DHLFieldDefinitions::SHIPPING_METHOD->value => Str::limit(
-                //                    $order->shipping_method,
-                //                    DHLFieldDefinitions::SHIPPING_METHOD->getMaxLength()
-                //                ),
+                DHLFieldDefinitions::SHIPPING_METHOD->value => null,
                 DHLFieldDefinitions::REFERENCE->value => Str::limit(
                     $order->id,
                     DHLFieldDefinitions::REFERENCE->getMaxLength()
@@ -142,10 +139,7 @@ class DHLOrderExport implements
                     DHLFieldDefinitions::SKU->getMaxLength()
                 ),
                 DHLFieldDefinitions::QTY->value => $item->quantity,
-                //                DHLFieldDefinitions::COMPANY->value => Str::limit(
-                //                    config("app.name"),
-                //                    DHLFieldDefinitions::COMPANY->getMaxLength()
-                //                ),
+                DHLFieldDefinitions::COMPANY->value => null,
 
                 // DHL specific fields
                 DHLFieldDefinitions::SIGNATURE_REQUIRED->value => "N",
@@ -163,20 +157,19 @@ class DHLOrderExport implements
                 DHLFieldDefinitions::CARRIER->value => "DHL",
                 DHLFieldDefinitions::CARRIER_PRODUCT_CODE->value =>
                     $order->dhl_product?->getCommerceCode() ?? "",
-                //                DHLFieldDefinitions::CARRIER_PRODUCT_UNIT_TYPE->value =>
-                //                    "metric",
+                DHLFieldDefinitions::CARRIER_PRODUCT_UNIT_TYPE->value => null,
                 DHLFieldDefinitions::DECLARED_VALUE_CURRENCY->value =>
                     $order->currency_code,
                 DHLFieldDefinitions::CODE->value => $purchasable->hs_code ?? "",
-                //                DHLFieldDefinitions::COLOR->value => "",
-                //                DHLFieldDefinitions::SIZE->value => "",
-                //                DHLFieldDefinitions::CONTENTS->value => "Commercial Sample",
+                DHLFieldDefinitions::COLOR->value => "",
+                DHLFieldDefinitions::SIZE->value => "",
+                DHLFieldDefinitions::CONTENTS->value => "",
                 DHLFieldDefinitions::DANGEROUS_GOODS->value => "N",
                 DHLFieldDefinitions::COUNTRY_OF_MANUFACTURER->value =>
                     $purchasable->country_of_origin ?? "AE",
-                //                DHLFieldDefinitions::DDP->value => "N",
-                //                DHLFieldDefinitions::RECEIVER_EORI->value => "",
-                //                DHLFieldDefinitions::RECEIVER_VAT->value => "",
+                DHLFieldDefinitions::DDP->value => "",
+                DHLFieldDefinitions::RECEIVER_EORI->value => "",
+                DHLFieldDefinitions::RECEIVER_VAT->value => "",
                 DHLFieldDefinitions::SHIPPING_FREIGHT_VALUE
                     ->value => CurrencyHelper::decimalFormatter(
                     $order->money_shipping_cost
