@@ -71,7 +71,11 @@ class DHLRateCheckService
                         ),
                         "cityName" => $destination["city"],
                         "countryCode" => $destination["country"],
-                        "addressLine1" => $destination["address"],
+                        "addressLine1" => substr(
+                            $destination["address"],
+                            0,
+                            45
+                        ),
                     ],
                 ],
             ];
