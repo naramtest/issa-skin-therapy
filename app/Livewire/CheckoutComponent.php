@@ -39,6 +39,7 @@ class CheckoutComponent extends Component
     public ?string $error = null;
     public ?string $currentOrderId = null;
     public float $shippingCost = 0;
+    public int $stripeAmount = 0;
 
     protected CartService $cartService;
     protected CustomerCheckoutService $customerCheckoutService;
@@ -100,13 +101,9 @@ class CheckoutComponent extends Component
     #[Computed]
     public function total()
     {
-        return $this->cartService->getTotal();
-    }
-
-    #[Computed]
-    public function stripeAmount(): int
-    {
-        return $this->total->getAmount();
+        $total = $this->cartService->getTotal();
+        $this->stripeAmount = $total->getAmount();
+        return $total;
     }
 
     public function placeOrderAndPay(): void

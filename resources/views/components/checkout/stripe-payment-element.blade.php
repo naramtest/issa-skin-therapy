@@ -1,7 +1,3 @@
-@props([
-    "stripeAmount",
-])
-
 @php
     $stripeKey = config("services.stripe.api_key");
     $userCurrency = \App\Services\Currency\CurrencyHelper::getUserCurrency();
@@ -14,9 +10,10 @@
         mount(
             '{{ $stripeKey }}',
             '{{ strtolower($userCurrency) }}',
-            {{ $stripeAmount }},
+            $wire.stripeAmount,
         )
     "
+    x-effect="updateAmount($wire.stripeAmount)"
     class="w-full"
 >
     <div class="space-y-4">
@@ -41,18 +38,16 @@
 
                 mount(key, currency, amount) {
                     if (this.stripe) return;
-
                     this.stripe = Stripe(key);
                     window.stripe = this.stripe;
                     this.initializeElements(currency, amount);
                 },
 
                 async initializeElements(currency, amount) {
-                    // Create Elements instance without specifying payment methods
                     console.log(amount);
                     this.elements = this.stripe.elements({
                         mode: 'payment',
-                        amount: amount, //TODO:  get that from checkoutComponent Totals
+                        amount: amount,
                         currency: currency,
                         appearance: {
                             theme: 'stripe',
@@ -69,7 +64,6 @@
                         },
                     });
 
-                    // Create and mount the Payment Element
                     this.paymentElement = this.elements.create('payment', {
                         defaultValues: {
                             billingDetails: {
@@ -82,14 +76,13 @@
                             },
                         },
                         fields: {
-                            billingDetails: 'never', // We'll collect this in our checkout form
+                            billingDetails: 'never',
                         },
                     });
 
                     this.paymentElement.mount('#payment-element');
                     window.stripeElements = this.elements;
 
-                    // Handle changes/errors
                     this.paymentElement.on('change', (event) => {
                         if (event.error) {
                             this.errorMessage = event.error.message;
@@ -97,6 +90,14 @@
                             this.errorMessage = '';
                         }
                     });
+                },
+
+                async updateAmount(amount) {
+                    if (this.elements) {
+                        await this.elements.update({
+                            amount: amount,
+                        });
+                    }
                 },
 
                 async updatePaymentElement(clientSecret) {
