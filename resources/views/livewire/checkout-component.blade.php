@@ -33,6 +33,10 @@
                     <x-checkout.sections.payment
                         :error="$error"
                         :stripe-amount="$this->stripeAmount"
+                        :price="$this->total->getAmount()"
+                        :selected-method="$selectedMethod"
+                        :rejection-reason="$rejectionReason"
+                        :is-available="$isAvailable"
                     />
                 </div>
             </div>

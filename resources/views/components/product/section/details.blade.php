@@ -35,29 +35,12 @@
         </div>
         {{-- Tabby Promo Section --}}
         <div class="border-t border-gray-200 pt-4">
-            <livewire:tabby-promo-component
+            <livewire:checkout.payment-methods.tabby-promo-component
                 :price="$product->current_money_price"
                 source="product"
                 selector="#TabbyProductPromo"
             />
         </div>
-        {{-- TODO: tabby payment --}}
-        {{-- <div --}}
-        {{-- class="flex gap-x-8 rounded-[10px] border-[1px] border-[#D1D5DB] px-5 py-5" --}}
-        {{-- > --}}
-        {{-- <div class="flex-1 text-sm text-darkColor"> --}}
-        {{-- <span>4 interest-free payments of</span> --}}
-        {{-- <strong>AED 55.00</strong> --}}
-        {{-- <span>. No fees. Shariah-compliant.</span> --}}
-        {{-- <a class="underline" href="/">Learn more</a> --}}
-        {{-- </div> --}}
-        {{-- <img --}}
-        {{-- class="h-[30px] w-[80px]" --}}
-        {{-- src="{{ asset("storage/icons/tabby.svg") }}" --}}
-        {{-- alt="{{ __("store.Tabby") }}" --}}
-        {{-- /> --}}
-        {{-- </div> --}}
-
         @php
             $outOfStock = ! $product->inventory()->canBePurchased(1);
         @endphp

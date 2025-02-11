@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Checkout\PaymentMethods;
 
 use App\Services\Currency\CurrencyHelper;
 use Livewire\Component;
@@ -31,7 +31,7 @@ class TabbyPromoComponent extends Component
 
     public function render()
     {
-        return view("livewire.tabby-promo-component", [
+        return view("livewire.checkout.payment-methods.tabby-promo-component", [
             "publicKey" => config("services.tabby.public_key"),
             "merchantCode" => config("services.tabby.merchant_code"),
         ]);

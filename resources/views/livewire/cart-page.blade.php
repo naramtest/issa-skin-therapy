@@ -178,7 +178,7 @@
                     </div>
 
                     <div class="my-6 border-t border-gray-200 pt-4">
-                        <livewire:tabby-promo-component
+                        <livewire:checkout.payment-methods.tabby-promo-component
                             :price="$this->total"
                             source="cart"
                             selector="#TabbyCartPromo"

@@ -538,4 +538,16 @@ return [
     "New Order Notification" => "New Order Notification",
     "Customer Information" => "Customer Information",
     "View Order Details" => "View Order Details",
+    "Pay in 4" => [
+        " No interest, no fees" => "Pay in 4. No interest, no fees.",
+    ],
+    "This purchase is above your current spending limit with Tabby, try a smaller cart or use another payment method" =>
+        "This purchase is above your current spending limit with Tabby, try a smaller cart or use another payment method",
+    "The purchase amount is below the minimum amount required to use Tabby, try adding more items or use another payment method" =>
+        "The purchase amount is below the minimum amount required to use Tabby, try adding more items or use another payment method",
+    "Sorry, Tabby is unable to approve this purchase" => [
+        " Please use an alternative payment method for your order" =>
+            "Sorry, Tabby is unable to approve this purchase. Please use an alternative payment method for your order",
+    ],
+    "Credit Card" => "Credit Card",
 ];
