@@ -33,6 +33,14 @@
                 {!! $product->description !!}
             </div>
         </div>
+        {{-- Tabby Promo Section --}}
+        <div class="border-t border-gray-200 pt-4">
+            <livewire:tabby-promo-component
+                :price="$product->current_money_price"
+                source="product"
+                selector="#TabbyProductPromo"
+            />
+        </div>
         {{-- TODO: tabby payment --}}
         {{-- <div --}}
         {{-- class="flex gap-x-8 rounded-[10px] border-[1px] border-[#D1D5DB] px-5 py-5" --}}

@@ -51,4 +51,12 @@ return [
         "environment" => env("DHL_ENVIRONMENT", "test"), // 'test' or 'prod'
         "base_url" => env("DHL_URL"),
     ],
+
+    "tabby" => [
+        "public_key" => env("TABBY_PUBLIC_KEY"),
+        "secret_key" => env("TABBY_SECRET_KEY"),
+        "merchant_code" => env("TABBY_MERCHANT_CODE"),
+        "is_sandbox" => env("TABBY_IS_SANDBOX", true),
+        "webhook_secret" => env("TABBY_WEBHOOK_SECRET"),
+    ],
 ];
