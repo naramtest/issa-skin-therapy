@@ -19,11 +19,10 @@ trait WithShippingCalculation
     public bool $canCalculateShipping = false;
     protected ShippingZoneService $shippingZoneService;
 
-    public function initializeWithShippingCalculation(
-        ShippingZoneService $shippingZoneService
-    ): void {
+    public function initializeWithShippingCalculation(): void
+    {
         // TODO: change to var in checkout component
-        $this->shippingZoneService = $shippingZoneService;
+        $this->shippingZoneService = app(ShippingZoneService::class);
         $this->shippingRates = collect();
         // Check address completeness on initialization
         $this->checkAddressCompleteness();
@@ -96,7 +95,7 @@ trait WithShippingCalculation
                 }
 
                 $this->shippingRates->push(
-                    $zoneService->formatMethodToRate(
+                    $this->shippingZoneService->formatMethodToRate(
                         $method,
                         $this->cartService->itemCount()
                     )

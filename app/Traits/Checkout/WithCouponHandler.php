@@ -62,7 +62,7 @@ trait WithCouponHandler
         );
 
         $this->cartService->applyCoupon($coupon, $this->couponDiscount);
-        $this->dispatch("coupon-applied");
+        unset($this->total);
     }
 
     abstract protected function getCouponCode(): ?string;
@@ -74,6 +74,8 @@ trait WithCouponHandler
         $this->setCouponCode(null); // Call setter method
         $this->couponDiscount = null;
         $this->cartService->removeCoupon();
+        unset($this->discount);
+        unset($this->total);
         $this->dispatch("coupon-removed");
     }
 
