@@ -1,4 +1,12 @@
 {{-- Payment Methods --}}
+
+@props([
+    "total",
+    "error",
+    "selectedMethod",
+    "rejectionReason",
+    "isAvailable",
+])
 <div>
     <div class="">
         <div class="px-4">
@@ -10,7 +18,7 @@
                             id="card"
                             name="payment_method"
                             type="radio"
-                            wire:model.live="selectedMethod"
+                            wire:model.live="form.payment_method"
                             value="{{ \App\Enums\Checkout\PaymentMethod::CARD->value }}"
                             class="text-primary focus:ring-primary h-4 w-4 border-gray-300"
                         />
@@ -35,7 +43,7 @@
                                     id="tabby"
                                     name="payment_method"
                                     type="radio"
-                                    wire:model.live="selectedMethod"
+                                    wire:model.live="form.payment_method"
                                     value="{{ \App\Enums\Checkout\PaymentMethod::TABBY->value }}"
                                     class="text-primary focus:ring-primary h-4 w-4 border-gray-300"
                                 />
@@ -57,7 +65,7 @@
 
                         <div
                             x-data="{ show: false }"
-                            x-effect="show = $wire.selectedMethod === 'tabby'"
+                            x-effect="show = $wire.form.payment_method === 'tabby'"
                         >
                             <div
                                 wire:ignore
@@ -92,15 +100,15 @@
 
         {{-- Payment Method Details Section --}}
         <div
-            x-data="{ show: false }"
-            x-effect="show = $wire.selectedMethod === 'card'"
+            x-data="{ show: true }"
+            x-effect="show = $wire.form.payment_method === 'card'"
         >
             <div
                 x-show="show"
                 x-collapse.duration.800ms
                 class="mt-4 border-t border-gray-200 p-4"
             >
-                <x-checkout.stripe-payment-element />
+                <x-checkout.stripe-payment-element :total="$total" />
             </div>
         </div>
     </div>

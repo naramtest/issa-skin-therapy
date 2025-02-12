@@ -1,3 +1,7 @@
+@props([
+    "total",
+])
+
 @php
     $stripeKey = config("services.stripe.api_key");
     $userCurrency = \App\Services\Currency\CurrencyHelper::getUserCurrency();
@@ -6,8 +10,8 @@
 <div
     wire:ignore
     x-data="stripePayment()"
-    x-init="mount('{{ $stripeKey }}', '{{ strtolower($userCurrency) }}', $wire.total)"
-    x-effect="updateAmount($wire.total)"
+    x-init="mount('{{ $stripeKey }}', '{{ strtolower($userCurrency) }}', {{ $total }})"
+    x-effect="updateAmount({{ $total }})"
     class="w-full"
 >
     <div class="space-y-4">
@@ -31,6 +35,7 @@
                 errorMessage: '',
 
                 mount(key, currency, amount) {
+                    console.log(amount);
                     if (this.stripe) return;
                     this.stripe = Stripe(key);
                     window.stripe = this.stripe;

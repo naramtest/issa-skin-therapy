@@ -3,6 +3,7 @@
 namespace App\Livewire\Forms;
 
 use App\Enums\AddressType;
+use App\Enums\Checkout\PaymentMethod;
 use App\Models\Country;
 use App\Models\State;
 use Livewire\Attributes\Rule;
@@ -96,7 +97,7 @@ class CheckoutForm extends Form
 
     // Payment Information
     #[Rule("required|in:card")]
-    public string $payment_method = "card";
+    public string $payment_method = PaymentMethod::CARD->value;
 
     #[Rule("nullable|string|max:50")]
     public ?string $coupon_code = null;

@@ -35,10 +35,10 @@
                         </h3>
 
                         <!-- Payment -->
-                        <livewire:checkout.payment-methods.payment-methods-component
+                        <x-checkout.sections.payment-methods-component
                             :error="$error"
                             :total="$this->total->getAmount()"
-                            :selected-method="$selectedMethod"
+                            :selected-method="$form->payment_method"
                             :rejection-reason="$rejectionReason"
                             :is-available="$isAvailable"
                         />

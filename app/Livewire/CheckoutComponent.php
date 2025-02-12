@@ -40,7 +40,6 @@ class CheckoutComponent extends Component
     public ?string $error = null;
     public ?string $currentOrderId = null;
     public float $shippingCost = 0;
-    public string $selectedMethod = "";
 
     protected CartService $cartService;
     protected CustomerCheckoutService $customerCheckoutService;
