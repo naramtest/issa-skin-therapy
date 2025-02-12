@@ -550,4 +550,7 @@ return [
             "Sorry, Tabby is unable to approve this purchase. Please use an alternative payment method for your order",
     ],
     "Credit Card" => "Credit Card",
+    "Failed to process payment" => [
+        " Please try again" => "Failed to process payment. Please try again",
+    ],
 ];

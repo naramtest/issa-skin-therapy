@@ -2,6 +2,9 @@
 
 namespace App\Services\Payment;
 
+use GuzzleHttp\Promise\PromiseInterface;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Log;
 
@@ -24,18 +27,7 @@ class TabbyPaymentService
     public function checkAvailability(array $data): array
     {
         try {
-            $response = Http::withHeaders([
-                "Authorization" => "Bearer " . $this->secretKey,
-            ])->post($this->baseUrl . "checkout", [
-                "payment" => $data,
-                "lang" => app()->getLocale(),
-                "merchant_code" => $this->merchantCode,
-                "merchant_urls" => [
-                    "success" => route("checkout.success"),
-                    "cancel" => route("checkout.index"),
-                    "failure" => route("checkout.index"),
-                ],
-            ]);
+            $response = $this->checkoutPostRequest($data);
 
             if ($response->successful()) {
                 return $response->json();
@@ -74,22 +66,31 @@ class TabbyPaymentService
         }
     }
 
+    /**
+     * @param array $data
+     * @return PromiseInterface|Response
+     * @throws ConnectionException
+     */
+    public function checkoutPostRequest(array $data): Response|PromiseInterface
+    {
+        return Http::withHeaders([
+            "Authorization" => "Bearer " . $this->secretKey,
+        ])->post($this->baseUrl . "checkout", [
+            "payment" => $data,
+            "lang" => app()->getLocale(),
+            "merchant_code" => $this->merchantCode,
+            "merchant_urls" => [
+                "success" => route("checkout.success"),
+                "cancel" => route("checkout.index"),
+                "failure" => route("checkout.index"),
+            ],
+        ]);
+    }
+
     public function createCheckoutSession(array $data): array
     {
         try {
-            $response = Http::withHeaders([
-                "Authorization" => "Bearer " . $this->secretKey,
-            ])->post($this->baseUrl . "checkout", [
-                "payment_type" => "installments",
-                "merchant_code" => $this->merchantCode,
-                "merchant_urls" => [
-                    "success" => route("checkout.success"),
-                    "cancel" => route("checkout.index"),
-                    "failure" => route("checkout.index"),
-                ],
-                ...$data,
-            ]);
-
+            $response = $this->checkoutPostRequest($data);
             if ($response->successful()) {
                 return [
                     "success" => true,

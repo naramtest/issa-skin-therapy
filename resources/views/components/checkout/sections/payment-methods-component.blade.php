@@ -64,6 +64,7 @@
                         </div>
 
                         <div
+                            x-cloak
                             x-data="{ show: false }"
                             x-effect="show = $wire.form.payment_method === 'tabby'"
                         >
@@ -100,6 +101,7 @@
 
         {{-- Payment Method Details Section --}}
         <div
+            x-cloak
             x-data="{ show: true }"
             x-effect="show = $wire.form.payment_method === 'card'"
         >

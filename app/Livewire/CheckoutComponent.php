@@ -4,9 +4,9 @@ namespace App\Livewire;
 
 use App\Enums\AddressType;
 use App\Enums\Checkout\DHLProduct;
+use App\Enums\Checkout\PaymentMethod;
 use App\Enums\Checkout\ShippingMethodType;
 use App\Livewire\Forms\CheckoutForm;
-use App\Models\Order;
 use App\Models\State;
 use App\Services\Cart\CartService;
 use App\Services\Checkout\CustomerCheckoutService;
@@ -121,23 +121,23 @@ class CheckoutComponent extends Component
 
         $this->processing = true;
         $this->error = null;
-
         try {
             if ($this->currentOrderId) {
-                $existingOrder = Order::find($this->currentOrderId);
-                if (
-                    $this->orderService->isOrderPendingPayment($existingOrder)
-                ) {
-                    $paymentData = $this->paymentService->getPaymentIntent(
-                        $existingOrder->payment_intent_id
-                    );
-
-                    $this->dispatch(
-                        "payment-ready",
-                        clientSecret: $paymentData["clientSecret"]
-                    );
-                    return;
-                }
+                dd($this->currentOrderId);
+                //                $existingOrder = Order::find($this->currentOrderId);
+                //                if (
+                //                    $this->orderService->isOrderPendingPayment($existingOrder)
+                //                ) {
+                //                    $paymentData = $this->paymentService->getPaymentIntent(
+                //                        $existingOrder->payment_intent_id
+                //                    );
+                //
+                //                    $this->dispatch(
+                //                        "payment-ready",
+                //                        clientSecret: $paymentData["clientSecret"]
+                //                    );
+                //                    return;
+                //                }
             }
 
             DB::beginTransaction();
@@ -188,15 +188,23 @@ class CheckoutComponent extends Component
             $this->currentOrderId = $order->id;
 
             // Create Stripe Payment Intent
-            $paymentData = $this->paymentService->createPaymentIntent($order);
+            if ($this->form->payment_method == PaymentMethod::CARD->value) {
+                $paymentData = $this->paymentService->createPaymentIntent(
+                    $order
+                );
+            }
 
             DB::commit();
 
             // Return the client secret for the frontend to complete the payment
-            $this->dispatch(
-                "payment-ready",
-                clientSecret: $paymentData["clientSecret"]
-            );
+            if ($this->form->payment_method == PaymentMethod::CARD->value) {
+                $this->dispatch(
+                    "payment-ready",
+                    clientSecret: $paymentData["clientSecret"]
+                );
+            } else {
+                $this->processTabbyPayment();
+            }
         } catch (Exception $e) {
             DB::rollBack();
             Log::error("Order creation failed", [
@@ -249,37 +257,5 @@ class CheckoutComponent extends Component
     public function setCouponCode(?string $code): void
     {
         $this->form->coupon_code = $code;
-    }
-
-    public function processTabbyPayment()
-    {
-        try {
-            $response = $this->tabbyService->createCheckoutSession(
-                $this->getTabbyCheckoutData()
-            );
-
-            if ($response["success"]) {
-                // Store payment intent ID for later verification
-                $this->currentOrderId = $response["data"]["payment"]["id"];
-
-                // Redirect to Tabby checkout
-                return redirect(
-                    $response["data"]["configuration"]["available_products"][
-                        "installments"
-                    ]["web_url"]
-                );
-            }
-
-            $this->error = $response["error"];
-            return;
-        } catch (Exception $e) {
-            Log::error("Tabby payment processing failed", [
-                "error" => $e->getMessage(),
-            ]);
-
-            $this->error = __(
-                "store.Failed to process payment. Please try again."
-            );
-        }
     }
 }

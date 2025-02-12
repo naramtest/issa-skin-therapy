@@ -147,4 +147,36 @@ trait WithPayment
     {
         $this->error = $error;
     }
+
+    public function processTabbyPayment()
+    {
+        try {
+            $response = $this->tabbyPaymentService->createCheckoutSession(
+                $this->getTabbyCheckoutData()
+            );
+
+            if ($response["success"]) {
+                // Store payment intent ID for later verification
+                $this->currentOrderId = $response["data"]["payment"]["id"];
+
+                // Redirect to Tabby checkout
+                return redirect(
+                    $response["data"]["configuration"]["available_products"][
+                        "installments"
+                    ][0]["web_url"]
+                );
+            }
+
+            $this->error = $response["error"];
+            return;
+        } catch (Exception $e) {
+            Log::error("Tabby payment processing failed", [
+                "error" => $e->getMessage(),
+            ]);
+
+            $this->error = __(
+                "store.Failed to process payment. Please try again"
+            );
+        }
+    }
 }

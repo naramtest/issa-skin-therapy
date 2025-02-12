@@ -96,7 +96,7 @@ class CheckoutForm extends Form
     public bool $terms_accepted = false;
 
     // Payment Information
-    #[Rule("required|in:card")]
+    #[Rule("required|in:card,tabby")]
     public string $payment_method = PaymentMethod::CARD->value;
 
     #[Rule("nullable|string|max:50")]
