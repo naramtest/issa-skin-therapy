@@ -2,6 +2,8 @@
 
 namespace App\Traits\Checkout;
 
+use App\Enums\Checkout\ShippingMethodType;
+use App\Services\Coupon\CouponService;
 use Exception;
 use Money\Money;
 
@@ -9,9 +11,13 @@ trait WithCouponHandler
 {
     public ?string $couponError = null;
     protected ?Money $couponDiscount = null;
+    protected CouponService $couponService;
 
-    public function initializeWithCouponHandler(): void
-    {
+    public function initializeWithCouponHandler(
+        CouponService $couponService
+    ): void {
+        $this->couponService = $couponService;
+
         $coupon = $this->cartService->getAppliedCoupon(); // TODO: in the checkout try to get the coupon once
         if ($coupon) {
             $this->setCouponCode($coupon->code);
@@ -69,6 +75,40 @@ trait WithCouponHandler
         $this->couponDiscount = null;
         $this->cartService->removeCoupon();
         $this->dispatch("coupon-removed");
+    }
+
+    public function freeShippingCoupon($country, $methods): bool
+    {
+        $appliedCoupon = $this->cartService->getAppliedCoupon();
+
+        if (!$appliedCoupon) {
+            return false;
+        }
+
+        if (
+            !$this->couponService->validateShippingEligibility(
+                $appliedCoupon,
+                $country
+            )
+        ) {
+            return false;
+        }
+
+        // Check if the free shipping method already exists using firstWhere as a shorthand.
+        $method = $methods->firstWhere(
+            "method_type",
+            ShippingMethodType::FREE_SHIPPING
+        );
+        if (
+            $method and
+            $method->meetsMinimumOrderRequirement(
+                $this->cartService->getSubtotal()
+            )
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     protected function getCouponDiscountAmount(): ?Money

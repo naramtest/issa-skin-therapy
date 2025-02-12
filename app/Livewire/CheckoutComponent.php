@@ -11,7 +11,6 @@ use App\Models\State;
 use App\Services\Cart\CartService;
 use App\Services\Checkout\CustomerCheckoutService;
 use App\Services\Checkout\OrderService;
-use App\Services\Coupon\CouponService;
 use App\Services\Currency\CurrencyHelper;
 use App\Services\LocationService;
 use App\Services\Payment\StripePaymentService;
@@ -30,9 +29,9 @@ use Money\Money;
 
 class CheckoutComponent extends Component
 {
+    use WithCouponHandler;
     use WithShippingCalculation;
     use LocationHandler;
-    use WithCouponHandler;
 
     public CheckoutForm $form;
     public Collection $shippingRates;
@@ -53,7 +52,6 @@ class CheckoutComponent extends Component
     protected StripePaymentService $paymentService;
     protected OrderService $orderService;
     protected LocationService $locationService;
-    protected CouponService $couponService;
     protected TabbyPaymentService $tabbyPaymentService;
 
     public function boot(
@@ -62,7 +60,6 @@ class CheckoutComponent extends Component
         StripePaymentService $paymentService,
         OrderService $orderService,
         LocationService $locationService,
-        CouponService $couponService,
         TabbyPaymentService $tabbyPaymentService
     ): void {
         $this->cartService = $cartService;
@@ -70,7 +67,6 @@ class CheckoutComponent extends Component
         $this->paymentService = $paymentService;
         $this->orderService = $orderService;
         $this->locationService = $locationService;
-        $this->couponService = $couponService;
         $this->tabbyPaymentService = $tabbyPaymentService;
     }
 
@@ -87,13 +83,11 @@ class CheckoutComponent extends Component
 
         // Initialize location handling
         $this->setupLocationHandler();
-        $this->initializeWithCouponHandler();
         // Initialize shipping-related properties
         $this->shippingRates = collect();
         $this->loadingRates = false;
         $this->selectedShippingRate = null;
 
-        $this->initializeWithShippingCalculation();
         $this->checkAvailability(); // TODO: call when updating address
     }
 

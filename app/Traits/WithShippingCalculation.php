@@ -17,9 +17,13 @@ trait WithShippingCalculation
 {
     //  TODO: Organize
     public bool $canCalculateShipping = false;
+    protected ShippingZoneService $shippingZoneService;
 
-    public function initializeWithShippingCalculation(): void
-    {
+    public function initializeWithShippingCalculation(
+        ShippingZoneService $shippingZoneService
+    ): void {
+        // TODO: change to var in checkout component
+        $this->shippingZoneService = $shippingZoneService;
         $this->shippingRates = collect();
         // Check address completeness on initialization
         $this->checkAddressCompleteness();
@@ -63,13 +67,23 @@ trait WithShippingCalculation
                 return;
             }
 
-            // TODO: change to var in checkout component
-            $zoneService = app(ShippingZoneService::class);
-            $methods = $zoneService->getAvailableMethodsForCountry(
+            $methods = $this->shippingZoneService->getAvailableMethodsForCountry(
                 $destination["country"]
             );
 
-            $this->freeShippingCoupon($destination["country"], $methods);
+            $hasFreeShipping = $this->freeShippingCoupon(
+                $destination["country"],
+                $methods
+            );
+            if ($hasFreeShipping) {
+                $this->shippingRates->push([
+                    "service_code" => ShippingMethodType::FREE_SHIPPING->value,
+                    "service_name" => ShippingMethodType::FREE_SHIPPING,
+                    "total_price" => 0,
+                    "currency" => CurrencyHelper::defaultCurrency()->getCode(),
+                    "guaranteed" => false,
+                ]);
+            }
 
             foreach ($methods as $method) {
                 // Skip methods that don't meet minimum order requirements
@@ -171,46 +185,6 @@ trait WithShippingCalculation
                 "last_name" => $this->form->billing_last_name,
             ];
         }
-    }
-
-    public function freeShippingCoupon($country, $methods): void
-    {
-        $appliedCoupon = $this->cartService->getAppliedCoupon();
-
-        if (!$appliedCoupon) {
-            return;
-        }
-
-        if (
-            !$this->couponService->validateShippingEligibility(
-                $appliedCoupon,
-                $country
-            )
-        ) {
-            return;
-        }
-
-        // Check if the free shipping method already exists using firstWhere as a shorthand.
-        $method = $methods->firstWhere(
-            "method_type",
-            ShippingMethodType::FREE_SHIPPING
-        );
-        if (
-            $method and
-            $method->meetsMinimumOrderRequirement(
-                $this->cartService->getSubtotal()
-            )
-        ) {
-            return;
-        }
-
-        $this->shippingRates->push([
-            "service_code" => ShippingMethodType::FREE_SHIPPING->value,
-            "service_name" => ShippingMethodType::FREE_SHIPPING,
-            "total_price" => 0,
-            "currency" => CurrencyHelper::defaultCurrency()->getCode(),
-            "guaranteed" => false,
-        ]);
     }
 
     /**
