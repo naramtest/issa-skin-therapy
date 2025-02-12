@@ -7,6 +7,7 @@ use App\Enums\Checkout\DHLProduct;
 use App\Enums\Checkout\PaymentMethod;
 use App\Enums\Checkout\ShippingMethodType;
 use App\Livewire\Forms\CheckoutForm;
+use App\Models\Order;
 use App\Models\State;
 use App\Services\Cart\CartService;
 use App\Services\Checkout\CustomerCheckoutService;
@@ -123,21 +124,20 @@ class CheckoutComponent extends Component
         $this->error = null;
         try {
             if ($this->currentOrderId) {
-                dd($this->currentOrderId);
-                //                $existingOrder = Order::find($this->currentOrderId);
-                //                if (
-                //                    $this->orderService->isOrderPendingPayment($existingOrder)
-                //                ) {
-                //                    $paymentData = $this->paymentService->getPaymentIntent(
-                //                        $existingOrder->payment_intent_id
-                //                    );
-                //
-                //                    $this->dispatch(
-                //                        "payment-ready",
-                //                        clientSecret: $paymentData["clientSecret"]
-                //                    );
-                //                    return;
-                //                }
+                $existingOrder = Order::find($this->currentOrderId);
+                if (
+                    $this->orderService->isOrderPendingPayment($existingOrder)
+                ) {
+                    $paymentData = $this->paymentService->getPaymentIntent(
+                        $existingOrder->payment_intent_id
+                    );
+
+                    $this->dispatch(
+                        "payment-ready",
+                        clientSecret: $paymentData["clientSecret"]
+                    );
+                    return;
+                }
             }
 
             DB::beginTransaction();

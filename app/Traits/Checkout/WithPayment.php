@@ -2,8 +2,10 @@
 
 namespace App\Traits\Checkout;
 
+use App\Models\Order;
 use App\Services\Currency\CurrencyHelper;
 use App\Services\Payment\TabbyPaymentService;
+use App\Services\Payment\TabbyPaymentVerificationService;
 use Exception;
 use Illuminate\Support\Facades\App;
 use Livewire\Attributes\On;
@@ -15,12 +17,15 @@ trait WithPayment
     public bool $isAvailable = false;
     public ?string $rejectionReason = null;
     protected TabbyPaymentService $tabbyPaymentService;
+    protected TabbyPaymentVerificationService $tabbyPaymentVerificationService;
 
     public function initializeWithPayment(
-        TabbyPaymentService $tabbyPaymentService
+        TabbyPaymentService $tabbyPaymentService,
+        TabbyPaymentVerificationService $tabbyPaymentVerificationService
     ): void {
         $this->tabbyPaymentService = $tabbyPaymentService;
-        $this->checkAvailability();
+        $this->tabbyPaymentVerificationService = $tabbyPaymentVerificationService;
+        //        $this->checkAvailability();
     }
 
     public function checkAvailability(): void
@@ -176,6 +181,53 @@ trait WithPayment
 
             $this->error = __(
                 "store.Failed to process payment. Please try again"
+            );
+        }
+    }
+
+    public function verifyTabbyPayment(string $paymentId): void
+    {
+        try {
+            $verificationResult = $this->tabbyPaymentVerificationService->verifyPayment(
+                $paymentId
+            );
+
+            if (!$verificationResult["success"]) {
+                $this->error = __(
+                    "store.Payment verification failed. Please try again."
+                );
+                return;
+            }
+
+            $order = Order::where("payment_intent_id", $paymentId)->first();
+            if (!$order) {
+                $this->error = __("store.Order not found");
+                return;
+            }
+
+            $this->tabbyPaymentVerificationService->processPaymentStatus(
+                $order,
+                $verificationResult["data"]
+            );
+
+            if ($verificationResult["status"] === "AUTHORIZED") {
+                // Redirect to success page
+                redirect()->route("checkout.success", [
+                    "payment_intent" => $paymentId,
+                ]);
+            } else {
+                $this->error = __(
+                    "store.Payment was not authorized. Please try again."
+                );
+            }
+        } catch (\Exception $e) {
+            Log::error("Tabby payment verification failed", [
+                "payment_id" => $paymentId,
+                "error" => $e->getMessage(),
+            ]);
+
+            $this->error = __(
+                "store.Payment verification failed. Please try again."
             );
         }
     }
