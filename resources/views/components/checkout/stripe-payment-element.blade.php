@@ -6,14 +6,8 @@
 <div
     wire:ignore
     x-data="stripePayment()"
-    x-init="
-        mount(
-            '{{ $stripeKey }}',
-            '{{ strtolower($userCurrency) }}',
-            $wire.stripeAmount,
-        )
-    "
-    x-effect="updateAmount($wire.stripeAmount)"
+    x-init="mount('{{ $stripeKey }}', '{{ strtolower($userCurrency) }}', $wire.total)"
+    x-effect="updateAmount($wire.total)"
     class="w-full"
 >
     <div class="space-y-4">
@@ -44,7 +38,6 @@
                 },
 
                 async initializeElements(currency, amount) {
-                    console.log(amount);
                     this.elements = this.stripe.elements({
                         mode: 'payment',
                         amount: amount,

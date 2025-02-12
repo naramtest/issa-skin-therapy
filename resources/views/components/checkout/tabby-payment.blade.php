@@ -1,4 +1,7 @@
-{{-- resources/views/livewire/checkout/payment-methods/tabby-payment-method.blade.php --}}
+@props([
+    "total",
+    "isAvailable",
+])
 <div class="ms-10 mt-2">
     <div class="flex w-full items-center justify-between">
         <div id="tabbyCard"></div>
@@ -14,7 +17,7 @@
                 currency:
                     '{{ app(\App\Services\Currency\CurrencyHelper::class)->getUserCurrency() }}',
                 lang: '{{ app()->getLocale() }}',
-                price: {{ $price }},
+                price: {{ $total }},
                 size: 'wide',
                 theme: 'default',
                 header: true,
