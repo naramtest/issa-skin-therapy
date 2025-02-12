@@ -56,8 +56,9 @@ class CheckoutController extends Controller
                 )
                 : null;
             // Clear cart
-            $this->cartService->clear();
-
+            if (\App::isProduction()) {
+                $this->cartService->clear();
+            }
             return view("storefront.checkout.success", [
                 "order" => $order,
                 "showRegistration" =>

@@ -6,6 +6,7 @@ use App\Services\Currency\CurrencyHelper;
 use App\Services\Payment\TabbyPaymentService;
 use Exception;
 use Illuminate\Support\Facades\App;
+use Livewire\Attributes\On;
 use Log;
 use Money\Money;
 
@@ -116,5 +117,34 @@ trait WithPayment
                 "is_email_verified" => auth()->check(),
             ],
         ];
+    }
+
+    public function getBillingDetails(): array
+    {
+        return [
+            "name" =>
+                $this->form->billing_first_name .
+                " " .
+                $this->form->billing_last_name,
+            "email" => $this->form->email,
+            "phone" => $this->form->phone,
+            "address" => [
+                "line1" => $this->form->billing_address,
+                "line2" =>
+                    $this->form->billing_building .
+                    " " .
+                    $this->form->billing_flat,
+                "city" => $this->form->billing_city,
+                "state" => $this->form->billing_state,
+                "postal_code" => $this->form->billing_postal_code,
+                "country" => $this->form->billing_country,
+            ],
+        ];
+    }
+
+    #[On("payment-error")]
+    public function setPaymentError($error)
+    {
+        $this->error = $error;
     }
 }
