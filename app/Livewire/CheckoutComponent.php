@@ -212,9 +212,7 @@ class CheckoutComponent extends Component
                 "trace" => $e->getTraceAsString(),
             ]);
 
-            $this->error = __(
-                "store.Failed to create order. Please try again."
-            );
+            $this->error = __("store.Failed to create order. Please try again");
         } finally {
             $this->processing = false;
         }

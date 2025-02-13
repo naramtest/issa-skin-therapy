@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use App\Enums\Checkout\PaymentStatus;
 use App\Models\Order;
 use App\Services\Cart\CartService;
@@ -56,7 +57,7 @@ class CheckoutController extends Controller
                 )
                 : null;
             // Clear cart
-            if (\App::isProduction()) {
+            if (App::isProduction()) {
                 $this->cartService->clear();
             }
             return view("storefront.checkout.success", [

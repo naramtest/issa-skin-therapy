@@ -132,11 +132,15 @@ class StripePaymentService implements PaymentServiceInterface
                     "exp_year" => $paymentMethod->card->exp_year ?? null,
                 ],
             ]);
-            Mail::to($order->email)->queue(new OrderConfirmationMail($order));
-            //TODO: make it dynamic from the dashboard (setting page)
-            Mail::to("info@issaskintherapy.com")->queue(
-                new NewOrderAdminNotification($order)
-            );
+            if (\App::isProduction()) {
+                Mail::to($order->email)->queue(
+                    new OrderConfirmationMail($order)
+                );
+                //TODO: make it dynamic from the dashboard (setting page)
+                Mail::to("info@issaskintherapy.com")->queue(
+                    new NewOrderAdminNotification($order)
+                );
+            }
             return true;
         } catch (ApiErrorException $e) {
             Log::error("Failed to confirm payment", [

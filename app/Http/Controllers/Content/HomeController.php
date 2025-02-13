@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Content;
 
 use App\Http\Controllers\Controller;
-use App\Services\Export\FTPServerService;
+use App\Models\Order;
+use App\Services\Invoice\InvoiceService;
 use App\Services\Post\PostCacheService;
 use App\Services\Product\ProductCacheService;
 
@@ -16,7 +17,11 @@ class HomeController extends Controller
         ProductCacheService $productCacheService,
         PostCacheService $postCacheService
     ) {
-        app(FTPServerService::class)->processTrackingUpdates();
+        $first = app(InvoiceService::class)->generateInvoice(
+            Order::latest()->first()
+        );
+
+        return $first->toPdfInvoice()->view();
         $bundles = $productCacheService->allBundles();
         $categories = $productCacheService->allProductCategories();
         $featuredProduct = $productCacheService->getFeaturedProduct();

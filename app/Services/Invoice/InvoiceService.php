@@ -22,7 +22,7 @@ class InvoiceService
         $invoice = new Invoice([
             "type" => InvoiceType::Invoice,
             "state" => InvoiceState::Paid,
-            "description" => "Order #$order->order_number",
+            "description" => "$order->order_number",
             "seller_information" => $this->getSellerInfo(),
             "buyer_information" => $this->getBuyerInfo($order),
             "currency" => $order->currency_code,
@@ -38,9 +38,9 @@ class InvoiceService
 
         // Save invoice to get serial number
         $invoice->save();
-        $items = $this->invoiceItems($order);
-
-        $invoice->items()->saveMany($items->all());
+        //        $items = $this->invoiceItems($order);
+        //
+        //        $invoice->items()->saveMany($items->all());
         return $invoice;
     }
 

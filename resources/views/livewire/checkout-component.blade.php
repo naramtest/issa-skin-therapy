@@ -95,5 +95,70 @@
                 </div>
             </div>
         </div>
+        <div
+            x-on:payment-ready.window="
+                const stripe = window.stripe
+                const elements = window.stripeElements
+
+                if (! stripe || ! elements) {
+                    $wire.dispatch('payment-error', {
+                        error: 'Payment system not initialized properly',
+                    })
+
+                    return
+                }
+
+                try {
+                    // First submit the elements form
+                    const { error: submitError } = await elements.submit()
+                    if (submitError) {
+                        $wire.dispatch('payment-error', {
+                            error: submitError.message,
+                        })
+                        return
+                    }
+                    const billingDetails = await $wire.getBillingDetails()
+
+                    const result = await stripe.confirmPayment({
+                        elements,
+                        clientSecret: $event.detail.clientSecret,
+                        confirmParams: {
+                            return_url: '{{ route("checkout.success") }}',
+                            payment_method_data: {
+                                billing_details: billingDetails,
+                            },
+                        },
+                    })
+
+                    console.log(result)
+
+                    if (result.error) {
+                        let errorMessage = result.error.message
+
+                        switch (result.error.type) {
+                            case 'card_error':
+                            case 'validation_error':
+                                errorMessage = result.error.message
+                                break
+                            case 'invalid_request_error':
+                                errorMessage =
+                                    'There was a problem with your payment information. Please check and try again.'
+                                break
+                            default:
+                                errorMessage = 'An unexpected error occurred. Please try again.'
+                        }
+
+                        $wire.dispatch('payment-error', {
+                            error: errorMessage,
+                        })
+                    }
+                } catch (e) {
+                    console.log(e)
+                    $wire.dispatch('payment-error', {
+                        error: 'An unexpected error occurred while processing your payment. Please try again.',
+                    })
+                }
+            "
+        ></div>
     </form>
 </div>
