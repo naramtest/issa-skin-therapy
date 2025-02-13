@@ -15,7 +15,7 @@
             ],
             "completed" => [
                 "title" => "Your Order Has Been Completed",
-                "message" => "Your order has been completed and delivered.",
+                "message" => "Your order has been completed.",
                 "feedback" => "We hope you are satisfied with your purchase.",
             ],
             "cancelled" => [
