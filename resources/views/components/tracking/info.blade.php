@@ -123,7 +123,7 @@
                             </td>
                             <td class="border p-4">
                                 <a
-                                    href="https://expressapi.dhl.com/mydhlapi/shipments/{{ $shippingOrder->tracking_number }}/tracking"
+                                    href="{{ $shippingOrder->tracking_url }}"
                                     rel="noindex, nofollow"
                                     class="rounded-md bg-black px-6 py-2 text-sm font-medium text-white hover:bg-gray-900"
                                 >
