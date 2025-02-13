@@ -11,7 +11,7 @@
             .status-badge {
                 display: inline-block;
                 padding: 8px 16px;
-                background-color: #28a745; /* Green for completed */
+                background-color: #28a745;
                 color: #ffffff;
                 border-radius: 20px;
                 font-size: 14px;
@@ -22,12 +22,12 @@
             .status-section {
                 padding: 30px 0;
                 text-align: center;
-                background-color: #f1f9f3; /* Light green background */
+                background-color: #f1f9f3;
                 border-radius: 6px;
                 margin: 20px 0;
             }
 
-            .feedback-section {
+            .tracking-section {
                 margin: 30px 0;
                 text-align: center;
                 padding: 20px;
@@ -35,13 +35,19 @@
                 border-radius: 6px;
             }
 
-            .rating-stars {
-                margin: 20px 0;
-                font-size: 24px;
-                color: #ffc107; /* Gold color for stars */
+            .tracking-number {
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+                margin: 10px 0;
+                padding: 10px;
+                background: #fff;
+                border: 1px dashed #ccc;
+                border-radius: 4px;
+                display: inline-block;
             }
 
-            /* Override button color for completed state */
+            /* Button styles */
             .button {
                 background-color: #28a745;
             }
@@ -54,11 +60,26 @@
                 display: inline-block;
                 padding: 10px 20px;
                 background-color: #6c757d;
-                color: #ffffff;
+                color: #ffffff !important;
                 text-decoration: none;
                 border-radius: 4px;
                 margin: 10px 0;
                 font-size: 14px;
+            }
+
+            .track-button {
+                display: inline-block;
+                padding: 12px 24px;
+                background-color: #007bff;
+                color: #ffffff !important;
+                text-decoration: none;
+                border-radius: 4px;
+                font-weight: bold;
+                margin: 10px 5px;
+            }
+
+            .track-button:hover {
+                background-color: #0056b3;
             }
         </style>
     </head>
@@ -94,6 +115,25 @@
                     </div>
                 </div>
 
+                <!-- Tracking Section -->
+                <div class="tracking-section">
+                    <h3>{{ __("store.Track Your Order") }}</h3>
+                    <p>{{ __("store.Your tracking number is") }}:</p>
+                    <div class="tracking-number">
+                        {{ $order->shippingOrder?->tracking_number ?? __("store.Not available yet") }}
+                    </div>
+                    <div style="margin-top: 15px">
+                        @if ($order->shippingOrder?->tracking_url)
+                            <a
+                                href="{{ $order->shippingOrder?->tracking_url }}"
+                                class="track-button"
+                            >
+                                {{ __("store.Track Package") }}
+                            </a>
+                        @endif
+                    </div>
+                </div>
+
                 @include("emails.orders.partials._order_details")
 
                 @if ($additionalMessage)
@@ -121,18 +161,6 @@
                         class="download-invoice"
                     >
                         {{ __("emails. Download Invoice") }}
-                    </a>
-                </div>
-
-                <!-- Feedback Section -->
-                <div class="feedback-section">
-                    <h3>{{ __("store.How was your experience?") }}</h3>
-                    <p>
-                        {{ __("store.We would love to hear your feedback") }}
-                    </p>
-                    <div class="rating-stars">★★★★★</div>
-                    <a href="{{ route("storefront.index") }}" class="button">
-                        {{ __("store.Leave a Review") }}
                     </a>
                 </div>
 

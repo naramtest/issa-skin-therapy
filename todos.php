@@ -2,6 +2,9 @@
 
 //TODO: social Icons below the Product should be share to not our social media links
 
+//TODO: global sale for products , bundles and both
+//TODO: add sale % not just a number
+
 //Important Section
 //1- Newsletter
 //2- Add To Cart Button So when Item Already on the cart show something on the button

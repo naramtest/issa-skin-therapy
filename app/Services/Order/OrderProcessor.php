@@ -41,11 +41,15 @@ readonly class OrderProcessor
 
             $this->invoiceService->generateInvoice($order);
 
-            Mail::to($order->email)->queue(new OrderConfirmationMail($order));
-            //TODO: make it dynamic from the dashboard (setting page)
-            Mail::to("info@issaskintherapy.com")->queue(
-                new NewOrderAdminNotification($order)
-            );
+            if (app()->isProduction()) {
+                Mail::to($order->email)->queue(
+                    new OrderConfirmationMail($order)
+                );
+                //TODO: make it dynamic from the dashboard (setting page)
+                Mail::to("info@issaskintherapy.com")->queue(
+                    new NewOrderAdminNotification($order)
+                );
+            }
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();

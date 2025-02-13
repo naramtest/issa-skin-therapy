@@ -5,7 +5,7 @@
     <div
         {{-- TODO: edit image --}}
         style="
-            background-image: url({{ asset("storage/images/shop-bg.webp") }});
+            background-image: url({{ asset("storage/images/shop.webp") }});
             background-position: top center;
             background-repeat: no-repeat;
             background-size: cover;

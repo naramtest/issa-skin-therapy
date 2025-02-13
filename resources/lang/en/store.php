@@ -553,4 +553,8 @@ return [
     "Failed to process payment" => [
         " Please try again" => "Failed to process payment. Please try again",
     ],
+    "Download" => "Download",
+    "Track Package" => "Track Package",
+    "Your tracking number is" => "Your tracking number is",
+    "Not available yet" => "Not available yet",
 ];

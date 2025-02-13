@@ -57,10 +57,13 @@ class OrderResource extends Resource
                 DateRangeFilter::make("created_at")->label(
                     __("dashboard.Created At")
                 ),
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
                 //                Action::make("createShipment")
                 //                    ->label("DHL")
                 //                    ->icon("heroicon-o-truck")
@@ -70,7 +73,7 @@ class OrderResource extends Resource
 
                 ActionGroup::make([
                     Action::make("download")
-                        ->label("Action")
+                        ->label(__("store.Download"))
                         ->icon("gmdi-download-o")
                         ->url(function (Order $record) {
                             return route("orders.invoice.download", [
@@ -99,6 +102,8 @@ class OrderResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
             ->defaultSort("created_at", "desc");
