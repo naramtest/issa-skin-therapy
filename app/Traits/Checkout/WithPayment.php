@@ -19,14 +19,14 @@ trait WithPayment
     protected TabbyPaymentService $tabbyPaymentService;
     protected TabbyPaymentVerificationService $tabbyPaymentVerificationService;
 
-    public function initializeWithPayment(
-        TabbyPaymentService $tabbyPaymentService,
-        TabbyPaymentVerificationService $tabbyPaymentVerificationService
-    ): void {
-        $this->tabbyPaymentService = $tabbyPaymentService;
-        $this->tabbyPaymentVerificationService = $tabbyPaymentVerificationService;
+    public function initializeWithPayment(): void
+    {
+        //        $this->tabbyPaymentService = $tabbyPaymentService;
+        //        $this->tabbyPaymentVerificationService = $tabbyPaymentVerificationService;
         //        $this->checkAvailability();
     }
+    //        TabbyPaymentService $tabbyPaymentService,
+    //        TabbyPaymentVerificationService $tabbyPaymentVerificationService
 
     public function checkAvailability(): void
     {
