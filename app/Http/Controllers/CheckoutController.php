@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use App;
 use App\Enums\Checkout\PaymentStatus;
+use App\Mail\NewOrderAdminNotification;
+use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
 use App\Services\Cart\CartService;
 use App\Services\Coupon\CouponService;
 use App\Services\Invoice\InvoiceService;
 use App\Services\Payment\StripePaymentService;
-use App\Services\Payment\TabbyPaymentVerificationService;
+use App\Services\Payment\TabbyPaymentService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use InvalidArgumentException;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -21,7 +23,7 @@ class CheckoutController extends Controller
         private readonly CartService $cartService,
         private readonly StripePaymentService $paymentService,
         private readonly CouponService $couponService,
-        private readonly TabbyPaymentVerificationService $tabbyPaymentVerificationService
+        private readonly TabbyPaymentService $tabbyPaymentService
     ) {
     }
 
@@ -38,49 +40,48 @@ class CheckoutController extends Controller
 
     public function success(Request $request)
     {
-        try {
-            if ($request->has("payment_id")) {
-                $verificationResult = $this->tabbyPaymentVerificationService->verifyPayment(
-                    $request->payment_id
+        // Get payment intent from URL
+        $paymentIntentId = $request->has("payment_id")
+            ? $request->get("payment_id")
+            : $request->get("payment_intent");
+        if (!$paymentIntentId) {
+            return redirect()
+                ->route("checkout.index")
+                ->with(
+                    "error",
+                    __(
+                        "store.An error occurred while processing your order. Please contact our support team"
+                    )
                 );
-
-                if (!$verificationResult["success"]) {
+        }
+        $order = Order::where("payment_intent_id", $paymentIntentId)
+            ->with(["items.purchasable", "billingAddress", "shippingAddress"])
+            ->firstOrFail();
+        try {
+            if ($order->payment_status !== PaymentStatus::PAID) {
+                if ($order->payment_provider == "tabby") {
+                    $result = $this->tabbyPaymentService->confirmPayment(
+                        $order,
+                        $paymentIntentId
+                    );
+                } else {
+                    $result = $this->paymentService->confirmPayment(
+                        $order,
+                        $paymentIntentId
+                    );
+                }
+                if (!$result["success"]) {
                     return redirect()
                         ->route("checkout.index")
                         ->with(
                             "error",
-                            __("store.Payment verification failed")
+                            $result["message"] ??
+                                __(
+                                    "store.An error occurred while processing your order. Please contact our support team"
+                                )
                         );
                 }
-
-                $order = Order::where(
-                    "payment_intent_id",
-                    $request->payment_id
-                )->first();
-
-                if (!$order) {
-                    return redirect()
-                        ->route("checkout.index")
-                        ->with("error", __("store.Order not found"));
-                }
-
-                $this->tabbyPaymentVerificationService->processPaymentStatus(
-                    $order,
-                    $verificationResult["data"]
-                );
-
-                if ($verificationResult["status"] !== "AUTHORIZED") {
-                    return redirect()
-                        ->route("checkout.index")
-                        ->with("error", __("store.Payment was not authorized"));
-                }
-            } else {
-                $order = $this->getOrderFromRequest($request);
-                if (!$this->canAccessOrder($order)) {
-                    return redirect()
-                        ->route("checkout.index")
-                        ->with("error", __("store.Invalid order access"));
-                }
+                $order->refresh();
             }
 
             $discount = $order->couponUsage
@@ -94,6 +95,15 @@ class CheckoutController extends Controller
             if (App::isProduction()) {
                 $this->cartService->clear();
             }
+            if (App::isProduction()) {
+                Mail::to($order->email)->queue(
+                    new OrderConfirmationMail($order)
+                );
+                //TODO: make it dynamic from the dashboard (setting page)
+                Mail::to("info@issaskintherapy.com")->queue(
+                    new NewOrderAdminNotification($order)
+                );
+            }
             return view("storefront.checkout.success", [
                 "order" => $order,
                 "showRegistration" =>
@@ -102,11 +112,6 @@ class CheckoutController extends Controller
                 "discount" => $discount,
             ]);
         } catch (Exception $e) {
-            Log::error("Error processing checkout success", [
-                "error" => $e->getMessage(),
-                "trace" => $e->getTraceAsString(),
-            ]);
-
             return redirect()
                 ->route("checkout.index")
                 ->with(
@@ -116,49 +121,6 @@ class CheckoutController extends Controller
                     )
                 );
         }
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function getOrderFromRequest(Request $request): Order
-    {
-        // Get payment intent from URL
-        $paymentIntentId = $request->get("payment_intent");
-        if (!$paymentIntentId) {
-            throw new InvalidArgumentException("Invalid payment session");
-        }
-
-        // Find order and eager load relationships
-        $order = Order::where("payment_intent_id", $paymentIntentId)
-            ->with(["items.purchasable", "billingAddress", "shippingAddress"])
-            ->firstOrFail();
-
-        // Verify payment if not already confirmed
-        if ($order->payment_status !== PaymentStatus::PAID) {
-            if (!$this->paymentService->confirmPayment($paymentIntentId)) {
-                throw new Exception(
-                    __(
-                        "store.Payment verification failed. Please contact our support team"
-                    )
-                );
-            }
-        }
-
-        return $order->refresh();
-    }
-
-    protected function canAccessOrder(Order $order): bool
-    {
-        // Logged-in users can access their own orders
-        if (auth()->check()) {
-            return $order->customer->user_id === auth()->id();
-        }
-
-        //TODO:what you should do when using Cash on delivery or another payment provider
-        return $order->payment_intent_id === request("payment_intent") &&
-            $order->created_at->gt(now()->subHours(24)) &&
-            $order->payment_status === PaymentStatus::PAID;
     }
 
     public function cancel(Request $request)
@@ -211,10 +173,6 @@ class CheckoutController extends Controller
             ->toPdfInvoice()
             ->download();
         try {
-            if (!$this->canAccessOrder($order)) {
-                abort(403, "Unauthorized access to invoice");
-            }
-
             return $order
                 ->invoices()
                 ->latest()

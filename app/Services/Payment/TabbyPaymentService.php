@@ -3,9 +3,14 @@
 namespace App\Services\Payment;
 
 use App\Contracts\PaymentServiceInterface;
+use App\Enums\Checkout\OrderStatus;
+use App\Enums\Checkout\PaymentStatus;
 use App\Models\Order;
 use App\Traits\Payment\WithTabbyData;
+use Exception;
+use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -26,8 +31,63 @@ class TabbyPaymentService implements PaymentServiceInterface
         $this->merchantCode = config("services.tabby.merchant_code");
     }
 
-    public function confirmPayment(string $paymentIntentId): bool
+    public function confirmPayment(Order $order, string $paymentIntentId): array
     {
+        $result = $this->getPaymentStatus($paymentIntentId);
+        if (!$result["success"]) {
+            return [
+                "success" => false,
+                "message" =>
+                    $result["message"] ?? "Payment verification failed",
+            ];
+        }
+
+        $order->update([
+            "status" => OrderStatus::PROCESSING,
+            "payment_status" => PaymentStatus::PAID,
+            "payment_authorized_at" => now(),
+        ]);
+
+        return [
+            "success" => true,
+            "order" => $order,
+        ];
+    }
+
+    public function getPaymentStatus(string $paymentId): array
+    {
+        try {
+            $response = Http::withHeaders([
+                "Authorization" => "Bearer " . $this->secretKey,
+            ])->get($this->baseUrl . "payments/" . $paymentId);
+            if (!$response->successful()) {
+                return [
+                    "success" => false,
+                    "status" => PaymentStatus::FAILED,
+                    "message" => "Payment verification failed",
+                ];
+            }
+
+            $paymentData = $response->json();
+            return match ($paymentData["status"]) {
+                "CLOSED", "AUTHORIZED" => [
+                    "success" => true,
+                    "status" => PaymentStatus::PAID,
+                    "data" => $paymentData,
+                ],
+                default => [
+                    "success" => false,
+                    "status" => PaymentStatus::FAILED,
+                    "data" => $paymentData,
+                ],
+            };
+        } catch (Exception $e) {
+            return [
+                "success" => false,
+                "status" => PaymentStatus::FAILED,
+                "message" => "Payment verification failed: " . $e->getMessage(),
+            ];
+        }
     }
 
     public function getPaymentIntent(string $paymentIntentId): array
@@ -46,36 +106,14 @@ class TabbyPaymentService implements PaymentServiceInterface
             if ($response->successful()) {
                 return $response->json();
             }
-
-            Log::error("Tabby API Error", [
-                "status" => $response->status(),
-                "body" => $response->json(),
-            ]);
-
             return [
                 "status" => "rejected",
-                "configuration" => [
-                    "products" => [
-                        "installments" => [
-                            "rejection_reason" => "not_available",
-                        ],
-                    ],
-                ],
+                "rejection_reason" => "not_available",
             ];
-        } catch (\Exception $e) {
-            Log::error("Tabby Service Error", [
-                "error" => $e->getMessage(),
-            ]);
-
+        } catch (Exception) {
             return [
                 "status" => "rejected",
-                "configuration" => [
-                    "products" => [
-                        "installments" => [
-                            "rejection_reason" => "not_available",
-                        ],
-                    ],
-                ],
+                "rejection_reason" => "not_available",
             ];
         }
     }
@@ -83,7 +121,7 @@ class TabbyPaymentService implements PaymentServiceInterface
     /**
      * @throws ConnectionException
      */
-    protected function makeRequest(array $data)
+    protected function makeRequest(array $data): PromiseInterface|Response
     {
         return Http::withHeaders([
             "Authorization" => "Bearer " . $this->secretKey,
@@ -141,7 +179,7 @@ class TabbyPaymentService implements PaymentServiceInterface
                         "installments"
                     ][0]["web_url"],
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Tabby Checkout Creation Error", [
                 "error" => $e->getMessage(),
             ]);

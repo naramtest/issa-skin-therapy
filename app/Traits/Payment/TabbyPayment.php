@@ -36,9 +36,7 @@ trait TabbyPayment
             } else {
                 $this->isAvailable = false;
                 $this->rejectionReason =
-                    $response["configuration"]["products"]["installments"][
-                        "rejection_reason"
-                    ] ?? "not_available";
+                    $response["rejection_reason"] ?? "not_available";
             }
         } catch (Exception) {
             $this->isAvailable = false;

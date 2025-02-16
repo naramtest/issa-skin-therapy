@@ -14,7 +14,10 @@ interface PaymentServiceInterface
     /**
      * Confirm a payment intent
      */
-    public function confirmPayment(string $paymentIntentId): bool;
+    public function confirmPayment(
+        Order $order,
+        string $paymentIntentId
+    ): array;
 
     /**
      * Get payment intent details
@@ -29,4 +32,6 @@ interface PaymentServiceInterface
     public function updateOrder(Order $order, string $id): bool;
 
     public function processPayment(Order $order): array;
+
+    public function getPaymentStatus(string $paymentId): array;
 }

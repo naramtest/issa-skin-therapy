@@ -5,12 +5,9 @@ namespace App\Services\Payment;
 use App\Contracts\PaymentServiceInterface;
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
-use App\Mail\NewOrderAdminNotification;
-use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
 use App\Services\Currency\Currency;
 use Exception;
-use Illuminate\Support\Facades\Mail;
 use Log;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
@@ -24,59 +21,74 @@ class StripePaymentService implements PaymentServiceInterface
         Stripe::setApiKey(config("services.stripe.secret_key"));
     }
 
-    public function confirmPayment(string $paymentIntentId): bool
+    /**
+     * @throws ApiErrorException
+     */
+    public function confirmPayment(Order $order, string $paymentIntentId): array
+    {
+        $result = $this->getPaymentStatus($paymentIntentId);
+        if (!$result["success"]) {
+            return [
+                "success" => false,
+                "message" =>
+                    $result["message"] ?? "Payment verification failed",
+            ];
+        }
+        $paymentMethod = PaymentMethod::retrieve(
+            $result["data"]->payment_method
+        );
+
+        if (!$paymentMethod) {
+            return [
+                "success" => false,
+                "message" => "Stripe payment method not found",
+            ];
+        }
+
+        $order->update([
+            "status" => OrderStatus::PROCESSING,
+            "payment_status" => PaymentStatus::PAID,
+            "payment_authorized_at" => now(),
+            "payment_captured_at" => now(),
+            "payment_method_details" => [
+                "type" => $paymentMethod->type,
+                "last4" => $paymentMethod->card->last4 ?? null,
+                "brand" => $paymentMethod->card->brand ?? null,
+                "exp_month" => $paymentMethod->card->exp_month ?? null,
+                "exp_year" => $paymentMethod->card->exp_year ?? null,
+            ],
+        ]);
+
+        return [
+            "success" => true,
+            "order" => $order,
+        ];
+    }
+
+    public function getPaymentStatus(string $paymentId): array
     {
         try {
-            $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
+            $paymentIntent = PaymentIntent::retrieve($paymentId);
+
             if ($paymentIntent->status !== "succeeded") {
-                Log::error("Stripe payment intent not found");
-                return false;
+                return [
+                    "success" => false,
+                    "status" => PaymentStatus::FAILED,
+                    "message" => "Payment verification failed",
+                ];
             }
 
-            // Store payment method details
-            $order = Order::where(
-                "payment_intent_id",
-                $paymentIntentId
-            )->first();
-
-            $paymentMethod = PaymentMethod::retrieve(
-                $paymentIntent->payment_method
-            );
-
-            if (!$order or !$paymentMethod) {
-                Log::error("Stripe payment method not found");
-                return false;
-            }
-
-            $order->update([
-                "status" => OrderStatus::PROCESSING,
-                "payment_status" => PaymentStatus::PAID,
-                "payment_authorized_at" => now(),
-                "payment_captured_at" => now(),
-                "payment_method_details" => [
-                    "type" => $paymentMethod->type,
-                    "last4" => $paymentMethod->card->last4 ?? null,
-                    "brand" => $paymentMethod->card->brand ?? null,
-                    "exp_month" => $paymentMethod->card->exp_month ?? null,
-                    "exp_year" => $paymentMethod->card->exp_year ?? null,
-                ],
-            ]);
-            if (\App::isProduction()) {
-                Mail::to($order->email)->queue(
-                    new OrderConfirmationMail($order)
-                );
-                //TODO: make it dynamic from the dashboard (setting page)
-                Mail::to("info@issaskintherapy.com")->queue(
-                    new NewOrderAdminNotification($order)
-                );
-            }
-            return true;
+            return [
+                "success" => true,
+                "status" => PaymentStatus::PAID,
+                "data" => $paymentIntent,
+            ];
         } catch (ApiErrorException $e) {
-            Log::error("Failed to confirm payment", [
-                "error" => $e->getMessage(),
-                "payment_intent_id" => $paymentIntentId,
-            ]);
-            return false;
+            return [
+                "success" => false,
+                "status" => PaymentStatus::FAILED,
+                "message" => "Payment verification failed",
+            ];
         }
     }
 
