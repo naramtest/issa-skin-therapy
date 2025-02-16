@@ -90,10 +90,6 @@ class TabbyPaymentService implements PaymentServiceInterface
         }
     }
 
-    public function getPaymentIntent(string $paymentIntentId): array
-    {
-    }
-
     public function calculatePaymentAmount(Order $order): int
     {
     }
@@ -139,7 +135,7 @@ class TabbyPaymentService implements PaymentServiceInterface
 
     public function updateOrder(Order $order, string $id): bool
     {
-        $order->update([
+        return $order->update([
             "payment_intent_id" => $id,
             "payment_provider" => "tabby",
         ]);

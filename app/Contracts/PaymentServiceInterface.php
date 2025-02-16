@@ -20,11 +20,6 @@ interface PaymentServiceInterface
     ): array;
 
     /**
-     * Get payment intent details
-     */
-    public function getPaymentIntent(string $paymentIntentId): array;
-
-    /**
      * Calculate payment amount with fees
      */
     public function calculatePaymentAmount(Order $order): int;
