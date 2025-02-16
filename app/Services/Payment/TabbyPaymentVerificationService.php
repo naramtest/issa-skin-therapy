@@ -5,7 +5,7 @@ namespace App\Services\Payment;
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
 use App\Models\Order;
-use Illuminate\Http\Client\ConnectionException;
+use Exception;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -25,14 +25,7 @@ class TabbyPaymentVerificationService
     {
         try {
             $response = $this->makeRequest($paymentId);
-
             if (!$response->successful()) {
-                Log::error("Tabby payment verification failed", [
-                    "payment_id" => $paymentId,
-                    "status" => $response->status(),
-                    "response" => $response->json(),
-                ]);
-
                 return [
                     "success" => false,
                     "status" => "error",
@@ -46,7 +39,7 @@ class TabbyPaymentVerificationService
                 "status" => $paymentData["status"],
                 "data" => $paymentData,
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Tabby payment verification error", [
                 "payment_id" => $paymentId,
                 "error" => $e->getMessage(),
@@ -60,9 +53,6 @@ class TabbyPaymentVerificationService
         }
     }
 
-    /**
-     * @throws ConnectionException
-     */
     protected function makeRequest(string $paymentId): Response
     {
         return Http::withHeaders([
@@ -72,6 +62,7 @@ class TabbyPaymentVerificationService
 
     public function processPaymentStatus(Order $order, array $paymentData): void
     {
+        //TODO: add payment_method_details
         switch ($paymentData["status"]) {
             case "AUTHORIZED":
                 $order->update([

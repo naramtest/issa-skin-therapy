@@ -9,6 +9,7 @@ use App\Services\Cart\CartService;
 use App\Services\Coupon\CouponService;
 use App\Services\Invoice\InvoiceService;
 use App\Services\Payment\StripePaymentService;
+use App\Services\Payment\TabbyPaymentVerificationService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +20,8 @@ class CheckoutController extends Controller
     public function __construct(
         private readonly CartService $cartService,
         private readonly StripePaymentService $paymentService,
-        private readonly CouponService $couponService
+        private readonly CouponService $couponService,
+        private readonly TabbyPaymentVerificationService $tabbyPaymentVerificationService
     ) {
     }
 
@@ -37,17 +39,48 @@ class CheckoutController extends Controller
     public function success(Request $request)
     {
         try {
-            $order = $this->getOrderFromRequest($request);
+            if ($request->has("payment_id")) {
+                $verificationResult = $this->tabbyPaymentVerificationService->verifyPayment(
+                    $request->payment_id
+                );
 
-            if (!$this->canAccessOrder($order)) {
-                Log::warning("Unauthorized order access attempt", [
-                    "order_id" => $order->id,
-                    "user_id" => auth()->id(),
-                ]);
+                if (!$verificationResult["success"]) {
+                    return redirect()
+                        ->route("checkout.index")
+                        ->with(
+                            "error",
+                            __("store.Payment verification failed")
+                        );
+                }
 
-                return redirect()
-                    ->route("checkout.index")
-                    ->with("error", __("store.Invalid order access"));
+                $order = Order::where(
+                    "payment_intent_id",
+                    $request->payment_id
+                )->first();
+
+                if (!$order) {
+                    return redirect()
+                        ->route("checkout.index")
+                        ->with("error", __("store.Order not found"));
+                }
+
+                $this->tabbyPaymentVerificationService->processPaymentStatus(
+                    $order,
+                    $verificationResult["data"]
+                );
+
+                if ($verificationResult["status"] !== "AUTHORIZED") {
+                    return redirect()
+                        ->route("checkout.index")
+                        ->with("error", __("store.Payment was not authorized"));
+                }
+            } else {
+                $order = $this->getOrderFromRequest($request);
+                if (!$this->canAccessOrder($order)) {
+                    return redirect()
+                        ->route("checkout.index")
+                        ->with("error", __("store.Invalid order access"));
+                }
             }
 
             $discount = $order->couponUsage
@@ -57,6 +90,7 @@ class CheckoutController extends Controller
                 )
                 : null;
             // Clear cart
+
             if (App::isProduction()) {
                 $this->cartService->clear();
             }
@@ -125,6 +159,49 @@ class CheckoutController extends Controller
         return $order->payment_intent_id === request("payment_intent") &&
             $order->created_at->gt(now()->subHours(24)) &&
             $order->payment_status === PaymentStatus::PAID;
+    }
+
+    public function cancel(Request $request)
+    {
+        if ($request->has("payment_id")) {
+            $order = Order::where(
+                "payment_intent_id",
+                $request->payment_id
+            )->first();
+            if ($order) {
+                $this->tabbyPaymentVerificationService->processPaymentStatus(
+                    $order,
+                    ["status" => "EXPIRED"]
+                );
+            }
+        }
+
+        return redirect()
+            ->route("checkout.index")
+            ->with(
+                "error",
+                __("store.Payment was cancelled. Please try again")
+            );
+    }
+
+    public function failure(Request $request)
+    {
+        if ($request->has("payment_id")) {
+            $order = Order::where(
+                "payment_intent_id",
+                $request->payment_id
+            )->first();
+            if ($order) {
+                $this->tabbyPaymentVerificationService->processPaymentStatus(
+                    $order,
+                    ["status" => "REJECTED"]
+                );
+            }
+        }
+
+        return redirect()
+            ->route("checkout.index")
+            ->with("error", __("store.Payment was declined. Please try again"));
     }
 
     public function downloadInvoice(Order $order)

@@ -2,11 +2,8 @@
 
 namespace App\Services\Payment;
 
-use GuzzleHttp\Promise\PromiseInterface;
-use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class TabbyPaymentService
 {
@@ -17,7 +14,6 @@ class TabbyPaymentService
 
     public function __construct()
     {
-        $isSandbox = config("services.tabby.is_sandbox", true);
         $this->baseUrl = "https://api.tabby.ai/api/v2/";
         $this->publicKey = config("services.tabby.public_key");
         $this->secretKey = config("services.tabby.secret_key");
@@ -27,7 +23,7 @@ class TabbyPaymentService
     public function checkAvailability(array $data): array
     {
         try {
-            $response = $this->checkoutPostRequest($data);
+            $response = $this->makeRequest($data);
 
             if ($response->successful()) {
                 return $response->json();
@@ -66,12 +62,7 @@ class TabbyPaymentService
         }
     }
 
-    /**
-     * @param array $data
-     * @return PromiseInterface|Response
-     * @throws ConnectionException
-     */
-    public function checkoutPostRequest(array $data): Response|PromiseInterface
+    protected function makeRequest(array $data)
     {
         return Http::withHeaders([
             "Authorization" => "Bearer " . $this->secretKey,
@@ -81,8 +72,8 @@ class TabbyPaymentService
             "merchant_code" => $this->merchantCode,
             "merchant_urls" => [
                 "success" => route("checkout.success"),
-                "cancel" => route("checkout.index"),
-                "failure" => route("checkout.index"),
+                "cancel" => route("checkout.cancel"),
+                "failure" => route("checkout.failure"),
             ],
         ]);
     }
@@ -90,7 +81,8 @@ class TabbyPaymentService
     public function createCheckoutSession(array $data): array
     {
         try {
-            $response = $this->checkoutPostRequest($data);
+            $response = $this->makeRequest($data);
+
             if ($response->successful()) {
                 return [
                     "success" => true,

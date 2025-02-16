@@ -50,6 +50,10 @@ Route::group(
             Route::get("/checkout/success", "success")->name(
                 "checkout.success"
             );
+            Route::get("/checkout/cancel", "cancel")->name("checkout.cancel");
+            Route::get("/checkout/failure", "failure")->name(
+                "checkout.failure"
+            );
         });
 
         Route::get("/about", [AboutController::class, "index"])->name(
