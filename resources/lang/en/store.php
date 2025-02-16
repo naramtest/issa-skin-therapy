@@ -557,4 +557,5 @@ return [
     "Track Package" => "Track Package",
     "Your tracking number is" => "Your tracking number is",
     "Not available yet" => "Not available yet",
+    "Payment was not authorized" => "Payment was not authorized",
 ];

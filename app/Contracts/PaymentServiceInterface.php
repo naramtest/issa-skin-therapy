@@ -25,4 +25,8 @@ interface PaymentServiceInterface
      * Calculate payment amount with fees
      */
     public function calculatePaymentAmount(Order $order): int;
+
+    public function updateOrder(Order $order, string $id): bool;
+
+    public function processPayment(Order $order): array;
 }

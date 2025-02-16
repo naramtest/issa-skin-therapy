@@ -24,77 +24,6 @@ class StripePaymentService implements PaymentServiceInterface
         Stripe::setApiKey(config("services.stripe.secret_key"));
     }
 
-    /**
-     * @throws Exception
-     */
-    public function createPaymentIntent(Order $order): array
-    {
-        try {
-            $amount = $this->calculatePaymentAmount($order);
-
-            $paymentIntent = PaymentIntent::create([
-                "amount" => $amount,
-                "currency" => strtolower($order->currency_code),
-                "automatic_payment_methods" => [
-                    "enabled" => true,
-                    "allow_redirects" => "always",
-                ],
-                "metadata" => [
-                    "order_id" => $order->id,
-                    "order_number" => $order->order_number,
-                ],
-                //                "receipt_email" => $order->email,
-                "shipping" => $this->formatShippingData($order),
-            ]);
-
-            $order->update([
-                "payment_intent_id" => $paymentIntent->id,
-                "payment_provider" => "stripe",
-            ]);
-
-            return [
-                "clientSecret" => $paymentIntent->client_secret,
-                "publicKey" => config("services.stripe.key"),
-            ];
-        } catch (ApiErrorException $e) {
-            Log::error("Stripe payment intent creation failed", [
-                "error" => $e->getMessage(),
-                "order" => $order->id,
-            ]);
-
-            throw new Exception(
-                "Failed to create payment: " . $e->getMessage()
-            );
-        }
-    }
-
-    public function calculatePaymentAmount(Order $order): int
-    {
-        $money = Currency::convertToUserCurrencyWithCache(
-            $order->getMoneyTotal(),
-            $order->currency_code
-        );
-        return $money->getAmount();
-    }
-
-    protected function formatShippingData(Order $order): array
-    {
-        return [
-            "name" =>
-                $order->shippingAddress->first_name .
-                " " .
-                $order->shippingAddress->last_name,
-            "address" => [
-                "line1" => $order->shippingAddress->address,
-                "city" => $order->shippingAddress->city,
-                "state" => $order->shippingAddress->state,
-                "postal_code" => $order->shippingAddress->postal_code,
-                "country" => $order->shippingAddress->country,
-            ],
-            "phone" => $order->shippingAddress->phone,
-        ];
-    }
-
     public function confirmPayment(string $paymentIntentId): bool
     {
         try {
@@ -199,5 +128,86 @@ class StripePaymentService implements PaymentServiceInterface
             ]);
             throw $e;
         }
+    }
+
+    public function processPayment(Order $order): array
+    {
+        $data = $this->createPaymentIntent($order);
+        if ($data["success"] === false) {
+            return $data;
+        }
+        $this->updateOrder($order, $data["id"]);
+        return [
+            "success" => true,
+            "key" => $data["client_secret"],
+            "data" => $data,
+            "url" => null,
+        ];
+    }
+
+    public function createPaymentIntent(Order $order): array
+    {
+        try {
+            $amount = $this->calculatePaymentAmount($order);
+
+            return PaymentIntent::create([
+                "amount" => $amount,
+                "currency" => strtolower($order->currency_code),
+                "automatic_payment_methods" => [
+                    "enabled" => true,
+                    "allow_redirects" => "always",
+                ],
+                "metadata" => [
+                    "order_id" => $order->id,
+                    "order_number" => $order->order_number,
+                ],
+                //                "receipt_email" => $order->email,
+                "shipping" => $this->formatShippingData($order),
+            ])->toArray();
+        } catch (ApiErrorException $e) {
+            Log::error("Stripe payment intent creation failed", [
+                "error" => $e->getMessage(),
+                "order" => $order->id,
+            ]);
+            return [
+                "success" => false,
+                "error" => "Failed to create checkout session",
+            ];
+        }
+    }
+
+    public function calculatePaymentAmount(Order $order): int
+    {
+        $money = Currency::convertToUserCurrencyWithCache(
+            $order->getMoneyTotal(),
+            $order->currency_code
+        );
+        return $money->getAmount();
+    }
+
+    protected function formatShippingData(Order $order): array
+    {
+        return [
+            "name" =>
+                $order->shippingAddress->first_name .
+                " " .
+                $order->shippingAddress->last_name,
+            "address" => [
+                "line1" => $order->shippingAddress->address,
+                "city" => $order->shippingAddress->city,
+                "state" => $order->shippingAddress->state,
+                "postal_code" => $order->shippingAddress->postal_code,
+                "country" => $order->shippingAddress->country,
+            ],
+            "phone" => $order->shippingAddress->phone,
+        ];
+    }
+
+    public function updateOrder(Order $order, string $id): bool
+    {
+        return $order->update([
+            "payment_intent_id" => $id,
+            "payment_provider" => "stripe",
+        ]);
     }
 }

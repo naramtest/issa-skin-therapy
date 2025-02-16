@@ -134,7 +134,7 @@ class CheckoutComponent extends Component
 
                     $this->dispatch(
                         "payment-ready",
-                        clientSecret: $paymentData["clientSecret"]
+                        clientSecret: $paymentData["key"]
                     );
                     return;
                 }
@@ -148,17 +148,13 @@ class CheckoutComponent extends Component
                 $this->selectedShippingRate
             );
 
-            $dhlProduct = null;
-            if (
-                in_array(
-                    $shippingRate["service_code"],
-                    array_column(DHLProduct::cases(), "value")
-                )
-            ) {
-                $dhlProduct = DHLProduct::tryFrom(
-                    $shippingRate["service_code"]
-                );
-            }
+            $dhlProduct = in_array(
+                $shippingRate["service_code"],
+                array_column(DHLProduct::cases(), "value")
+            )
+                ? DHLProduct::tryFrom($shippingRate["service_code"])
+                : null;
+
             //TODO: convert data to DTO like in the OrderService
             $order = $this->customerCheckoutService->processCheckout([
                 "email" => $validatedData["email"],
@@ -189,9 +185,7 @@ class CheckoutComponent extends Component
 
             // Create Stripe Payment Intent
             if ($this->form->payment_method == PaymentMethod::CARD->value) {
-                $paymentData = $this->paymentService->createPaymentIntent(
-                    $order
-                );
+                $paymentData = $this->paymentService->processPayment($order);
             }
 
             DB::commit();
@@ -200,10 +194,10 @@ class CheckoutComponent extends Component
             if ($this->form->payment_method == PaymentMethod::CARD->value) {
                 $this->dispatch(
                     "payment-ready",
-                    clientSecret: $paymentData["clientSecret"]
+                    clientSecret: $paymentData["key"]
                 );
             } else {
-                $this->processTabbyPayment();
+                $this->processTabbyPayment($order);
             }
         } catch (Exception $e) {
             DB::rollBack();

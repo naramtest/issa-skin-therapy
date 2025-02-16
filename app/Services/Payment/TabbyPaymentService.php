@@ -2,11 +2,17 @@
 
 namespace App\Services\Payment;
 
+use App\Contracts\PaymentServiceInterface;
+use App\Models\Order;
+use App\Traits\Checkout\WithTabbyData;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class TabbyPaymentService
+class TabbyPaymentService implements PaymentServiceInterface
 {
+    use WithTabbyData;
+
     protected string $baseUrl;
     protected string $publicKey;
     protected string $secretKey;
@@ -18,6 +24,18 @@ class TabbyPaymentService
         $this->publicKey = config("services.tabby.public_key");
         $this->secretKey = config("services.tabby.secret_key");
         $this->merchantCode = config("services.tabby.merchant_code");
+    }
+
+    public function confirmPayment(string $paymentIntentId): bool
+    {
+    }
+
+    public function getPaymentIntent(string $paymentIntentId): array
+    {
+    }
+
+    public function calculatePaymentAmount(Order $order): int
+    {
     }
 
     public function checkAvailability(array $data): array
@@ -62,6 +80,9 @@ class TabbyPaymentService
         }
     }
 
+    /**
+     * @throws ConnectionException
+     */
     protected function makeRequest(array $data)
     {
         return Http::withHeaders([
@@ -78,22 +99,47 @@ class TabbyPaymentService
         ]);
     }
 
-    public function createCheckoutSession(array $data): array
+    public function updateOrder(Order $order, string $id): bool
+    {
+        $order->update([
+            "payment_intent_id" => $id,
+            "payment_provider" => "tabby",
+        ]);
+    }
+
+    public function processPayment(Order $order): array
+    {
+        $response = $this->createPaymentIntent($order);
+        if ($response["success"]) {
+            $order->update([
+                "payment_intent_id" => $response["key"],
+                "payment_provider" => "tabby",
+            ]);
+        }
+        return $response;
+    }
+
+    public function createPaymentIntent(Order $order): array
     {
         try {
+            $data = $this->getTabbyCheckoutData($order);
             $response = $this->makeRequest($data);
-
-            if ($response->successful()) {
+            $responseData = $response->json();
+            if (!$response->successful()) {
                 return [
-                    "success" => true,
-                    "data" => $response->json(),
+                    "success" => false,
+                    "error" =>
+                        $responseData["message"] ?? "Unknown error occurred",
                 ];
             }
-
             return [
-                "success" => false,
-                "error" =>
-                    $response->json()["message"] ?? "Unknown error occurred",
+                "success" => true,
+                "key" => $responseData["payment"]["id"],
+                "data" => $responseData,
+                "url" =>
+                    $responseData["configuration"]["available_products"][
+                        "installments"
+                    ][0]["web_url"],
             ];
         } catch (\Exception $e) {
             Log::error("Tabby Checkout Creation Error", [
