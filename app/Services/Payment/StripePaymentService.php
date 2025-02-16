@@ -133,7 +133,7 @@ class StripePaymentService implements PaymentServiceInterface
     public function processPayment(Order $order): array
     {
         $data = $this->createPaymentIntent($order);
-        if ($data["success"] === false) {
+        if (array_key_exists("success", $data) and $data["success"] === false) {
             return $data;
         }
         $this->updateOrder($order, $data["id"]);

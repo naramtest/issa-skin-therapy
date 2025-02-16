@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits\Checkout;
+namespace App\Traits\Payment;
 
 use App\Models\Order;
 use App\Services\Currency\CurrencyHelper;

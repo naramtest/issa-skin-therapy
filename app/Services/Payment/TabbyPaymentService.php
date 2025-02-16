@@ -4,7 +4,7 @@ namespace App\Services\Payment;
 
 use App\Contracts\PaymentServiceInterface;
 use App\Models\Order;
-use App\Traits\Checkout\WithTabbyData;
+use App\Traits\Payment\WithTabbyData;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;

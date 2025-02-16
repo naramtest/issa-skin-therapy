@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Models\CustomerEmail;
 use App\Models\Order;
+use App\Models\State;
 use App\Services\Cart\CartService;
 use App\Services\Coupon\CouponService;
 use DB;
@@ -24,22 +25,22 @@ readonly class CustomerCheckoutService
     ) {
     }
 
-    public function processCheckout(array $data): Order
+    public function processCheckout($validationData, array $data): Order
     {
-        return DB::transaction(function () use ($data) {
+        return DB::transaction(function () use ($data, $validationData) {
             // 1. Handle Customer
-            $customer = $this->handleCustomer($data);
+            $customer = $this->handleCustomer($validationData);
 
             // 2. Handle Addresses
             $billingAddress = $this->handleAddress(
                 $customer,
-                $data["billing"],
+                $validationData,
                 AddressType::BILLING
             );
-            $shippingAddress = $data["different_shipping_address"]
+            $shippingAddress = $validationData["different_shipping_address"]
                 ? $this->handleAddress(
                     $customer,
-                    $data["shipping"],
+                    $validationData,
                     AddressType::SHIPPING
                 )
                 : $billingAddress;
@@ -47,7 +48,7 @@ readonly class CustomerCheckoutService
             $order = $this->orderService->createOrder(
                 new CreateOrderData(
                     customerId: $customer->id,
-                    email: $data["email"],
+                    email: $validationData["email"],
                     billingAddressId: $billingAddress->id,
                     shippingAddressId: $shippingAddress->id,
                     status: OrderStatus::PENDING,
@@ -56,7 +57,7 @@ readonly class CustomerCheckoutService
                     subtotal: $this->cartService->getSubtotal()->getAmount(),
                     shippingCost: $data["shipping_cost"] ?? null,
                     total: $this->cartService->getTotal()->getAmount(),
-                    notes: $data["notes"] ?? null,
+                    notes: $validationData["notes"] ?? null,
                     cartItems: $this->cartService->getItems(),
                     dhlProduct: $data["dhl_product"] ??
                         DHLProduct::getProduct($shippingAddress->country)->value
@@ -136,9 +137,10 @@ readonly class CustomerCheckoutService
 
     private function handleAddress(
         Customer $customer,
-        array $addressData,
+        array $validationData,
         AddressType $type
     ): CustomerAddress {
+        $addressData = $this->getAddress($validationData, $type->value);
         // Try to find matching existing address
         $existingAddress = $customer
             ->addresses()
@@ -182,5 +184,28 @@ readonly class CustomerCheckoutService
             "is_default" => !$customer->addresses()->exists(),
             "last_used_at" => now(),
         ]);
+    }
+
+    /**
+     * @param array $validatedData
+     * @param string $type
+     * @return array
+     */
+    public function getAddress(array $validatedData, string $type): array
+    {
+        return [
+            "first_name" => $validatedData[$type . "_first_name"],
+            "last_name" => $validatedData[$type . "_last_name"],
+            "phone" => $validatedData["phone"],
+            "address" => $validatedData[$type . "_address"],
+            "city" => $validatedData[$type . "_city"],
+            "state" =>
+                State::find($validatedData[$type . "_state"])->name ?? null,
+            "country" => $validatedData[$type . "_country"],
+            "postal_code" => $validatedData[$type . "_postal_code"],
+            "area" => $validatedData[$type . "_area"],
+            "building" => $validatedData[$type . "_building"],
+            "flat" => $validatedData[$type . "_flat"],
+        ];
     }
 }
