@@ -24,7 +24,8 @@ readonly class OrderProcessor
      */
     public function processSuccessfulPayment(
         Order $order,
-        array $paymentDetails = []
+        array $paymentDetails = [],
+        bool $isCaptured = true
     ): void {
         try {
             // Begin transaction
@@ -35,12 +36,18 @@ readonly class OrderProcessor
                 "status" => OrderStatus::PROCESSING,
                 "payment_status" => PaymentStatus::PAID,
                 "payment_authorized_at" => now(),
-                "payment_captured_at" => now(),
                 "payment_method_details" => $paymentDetails,
             ]);
 
+            if ($isCaptured) {
+                $order->update([
+                    "payment_captured_at" => now(),
+                ]);
+            }
+
             $this->invoiceService->generateInvoice($order);
 
+            //TODO: don't send mail 2 times
             if (app()->isProduction()) {
                 Mail::to($order->email)->queue(
                     new OrderConfirmationMail($order)
@@ -75,7 +82,7 @@ readonly class OrderProcessor
             $order->update([
                 "status" => OrderStatus::CANCELLED,
                 "payment_status" => PaymentStatus::FAILED,
-                "payment_failure_details" => $failureDetails,
+                //                "payment_failure_details" => $failureDetails,
             ]);
 
             //TODO: Here you might want to:
@@ -102,7 +109,7 @@ readonly class OrderProcessor
                 "status" => OrderStatus::REFUNDED,
                 "payment_status" => PaymentStatus::REFUNDED,
                 "payment_refunded_at" => now(),
-                "refund_details" => $refundDetails,
+                //                "refund_details" => $refundDetails,
             ]);
 
             // TODO: Here you might want to:

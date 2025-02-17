@@ -70,7 +70,6 @@
                             x-effect="show = $wire.form.payment_method === 'tabby'"
                         >
                             <div
-                                wire:ignore
                                 x-show="show"
                                 x-collapse.duration.800ms
                                 class="mt-4 border-t border-gray-200 p-4"

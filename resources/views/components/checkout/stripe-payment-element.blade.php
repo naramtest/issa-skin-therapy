@@ -35,7 +35,6 @@
                 errorMessage: '',
 
                 mount(key, currency, amount) {
-                    console.log(amount);
                     if (this.stripe) return;
                     this.stripe = Stripe(key);
                     window.stripe = this.stripe;

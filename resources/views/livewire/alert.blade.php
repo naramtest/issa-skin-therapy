@@ -6,7 +6,6 @@
         }"
         x-effect="
             () => {
-                console.log('Effect running', $wire.show)
                 if ($wire.show) {
                     if (timeout) clearTimeout(timeout)
                     timeout = setTimeout(() => {
@@ -24,6 +23,7 @@
         x-transition:leave-end="scale-90 transform opacity-0"
         class="fixed right-4 top-4 z-50 w-96 rounded-lg shadow-lg"
         role="alert"
+        x-cloak
     >
         <div
             @class([

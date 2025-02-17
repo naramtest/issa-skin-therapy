@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Payment;
+namespace App\Services\Payment\Tabby;
 
 use App\Contracts\PaymentServiceInterface;
 use App\Enums\Checkout\OrderStatus;

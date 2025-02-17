@@ -2,8 +2,8 @@
 
 namespace App\Traits\Payment;
 
-use App\Services\Payment\TabbyPaymentService;
-use App\Services\Payment\TabbyPaymentVerificationService;
+use App\Services\Payment\Tabby\TabbyPaymentService;
+use App\Services\Payment\Tabby\TabbyPaymentVerificationService;
 use Exception;
 
 trait TabbyPayment

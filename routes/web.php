@@ -15,6 +15,7 @@ use App\Http\Controllers\Content\ShopController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Http\Controllers\TabbyWebhookController;
 use App\Services\UrlShortenerService;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -116,6 +117,11 @@ Route::post("stripe/webhook", [
     StripeWebhookController::class,
     "handleWebhook",
 ])->name("cashier.webhook");
+
+Route::post("/webhooks/tabby", [
+    TabbyWebhookController::class,
+    "handleWebhook",
+])->name("webhooks.tabby");
 
 Route::get("/cart/prefill", CartPrefillController::class)
     ->name("cart.prefill")

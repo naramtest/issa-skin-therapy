@@ -19,7 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->validateCsrfTokens(
             except: [
-                "stripe/webhook", // <-- exclude this route
+                "stripe/webhook",
+                "webhooks/tabby", // <-- exclude this route
             ]
         );
         $middleware->alias([
