@@ -558,4 +558,10 @@ return [
     "Your tracking number is" => "Your tracking number is",
     "Not available yet" => "Not available yet",
     "Payment was not authorized" => "Payment was not authorized",
+    "Payment was cancelled" => [
+        " Please try again" => "Payment was cancelled. Please try again",
+    ],
+    "Payment was declined" => [
+        " Please try again" => "Payment was declined. Please try again",
+    ],
 ];

@@ -68,6 +68,7 @@
         <x-bottom.language-modal />
 
         <livewire:search-component />
+        <livewire:alert />
 
         <!-- Custom Cursor -->
         <div

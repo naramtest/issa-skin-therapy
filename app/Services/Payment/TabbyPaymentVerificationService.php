@@ -62,7 +62,6 @@ class TabbyPaymentVerificationService
 
     public function processPaymentStatus(Order $order, array $paymentData): void
     {
-        //TODO: add payment_method_details
         switch ($paymentData["status"]) {
             case "AUTHORIZED":
                 $order->update([

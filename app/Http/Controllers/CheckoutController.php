@@ -12,6 +12,7 @@ use App\Services\Coupon\CouponService;
 use App\Services\Invoice\InvoiceService;
 use App\Services\Payment\StripePaymentService;
 use App\Services\Payment\TabbyPaymentService;
+use App\Services\Payment\TabbyPaymentVerificationService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -23,7 +24,8 @@ class CheckoutController extends Controller
         private readonly CartService $cartService,
         private readonly StripePaymentService $paymentService,
         private readonly CouponService $couponService,
-        private readonly TabbyPaymentService $tabbyPaymentService
+        private readonly TabbyPaymentService $tabbyPaymentService,
+        private readonly TabbyPaymentVerificationService $tabbyPaymentVerificationService
     ) {
     }
 
