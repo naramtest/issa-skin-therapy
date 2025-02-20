@@ -564,4 +564,6 @@ return [
     "Payment was declined" => [
         " Please try again" => "Payment was declined. Please try again",
     ],
+    "Please check your input and try again" =>
+        "Please check your input and try again",
 ];

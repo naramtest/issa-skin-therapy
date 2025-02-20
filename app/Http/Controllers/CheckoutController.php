@@ -135,7 +135,7 @@ class CheckoutController extends Controller
             if ($order) {
                 $this->tabbyPaymentVerificationService->processPaymentStatus(
                     $order,
-                    ["status" => "EXPIRED"]
+                    ["status" => "canceled"]
                 );
             }
         }
@@ -158,7 +158,7 @@ class CheckoutController extends Controller
             if ($order) {
                 $this->tabbyPaymentVerificationService->processPaymentStatus(
                     $order,
-                    ["status" => "REJECTED"]
+                    ["status" => "rejected"]
                 );
             }
         }

@@ -13,9 +13,7 @@
             initTabby(total) {
                 if (typeof TabbyCard !== 'undefined') {
                     // Destroy existing instance if it exists
-                    if (this.tabbyInstance) {
-                        this.tabbyInstance.destroy()
-                    }
+                    console.log('naram')
                     // Create new instance
                     this.tabbyInstance = new TabbyCard({
                         selector: '#tabbyCard',
@@ -31,15 +29,12 @@
             tabbyInstance: null,
         }"
         x-init="initTabby({{ $total }})"
-        x-on:totals-updated="initTabby($event.detail.total)"
         class="flex w-full items-center justify-between"
     >
-        <div id="tabbyCard"></div>
+        <div wire:ignore id="tabbyCard"></div>
     </div>
 </div>
 
 @push("scripts")
-    @if ($isAvailable)
-        <script src="https://checkout.tabby.ai/tabby-card.js"></script>
-    @endif
+    <script src="https://checkout.tabby.ai/tabby-card.js"></script>
 @endpush
