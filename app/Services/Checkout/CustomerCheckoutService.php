@@ -30,7 +30,6 @@ readonly class CustomerCheckoutService
         return DB::transaction(function () use ($data, $validationData) {
             // 1. Handle Customer
             $customer = $this->handleCustomer($validationData);
-
             // 2. Handle Addresses
             $billingAddress = $this->handleAddress(
                 $customer,
@@ -72,6 +71,7 @@ readonly class CustomerCheckoutService
                     $this->cartService->getCouponDiscount()
                 );
             }
+
             return $order;
         });
     }
@@ -114,12 +114,12 @@ readonly class CustomerCheckoutService
                     "is_registered" => false,
                 ],
                 [
-                    "first_name" => $data["billing"]["first_name"],
-                    "last_name" => $data["billing"]["last_name"],
+                    "first_name" => $data["billing_first_name"],
+                    "last_name" => $data["billing_last_name"],
                     "name" =>
-                        $data["billing"]["first_name"] .
+                        $data["billing_first_name"] .
                         " " .
-                        $data["billing"]["last_name"],
+                        $data["billing_last_name"],
                     "orders_count" => 0,
                     "total_spent" => 0,
                 ]

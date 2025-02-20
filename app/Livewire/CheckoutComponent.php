@@ -115,7 +115,6 @@ class CheckoutComponent extends Component
 
             DB::beginTransaction();
             $order = $this->createAndGetOrder($validatedData);
-
             $this->currentOrderId = $order->id;
             $paymentData = $this->processPayment($order);
             DB::commit();
