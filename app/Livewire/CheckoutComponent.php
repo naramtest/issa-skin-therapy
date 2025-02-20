@@ -128,8 +128,9 @@ class CheckoutComponent extends Component
             } else {
                 $this->redirect($paymentData["data"]["url"]);
             }
-        } catch (Exception) {
+        } catch (Exception $exception) {
             DB::rollBack();
+            \Log::error($exception->getMessage());
             $this->error = __("store.Failed to create order. Please try again");
         } finally {
             $this->processing = false;
