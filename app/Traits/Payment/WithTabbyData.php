@@ -24,12 +24,12 @@ trait WithTabbyData
             "currency" => CurrencyHelper::getUserCurrency(),
             "description" => "Order #" . time(),
             "buyer" => [
-                "phone" => App::isLocal()
-                    ? "otp.success@tabby.ai"
-                    : $this->form->phone,
                 "email" => App::isLocal()
-                    ? "+971500000001"
+                    ? "otp.success@tabby.ai"
                     : $this->form->email,
+                "phone" => App::isLocal()
+                    ? "+971500000001"
+                    : $this->form->phone,
                 "name" =>
                     $this->form->billing_first_name .
                     " " .
@@ -98,9 +98,11 @@ trait WithTabbyData
             "description" => "Order #{$order->order_number}",
             "buyer" => [
                 "phone" => App::isLocal()
-                    ? "otp.success@tabby.ai"
+                    ? "971500000001"
                     : $order->shippingAddress->phone,
-                "email" => App::isLocal() ? "+971500000001" : $order->email,
+                "email" => App::isLocal()
+                    ? "otp.success@tabby.ai"
+                    : $order->email,
                 "name" => $order->shippingAddress->full_name,
             ],
             "shipping_address" => [
