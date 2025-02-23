@@ -30,6 +30,7 @@ class DHLRateCheckService
         array $destination,
         int $additionalDays = 0
     ): array {
+        logger($destination["address"]);
         try {
             // Determine if this is a domestic shipment
             $isDomestic = DHLAddress::getIsDomestic($destination["country"]);
@@ -71,11 +72,6 @@ class DHLRateCheckService
                         ),
                         "cityName" => $destination["city"],
                         "countryCode" => $destination["country"],
-                        "addressLine1" => substr(
-                            $destination["address"],
-                            0,
-                            45
-                        ),
                     ],
                 ],
             ];
@@ -87,6 +83,7 @@ class DHLRateCheckService
                 "Content-Type" => "application/json",
                 "Accept" => "application/json",
             ])->post($this->baseUrl . "rates", $request);
+            logger($response->json());
             if ($response->successful()) {
                 $responseData = $response->json();
 
