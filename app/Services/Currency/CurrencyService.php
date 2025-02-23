@@ -138,9 +138,8 @@ class CurrencyService
             $convertedAmount = (int) round(
                 $money->getAmount() * $rate * $multiplier
             );
-
             return new Money($convertedAmount, new Currency($userCurrency));
-        } catch (Exception) {
+        } catch (Exception $exception) {
             return $money;
         }
     }
