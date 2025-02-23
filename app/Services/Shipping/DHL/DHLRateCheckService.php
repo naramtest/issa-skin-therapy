@@ -40,7 +40,7 @@ class DHLRateCheckService
             $products = [];
             $plannedDate = now()->addDays($additionalDays);
             if ($plannedDate->isToday() and $plannedDate->hour > 12) {
-                $plannedDate = $plannedDate->addDay();
+                $plannedDate = $plannedDate->addDays(3);
             }
             foreach ($productCodes as $productCode) {
                 $products[] = [
