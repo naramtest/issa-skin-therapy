@@ -21,9 +21,9 @@ class FirstVisitModal extends Component
 
     public function subscribe()
     {
-        $this->validate([
-            "email" => "required|email|unique:subscribers,email",
-        ]);
+        //        $this->validate([
+        //            "email" => "required|email|unique:subscribers,email",
+        //        ]);
 
         // Add subscriber to your database
         //        \App\Models\Subscriber::create([

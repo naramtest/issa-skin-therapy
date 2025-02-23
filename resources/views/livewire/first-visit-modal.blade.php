@@ -266,7 +266,7 @@
                             class="w-full rounded-lg border-gray-300 bg-gray-100 py-5 pe-12 ps-6 placeholder:text-gray-500 focus:border-gray-300 focus:ring-0"
                         />
                         <button
-                            wire:click="subscribe"
+                            {{-- wire:click="subscribe" --}}
                             class="absolute end-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-darkColor"
                         >
                             <x-icons.arrow-right
