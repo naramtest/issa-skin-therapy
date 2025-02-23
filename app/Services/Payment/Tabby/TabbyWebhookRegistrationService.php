@@ -16,8 +16,8 @@ class TabbyWebhookRegistrationService
     public function __construct()
     {
         $this->baseUrl = "https://api.tabby.ai/api/v1/";
-        $this->secretKey = config("services.tabby.secret_key");
-        $this->merchantCode = config("services.tabby.merchant_code");
+        $this->secretKey = config("services.tabby.secret_key") ?? "";
+        $this->merchantCode = config("services.tabby.merchant_code") ?? "";
         $this->isTestMode = !app()->isProduction();
     }
 
@@ -26,7 +26,6 @@ class TabbyWebhookRegistrationService
         ?string $customAuthHeader = null
     ): array {
         try {
-            logger($webhookUrl);
             $response = Http::withHeaders([
                 "Authorization" => "Bearer " . $this->secretKey,
                 "X-Merchant-Code" => $this->merchantCode,
