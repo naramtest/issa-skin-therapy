@@ -17,7 +17,7 @@ class TabbyPaymentVerificationService
     public function __construct(private readonly OrderProcessor $orderProcessor)
     {
         $this->baseUrl = "https://api.tabby.ai/api/v2/payments/";
-        $this->secretKey = config("services.tabby.secret_key");
+        $this->secretKey = config("services.tabby.secret_key") ?? "";
     }
 
     public function processPaymentStatus(Order $order, array $paymentData): void
