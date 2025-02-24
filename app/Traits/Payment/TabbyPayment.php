@@ -26,6 +26,10 @@ trait TabbyPayment
 
     public function checkAvailability(): void
     {
+        if (!$this->hasTypeCompleteAddress()) {
+            $this->isAvailable = false;
+            return;
+        }
         try {
             $response = $this->tabbyPaymentService->checkAvailability(
                 $this->getTabbyCheckoutData()
@@ -41,6 +45,15 @@ trait TabbyPayment
         } catch (Exception) {
             $this->isAvailable = false;
             $this->rejectionReason = "not_available";
+        }
+    }
+
+    public function updatedTabbyPayment(): void
+    {
+        // Only recalculate shipping when address fields change
+
+        if (!$this->isAvailable) {
+            $this->checkAvailability();
         }
     }
 }

@@ -24,27 +24,12 @@ trait WithTabbyData
             "currency" => CurrencyHelper::getUserCurrency(),
             "description" => "Order #" . time(),
             "buyer" => [
-                "email" => App::isLocal()
-                    ? "otp.success@tabby.ai"
-                    : $this->form->email,
-                "phone" => App::isLocal()
-                    ? "+971500000001"
-                    : $this->form->phone,
+                "email" => $this->form->email,
+                "phone" => $this->form->phone,
                 "name" =>
                     $this->form->billing_first_name .
                     " " .
                     $this->form->billing_last_name,
-            ],
-            "shipping_address" => [
-                "city" => $this->form->different_shipping_address
-                    ? $this->form->shipping_city
-                    : $this->form->billing_city,
-                "address" => $this->form->different_shipping_address
-                    ? $this->form->shipping_address
-                    : $this->form->billing_address,
-                "zip" => $this->form->different_shipping_address
-                    ? $this->form->shipping_postal_code
-                    : $this->form->billing_postal_code,
             ],
             "order" => [
                 "reference_id" => (string) time(),
@@ -149,5 +134,13 @@ trait WithTabbyData
             "is_phone_number_verified" => false,
             "is_email_verified" => auth()->check(),
         ];
+    }
+
+    protected function hasTypeCompleteAddress(): bool
+    {
+        return !empty($this->form->phone) and
+            !empty($this->form->email) and
+            !empty($this->form->billing_first_name) and
+            !empty($this->form->billing_last_name);
     }
 }
