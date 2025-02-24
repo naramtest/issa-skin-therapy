@@ -73,7 +73,6 @@ class CheckoutComponent extends Component
         $this->shippingRates = collect();
         $this->loadingRates = false;
         $this->selectedShippingRate = null;
-        $this->initializeWithShippingCalculation();
     }
 
     #[Computed]

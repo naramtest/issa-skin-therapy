@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use App\Enums\Checkout\CartCostType;
 use App\Enums\Checkout\ShippingMethodType;
-use App\Helpers\DHL\DHLHelper;
 use App\Services\Currency\CurrencyHelper;
 use App\Services\Shipping\DHL\DHLRateCheckService;
 use App\Services\Shipping\ShippingZoneService;
@@ -15,16 +14,14 @@ use Money\Money;
 
 trait WithShippingCalculation
 {
-    //  TODO: Organize
     public bool $canCalculateShipping = false;
     protected ShippingZoneService $shippingZoneService;
 
-    public function initializeWithShippingCalculation(): void
-    {
-        // TODO: change to var in checkout component
-        $this->shippingZoneService = app(ShippingZoneService::class);
+    public function initializeWithShippingCalculation(
+        ShippingZoneService $shippingZoneService
+    ): void {
+        $this->shippingZoneService = $shippingZoneService;
         $this->shippingRates = collect();
-        // Check address completeness on initialization
         $this->checkAddressCompleteness();
     }
 
@@ -105,12 +102,7 @@ trait WithShippingCalculation
             // Get DHL rates
             $dhlService = app(DHLRateCheckService::class);
 
-            $dhlRates = collect(
-                $dhlService->getRates(
-                    DHLHelper::weightAndDimensions($this->cartItems),
-                    $destination
-                )
-            );
+            $dhlRates = collect($dhlService->getRates($destination));
 
             // Merge rates
 

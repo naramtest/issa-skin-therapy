@@ -2,6 +2,7 @@
 
 namespace App\Services\Shipping\DHL;
 
+use App\Models\State;
 use App\Services\Currency\CurrencyHelper;
 use Exception;
 use Illuminate\Support\Facades\Http;
@@ -23,10 +24,12 @@ class DHLExpressCommerceService
             $payload = [
                 "rate" => [
                     "destination" => [
-                        "address1" => $destination["address"],
+                        "address1" => $destination["address"] ?? "",
                         "city" => $destination["city"],
                         "postal_code" => $destination["postal_code"],
-                        "province" => $destination["state"],
+                        "province" =>
+                            State::find($destination["state"])->name ?? null,
+
                         "country" => $destination["country"],
                     ],
                     "items" => $this->formatItems($items),

@@ -10,6 +10,7 @@ use App\Services\Cart\Redis\CartCouponRedisService;
 use App\Services\Cart\Redis\CartItemsRedisService;
 use App\Services\Checkout\OrderService;
 use App\Services\Currency\CurrencyService;
+use App\Services\Shipping\ShippingZoneService;
 use Illuminate\Support\ServiceProvider;
 
 class SingletonProvider extends ServiceProvider
@@ -48,6 +49,8 @@ class SingletonProvider extends ServiceProvider
                 $app->make(CartCouponRedisService::class)
             );
         });
+
+        $this->app->singleton(ShippingZoneService::class);
     }
 
     /**

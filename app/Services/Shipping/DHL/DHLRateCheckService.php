@@ -15,7 +15,7 @@ class DHLRateCheckService
         $this->dhlCommerceService = $dhlCommerceService;
     }
 
-    public function getRates(array $package, array $destination): array
+    public function getRates(array $destination): array
     {
         try {
             if (!$this->validateDestination($destination)) {
@@ -41,7 +41,7 @@ class DHLRateCheckService
 
     protected function validateDestination(array $destination): bool
     {
-        $requiredFields = ["country", "city", "postal_code", "address"];
+        $requiredFields = ["country", "city", "postal_code"];
 
         foreach ($requiredFields as $field) {
             if (empty($destination[$field])) {
