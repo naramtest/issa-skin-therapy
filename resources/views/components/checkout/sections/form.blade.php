@@ -83,6 +83,16 @@
         </div>
 
         <x-checkout.input-field
+            label="{{ __('store.Postal Code') }}"
+            wire:model.blur="form.billing_postal_code"
+            required
+            place-holder="{{ __('store.Postal Code') }}"
+            field="form.billing_postal_code"
+            :error="$errors->first('form.billing_postal_code')"
+            helper-text="{{ __('store.Please type') }}"
+        />
+
+        <x-checkout.input-field
             label="{{ __('store.Street Address') }}"
             wire:model="form.billing_address"
             required
@@ -98,16 +108,6 @@
             place-holder="{{ __('store.Area and/or Block Number') }}"
             field="form.billing_area"
             :error="$errors->first('form.billing_area')"
-        />
-
-        <x-checkout.input-field
-            label="{{ __('store.Postal Code') }}"
-            wire:model.blur="form.billing_postal_code"
-            required
-            place-holder="{{ __('store.Postal Code') }}"
-            field="form.billing_postal_code"
-            :error="$errors->first('form.billing_postal_code')"
-            helper-text="{{ __('store.Please type') }}"
         />
 
         <x-checkout.input-field

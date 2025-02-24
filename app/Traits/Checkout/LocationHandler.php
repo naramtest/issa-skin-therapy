@@ -110,7 +110,9 @@ trait LocationHandler
         } else {
             $this->billingStates = collect();
         }
-
+        if ($value === "AE") {
+            $this->form->billing_postal_code = "00000";
+        }
         $this->form->billing_state = "";
         $this->form->billing_city = "";
         $this->billingCities = collect();

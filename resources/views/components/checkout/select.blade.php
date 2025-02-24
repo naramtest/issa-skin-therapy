@@ -43,6 +43,7 @@
     }"
     @click.away="open = false"
     class="relative"
+    x-cloak
 >
     <label
         for="{{ $field }}"

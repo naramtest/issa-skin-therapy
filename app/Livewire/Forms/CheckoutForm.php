@@ -40,7 +40,7 @@ class CheckoutForm extends Form
     public string $billing_country = "";
 
     #[Rule("required|string|max:20")]
-    public string $billing_postal_code = "00000";
+    public string $billing_postal_code = "";
 
     #[Rule("required|string|max:255")]
     public string $billing_area = "";
