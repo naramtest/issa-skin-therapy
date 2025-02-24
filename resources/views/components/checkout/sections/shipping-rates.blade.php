@@ -34,23 +34,11 @@
                                     {{ $rate["service_name"] instanceof \App\Enums\Checkout\ShippingMethodType ? $rate["service_name"]->getLabel() : $rate["service_name"] }}
                                 </p>
                                 @if ($rate["total_price"] > 0)
-                                    <p class="text-gray-500">
-                                        {{ $rate["estimated_days"] ?? __("store.N/A") }}
-                                    </p>
-                                @endif
-
-                                @if ($rate["total_price"] > 0)
                                     @php
                                         $money = new \Money\Money($rate["total_price"], new \Money\Currency($rate["currency"]));
                                     @endphp
 
                                     <x-price :money="$money" />
-                                @endif
-
-                                @if ($rate["guaranteed"])
-                                    <span class="text-xs text-green-600">
-                                        {{ __("store.Guaranteed delivery") }}
-                                    </span>
                                 @endif
                             </div>
                         </div>

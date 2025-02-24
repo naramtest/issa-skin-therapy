@@ -172,7 +172,7 @@
                         <!-- Track Button -->
                         <div class="pt-2">
                             <a
-                                href="https://expressapi.dhl.com/mydhlapi/shipments/{{ $shippingOrder->tracking_number }}/tracking"
+                                href="{{ $shippingOrder->tracking_url }}"
                                 rel="noindex, nofollow"
                                 class="block w-full rounded-md bg-black py-2 text-center text-sm font-medium text-white hover:bg-gray-900"
                             >

@@ -128,7 +128,6 @@ class DHLOrderExport implements
                     $purchasable->weight ?? 0,
                     2
                 ),
-                //TODO: check to see if it will work like this
                 DHLFieldDefinitions::SHIPPING_METHOD->value => null,
                 DHLFieldDefinitions::REFERENCE->value => Str::limit(
                     $order->id,

@@ -45,11 +45,7 @@ return [
     ],
 
     "dhl" => [
-        "key" => env("DHL_API_KEY"),
-        "secret" => env("DHL_API_SECRET"),
-        "account_number" => env("DHL_ACCOUNT_NUMBER"),
-        "environment" => env("DHL_ENVIRONMENT", "test"), // 'test' or 'prod'
-        "base_url" => env("DHL_URL"),
+        "api_key" => env("DHL_API_KEY"),
     ],
 
     "tabby" => [

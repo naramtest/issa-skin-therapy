@@ -10,9 +10,11 @@ use Clockwork\Support\Laravel\ClockworkMiddleware;
 use Clockwork\Support\Laravel\ClockworkServiceProvider;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Livewire;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Mcamara\LaravelLocalization\Traits\LoadsTranslatedCachedRoutes;
 use Money\Money;
 use Opcodes\LogViewer\Facades\LogViewer;
 use Route;
@@ -23,6 +25,8 @@ use View;
 
 class AppServiceProvider extends ServiceProvider
 {
+    use LoadsTranslatedCachedRoutes;
+
     public function register(): void
     {
         if ($this->app->isLocal()) {
@@ -65,6 +69,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(Kernel $kernel): void
     {
+        RouteServiceProvider::loadCachedRoutesUsing(
+            fn() => $this->loadCachedRoutes()
+        );
         Blade::stringable(function (Money $money) {
             return CurrencyHelper::moneyObjectInBlade($money);
         });
