@@ -145,8 +145,11 @@ trait LocationHandler
         } else {
             $this->billingCities = collect();
         }
-        $this->form->billing_city = "";
-
+        if (count($this->billingCities) === 1) {
+            $this->form->billing_city = $this->billingCities[0]->name;
+        } else {
+            $this->form->billing_city = "";
+        }
         if (!$this->form->different_shipping_address) {
             $this->form->shipping_state = $value;
             $this->updatedFormShippingState($value);

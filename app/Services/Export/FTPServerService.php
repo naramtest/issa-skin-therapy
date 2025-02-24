@@ -107,10 +107,6 @@ class FTPServerService
                     $file,
                     $this->processDirectory . "/" . basename($file)
                 );
-
-                Log::info("Processed tracking file", [
-                    "file" => basename($file),
-                ]);
             }
         } catch (\Exception $e) {
             Log::error("Failed to process tracking updates", [
