@@ -2,6 +2,8 @@
 
 namespace App\Traits\Payment;
 
+use App\Enums\Checkout\PaymentStatus;
+use App\Models\Customer;
 use App\Models\Order;
 use App\Services\Currency\Currency;
 use App\Services\Currency\CurrencyHelper;
@@ -74,12 +76,17 @@ trait WithTabbyData
                 "registered_since" => auth()->check()
                     ? auth()->user()->created_at->toIso8601String()
                     : now()->toIso8601String(),
-                "loyalty_level" => 0,
+                "loyalty_level" => $this->getCustomerLoyaltyLevel(
+                    email: $this->form->email
+                ),
                 "wishlist_count" => 0,
                 "is_social_networks_connected" => false,
                 "is_phone_number_verified" => false,
                 "is_email_verified" => auth()->check(),
             ],
+            "order_history" => $this->getOrderHistory(
+                email: $this->form->email
+            ),
         ];
     }
 
@@ -108,6 +115,83 @@ trait WithTabbyData
 
         // Default category if no categories are found
         return "General";
+    }
+
+    protected function getCustomerLoyaltyLevel(
+        $customerId = null,
+        ?string $email = null
+    ): int {
+        if (!$customerId) {
+            if (auth()->check() && auth()->user()->customer) {
+                $customerId = auth()->user()->customer->id;
+            } else {
+                $customerId = Customer::where("email", $email)
+                    ->where("is_registered", false)
+                    ->first()?->id;
+            }
+        }
+
+        // If we have a customer ID, count their successful orders
+        if ($customerId) {
+            return Order::where("customer_id", $customerId)
+                ->where("payment_status", PaymentStatus::PAID)
+                ->count();
+        }
+
+        return 0;
+    }
+
+    protected function getOrderHistory(
+        $customerId = null,
+        ?string $email = null
+    ): array {
+        // If no customer ID was provided but user is logged in, use the authenticated user's customer ID
+        if (!$customerId) {
+            if (auth()->check() && auth()->user()->customer) {
+                $customerId = auth()->user()->customer->id;
+            } else {
+                $customerId = Customer::where("email", $email)
+                    ->where("is_registered", false)
+                    ->first()?->id;
+            }
+        }
+
+        // If we don't have a customer ID, return empty order history
+        if (!$customerId) {
+            return [];
+        }
+
+        // Get the last 5 paid orders for this customer
+        $orders = Order::where("customer_id", $customerId)
+            ->where("payment_status", PaymentStatus::PAID)
+            ->orderBy("created_at", "desc")
+            ->limit(5)
+            ->get();
+
+        return $orders
+            ->map(function (Order $order) {
+                return [
+                    "purchased_at" => $order->created_at->toIso8601String(),
+                    "amount" => CurrencyHelper::decimalFormatter(
+                        $this->convertMoney(
+                            $order->getMoneyTotal(),
+                            $order->currency_code
+                        )
+                    ),
+                    "status" => $order->status->value,
+                    "buyer" => [
+                        "phone" => $order->shippingAddress->phone ?? "",
+                        "email" => $order->email ?? "",
+                        "name" => $order->shippingAddress->full_name ?? "",
+                    ],
+                    "shipping_address" => [
+                        "city" => $order->shippingAddress->city ?? "",
+                        "address" => $order->shippingAddress->address ?? "",
+                        "zip" => $order->shippingAddress->postal_code ?? "",
+                    ],
+                ];
+            })
+            ->toArray();
     }
 
     protected function getDataFromOrder(Order $order): array
@@ -158,17 +242,18 @@ trait WithTabbyData
                     ? $order->couponUsage->discount_amount
                     : "0.00",
             ],
-            "buyer_history" => $this->getBuyerHistory(),
+            "buyer_history" => $this->getBuyerHistory($order->customer_id),
+            "order_history" => $this->getOrderHistory($order->customer_id),
         ];
     }
 
-    protected function getBuyerHistory()
+    protected function getBuyerHistory($customerId = null): array
     {
         return [
             "registered_since" => auth()->check()
                 ? auth()->user()->created_at->toIso8601String()
                 : now()->toIso8601String(),
-            "loyalty_level" => 0,
+            "loyalty_level" => $this->getCustomerLoyaltyLevel($customerId),
             "wishlist_count" => 0,
             "is_social_networks_connected" => false,
             "is_phone_number_verified" => false,

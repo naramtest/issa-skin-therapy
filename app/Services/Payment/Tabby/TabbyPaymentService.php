@@ -115,7 +115,6 @@ class TabbyPaymentService implements PaymentServiceInterface
      */
     protected function makeRequest(array $data): PromiseInterface|Response
     {
-        dd($data);
         return Http::withHeaders([
             "Authorization" => "Bearer " . $this->secretKey,
         ])->post($this->baseUrl . "checkout", [
