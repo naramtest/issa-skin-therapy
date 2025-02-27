@@ -86,6 +86,7 @@
 
     <div
         wire:loading.class="!flex"
+        wire:target="form.billing_country, form.billing_state, form.billing_city, form.shipping_country, form.shipping_state, form.shipping_city"
         class="rounded-inherit absolute inset-0 hidden items-center justify-center overflow-hidden bg-gray-100/70"
     >
         <span class="loader"></span>

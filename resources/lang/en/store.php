@@ -568,4 +568,6 @@ Sorry, Tabby is unable to approve this purchase. Please use an alternative payme
         "Please check your input and try again",
     "You aborted the payment" =>
         "You aborted the payment. Please retry or choose another payment method.",
+    "Tabby payment availability can be determined after completing your address details" =>
+        "Tabby payment availability can be determined after completing your address details",
 ];

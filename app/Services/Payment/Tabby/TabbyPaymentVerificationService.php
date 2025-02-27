@@ -115,7 +115,6 @@ class TabbyPaymentVerificationService
      */
     private function handleAuthorized(Order $order, array $paymentData): void
     {
-        logger("called");
         if ($order->payment_status !== PaymentStatus::PAID) {
             $this->orderProcessor->processSuccessfulPayment($order, [], false);
         }

@@ -15,6 +15,8 @@ use Money\Money;
 trait WithShippingCalculation
 {
     public bool $canCalculateShipping = false;
+    public bool $loadingRates = false;
+
     protected ShippingZoneService $shippingZoneService;
 
     public function initializeWithShippingCalculation(
@@ -50,13 +52,6 @@ trait WithShippingCalculation
                 );
                 unset($this->total);
             }
-        }
-    }
-
-    public function updated($property): void
-    {
-        if ($this->isAddressField($property)) {
-            $this->checkAddressCompleteness();
         }
     }
 

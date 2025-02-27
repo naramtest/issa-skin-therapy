@@ -32,7 +32,6 @@ class CheckoutComponent extends Component
     public CheckoutForm $form;
     public Collection $shippingRates;
     public ?string $selectedShippingRate = null;
-    public bool $loadingRates = false;
     public bool $processing = false;
     public ?string $error = null;
     public ?string $currentOrderId = null;
@@ -65,7 +64,6 @@ class CheckoutComponent extends Component
 
         // Initialize shipping-related properties
         $this->shippingRates = collect();
-        $this->loadingRates = false;
         $this->selectedShippingRate = null;
         if (auth()->check()) {
             $this->form->setFromUser(auth()->user());
@@ -207,5 +205,16 @@ class CheckoutComponent extends Component
     public function setCouponCode(?string $code): void
     {
         $this->form->coupon_code = $code;
+    }
+
+    public function updated($property): void
+    {
+        if ($this->isAddressField($property)) {
+            $this->checkAddressCompleteness();
+        }
+
+        if ($this->hasTypeCompleteAddress()) {
+            $this->checkAvailability();
+        }
     }
 }

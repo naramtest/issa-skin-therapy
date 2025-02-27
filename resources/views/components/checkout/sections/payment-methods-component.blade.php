@@ -91,6 +91,8 @@
                                     {{ __("store.The purchase amount is below the minimum amount required to use Tabby, try adding more items or use another payment method") }}
                                 @elseif ($rejectionReason === "cancelled_by_user")
                                     {{ __("store.You aborted the payment") }}
+                                @elseif ($rejectionReason === "complete_address")
+                                    {{ __("store.Tabby payment availability can be determined after completing your address details") }}
                                 @else
                                     {{ __("store.Sorry, Tabby is unable to approve this purchase. Please use an alternative payment method for your order") }}
                                 @endif

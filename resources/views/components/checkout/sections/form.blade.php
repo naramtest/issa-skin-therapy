@@ -18,7 +18,7 @@
         <div class="grid grid-cols-2 gap-4">
             <x-checkout.input-field
                 label="{{ __('store.First Name') }}"
-                wire:model="form.billing_first_name"
+                wire:model.blur="form.billing_first_name"
                 place-holder="{{ __('store.First Name') }}"
                 required
                 field="form.billing_first_name"
@@ -27,7 +27,7 @@
 
             <x-checkout.input-field
                 label="{{ __('store.Last Name') }}"
-                wire:model="form.billing_last_name"
+                wire:model.blur="form.billing_last_name"
                 required
                 place-holder="{{ __('store.Last Name') }}"
                 field="form.billing_last_name"
@@ -37,7 +37,7 @@
         {{-- TODO: phone number --}}
         <x-checkout.input-field
             label="{{ __('dashboard.info.phone') }}"
-            wire:model="form.phone"
+            wire:model.blur="form.phone"
             required
             place-holder="{{ __('dashboard.info.phone') }}"
             field="form.phone"
@@ -47,7 +47,7 @@
 
         <x-checkout.input-field
             label="{{ __('store.Email Address') }}"
-            wire:model="form.email"
+            wire:model.blur="form.email"
             required
             place-holder="{{ __('store.Email Address') }}"
             field="form.email"
