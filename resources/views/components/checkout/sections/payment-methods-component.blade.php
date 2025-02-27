@@ -90,6 +90,8 @@
                                         {{ __("store.This purchase is above your current spending limit with Tabby, try a smaller cart or use another payment method") }}
                                     @elseif ($rejectionReason === "order_amount_too_low")
                                         {{ __("store.The purchase amount is below the minimum amount required to use Tabby, try adding more items or use another payment method") }}
+                                    @elseif ($rejectionReason === "cancelled_by_user")
+                                        {{ __("store.You aborted the payment") }}
                                     @else
                                         {{ __("store.Sorry, Tabby is unable to approve this purchase. Please use an alternative payment method for your order") }}
                                     @endif

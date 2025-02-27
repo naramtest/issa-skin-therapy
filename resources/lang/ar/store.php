@@ -486,4 +486,10 @@ return [
     "Generated URL" => "الرابط المُنشأ",
     "Copy" => "نسخ",
     "Marketing" => "التسويق",
+    "You aborted the payment" =>
+        "لقد ألغيت الدفعة. فضلاً حاول مجددًا أو اختر طريقة دفع أخرى.",
+    "Sorry, Tabby is unable to approve this purchase" => [
+        " Please use an alternative payment method for your order" =>
+            "نأسف، تابي غير قادرة على الموافقة على هذه العملية. الرجاء استخدام طريقة دفع أخرى.",
+    ],
 ];

@@ -2,6 +2,7 @@
 
 namespace App\Traits\Payment;
 
+use App\Enums\Checkout\PaymentMethod;
 use App\Services\Payment\Tabby\TabbyPaymentService;
 use App\Services\Payment\Tabby\TabbyPaymentVerificationService;
 use Exception;
@@ -19,6 +20,16 @@ trait WithTabbyPayment
         TabbyPaymentService $tabbyPaymentService,
         TabbyPaymentVerificationService $tabbyPaymentVerificationService
     ): void {
+        if (
+            session()->has("payment_method") &&
+            session("payment_method") === "tabby"
+        ) {
+            $this->form->payment_method = PaymentMethod::CARD->value;
+            if (session()->has("rejection_reason")) {
+                $this->rejectionReason = session("rejection_reason");
+                $this->isAvailable = true;
+            }
+        }
         $this->tabbyPaymentService = $tabbyPaymentService;
         $this->tabbyPaymentVerificationService = $tabbyPaymentVerificationService;
         $this->checkAvailability();

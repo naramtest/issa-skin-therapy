@@ -142,12 +142,16 @@ class CheckoutController extends Controller
 
         return redirect()
             ->route("checkout.index")
-            ->with(
-                "error",
-                __("store.Payment was cancelled. Please try again")
-            );
+            ->with([
+                "error" => __("store.Payment was cancelled. Please try again"),
+                "payment_method" => "tabby",
+                "rejection_reason" => "cancelled_by_user",
+            ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function failure(Request $request)
     {
         if ($request->has("payment_id")) {
@@ -162,10 +166,15 @@ class CheckoutController extends Controller
                 );
             }
         }
-
         return redirect()
             ->route("checkout.index")
-            ->with("error", __("store.Payment was declined. Please try again"));
+            ->with([
+                "error" => __("store.Payment was declined. Please try again"),
+                "payment_method" => "tabby",
+                "rejection_reason" => __(
+                    "store.Sorry, Tabby is unable to approve this purchase. Please use an alternative payment method for your order"
+                ),
+            ]);
     }
 
     public function downloadInvoice(Order $order)

@@ -546,8 +546,8 @@ return [
     "The purchase amount is below the minimum amount required to use Tabby, try adding more items or use another payment method" =>
         "The purchase amount is below the minimum amount required to use Tabby, try adding more items or use another payment method",
     "Sorry, Tabby is unable to approve this purchase" => [
-        " Please use an alternative payment method for your order" =>
-            "Sorry, Tabby is unable to approve this purchase. Please use an alternative payment method for your order",
+        " Please use an alternative payment method for your order" => "
+Sorry, Tabby is unable to approve this purchase. Please use an alternative payment method for your order",
     ],
     "Credit Card" => "Credit Card",
     "Failed to process payment" => [
@@ -566,4 +566,6 @@ return [
     ],
     "Please check your input and try again" =>
         "Please check your input and try again",
+    "You aborted the payment" =>
+        "You aborted the payment. Please retry or choose another payment method.",
 ];

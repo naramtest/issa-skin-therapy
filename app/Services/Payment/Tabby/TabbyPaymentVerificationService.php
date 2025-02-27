@@ -37,7 +37,7 @@ class TabbyPaymentVerificationService
                         $paymentData
                     ),
                     "closed" => $this->handleClosed($order, $paymentData),
-                    "rejected" => $this->handleRejected($order, $paymentData),
+                    "rejected" => $this->handleRejected($order),
                     "expired" => $this->handleExpired($order, $paymentData),
                     "canceled" => $this->handleCanceled($order, $paymentData),
                     default => $this->handleUnknownStatus(
@@ -141,12 +141,13 @@ class TabbyPaymentVerificationService
         }
     }
 
-    private function handleRejected(Order $order, array $paymentData): void
+    /**
+     * @throws Exception
+     */
+    private function handleRejected(Order $order): void
     {
         $this->orderProcessor->processFailedPayment($order, [
-            "payment_id" => $paymentData["id"],
             "rejected_at" => now(),
-            "rejection_data" => $paymentData,
         ]);
     }
 
@@ -184,7 +185,6 @@ class TabbyPaymentVerificationService
     {
         Log::warning("Unknown Tabby payment status received", [
             "order_id" => $order->id,
-            "payment_id" => $paymentData["id"],
             "status" => $paymentData["status"],
         ]);
     }
