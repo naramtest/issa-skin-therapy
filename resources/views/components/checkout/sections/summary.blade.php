@@ -65,6 +65,7 @@
                 <td class="py-4">
                     {{ __("store.Shipping") }}
                 </td>
+
                 <td class="py-4 text-right text-darkColor">
                     <x-checkout.sections.shipping-rates
                         :shippingRates="$shippingRates"

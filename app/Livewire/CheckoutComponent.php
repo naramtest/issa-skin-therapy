@@ -63,16 +63,18 @@ class CheckoutComponent extends Component
             return;
         }
 
-        if (auth()->check()) {
-            $this->form->setFromUser(auth()->user());
-        }
-
-        // Initialize location handling
-        $this->setupLocationHandler();
         // Initialize shipping-related properties
         $this->shippingRates = collect();
         $this->loadingRates = false;
         $this->selectedShippingRate = null;
+        if (auth()->check()) {
+            $this->form->setFromUser(auth()->user());
+            $this->checkAddressCompleteness();
+            $this->checkAvailability();
+        }
+
+        // Initialize location handling
+        $this->setupLocationHandler();
     }
 
     #[Computed]

@@ -21,8 +21,60 @@ trait WithShippingCalculation
         ShippingZoneService $shippingZoneService
     ): void {
         $this->shippingZoneService = $shippingZoneService;
-        $this->shippingRates = collect();
-        $this->checkAddressCompleteness();
+    }
+
+    public function updatedSelectedShippingRate($value): void
+    {
+        // Don't recalculate rates when only changing selected rate
+        $this->updateTotals();
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function updateTotals(): void
+    {
+        if ($this->selectedShippingRate && $this->shippingRates->isNotEmpty()) {
+            $rate = $this->shippingRates->firstWhere(
+                "service_code",
+                $this->selectedShippingRate
+            );
+            if ($rate) {
+                $this->shippingCost = $rate["total_price"];
+                $this->cartService->addCost(
+                    CartCostType::SHIPPING,
+                    new Money(
+                        $rate["total_price"],
+                        new Currency($rate["currency"])
+                    )
+                );
+                unset($this->total);
+            }
+        }
+    }
+
+    public function updated($property): void
+    {
+        if ($this->isAddressField($property)) {
+            $this->checkAddressCompleteness();
+        }
+    }
+
+    protected function isAddressField(string $field): bool
+    {
+        $addressFields = [
+            "form.billing_country",
+            "form.billing_state",
+            "form.billing_city",
+            "form.billing_postal_code",
+            "form.shipping_country",
+            "form.shipping_state",
+            "form.shipping_city",
+            "form.shipping_postal_code",
+            "form.different_shipping_address",
+        ];
+
+        return in_array($field, $addressFields);
     }
 
     protected function checkAddressCompleteness(): void
@@ -30,9 +82,6 @@ trait WithShippingCalculation
         $this->canCalculateShipping = $this->hasCompleteAddress();
         if ($this->canCalculateShipping) {
             $this->calculateShippingRates();
-        } else {
-            $this->shippingRates = collect();
-            $this->selectedShippingRate = null;
         }
     }
 
@@ -44,7 +93,16 @@ trait WithShippingCalculation
                 !empty($this->form->shipping_city) &&
                 !empty($this->form->shipping_postal_code);
         }
-
+        logger(
+            "country:" .
+                $this->form->billing_country .
+                " state" .
+                $this->form->billing_state .
+                " city" .
+                $this->form->billing_city .
+                " postal code" .
+                $this->form->billing_postal_code
+        );
         return !empty($this->form->billing_country) &&
             !empty($this->form->billing_state) &&
             !empty($this->form->billing_city) &&
@@ -103,7 +161,6 @@ trait WithShippingCalculation
             $dhlService = app(DHLRateCheckService::class);
 
             $dhlRates = collect($dhlService->getRates($destination));
-
             // Merge rates
 
             foreach ($dhlRates as $dhlRate) {
@@ -130,7 +187,6 @@ trait WithShippingCalculation
                 "error",
                 __("store.Shipping calculation failed. Please try again.")
             );
-            $this->shippingRates = collect();
         } finally {
             $this->loadingRates = false;
         }
@@ -176,62 +232,5 @@ trait WithShippingCalculation
                 "last_name" => $this->form->billing_last_name,
             ];
         }
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function updateTotals(): void
-    {
-        if ($this->selectedShippingRate && $this->shippingRates->isNotEmpty()) {
-            $rate = $this->shippingRates->firstWhere(
-                "service_code",
-                $this->selectedShippingRate
-            );
-            if ($rate) {
-                $this->shippingCost = $rate["total_price"];
-                $this->cartService->addCost(
-                    CartCostType::SHIPPING,
-                    new Money(
-                        $rate["total_price"],
-                        new Currency($rate["currency"])
-                    )
-                );
-                unset($this->total);
-            }
-        }
-    }
-
-    public function updatedSelectedShippingRate($value): void
-    {
-        // Don't recalculate rates when only changing selected rate
-        $this->updateTotals();
-    }
-
-    public function updated($property): void
-    {
-        // Only recalculate shipping when address fields change
-        //TODO: don't request new rate if the updated field is the same as the old one
-        //TODO: when country updated the state and city should update before asking for rate
-        if ($this->isAddressField($property)) {
-            $this->checkAddressCompleteness();
-        }
-    }
-
-    protected function isAddressField(string $field): bool
-    {
-        $addressFields = [
-            "form.billing_country",
-            "form.billing_state",
-            "form.billing_city",
-            "form.billing_postal_code",
-            "form.shipping_country",
-            "form.shipping_state",
-            "form.shipping_city",
-            "form.shipping_postal_code",
-            "form.different_shipping_address",
-        ];
-
-        return in_array($field, $addressFields);
     }
 }
