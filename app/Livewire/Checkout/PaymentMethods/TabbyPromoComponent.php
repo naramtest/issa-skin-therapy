@@ -32,7 +32,7 @@ class TabbyPromoComponent extends Component
     public function render()
     {
         return view("livewire.checkout.payment-methods.tabby-promo-component", [
-            "publicKey" => config("services.tabby.public_key"),
+            "publicKey" => "pk_019043b4-3a0c-5e8a-7a95-a595ca0b5d4d", //TODO: switch to config
             "merchantCode" => config("services.tabby.merchant_code"),
         ]);
     }
