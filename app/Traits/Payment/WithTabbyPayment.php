@@ -59,10 +59,9 @@ trait WithTabbyPayment
         }
     }
 
-    public function updatedTabbyPayment(): void
+    public function updatedWithTabbyPayment(): void
     {
         // Only recalculate shipping when address fields change
-
         if (!$this->isAvailable) {
             $this->checkAvailability();
         }

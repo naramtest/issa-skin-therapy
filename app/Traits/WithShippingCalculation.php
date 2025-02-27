@@ -93,16 +93,7 @@ trait WithShippingCalculation
                 !empty($this->form->shipping_city) &&
                 !empty($this->form->shipping_postal_code);
         }
-        logger(
-            "country:" .
-                $this->form->billing_country .
-                " state" .
-                $this->form->billing_state .
-                " city" .
-                $this->form->billing_city .
-                " postal code" .
-                $this->form->billing_postal_code
-        );
+
         return !empty($this->form->billing_country) &&
             !empty($this->form->billing_state) &&
             !empty($this->form->billing_city) &&
