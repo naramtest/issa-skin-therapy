@@ -90,10 +90,6 @@ class TabbyPaymentService implements PaymentServiceInterface
         }
     }
 
-    public function calculatePaymentAmount(Order $order): int
-    {
-    }
-
     public function checkAvailability(array $data): array
     {
         try {
@@ -119,6 +115,7 @@ class TabbyPaymentService implements PaymentServiceInterface
      */
     protected function makeRequest(array $data): PromiseInterface|Response
     {
+        dd($data);
         return Http::withHeaders([
             "Authorization" => "Bearer " . $this->secretKey,
         ])->post($this->baseUrl . "checkout", [
@@ -185,5 +182,10 @@ class TabbyPaymentService implements PaymentServiceInterface
                 "error" => "Failed to create checkout session",
             ];
         }
+    }
+
+    public function calculatePaymentAmount(Order $order): int
+    {
+        // TODO: Implement calculatePaymentAmount() method.
     }
 }

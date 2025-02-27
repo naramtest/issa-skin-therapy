@@ -6,7 +6,7 @@ use App\Services\Payment\Tabby\TabbyPaymentService;
 use App\Services\Payment\Tabby\TabbyPaymentVerificationService;
 use Exception;
 
-trait TabbyPayment
+trait WithTabbyPayment
 {
     use WithTabbyData;
 
@@ -15,7 +15,7 @@ trait TabbyPayment
     protected TabbyPaymentService $tabbyPaymentService;
     protected TabbyPaymentVerificationService $tabbyPaymentVerificationService;
 
-    public function initializeTabbyPayment(
+    public function initializeWithTabbyPayment(
         TabbyPaymentService $tabbyPaymentService,
         TabbyPaymentVerificationService $tabbyPaymentVerificationService
     ): void {

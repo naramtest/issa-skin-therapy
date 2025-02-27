@@ -5,11 +5,11 @@ namespace App\Traits\Payment;
 use App\Models\Order;
 use App\Services\Payment\StripePaymentService;
 
-trait StripePayment
+trait WithStripePayment
 {
     protected StripePaymentService $paymentService;
 
-    public function initializeStripePayment(
+    public function initializeWithStripePayment(
         StripePaymentService $paymentService
     ): void {
         $this->paymentService = $paymentService;

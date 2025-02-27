@@ -3,6 +3,7 @@
 namespace App\Traits\Payment;
 
 use App\Models\Order;
+use App\Services\Currency\Currency;
 use App\Services\Currency\CurrencyHelper;
 use Illuminate\Support\Facades\App;
 use Money\Money;
@@ -20,12 +21,16 @@ trait WithTabbyData
     protected function getDataFromForm(): array
     {
         return [
-            "amount" => CurrencyHelper::decimalFormatter($this->total),
+            "amount" => CurrencyHelper::decimalFormatter(
+                $this->convertMoney($this->total)
+            ),
             "currency" => CurrencyHelper::getUserCurrency(),
             "description" => "Order #" . time(),
             "buyer" => [
-                "email" => $this->form->email,
-                "phone" => $this->form->phone,
+                "email" => App::isLocal()
+                    ? "otp.success@tabby.ai"
+                    : $this->form->email,
+                "phone" => App::isLocal() ? "971500000001" : $this->form->phone,
                 "name" =>
                     $this->form->billing_first_name .
                     " " .
@@ -40,11 +45,14 @@ trait WithTabbyData
                             "title" => $item->getPurchasable()->getName(),
                             "quantity" => $item->getQuantity(),
                             "unit_price" => CurrencyHelper::decimalFormatter(
-                                $item->getPrice()
+                                $this->convertMoney($item->getPrice())
                             ),
                             "reference_id" => (string) $item
                                 ->getPurchasable()
                                 ->getId(),
+                            "category" => $this->getItemCategory(
+                                $item->getPurchasable()
+                            ),
                         ];
                     })
                     ->values()
@@ -57,7 +65,9 @@ trait WithTabbyData
                     )
                 ),
                 "discount_amount" => $this->discount
-                    ? CurrencyHelper::decimalFormatter($this->discount)
+                    ? CurrencyHelper::decimalFormatter(
+                        $this->convertMoney($this->discount)
+                    )
                     : "0.00",
             ],
             "buyer_history" => [
@@ -71,6 +81,33 @@ trait WithTabbyData
                 "is_email_verified" => auth()->check(),
             ],
         ];
+    }
+
+    public function convertMoney(
+        Money $money,
+        ?string $currency_code = null
+    ): Money {
+        return Currency::convertToUserCurrencyWithCache($money, $currency_code);
+    }
+
+    protected function getItemCategory($purchasable): string
+    {
+        // Try to get categories from the purchasable if it has them
+        if (
+            method_exists($purchasable, "categories") &&
+            $purchasable->categories()->exists()
+        ) {
+            $categories = $purchasable->categories;
+
+            if ($categories->isNotEmpty()) {
+                // Return a tree of category-subcategory if possible
+                $categoryNames = $categories->pluck("name")->toArray();
+                return implode("-", $categoryNames);
+            }
+        }
+
+        // Default category if no categories are found
+        return "General";
     }
 
     protected function getDataFromOrder(Order $order): array
@@ -107,6 +144,9 @@ trait WithTabbyData
                                 $item->money_unit_price
                             ),
                             "reference_id" => (string) $item->purchasable_id,
+                            "category" => $this->getItemCategory(
+                                $item->purchasable
+                            ),
                         ]
                     )
                     ->values(),

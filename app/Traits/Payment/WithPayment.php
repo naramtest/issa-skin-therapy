@@ -8,8 +8,8 @@ use Livewire\Attributes\On;
 
 trait WithPayment
 {
-    use TabbyPayment;
-    use StripePayment;
+    use WithTabbyPayment;
+    use WithStripePayment;
 
     #[On("payment-error")]
     public function setPaymentError($error): void
