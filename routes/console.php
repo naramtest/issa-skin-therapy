@@ -10,12 +10,12 @@ Schedule::command("queue:work --stop-when-empty")
     ->withoutOverlapping();
 // Prepare new orders for DHL every 10 minutes
 Schedule::command("dhl:prepare-orders")
-    ->everyMinute()
-    ->withoutOverlapping()
-    ->appendOutputTo(storage_path("logs/dhl-export.log"));
+    ->everyTenMinutes()
+    ->withoutOverlapping();
 
 // Process tracking updates from DHL every 5 minutes
 Schedule::command("dhl:process-tracking")
-    ->everyFiveMinutes()
-    ->withoutOverlapping()
-    ->appendOutputTo(storage_path("logs/dhl-tracking.log"));
+    ->everyTenMinutes()
+    ->withoutOverlapping();
+
+Schedule::command("tabby:capture-payments")->hourly()->withoutOverlapping();

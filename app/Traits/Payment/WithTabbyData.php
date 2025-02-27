@@ -207,7 +207,7 @@ trait WithTabbyData
                     ? "971500000001"
                     : $order->shippingAddress->phone,
                 "email" => App::isLocal()
-                    ? "otp.rejected@tabby.ai"
+                    ? "otp.success@tabby.ai"
                     : $order->email,
                 "name" => $order->shippingAddress->full_name,
             ],

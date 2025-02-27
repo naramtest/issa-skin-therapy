@@ -14,8 +14,10 @@ class TabbyPaymentVerificationService
     protected string $baseUrl;
     protected string $secretKey;
 
-    public function __construct(private readonly OrderProcessor $orderProcessor)
-    {
+    public function __construct(
+        private readonly OrderProcessor $orderProcessor,
+        private readonly TabbyPaymentService $tabbyPaymentService
+    ) {
         $this->baseUrl = "https://api.tabby.ai/api/v2/payments/";
         $this->secretKey = config("services.tabby.secret_key") ?? "";
     }
@@ -113,9 +115,11 @@ class TabbyPaymentVerificationService
      */
     private function handleAuthorized(Order $order, array $paymentData): void
     {
+        logger("called");
         if ($order->payment_status !== PaymentStatus::PAID) {
             $this->orderProcessor->processSuccessfulPayment($order, [], false);
         }
+        $this->tabbyPaymentService->capturePayment($order);
     }
 
     private function handleClosed(Order $order, array $paymentData): void

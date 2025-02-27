@@ -6,6 +6,7 @@ use App\Contracts\PaymentServiceInterface;
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
 use App\Models\Order;
+use App\Services\Currency\CurrencyHelper;
 use App\Traits\Payment\WithTabbyData;
 use Exception;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -186,5 +187,107 @@ class TabbyPaymentService implements PaymentServiceInterface
     public function calculatePaymentAmount(Order $order): int
     {
         // TODO: Implement calculatePaymentAmount() method.
+    }
+
+    public function captureAuthorizedPayments(): void
+    {
+        $orders = Order::where("payment_provider", "tabby")
+            ->where("payment_status", PaymentStatus::PAID)
+            ->whereNull("payment_captured_at")
+            ->where("payment_authorized_at", "<=", now()->subHours(1)) // Configurable delay
+            ->get();
+
+        foreach ($orders as $order) {
+            $captureResult = $this->capturePayment($order);
+
+            if (!$captureResult["success"]) {
+                Log::warning("Automated capture failed", [
+                    "order_id" => $order->id,
+                    "message" => $captureResult["message"],
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Capture an authorized Tabby payment
+     *
+     * @param Order $order
+     * @return array
+     */
+    public function capturePayment(Order $order): array
+    {
+        try {
+            // Ensure we have a payment intent ID
+            if (!$order->payment_intent_id) {
+                Log::error("No payment intent ID for order", [
+                    "order_id" => $order->id,
+                ]);
+                return [
+                    "success" => false,
+                    "message" => "No payment intent found",
+                ];
+            }
+
+            // Make the capture request to Tabby
+            $response = Http::withHeaders([
+                "Authorization" => "Bearer " . $this->secretKey,
+                "Content-Type" => "application/json",
+            ])->post(
+                $this->baseUrl .
+                    "payments/{$order->payment_intent_id}/captures",
+                [
+                    "amount" => CurrencyHelper::decimalFormatter(
+                        $this->convertMoney($order->getMoneyTotal())
+                    ),
+                    "merchant_code" => $this->merchantCode,
+                ]
+            );
+
+            // Check the response
+            if (!$response->successful()) {
+                Log::error("Tabby capture failed", [
+                    "order_id" => $order->id,
+                    "response" => $response->json(),
+                ]);
+                return [
+                    "success" => false,
+                    "message" => $response->json("message") ?? "Capture failed",
+                ];
+            }
+
+            // Capture successful
+            $captureData = $response->json();
+            $order->update([
+                "payment_captured_at" => now(),
+                "payment_method_details" => array_merge(
+                    $order->payment_method_details ?? [],
+                    [
+                        "capture_data" => [
+                            "capture_id" => $captureData["id"] ?? null,
+                            "captured_at" => now(),
+                            "full_response" => $captureData,
+                        ],
+                    ]
+                ),
+            ]);
+
+            return [
+                "success" => true,
+                "message" => "Payment captured successfully",
+                "data" => $captureData,
+            ];
+        } catch (Exception $e) {
+            Log::error("Tabby payment capture error", [
+                "order_id" => $order->id,
+                "error" => $e->getMessage(),
+                "trace" => $e->getTraceAsString(),
+            ]);
+
+            return [
+                "success" => false,
+                "message" => "Payment capture failed: " . $e->getMessage(),
+            ];
+        }
     }
 }

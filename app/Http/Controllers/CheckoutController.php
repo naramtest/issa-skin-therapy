@@ -59,6 +59,7 @@ class CheckoutController extends Controller
         $order = Order::where("payment_intent_id", $paymentIntentId)
             ->with(["items.purchasable", "billingAddress", "shippingAddress"])
             ->firstOrFail();
+
         try {
             if ($order->payment_status !== PaymentStatus::PAID) {
                 if ($order->payment_provider == "tabby") {
