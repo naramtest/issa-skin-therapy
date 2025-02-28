@@ -194,7 +194,7 @@ class TabbyPaymentService implements PaymentServiceInterface
         $orders = Order::where("payment_provider", "tabby")
             ->where("payment_status", PaymentStatus::PAID)
             ->whereNull("payment_captured_at")
-            ->where("payment_authorized_at", "<=", now()->subHours(1)) // Configurable delay
+            ->where("payment_authorized_at", "<=", now()) // Configurable delay
             ->get();
 
         logger($orders->pluck("id"));
