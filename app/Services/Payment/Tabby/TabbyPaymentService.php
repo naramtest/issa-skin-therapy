@@ -197,7 +197,6 @@ class TabbyPaymentService implements PaymentServiceInterface
             ->where("payment_authorized_at", "<=", now()) // Configurable delay
             ->get();
 
-        logger($orders->pluck("id"));
         foreach ($orders as $order) {
             $captureResult = $this->capturePayment($order);
 
