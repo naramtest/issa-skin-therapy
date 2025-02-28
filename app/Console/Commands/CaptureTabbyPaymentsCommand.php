@@ -17,7 +17,7 @@ class CaptureTabbyPaymentsCommand extends Command
     public function handle(TabbyPaymentService $tabbyPaymentService): void
     {
         $this->info("Starting Tabby payment capture process...");
-
+        logger("run");
         $tabbyPaymentService->captureAuthorizedPayments();
 
         $this->info("Tabby payment capture process completed.");
