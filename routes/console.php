@@ -18,4 +18,6 @@ Schedule::command("dhl:process-tracking")
     ->everyTenMinutes()
     ->withoutOverlapping();
 
-Schedule::command("tabby:capture-payments")->hourly()->withoutOverlapping();
+Schedule::command("tabby:capture-payments")
+    ->everyMinute()
+    ->withoutOverlapping();
