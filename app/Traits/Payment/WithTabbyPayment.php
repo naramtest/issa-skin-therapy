@@ -12,6 +12,7 @@ trait WithTabbyPayment
     use WithTabbyData;
 
     public bool $isAvailable = false;
+    public bool $shouldChangeRejection = false;
     public ?string $rejectionReason = null;
     protected TabbyPaymentService $tabbyPaymentService;
     protected TabbyPaymentVerificationService $tabbyPaymentVerificationService;
@@ -39,7 +40,6 @@ trait WithTabbyPayment
     {
         if (!$this->hasTypeCompleteAddress()) {
             $this->isAvailable = false;
-            $this->rejectionReason = "complete_address";
             return;
         }
         try {
@@ -48,7 +48,10 @@ trait WithTabbyPayment
             );
             if ($response["status"] === "created") {
                 $this->isAvailable = true;
-                $this->rejectionReason = null;
+                if ($this->shouldChangeRejection) {
+                    $this->rejectionReason = null;
+                }
+                $this->shouldChangeRejection = !$this->shouldChangeRejection;
             } else {
                 $this->isAvailable = false;
                 $this->rejectionReason =
