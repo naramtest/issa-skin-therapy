@@ -151,7 +151,6 @@
                         })
                     }
                 } catch (e) {
-                    console.log(e)
                     $wire.dispatch('payment-error', {
                         error: 'An unexpected error occurred while processing your payment. Please try again.',
                     })

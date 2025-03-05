@@ -21,7 +21,6 @@
                         <div
                             x-data="{
                                 copy() {
-                                    console.log($wire.generatedUrl)
                                     Livewire.dispatch('copy-to-clipboard')
                                     navigator.clipboard.writeText('{{ $generatedUrl }}')
                                 },

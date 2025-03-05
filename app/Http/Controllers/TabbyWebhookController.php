@@ -16,11 +16,9 @@ class TabbyWebhookController extends Controller
 
     public function handleWebhook(Request $request)
     {
-        logger("webhook");
         try {
             // Get the payment data from the webhook
             $payload = $request->all();
-            logger($payload);
 
             // Find the order by payment ID
             $order = Order::where("payment_intent_id", $payload["id"])->first();

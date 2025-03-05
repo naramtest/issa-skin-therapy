@@ -206,7 +206,6 @@ class TabbyPaymentService implements PaymentServiceInterface
                     "message" => $captureResult["message"],
                 ]);
             }
-            logger("order-success");
         }
     }
 

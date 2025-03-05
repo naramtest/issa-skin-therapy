@@ -13,7 +13,6 @@
             initTabby(total) {
                 if (typeof TabbyCard !== 'undefined') {
                     // Destroy existing instance if it exists
-                    console.log('naram')
                     // Create new instance
                     this.tabbyInstance = new TabbyCard({
                         selector: '#tabbyCard',
