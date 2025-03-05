@@ -37,34 +37,33 @@
                 {{--  --}}
                 {{-- Tabby Payment Method --}}
                 <div>
-                    @if ($isAvailable)
-                        <div class="relative flex gap-x-4 pb-4">
-                            <div class="flex h-6 items-center">
-                                <input
-                                    id="tabby"
-                                    name="payment_method"
-                                    type="radio"
-                                    wire:model.live="form.payment_method"
-                                    value="{{ \App\Enums\Checkout\PaymentMethod::TABBY->value }}"
-                                    class="text-primary focus:ring-primary h-4 w-4 border-gray-300"
-                                />
-                            </div>
-
-                            <label
-                                for="tabby"
-                                class="flex items-center gap-x-2 text-sm font-medium leading-6 text-gray-900"
-                            >
-                                <img
-                                    class="h-5 w-auto"
-                                    src="{{ asset("storage/icons/tabby.svg") }}"
-                                    alt=""
-                                />
-                                <p>
-                                    {{ __("store.Pay in 4. No interest, no fees") }}
-                                </p>
-                            </label>
+                    <div class="relative flex gap-x-4 pb-4">
+                        <div class="flex h-6 items-center">
+                            <input
+                                id="tabby"
+                                name="payment_method"
+                                type="radio"
+                                @disabled(! $isAvailable)
+                                wire:model.live="form.payment_method"
+                                value="{{ \App\Enums\Checkout\PaymentMethod::TABBY->value }}"
+                                class="text-primary focus:ring-primary h-4 w-4 border-gray-300"
+                            />
                         </div>
-                    @endif
+
+                        <label
+                            @class(["flex items-center gap-x-2 text-sm font-medium leading-6 ", "text-gray-400" => ! $isAvailable, "text-gray-900" => $isAvailable])
+                            for="tabby"
+                        >
+                            <img
+                                class="h-5 w-auto"
+                                src="{{ asset("storage/icons/tabby.svg") }}"
+                                alt=""
+                            />
+                            <p>
+                                {{ __("store.Pay in 4. No interest, no fees") }}
+                            </p>
+                        </label>
+                    </div>
 
                     <div
                         x-cloak

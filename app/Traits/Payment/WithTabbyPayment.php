@@ -13,7 +13,7 @@ trait WithTabbyPayment
 
     public bool $isAvailable = false;
     public bool $shouldChangeRejection = false;
-    public ?string $rejectionReason = null;
+    public ?string $rejectionReason = "complete_address";
     protected TabbyPaymentService $tabbyPaymentService;
     protected TabbyPaymentVerificationService $tabbyPaymentVerificationService;
 
