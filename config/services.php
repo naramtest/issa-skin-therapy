@@ -52,7 +52,9 @@ return [
         "public_key" => env("TABBY_PUBLIC_KEY"),
         "secret_key" => env("TABBY_SECRET_KEY"),
         "merchant_code" => env("TABBY_MERCHANT_CODE"),
-        "is_sandbox" => env("TABBY_IS_SANDBOX", true),
-        "webhook_secret" => env("TABBY_WEBHOOK_SECRET"),
+    ],
+
+    "facebook" => [
+        "facebook_pixel_id" => env("FACEBOOK_PIXEL_ID"),
     ],
 ];
