@@ -19,5 +19,7 @@ Schedule::command("dhl:process-tracking")
     ->withoutOverlapping();
 
 Schedule::command("tabby:capture-payments")
-    ->everyMinute()
+    ->everyTenMinutes()
     ->withoutOverlapping();
+
+Schedule::command("catalog:export-facebook")->daily();

@@ -113,15 +113,6 @@ class CurrencyHelper
         return $moneyFormatter->format($money);
     }
 
-    public static function decimalFormatter(Money $money): string
-    {
-        $currencies = new ISOCurrencies();
-
-        $moneyFormatter = new DecimalMoneyFormatter($currencies);
-
-        return $moneyFormatter->format($money); // outputs 1.00
-    }
-
     /**
      * Parse a localized money string into a Money object
      */
@@ -153,5 +144,21 @@ class CurrencyHelper
 
         // Convert to subunits (cents)
         return (int) round($amount * $subunitDivisor);
+    }
+
+    public static function faceBookCurrency($amount): string
+    {
+        $currency = self::defaultCurrency();
+        $money = new Money($amount, $currency);
+        return self::decimalFormatter($money) . " " . $currency;
+    }
+
+    public static function decimalFormatter(Money $money): string
+    {
+        $currencies = new ISOCurrencies();
+
+        $moneyFormatter = new DecimalMoneyFormatter($currencies);
+
+        return $moneyFormatter->format($money); // outputs 1.00
     }
 }

@@ -279,4 +279,20 @@
             </div>
         </div>
     </div>
+
+    {{-- @push('scripts') --}}
+    {{-- <script> --}}
+    {{-- document.addEventListener('livewire:init', () => { --}}
+    {{-- Livewire.on('item-added-to-cart', (data) => { --}}
+    {{-- fbq('track', 'AddToCart', { --}}
+    {{-- content_name: data.content_name, --}}
+    {{-- content_ids: data.content_ids, --}}
+    {{-- content_type: data.content_type, --}}
+    {{-- value: data.value, --}}
+    {{-- currency: data.currency --}}
+    {{-- }); --}}
+    {{-- }); --}}
+    {{-- }); --}}
+    {{-- </script> --}}
+    {{-- @endpush --}}
 </div>

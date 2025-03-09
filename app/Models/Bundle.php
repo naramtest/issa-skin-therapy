@@ -143,4 +143,9 @@ class Bundle extends Model implements HasMedia, Purchasable
     {
         return $this->stock_status;
     }
+
+    public function getFacebookIdAttribute(): string
+    {
+        return "SKU-" . $this->sku;
+    }
 }

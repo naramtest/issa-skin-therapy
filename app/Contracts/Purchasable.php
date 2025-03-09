@@ -12,5 +12,7 @@ interface Purchasable
 
     public function getCurrentMoneyPriceAttribute(): Money;
 
+    public function getFacebookIdAttribute(): string;
+
     public function inventory(): InventoryInterface;
 }

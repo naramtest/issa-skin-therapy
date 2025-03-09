@@ -220,4 +220,9 @@ class Product extends Model implements HasMedia, Purchasable
         //            !$this->published_at and
         //            !$this->published_at <= now();
     }
+
+    public function getFacebookIdAttribute(): string
+    {
+        return "SKU-" . $this->sku;
+    }
 }

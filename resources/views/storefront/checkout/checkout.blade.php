@@ -5,5 +5,8 @@
     <livewire:checkout-component />
     @pushonce("scripts")
         <script src="https://js.stripe.com/v3/"></script>
+        <script>
+            fbq('track', 'InitiateCheckout');
+        </script>
     @endpushonce
 </x-store-main-layout>

@@ -83,4 +83,25 @@ class ImageGetter
         }
         return $image->getAvailableUrl([config("const.media.thumbnail")]);
     }
+
+    public static function getGalleryImages(
+        Model&HasMedia $model,
+        int $limit = 5
+    ): ?string {
+        $additionalImages = $model->getMedia(config("const.media.gallery"));
+        // Limit the number of additional images
+        $limitedImages = $additionalImages->take($limit);
+
+        // If no additional images, return null
+        if ($limitedImages->isEmpty()) {
+            return null;
+        }
+        return $limitedImages
+            ->map(function (Media $mediaItem) {
+                return $mediaItem->getAvailableUrl([
+                    config("const.media.optimized"),
+                ]);
+            })
+            ->implode(", ");
+    }
 }
