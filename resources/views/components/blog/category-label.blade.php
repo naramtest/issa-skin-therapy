@@ -1,6 +1,7 @@
 @props([
     "post",
 ])
+{{-- THIs a test --}}
 @if (count($post->categories))
     <a
         href="{{ route("posts.index", ["categoryId" => $post->categories->first()->id]) }}"
