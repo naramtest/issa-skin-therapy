@@ -156,7 +156,7 @@ class OrderForm
                             ->disabled(),
                         TextInput::make("quantity")
                             ->label(__("dashboard.Quantity"))
-                            ->disabled(), //TODO: in the future makes quantity editable
+                            ->disabled(),
                         MoneyInput::make("subtotal")
                             ->label(__("store.Subtotal"))
                             ->disabled(),

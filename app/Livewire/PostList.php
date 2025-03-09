@@ -15,8 +15,8 @@ class PostList extends Component
 
     public const REQUIRED_POSTS = 6;
     private const POSTS_PER_PAGE = 6;
-    #[Url]
-    public ?string $categoryId = null;
+    #[Url(as: "category")]
+    public ?string $categoryId = "-1";
     public Collection $categories;
     private PostCacheService $postCacheService;
 
@@ -34,6 +34,7 @@ class PostList extends Component
     public function paginatedPosts()
     {
         return $this->postCacheService->getPaginatedPosts(
+            categoryIds: $this->categoryId != -1 ? [$this->categoryId] : null,
             perPage: self::POSTS_PER_PAGE
         );
     }

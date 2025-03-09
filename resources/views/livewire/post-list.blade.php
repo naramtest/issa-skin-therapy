@@ -2,10 +2,24 @@
     <ul
         class="my-2 flex items-center justify-center divide-x divide-[#B9B9B9] rtl:pt-6"
     >
+        <li
+            wire:click="filterByCategory('-1')"
+            @class([
+                "cursor-pointer px-4 text-lg hover:text-darkColor",
+                "text-darkColor" => $categoryId == -1,
+                "text-[#B9B9B9]" => $categoryId != -1,
+            ])
+        >
+            {{ __("store.All") }}
+        </li>
         @foreach ($categories as $category)
             <li
                 wire:click="filterByCategory({{ $category->id }})"
-                class="cursor-pointer px-4 text-lg text-[#B9B9B9] hover:text-darkColor"
+                @class([
+                    "cursor-pointer px-4 text-lg hover:text-darkColor",
+                    "text-darkColor" => $categoryId == $category->id,
+                    "text-[#B9B9B9]" => $categoryId != $category->id,
+                ])
             >
                 {{ $category->name }}
             </li>

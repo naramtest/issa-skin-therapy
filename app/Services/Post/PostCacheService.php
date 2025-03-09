@@ -14,8 +14,6 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class PostCacheService
 {
-    //TODO: test this if its work (add and removing the cache)
-    //TODO: switch to spatie cache / for posts , faq ... etc / to know what to do ask claude how to cache a pagination
     /**
      * Cache duration in seconds (1 week)
      */
@@ -88,7 +86,7 @@ class PostCacheService
                 self::POST_CACHE_TTL,
                 fn() => $this->queryPosts($categoryIds, $perPage)
             );
-        } catch (\Exception | NotFoundExceptionInterface | ContainerExceptionInterface $e) {
+        } catch (\Exception | NotFoundExceptionInterface | ContainerExceptionInterface) {
             return $this->queryPosts($categoryIds, $perPage);
         }
     }
