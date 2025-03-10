@@ -45,4 +45,14 @@
 
         <x-product.section.faqs :faqs="$faqs" />
     </main>
+    @push("scripts")
+        <script>
+            fbq('track', 'ViewContent', {
+                content_ids: ['{{ $bundle->facebook_id }}'],
+                currency:
+                    '{{ \App\Services\Currency\CurrencyHelper::getCurrencyCode() }}',
+                value: {{ \App\Services\Currency\CurrencyHelper::decimalFormatter($bundle->current_money_price) }},
+            });
+        </script>
+    @endpush
 </x-store-main-layout>
