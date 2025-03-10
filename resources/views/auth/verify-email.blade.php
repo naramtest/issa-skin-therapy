@@ -47,4 +47,17 @@
             </x-general.button-white-animation>
         </form>
     </main>
+    @php
+        $user = Auth::user();
+    @endphp
+
+    @if ($user and $user->created_at->isToday())
+        @push("scripts")
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    fbq('track', 'CompleteRegistration');
+                });
+            </script>
+        @endpush
+    @endif
 </x-store-main-layout>

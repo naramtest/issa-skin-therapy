@@ -45,7 +45,7 @@
                 />
                 <x-general.button-black-animation class="!w-fit !py-2 px-6">
                     <button class="relative z-10" type="submit">
-                        {{ __("store.Sign In") }}
+                        {{ __("store.Create Account") }}
                     </button>
                 </x-general.button-black-animation>
             </form>
