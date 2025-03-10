@@ -248,4 +248,23 @@
             </a>
         </div>
     </main>
+    @push("scripts")
+        <script>
+            fbq('track', 'Purchase', {
+                content_type: 'product',
+                contents: [
+                        @foreach($order->items as $item)
+                    {
+                        id: '{{ $item->purchasable->facebook_id }}',
+                        quantity: {{ $item->quantity }},
+
+                    }{{ !$loop->last ? ',' : '' }}
+                        @endforeach
+                ],
+                currency: '{{ $order->currency_code }}',
+                num_items: {{ $order->items->sum('quantity') }},
+                value: {{ \App\Services\Currency\CurrencyHelper::decimalFormatter($order->getMoneyTotal()) }}
+            });
+        </script>
+    @endpush
 </x-store-main-layout>

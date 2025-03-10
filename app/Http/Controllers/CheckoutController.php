@@ -106,6 +106,9 @@ class CheckoutController extends Controller
                 Mail::to("info@issaskintherapy.com")->queue(
                     new NewOrderAdminNotification($order)
                 );
+                Mail::to("tarekalkoht@gmail.com")->queue(
+                    new NewOrderAdminNotification($order)
+                );
             }
             return view("storefront.checkout.success", [
                 "order" => $order,
