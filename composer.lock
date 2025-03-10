@@ -7821,16 +7821,16 @@
         },
         {
             "name": "ralphjsmit/laravel-seo",
-            "version": "1.6.3",
+            "version": "1.6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ralphjsmit/laravel-seo.git",
-                "reference": "f22d0a2982f0d5162b57609b56537643d562b67d"
+                "reference": "4b087a8860872c6719e60ab35abbabe6d47c28c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ralphjsmit/laravel-seo/zipball/f22d0a2982f0d5162b57609b56537643d562b67d",
-                "reference": "f22d0a2982f0d5162b57609b56537643d562b67d",
+                "url": "https://api.github.com/repos/ralphjsmit/laravel-seo/zipball/4b087a8860872c6719e60ab35abbabe6d47c28c5",
+                "reference": "4b087a8860872c6719e60ab35abbabe6d47c28c5",
                 "shasum": ""
             },
             "require": {
@@ -7853,12 +7853,12 @@
             "type": "library",
             "extra": {
                 "laravel": {
-                    "providers": [
-                        "RalphJSmit\\Laravel\\SEO\\LaravelSEOServiceProvider"
-                    ],
                     "aliases": {
                         "SEOManager": "RalphJSmit\\Laravel\\SEO\\Facades\\SEOManager"
-                    }
+                    },
+                    "providers": [
+                        "RalphJSmit\\Laravel\\SEO\\LaravelSEOServiceProvider"
+                    ]
                 }
             },
             "autoload": {
@@ -7890,9 +7890,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ralphjsmit/laravel-seo/issues",
-                "source": "https://github.com/ralphjsmit/laravel-seo/tree/1.6.3"
+                "source": "https://github.com/ralphjsmit/laravel-seo/tree/1.6.7"
             },
-            "time": "2024-08-30T11:58:06+00:00"
+            "time": "2025-01-22T18:45:53+00:00"
         },
         {
             "name": "ramsey/collection",

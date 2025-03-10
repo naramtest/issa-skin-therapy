@@ -29,7 +29,7 @@ class ExportFacebookCatalogCommand extends Command
     public function handle(): void
     {
         // Fixed filename
-        $filename = "facebook_catalog.xlsx";
+        $filename = "facebook_catalog.csv";
         $dir = "feeds";
         $storage = Storage::disk("public");
         if (!$storage->exists($dir)) {
@@ -39,7 +39,8 @@ class ExportFacebookCatalogCommand extends Command
         Excel::store(
             new FacebookCatalogExport(),
             $dir . "/" . $filename,
-            "public"
+            "public",
+            \Maatwebsite\Excel\Excel::CSV
         );
 
         // Generate public URL
