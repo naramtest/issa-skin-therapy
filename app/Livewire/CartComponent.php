@@ -82,17 +82,37 @@ class CartComponent extends Component
             $this->dispatch("toggle-cart");
             $this->dispatch("finish-loading");
 
-            $this->dispatch("fb-add-to-cart", [
-                "content_id" => $result["item"]->facebook_id,
-                "quantity" => $quantity,
-                "value" => CurrencyHelper::decimalFormatter(
-                    $result["item"]->current_money_price
-                ),
-                "currency" => CurrencyHelper::defaultCurrency(),
-            ]);
+            $price = CurrencyHelper::decimalFormatter(
+                $result["item"]->current_money_price
+            );
+            $this->facebookAddToCartEvent($result["item"], $quantity, $price);
         } catch (Exception $e) {
             $this->dispatch("error", message: $e->getMessage());
         }
+    }
+
+    /**
+     * @param $item
+     * @param mixed $quantity
+     * @param string $price
+     * @return void
+     */
+    public function facebookAddToCartEvent(
+        $item,
+        mixed $quantity,
+        string $price
+    ): void {
+        $currency = CurrencyHelper::defaultCurrency();
+        $this->js("
+            fbq('track', 'AddToCart', {
+                contents: [
+                    { id: '{$item->facebook_id}', quantity: {$quantity} }
+                ],
+                content_type: 'product',
+                value: {$price},
+                currency: '{$currency}'
+            });
+        ");
     }
 
     public function updateQuantity(string $itemId, string $action): void
