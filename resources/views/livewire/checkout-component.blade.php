@@ -158,4 +158,16 @@
             "
         ></div>
     </form>
+
+    @push("scripts")
+        <script>
+            fbq('track', 'InitiateCheckout', {
+                contents: @json($this->getFacebookArray()),
+                currency:
+                    '{{ \App\Services\Currency\CurrencyHelper::getCurrencyCode() }}',
+                num_items: {{ count($this->cartItems) }},
+                value: {{ \App\Services\Currency\CurrencyHelper::decimalFormatter($this->total) }},
+            });
+        </script>
+    @endpush
 </div>

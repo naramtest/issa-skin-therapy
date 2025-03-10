@@ -15,6 +15,7 @@ use App\Traits\Checkout\LocationHandler;
 use App\Traits\Checkout\WithCouponHandler;
 use App\Traits\Payment\WithPayment;
 use App\Traits\WithShippingCalculation;
+use App\ValueObjects\CartItem;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -216,5 +217,15 @@ class CheckoutComponent extends Component
         if ($this->hasTypeCompleteAddress()) {
             $this->checkAvailability();
         }
+    }
+
+    public function getFacebookArray(): array
+    {
+        return array_map(function (CartItem $item) {
+            return [
+                "id" => $item->getPurchasable()->facebook_id,
+                "quantity" => $item->getQuantity(),
+            ];
+        }, $this->cartItems);
     }
 }
