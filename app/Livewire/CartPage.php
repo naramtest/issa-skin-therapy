@@ -43,7 +43,6 @@ class CartPage extends Component
 
             $this->cartService->updateItemQuantity($itemId, $newQty);
             $this->refreshCart();
-            $this->dispatch("cart-updated");
         } catch (Exception $e) {
             $this->dispatch("error", message: $e->getMessage());
         }
@@ -54,7 +53,6 @@ class CartPage extends Component
         try {
             $this->cartService->removeItem($itemId);
             $this->refreshCart();
-            $this->dispatch("cart-updated");
         } catch (\Exception $e) {
             $this->dispatch("error", message: $e->getMessage());
         }

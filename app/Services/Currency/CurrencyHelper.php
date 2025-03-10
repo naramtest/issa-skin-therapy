@@ -20,7 +20,7 @@ class CurrencyHelper
         if (session()->has("currency")) {
             try {
                 return new Currency(
-                    session()->get("currency", config("app.money_currency"))
+                    session()->get("currency", self::getCurrencyCode())
                 );
             } catch (NotFoundExceptionInterface | ContainerExceptionInterface) {
                 return self::defaultCurrency();
@@ -29,9 +29,14 @@ class CurrencyHelper
         return self::defaultCurrency();
     }
 
+    public static function getCurrencyCode(): string
+    {
+        return config("app.money_currency");
+    }
+
     public static function defaultCurrency(): Currency
     {
-        return new Currency(config("app.money_currency"));
+        return new Currency(self::getCurrencyCode());
     }
 
     public static function setUserCurrency(string $currency): void
@@ -59,9 +64,9 @@ class CurrencyHelper
     public static function getUserCurrency(): string
     {
         try {
-            return session()->get("currency", config("app.money_currency"));
+            return session()->get("currency", self::getCurrencyCode());
         } catch (NotFoundExceptionInterface | ContainerExceptionInterface) {
-            return config("app.money_currency");
+            return self::getCurrencyCode();
         }
     }
 
@@ -153,8 +158,13 @@ class CurrencyHelper
         return self::decimalFormatter($money) . " " . $currency;
     }
 
-    public static function decimalFormatter(Money $money): string
-    {
+    public static function decimalFormatter(
+        ?Money $money = null,
+        int|float $value = 0
+    ): string {
+        if (!$money) {
+            $money = new Money($value, self::defaultCurrency());
+        }
         $currencies = new ISOCurrencies();
 
         $moneyFormatter = new DecimalMoneyFormatter($currencies);

@@ -81,7 +81,7 @@
                         style="scrollbar-width: none"
                         class="flex-1 overflow-y-scroll py-4"
                     >
-                        @forelse ($cartItems as $item)
+                        @forelse ($this->cartItems as $item)
                             <div class="flex px-3 py-3">
                                 <div
                                     class="relative h-16 w-16 flex-shrink-0 rounded-md border"
@@ -160,7 +160,7 @@
                     </div>
 
                     <!-- Cart footer -->
-                    @if (count($cartItems) > 0)
+                    @if (count($this->cartItems) > 0)
                         <div class="border-t border-gray-200 py-4">
                             <!-- Discount code -->
                             <div
@@ -280,19 +280,18 @@
         </div>
     </div>
 
-    {{-- @push('scripts') --}}
-    {{-- <script> --}}
-    {{-- document.addEventListener('livewire:init', () => { --}}
-    {{-- Livewire.on('item-added-to-cart', (data) => { --}}
-    {{-- fbq('track', 'AddToCart', { --}}
-    {{-- content_name: data.content_name, --}}
-    {{-- content_ids: data.content_ids, --}}
-    {{-- content_type: data.content_type, --}}
-    {{-- value: data.value, --}}
-    {{-- currency: data.currency --}}
-    {{-- }); --}}
-    {{-- }); --}}
-    {{-- }); --}}
-    {{-- </script> --}}
-    {{-- @endpush --}}
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('fb-add-to-cart', (data) => {
+                fbq('track', 'AddToCart', {
+                    contents: [
+                        { id: data[0].content_id, quantity: data[0].quantity },
+                    ],
+                    content_type: 'product',
+                    value: data[0].value,
+                    currency: data[0].currency,
+                });
+            });
+        });
+    </script>
 </div>

@@ -110,7 +110,7 @@ readonly class CartService
         int $id,
         int $quantity = 1,
         array $options = []
-    ): void {
+    ): array {
         $purchasable = match ($type) {
             ProductType::PRODUCT => Product::findOrFail($id),
             ProductType::BUNDLE => Bundle::findOrFail($id),
@@ -122,6 +122,10 @@ readonly class CartService
         }
 
         $this->itemsService->addItem($purchasable, $quantity, $options);
+        return [
+            "item" => $purchasable,
+            "quantity" => $quantity,
+        ];
     }
 
     public function removeItem(string $itemId): void

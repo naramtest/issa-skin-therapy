@@ -17,7 +17,6 @@ class CartComponent extends Component
     use WithCouponHandler;
 
     public $isOpen = false;
-    public $cartItems = [];
     public string $subtotalString = "";
     public $itemCount = 0;
     public ?string $coupon_code;
@@ -39,7 +38,6 @@ class CartComponent extends Component
     protected function refreshCart(): void
     {
         try {
-            $this->cartItems = $this->cartService->getItems();
             $this->subtotal = $this->cartService->getSubtotal();
             $this->total = $this->cartService->getTotal();
 
@@ -71,7 +69,7 @@ class CartComponent extends Component
         $options = []
     ): void {
         try {
-            $this->cartService->addItem(
+            $result = $this->cartService->addItem(
                 type: ProductType::fromString($type),
                 id: $id,
                 quantity: $quantity,
@@ -79,12 +77,20 @@ class CartComponent extends Component
             );
 
             $this->refreshCart();
+
             $this->isOpen = true;
-            $this->dispatch("cart-updated");
             $this->dispatch("toggle-cart");
             $this->dispatch("finish-loading");
+
+            $this->dispatch("fb-add-to-cart", [
+                "content_id" => $result["item"]->facebook_id,
+                "quantity" => $quantity,
+                "value" => CurrencyHelper::decimalFormatter(
+                    $result["item"]->current_money_price
+                ),
+                "currency" => CurrencyHelper::defaultCurrency(),
+            ]);
         } catch (Exception $e) {
-            //TODO: add a error notification
             $this->dispatch("error", message: $e->getMessage());
         }
     }
@@ -92,7 +98,8 @@ class CartComponent extends Component
     public function updateQuantity(string $itemId, string $action): void
     {
         try {
-            $item = $this->cartService->getItems()[$itemId] ?? null;
+            $cartItems = $this->cartItems();
+            $item = $cartItems[$itemId] ?? null;
             if (!$item) {
                 throw new Exception(__("store.Item not found in cart"));
             }
@@ -108,10 +115,15 @@ class CartComponent extends Component
 
             $this->cartService->updateItemQuantity($itemId, $newQty);
             $this->refreshCart();
-            $this->dispatch("cart-updated");
         } catch (Exception $e) {
             $this->dispatch("error", message: $e->getMessage());
         }
+    }
+
+    #[Computed]
+    public function cartItems()
+    {
+        return $this->cartService->getItems();
     }
 
     public function removeItem(string $itemId): void
@@ -119,7 +131,6 @@ class CartComponent extends Component
         try {
             $this->cartService->removeItem($itemId);
             $this->refreshCart();
-            $this->dispatch("cart-updated");
         } catch (\Exception $e) {
             $this->dispatch("error", message: $e->getMessage());
         }
@@ -135,7 +146,6 @@ class CartComponent extends Component
         try {
             $this->cartService->clear();
             $this->refreshCart();
-            $this->dispatch("cart-updated");
         } catch (\Exception $e) {
             $this->dispatch("error", message: $e->getMessage());
         }
