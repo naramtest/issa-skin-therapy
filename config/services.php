@@ -57,4 +57,8 @@ return [
     "facebook" => [
         "facebook_pixel_id" => env("FACEBOOK_PIXEL_ID"),
     ],
+    "cloudflare" => [
+        "site_key" => env("CLOUDFLARE_TURNSTILE_SITE_KEY"),
+        "secret_key" => env("CLOUDFLARE_TURNSTILE_SECRET_KEY"),
+    ],
 ];

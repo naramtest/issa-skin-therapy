@@ -577,4 +577,5 @@ return [
     "Mark as Read" => "Mark as Read",
     "Contact Message" => "Contact Message",
     "Contact Messages" => "Contact Messages",
+    "Sending contact" => "Sending...",
 ];

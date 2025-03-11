@@ -2,8 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Mail\ContactFormSubmission;
 use App\Models\ContactMessage;
+use App\Rules\TurnstileCheckRule;
 use Livewire\Component;
+use Mail;
 
 class ContactForm extends Component
 {
@@ -12,6 +15,7 @@ class ContactForm extends Component
     public string $phone_number = "";
     public string $subject = "";
     public string $message = "";
+    public string $turnstileToken = "";
 
     public bool $success = false;
 
@@ -23,6 +27,7 @@ class ContactForm extends Component
             "phone_number" => "required|string|max:20",
             "subject" => "required|string|max:100",
             "message" => "required|string|max:1000",
+            "turnstileToken" => ["required", new TurnstileCheckRule()],
         ]);
 
         // 1. Store in database
@@ -37,12 +42,21 @@ class ContactForm extends Component
 
         // 2. Send email notification
         //TODO: update from admin panel
-        //        Mail::to("info@issaskintherapy.com")->queue(
-        //            new ContactFormSubmission($contactMessage)
-        //        );
+        if (\App::isProduction()) {
+            Mail::to("info@issaskintherapy.com")->queue(
+                new ContactFormSubmission($contactMessage)
+            );
+        }
 
         // 3. Show success message
-        $this->reset(["name", "email", "phone_number", "subject", "message"]);
+        $this->reset([
+            "name",
+            "email",
+            "phone_number",
+            "subject",
+            "message",
+            "turnstileToken",
+        ]);
         $this->success = true;
     }
 

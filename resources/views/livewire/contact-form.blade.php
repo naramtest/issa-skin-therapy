@@ -29,11 +29,38 @@
         </div>
     @endif
 
-    <form wire:submit="submitForm">
+    <form
+        wire:submit="submitForm"
+        x-data="{
+    async initTurnstile() {
+
+
+            // Wait for turnstile to be fully loaded
+            await new Promise(resolve => {
+                if (document.readyState === 'complete') {
+                    resolve();
+                } else {
+                    window.addEventListener('load', resolve);
+                }
+            });
+            turnstile.render('#turnstile-container', {
+                sitekey: '{{ env('CLOUDFLARE_TURNSTILE_SITE_KEY') }}',
+                theme: 'light',
+                action: 'contactform',
+                size: 'invisible',
+                callback: (token) => {
+                    @this.set('turnstileToken', token);
+                    // Submit the form automatically when token is received
+                }
+            });
+
+    }
+    }"
+        x-init="initTurnstile()"
+    >
         <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             <x-checkout.input-field
                 label="{{ __('store.Name') }}:"
-                :required="true"
                 place-holder="{{ __('store.Type your name') }}"
                 field="name"
                 wire:model="name"
@@ -80,13 +107,19 @@
             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
         @enderror
 
+        @error("turnstileToken")
+            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+        @enderror
+
+        <!-- Invisible Turnstile container -->
+        <div id="turnstile-container" class="hidden"></div>
         <button type="submit" class="mt-6 w-full" wire:loading.attr="disabled">
             <x-general.button-black-animation>
                 <span class="relative z-10 inline-block" wire:loading.remove>
                     {{ __("store.Send Message") }}
                 </span>
                 <span class="relative z-10 inline-block" wire:loading>
-                    {{ __("store.Sending...") }}
+                    {{ __("store.Sending contact") }}
                 </span>
             </x-general.button-black-animation>
         </button>
