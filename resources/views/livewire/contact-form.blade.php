@@ -47,7 +47,7 @@
                 sitekey: '{{ config('services.cloudflare.site_key') }}',
                 theme: 'light',
                 action: 'contactform',
-                size: 'invisible',
+                size: 'normal',
                 callback: (token) => {
                     @this.set('turnstileToken', token);
                     // Submit the form automatically when token is received
@@ -124,4 +124,16 @@
             </x-general.button-black-animation>
         </button>
     </form>
+
+    @push("scripts")
+        <script>
+            document.addEventListener('livewire:init', () => {
+                Livewire.on('fb-event', (eventData) => {
+                    if (eventData.type === 'Lead') {
+                        fbq('track', 'Lead', eventData.params);
+                    }
+                });
+            });
+        </script>
+    @endpush
 </div>

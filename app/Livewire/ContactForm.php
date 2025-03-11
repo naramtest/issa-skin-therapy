@@ -47,6 +47,15 @@ class ContactForm extends Component
                 new ContactFormSubmission($contactMessage)
             );
         }
+        $this->dispatch(
+            "fb-event",
+            type: "Lead",
+            params: [
+                "content_name" => "Contact Form",
+                "content_category" => "Contact",
+                "status" => "complete",
+            ]
+        );
 
         // 3. Show success message
         $this->reset([
