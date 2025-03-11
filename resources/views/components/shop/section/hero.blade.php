@@ -1,12 +1,12 @@
 @props([
     "label",
 ])
-<div {{ $attributes->class(["h-[450px] w-full bg-lightColor lg:h-[90vh]"]) }}>
+<div {{ $attributes->class(["h-[250px] w-full bg-lightColor lg:h-[300px]"]) }}>
     <div
         {{-- TODO: edit image --}}
         style="
             background-image: url({{ asset("storage/images/shop.webp") }});
-            background-position: top center;
+            background-position: center center;
             background-repeat: no-repeat;
             background-size: cover;
         "
@@ -29,7 +29,7 @@
                     <span>{{ __("store.All Products") }}</span>
                 </a>
             </div>
-            <h1 class="mt-4 text-[2.25rem] font-bold lg:text-[75px]">
+            <h1 class="mt-2 text-[2.25rem] font-bold lg:text-[40px]">
                 {{ $label }}
             </h1>
         </div>
