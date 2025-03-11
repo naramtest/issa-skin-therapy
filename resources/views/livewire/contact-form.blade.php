@@ -44,7 +44,7 @@
                 }
             });
             turnstile.render('#turnstile-container', {
-                sitekey: '{{ env('CLOUDFLARE_TURNSTILE_SITE_KEY') }}',
+                sitekey: '{{ config('services.cloudflare.site_key') }}',
                 theme: 'light',
                 action: 'contactform',
                 size: 'invisible',
