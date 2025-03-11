@@ -573,4 +573,8 @@ return [
     "Thank you for your message" => "Thank you for your message",
     "We have received your inquiry and will respond as                             soon as possible" => 'We have received your inquiry and will respond as
                             soon as possible',
+    "Is Read" => "Is Read",
+    "Mark as Read" => "Mark as Read",
+    "Contact Message" => "Contact Message",
+    "Contact Messages" => "Contact Messages",
 ];
