@@ -9,52 +9,9 @@
             <h1 class="text-4xl font-[800] lg:text-[95px] rtl:text-[60px]">
                 {{ __("store.Contact Us") }}
             </h1>
-            <form class="mt-10 md:mt-12">
-                <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <x-checkout.input-field
-                        label="{{ __('store.Name') }}:"
-                        :required="true"
-                        place-holder="{{ __('store.Type your name') }}"
-                        field="name"
-                    />
-
-                    <x-checkout.input-field
-                        label="{{ __('store.Email') }}:"
-                        :required="true"
-                        place-holder="{{ __('store.Type you email') }}"
-                        field="email"
-                        type="email"
-                    />
-                </div>
-                <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <x-checkout.input-field
-                        label="{{ __('dashboard.Phone number') }}:"
-                        :required="true"
-                        place-holder="{{ __('dashboard.Type your phone number') }}:"
-                        field="phone_number"
-                    />
-
-                    <x-checkout.input-field
-                        label="{{ __('dashboard.Subject') }}:"
-                        :required="true"
-                        place-holder="{{ __('dashboard.Email you used during checkout') }}"
-                        field="subject"
-                    />
-                </div>
-                <x-checkout.text-area-field
-                    label="{{ __('store.Message') }}:"
-                    :required="true"
-                    placeHolder="{{ __('dashboard.Type your message') }}"
-                    field="message"
-                />
-                <button type="submit" class="mt-6 w-full">
-                    <x-general.button-black-animation>
-                        <span class="relative z-10 inline-block">
-                            {{ __("store.Shop Now") }}
-                        </span>
-                    </x-general.button-black-animation>
-                </button>
-            </form>
+            <div class="mt-10 md:mt-12">
+                <livewire:contact-form />
+            </div>
         </div>
         <div class="md:w-[50%]">
             <iframe
