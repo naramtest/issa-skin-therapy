@@ -36,15 +36,7 @@ class HomeController extends Controller
                 description: $info->about,
                 author: $info->name,
                 image: "storage/test/hero1.webp",
-                tags: [
-                    "skincare",
-                    "beauty",
-                    "natural skincare",
-                    "skin health",
-                    "moisturizer",
-                    "cleanser",
-                    "serum",
-                ]
+                tags: ["skincare", "beauty", "skin health", "cleanser"]
             ),
         ]);
     }
