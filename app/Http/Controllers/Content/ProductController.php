@@ -8,38 +8,31 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Services\Faq\FaqService;
-use App\Services\SEO\SchemaServices\BundlePageSchemaService;
-use App\Services\SEO\SchemaServices\SingleProductSchemaService;
+use App\Services\SEO\Schema;
 
 class ProductController extends Controller
 {
-    public function show(
-        Product $product,
-        FaqService $faqService,
-        SingleProductSchemaService $schemaService
-    ) {
+    public function show(Product $product, FaqService $faqService)
+    {
         $product->load(["media", "categories", "types"]);
         $productFaqs = $faqService->getProductFaqs();
         return view("storefront.product.show", [
             "product" => $product,
             "faqs" => $productFaqs,
             "media" => $product->media,
-            "graph" => $schemaService->setProduct($product)->generate(),
+            "graph" => Schema::getSchema("product", $product),
         ]);
     }
 
-    public function showBundle(
-        Bundle $bundle,
-        FaqService $faqService,
-        BundlePageSchemaService $schemaService
-    ) {
+    public function showBundle(Bundle $bundle, FaqService $faqService)
+    {
         $bundle->load(["media", "products"]);
         $productFaqs = $faqService->getProductFaqs();
         return view("storefront.product.bundle", [
             "bundle" => $bundle,
             "faqs" => $productFaqs,
             "media" => $bundle->media,
-            "graph" => $schemaService->setBundle($bundle)->generate(),
+            "graph" => Schema::getSchema("bundle", $bundle),
         ]);
     }
 

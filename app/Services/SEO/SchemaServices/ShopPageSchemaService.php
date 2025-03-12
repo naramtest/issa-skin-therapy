@@ -7,24 +7,26 @@ use App\Models\Info;
 use App\Models\Product;
 use App\Services\Currency\CurrencyHelper;
 use App\Services\Info\InfoCacheService;
-use App\Services\Product\ProductCacheService;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Spatie\SchemaOrg\ItemAvailability;
 use Spatie\SchemaOrg\Schema;
 
 class ShopPageSchemaService extends BaseSchemaService
 {
-    protected ProductCacheService $productCacheService;
-    private Info $info;
+    protected Collection $products;
+    protected Collection $bundles;
 
-    public function __construct(
-        ProductCacheService $productCacheService,
-        InfoCacheService $infoCacheService
-    ) {
-        $this->info = $infoCacheService->getInfo();
+    public function setProducts(Collection $products): static
+    {
+        $this->products = $products;
+        return $this;
+    }
 
-        $this->productCacheService = $productCacheService;
-        parent::__construct($this->info);
+    public function setBundles(Collection $bundles): static
+    {
+        $this->bundles = $bundles;
+        return $this;
     }
 
     public function generate(): string
@@ -51,12 +53,8 @@ class ShopPageSchemaService extends BaseSchemaService
 
     protected function generateProductsSchema(): array
     {
-        $products = $this->productCacheService->allProducts();
-
-        $bundles = $this->productCacheService->allBundles();
-
-        return $products
-            ->concat($bundles)
+        return $this->products
+            ->concat($this->bundles)
             ->map(function ($product) {
                 return Schema::product()
                     ->name($product->name)
@@ -84,5 +82,25 @@ class ShopPageSchemaService extends BaseSchemaService
                     );
             })
             ->toArray();
+    }
+
+    protected function getInfo(): Info
+    {
+        if (!$this->info) {
+            $this->setInfo(app(InfoCacheService::class)->getInfo());
+        }
+        return $this->info;
+    }
+
+    /**
+     * Set the info object and initialize parent
+     *
+     * @param Info $info
+     * @return self
+     */
+    public function setInfo(Info $info): static
+    {
+        $this->info = $info;
+        return $this;
     }
 }

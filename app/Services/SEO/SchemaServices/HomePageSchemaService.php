@@ -6,7 +6,6 @@ use App\Helpers\Media\ImageGetter;
 use App\Models\Info;
 use App\Services\Currency\CurrencyHelper;
 use App\Services\Info\InfoCacheService;
-use App\Services\Product\ProductCacheService;
 use Illuminate\Support\Facades\URL;
 use Spatie\SchemaOrg\ItemAvailability;
 use Spatie\SchemaOrg\Product;
@@ -14,17 +13,13 @@ use Spatie\SchemaOrg\Schema;
 
 class HomePageSchemaService extends BaseSchemaService
 {
-    protected ProductCacheService $productCacheService;
-    private Info $info;
+    protected ?\App\Models\Product $featuredProduct;
 
-    public function __construct(
-        ProductCacheService $productCacheService,
-        InfoCacheService $infoCacheService
-    ) {
-        $this->info = $infoCacheService->getInfo();
-        $this->productCacheService = $productCacheService;
-
-        parent::__construct($this->info);
+    public function setFeaturedProduct(
+        ?\App\Models\Product $featuredProduct
+    ): static {
+        $this->featuredProduct = $featuredProduct;
+        return $this;
     }
 
     public function generate(): string
@@ -57,27 +52,45 @@ class HomePageSchemaService extends BaseSchemaService
 
     protected function generateFeaturedProductsSchema(): ?Product
     {
-        $featuredProduct = $this->productCacheService->getFeaturedProduct();
-
-        if (!$featuredProduct) {
+        if (!$this->featuredProduct) {
             return null;
         }
 
         return Schema::product()
-            ->name($featuredProduct->name)
-            ->description(strip_tags($featuredProduct->description))
-            ->image(ImageGetter::getMediaUrl($featuredProduct))
+            ->name($this->featuredProduct->name)
+            ->description(strip_tags($this->featuredProduct->description))
+            ->image(ImageGetter::getMediaUrl($this->featuredProduct))
             ->brand(Schema::brand()->name($this->info->name))
             ->offers(
                 Schema::offer()
                     ->price(
                         CurrencyHelper::decimalFormatter(
-                            value: $featuredProduct->getCurrentPrice()
+                            value: $this->featuredProduct->getCurrentPrice()
                         )
                     )
                     ->priceCurrency(CurrencyHelper::getCurrencyCode())
                     ->availability(ItemAvailability::InStock)
-                    ->url(URL::route("product.show", $featuredProduct))
+                    ->url(URL::route("product.show", $this->featuredProduct))
             );
+    }
+
+    protected function getInfo(): Info
+    {
+        if (!$this->info) {
+            $this->setInfo(app(InfoCacheService::class)->getInfo());
+        }
+        return $this->info;
+    }
+
+    /**
+     * Set the info object and initialize parent
+     *
+     * @param Info $info
+     * @return self
+     */
+    public function setInfo(Info $info): static
+    {
+        $this->info = $info;
+        return $this;
     }
 }

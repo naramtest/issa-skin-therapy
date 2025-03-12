@@ -60,8 +60,12 @@ class SchemaManager
         ?Info $info = null
     ): string {
         $schemeService = match ($pageType) {
-            "home" => app(HomePageSchemaService::class),
-            "shop" => app(ShopPageSchemaService::class),
+            "home" => app(HomePageSchemaService::class)->setFeaturedProduct(
+                $data
+            ),
+            "shop" => app(ShopPageSchemaService::class)
+                ->setBundles($data["bundles"])
+                ->setProducts($data["products"]),
             "product" => app(SingleProductSchemaService::class)->setProduct(
                 $data
             ),

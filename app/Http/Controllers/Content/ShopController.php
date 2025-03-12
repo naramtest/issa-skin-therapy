@@ -4,21 +4,22 @@ namespace App\Http\Controllers\Content;
 
 use App\Http\Controllers\Controller;
 use App\Services\Product\ProductCacheService;
-use App\Services\SEO\SchemaServices\ShopPageSchemaService;
+use App\Services\SEO\Schema;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class ShopController extends Controller
 {
-    public function index(
-        ProductCacheService $productCacheService,
-        ShopPageSchemaService $shopPageSchemaService
-    ) {
+    public function index(ProductCacheService $productCacheService)
+    {
         $bundles = $productCacheService->allBundles();
         $products = $productCacheService->getPaginatedProduct(12);
         return view("storefront.shop", [
             "bundles" => $bundles,
             "products" => $products,
-            "graph" => $shopPageSchemaService->generate(),
+            "graph" => Schema::getSchema("shop", [
+                "products" => $productCacheService->allProducts(),
+                "bundles" => $bundles,
+            ]),
             "seo" => new SEOData(
                 title: getPageTitle(__("store.Shop")),
                 description: __(

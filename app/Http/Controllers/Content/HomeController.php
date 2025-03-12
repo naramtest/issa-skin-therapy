@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Info\InfoCacheService;
 use App\Services\Post\PostCacheService;
 use App\Services\Product\ProductCacheService;
-use App\Services\SEO\SchemaServices\HomePageSchemaService;
+use App\Services\SEO\Schema;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class HomeController extends Controller
@@ -17,8 +17,7 @@ class HomeController extends Controller
     public function index(
         ProductCacheService $productCacheService,
         PostCacheService $postCacheService,
-        InfoCacheService $infoCacheService,
-        HomePageSchemaService $homePageSchemaService
+        InfoCacheService $infoCacheService
     ) {
         $bundles = $productCacheService->allBundles();
         $categories = $productCacheService->allProductCategories();
@@ -30,7 +29,11 @@ class HomeController extends Controller
             "categories" => $categories,
             "featuredProduct" => $featuredProduct,
             "posts" => $posts,
-            "graph" => $homePageSchemaService->generate(),
+            "graph" => Schema::getSchema(
+                "home",
+                data: $featuredProduct,
+                info: $info
+            ),
             "seo" => new SEOData(
                 title: $info->name,
                 description: $info->about,

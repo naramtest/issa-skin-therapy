@@ -14,13 +14,6 @@ use Spatie\SchemaOrg\Schema;
 class SingleProductSchemaService extends BaseSchemaService
 {
     protected Product $product;
-    private Info $info;
-
-    public function __construct(InfoCacheService $infoCacheService)
-    {
-        $this->info = $infoCacheService->getInfo();
-        parent::__construct($this->info);
-    }
 
     public function setProduct(Product $product): static
     {
@@ -82,5 +75,25 @@ class SingleProductSchemaService extends BaseSchemaService
         }
 
         return $productSchema;
+    }
+
+    protected function getInfo(): Info
+    {
+        if (!$this->info) {
+            $this->setInfo(app(InfoCacheService::class)->getInfo());
+        }
+        return $this->info;
+    }
+
+    /**
+     * Set the info object and initialize parent
+     *
+     * @param Info $info
+     * @return self
+     */
+    public function setInfo(Info $info): static
+    {
+        $this->info = $info;
+        return $this;
     }
 }
