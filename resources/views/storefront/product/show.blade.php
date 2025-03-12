@@ -1,6 +1,9 @@
 <x-store-main-layout>
-    <x-slot name="title">
-        <title>{{ getPageTitle($product->name) }}</title>
+    <x-slot name="seo">
+        {!! seo()->for($product) !!}
+    </x-slot>
+    <x-slot name="graph">
+        {!! $graph !!}
     </x-slot>
     <main>
         <x-product.section.details

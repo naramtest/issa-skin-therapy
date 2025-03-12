@@ -8,6 +8,7 @@ use App\Enums\StockStatus;
 use App\Models\Query\ProductQuery;
 use App\Services\Inventory\InventoryManager;
 use App\Services\Product\ProductService;
+use App\Traits\HasDynamicSeo;
 use App\Traits\HasPurchasableMedia;
 use App\Traits\Price\HasMoney;
 use App\Traits\Price\HasPricing;
@@ -27,6 +28,7 @@ class Product extends Model implements HasMedia, Purchasable
     use HasTags;
     use HasPurchasableMedia;
     use Searchable;
+    use HasDynamicSeo;
 
     public bool $asYouType = true;
 

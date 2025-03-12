@@ -104,4 +104,24 @@ class ImageGetter
             })
             ->implode(", ");
     }
+
+    public static function getRelativePath(Model&HasMedia $model): ?string
+    {
+        try {
+            $media = $model->getFirstMedia(config("const.media.featured"));
+            if (!$media) {
+                return null;
+            }
+            return "storage/" .
+                $media->getPathRelativeToRoot(
+                    $media->hasGeneratedConversion(
+                        config("const.media.optimized")
+                    )
+                        ? config("const.media.optimized")
+                        : ""
+                );
+        } catch (\Exception) {
+            return null;
+        }
+    }
 }

@@ -8,6 +8,7 @@ use App\Enums\StockStatus;
 use App\Models\Query\BundleQuery;
 use App\Services\Bundle\BundleService;
 use App\Services\Inventory\BundleInventoryManager;
+use App\Traits\HasDynamicSeo;
 use App\Traits\HasPurchasableMedia;
 use App\Traits\Price\HasBundlePrice;
 use App\Traits\Price\HasMoney;
@@ -24,6 +25,7 @@ class Bundle extends Model implements HasMedia, Purchasable
     use SoftDeletes, HasPricing, HasBundlePrice, HasMoney;
     use HasTranslations;
     use HasPurchasableMedia;
+    use HasDynamicSeo;
 
     public array $translatable = [
         "name",

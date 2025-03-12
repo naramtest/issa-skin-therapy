@@ -1,6 +1,10 @@
 <x-store-main-layout>
-    <x-slot name="title">
-        <title>{{ getPageTitle($bundle->name) }}</title>
+    <x-slot name="seo">
+        {!! seo()->for($bundle) !!}
+    </x-slot>
+
+    <x-slot name="graph">
+        {!! $graph !!}
     </x-slot>
 
     <main>
