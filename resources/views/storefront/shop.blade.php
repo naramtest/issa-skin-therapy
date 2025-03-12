@@ -2,6 +2,12 @@
     <x-slot name="title">
         <title>{{ getPageTitle(__("store.Shop")) }}</title>
     </x-slot>
+    {{-- <x-slot name="seo"> --}}
+    {{-- {!! seo($seo) !!} --}}
+    {{-- </x-slot> --}}
+    <x-slot name="graph">
+        {!! $graph !!}
+    </x-slot>
     <main class="relative">
         <x-shop.section.hero label="{{__('dashboard.Our Products')}}" />
         <section class="padding-from-side-menu py-12">

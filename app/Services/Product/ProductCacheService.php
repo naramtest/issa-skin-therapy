@@ -133,7 +133,7 @@ class ProductCacheService
     public function allBundles(): Collection
     {
         $query = App\Models\Bundle::select(
-            array_merge(self::COLUMNS, ["subtitle"])
+            array_merge(self::COLUMNS, ["subtitle", "bundle_level_stock"])
         )->get();
 
         if (App::isLocal()) {

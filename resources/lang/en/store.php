@@ -579,4 +579,8 @@ return [
     "Contact Messages" => "Contact Messages",
     "Sending contact" => "Sending...",
     "Read Full Article" => "Read Full Article",
+    "Browse our curated collection of high-quality products" => [
+        " Find everything you need with easy navigation, detailed descriptions, and secure checkout" =>
+            "Browse our curated collection of high-quality products. Find everything you need with easy navigation, detailed descriptions, and secure checkout.",
+    ],
 ];

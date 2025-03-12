@@ -3,7 +3,6 @@
 ])
 <div {{ $attributes->class(["h-[250px] w-full bg-lightColor lg:h-[300px]"]) }}>
     <div
-        {{-- TODO: edit image --}}
         style="
             background-image: url({{ asset("storage/images/shop.webp") }});
             background-position: center center;

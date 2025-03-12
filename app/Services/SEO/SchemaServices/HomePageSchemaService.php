@@ -70,7 +70,11 @@ class HomePageSchemaService extends BaseSchemaService
             ->brand(Schema::brand()->name($this->info->name))
             ->offers(
                 Schema::offer()
-                    ->price($featuredProduct->getCurrentPrice())
+                    ->price(
+                        CurrencyHelper::decimalFormatter(
+                            value: $featuredProduct->getCurrentPrice()
+                        )
+                    )
                     ->priceCurrency(CurrencyHelper::getCurrencyCode())
                     ->availability(ItemAvailability::InStock)
                     ->url(URL::route("product.show", $featuredProduct))
