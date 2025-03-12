@@ -6,6 +6,7 @@ use App\Helpers\Media\ImageGetter;
 use App\Models\Info;
 use App\Models\Product;
 use App\Services\Currency\CurrencyHelper;
+use App\Services\Info\InfoCacheService;
 use Illuminate\Support\Facades\URL;
 use Spatie\SchemaOrg\ItemAvailability;
 use Spatie\SchemaOrg\Schema;
@@ -13,15 +14,18 @@ use Spatie\SchemaOrg\Schema;
 class SingleProductSchemaService extends BaseSchemaService
 {
     protected Product $product;
-
     private Info $info;
 
-    public function __construct(Product $product, Info $info)
+    public function __construct(InfoCacheService $infoCacheService)
     {
-        $this->info = $info;
-        $this->product = $product;
-
+        $this->info = $infoCacheService->getInfo();
         parent::__construct($this->info);
+    }
+
+    public function setProduct(Product $product): static
+    {
+        $this->product = $product;
+        return $this;
     }
 
     public function generate(): string

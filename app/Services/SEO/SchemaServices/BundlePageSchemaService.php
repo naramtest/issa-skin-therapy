@@ -6,6 +6,7 @@ use App\Helpers\Media\ImageGetter;
 use App\Models\Bundle;
 use App\Models\Info;
 use App\Services\Currency\CurrencyHelper;
+use App\Services\Info\InfoCacheService;
 use Illuminate\Support\Facades\URL;
 use Spatie\SchemaOrg\ItemAvailability;
 use Spatie\SchemaOrg\Product;
@@ -17,12 +18,17 @@ class BundlePageSchemaService extends BaseSchemaService
 
     private Info $info;
 
-    public function __construct(Bundle $bundle, Info $info)
+    public function __construct(InfoCacheService $infoCacheService)
     {
-        $this->info = $info;
-        $this->bundle = $bundle;
+        $this->info = $infoCacheService->getInfo();
 
         parent::__construct($this->info);
+    }
+
+    public function setBundle(Bundle $bundle): static
+    {
+        $this->bundle = $bundle;
+        return $this;
     }
 
     public function generate(): string
