@@ -10,9 +10,9 @@ use Spatie\SchemaOrg\WebPage;
 
 abstract class BaseSchemaService
 {
-    public function __construct(private readonly Info $info)
-    {
-    }
+    protected ?Info $info;
+
+    abstract public function setInfo(Info $info): static;
 
     /**
      * Generate the schema markup for the page

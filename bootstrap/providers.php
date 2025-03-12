@@ -7,5 +7,6 @@ return [
     App\Providers\Filament\AdminPanelProvider::class,
     App\Providers\FortifyServiceProvider::class,
     App\Providers\ObserverProvider::class,
+    App\Providers\SchemaServiceProvider::class,
     App\Providers\SingletonProvider::class,
 ];
