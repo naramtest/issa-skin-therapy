@@ -12,7 +12,10 @@
 </div>
 
 <h2 class="py-5 text-2xl font-bold leading-[30px]">
-    <a href="{{ route("posts.show", $post) }}">
+    <a
+        href="{{ route("posts.show", $post) }}"
+        aria-label="Read full article: {{ $post->title }}"
+    >
         {{ $post->title }}
     </a>
 </h2>
@@ -24,6 +27,7 @@
 <a
     class="mt-5 inline-block text-sm underline transition-colors duration-300 hover:text-[#5d5d5d]"
     href="{{ route("posts.show", $post) }}"
+    aria-label="Continue reading full article: {{ $post->title }}"
 >
-    {{ __("store.Read More") }}
+    {{ __("store.Read Full Article") }}
 </a>

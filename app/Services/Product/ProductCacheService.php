@@ -111,7 +111,7 @@ class ProductCacheService
     /**
      * Get Featured Product (cached)
      */
-    public function getFeaturedProduct(): Product
+    public function getFeaturedProduct(): ?Product
     {
         $query = Product::select(
             array_merge(self::COLUMNS, ["short_description"])

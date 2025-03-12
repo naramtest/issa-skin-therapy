@@ -1,4 +1,10 @@
 <x-store-main-layout>
+    <x-slot name="seo">
+        {!! seo($seo) !!}
+    </x-slot>
+    <x-slot name="graph">
+        {!! $graph !!}
+    </x-slot>
     <main class="relative">
         <x-home.section.hero-swiper />
         <x-home.section.home-collection

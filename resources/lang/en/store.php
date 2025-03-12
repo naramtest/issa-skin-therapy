@@ -578,4 +578,5 @@ return [
     "Contact Message" => "Contact Message",
     "Contact Messages" => "Contact Messages",
     "Sending contact" => "Sending...",
+    "Read Full Article" => "Read Full Article",
 ];

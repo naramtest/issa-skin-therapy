@@ -8,6 +8,7 @@
     <a
         class="card-opacity-10 card-overlay relative h-full"
         href="{{ route("posts.show", $post) }}"
+        aria-label="{{ $post->title }}"
     >
         {!! \App\Helpers\Media\ImageGetter::responsiveFeaturedImg($post, class: "h-full w-full object-cover rounded-2xl") !!}
     </a>
@@ -51,8 +52,9 @@
             <a
                 class="mt-5 inline-block text-sm underline transition-colors duration-300 hover:text-secondaryColor"
                 href="{{ route("posts.show", $post) }}"
+                aria-label="{{ "Continue reading: " . $post->title }}"
             >
-                {{ __("store.Read More") }}
+                {{ __("store.Read Full Article") }}
             </a>
         @endif
     </div>
