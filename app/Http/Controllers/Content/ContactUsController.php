@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Content;
 
+use App\Http\Controllers\Controller;
 use App\Services\Info\InfoCacheService;
 use App\Services\SEO\Schema;
 use App\Traits\Seo\HasPageSeo;

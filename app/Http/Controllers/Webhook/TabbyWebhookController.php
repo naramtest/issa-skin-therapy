@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Webhook;
 
+use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\Payment\Tabby\TabbyPaymentVerificationService;
 use Illuminate\Http\Request;

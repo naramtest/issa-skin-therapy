@@ -1,21 +1,21 @@
 <?php
 
-use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartPrefillController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\Content\AboutController;
+use App\Http\Controllers\Content\ContactUsController;
 use App\Http\Controllers\Content\FaqController;
 use App\Http\Controllers\Content\HomeController;
+use App\Http\Controllers\Content\LegalController;
 use App\Http\Controllers\Content\PostController;
 use App\Http\Controllers\Content\ProductController;
 use App\Http\Controllers\Content\ShopController;
-use App\Http\Controllers\LegalController;
 use App\Http\Controllers\ShippingController;
-use App\Http\Controllers\StripeWebhookController;
-use App\Http\Controllers\TabbyWebhookController;
+use App\Http\Controllers\Webhook\StripeWebhookController;
+use App\Http\Controllers\Webhook\TabbyWebhookController;
 use App\Services\UrlShortenerService;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
