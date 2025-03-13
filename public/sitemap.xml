@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+    <url>
+        <loc>http://localhost:8000</loc>
+        <lastmod>2024-03-10T00:00:00+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/shop</loc>
+        <lastmod>2025-03-10T13:25:15+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/about</loc>
+        <lastmod>2024-03-10T00:00:00+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/contact-us</loc>
+        <lastmod>2024-03-10T00:00:00+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/faq</loc>
+        <lastmod>2024-03-10T00:00:00+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/terms-conditions</loc>
+        <lastmod>2024-03-10T00:00:00+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/privacy-policy</loc>
+        <lastmod>2024-03-10T00:00:00+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/refund_returns</loc>
+        <lastmod>2024-03-10T00:00:00+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/blog</loc>
+        <lastmod>2024-07-17T06:34:46+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/collections-page</loc>
+        <lastmod>2025-03-10T13:25:14+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/lumicleanse-cleanser</loc>
+        <lastmod>2025-03-09T07:12:35+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/salicleanse-cleanser</loc>
+        <lastmod>2025-03-09T07:30:23+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/purehydra-oil-free-lightweight-lotion</loc>
+        <lastmod>2025-03-10T13:25:15+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/lumihydra-antioxidant-moisturizer-emulsion</loc>
+        <lastmod>2025-03-10T13:25:14+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/a-clear-peelrevive-serum</loc>
+        <lastmod>2025-01-23T08:35:04+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/a-clear-control-lotion</loc>
+        <lastmod>2025-02-06T10:14:55+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/a-luminate-renewing-lotion</loc>
+        <lastmod>2025-03-10T13:25:14+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/a-luminate-lightening-serum</loc>
+        <lastmod>2024-11-21T12:57:58+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/a-luminate-tranelixir-serum</loc>
+        <lastmod>2025-01-25T03:56:35+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/lumiguard-broad-spectrum-emulsion</loc>
+        <lastmod>2025-01-29T07:14:58+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/x-age-stem-booster</loc>
+        <lastmod>2025-01-25T03:45:15+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/x-age-complex-c</loc>
+        <lastmod>2024-11-21T07:18:55+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product/x-age-eye-restore</loc>
+        <lastmod>2024-11-21T07:18:19+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/collection/a-clear-collection</loc>
+        <lastmod>2025-03-09T07:30:35+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/collection/a-luminate-one-collection</loc>
+        <lastmod>2025-03-10T13:25:14+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/collection/a-luminate-two-collection</loc>
+        <lastmod>2025-02-06T04:21:54+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/collection/x-age-collection</loc>
+        <lastmod>2024-11-29T09:28:54+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/post/acne-understanding-treating-and-preventing-breakouts</loc>
+        <lastmod>2024-11-25T15:10:08+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/post/understanding-melasma-causes-treatments-and-prevention</loc>
+        <lastmod>2024-11-26T12:33:58+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/post/the-essential-guide-to-sunscreen-protecting-your-skin-from-the-sun</loc>
+        <lastmod>2024-11-26T06:40:51+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product-category/cleanse</loc>
+        <lastmod>2024-12-01T08:13:27+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product-category/hydrate-protect</loc>
+        <lastmod>2024-12-01T08:13:27+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product-category/treat</loc>
+        <lastmod>2024-12-01T08:13:27+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product-category/a-clear</loc>
+        <lastmod>2024-11-25T13:34:39+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product-category/a-luminate</loc>
+        <lastmod>2024-11-25T13:34:50+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product-category/lumiguard</loc>
+        <lastmod>2024-11-25T13:35:07+00:00</lastmod>
+
+            </url>
+    <url>
+        <loc>http://localhost:8000/product-category/x-age</loc>
+        <lastmod>2024-11-11T11:41:22+00:00</lastmod>
+
+            </url>
+</urlset>

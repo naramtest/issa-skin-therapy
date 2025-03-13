@@ -13,6 +13,8 @@ Schedule::command("dhl:prepare-orders")
     ->everyTenMinutes()
     ->withoutOverlapping();
 
+Schedule::command("sitemap:generate")->daily()->withoutOverlapping();
+
 // Process tracking updates from DHL every 5 minutes
 Schedule::command("dhl:process-tracking")
     ->everyTenMinutes()
