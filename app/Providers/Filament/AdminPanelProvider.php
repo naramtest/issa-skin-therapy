@@ -36,6 +36,7 @@ class AdminPanelProvider extends PanelProvider
             ->path("admin")
             ->sidebarWidth("md")
             ->login()
+            ->databaseNotifications()
             ->colors([
                 "primary" => Color::Amber,
             ])
