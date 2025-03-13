@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
+use App\Filament\Exports\OrderExporter;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\Partials\Components\EmailAction;
 use App\Filament\Resources\OrderResource\Partials\OrderForm;
@@ -13,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Table;
 use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 use Pelmered\FilamentMoneyField\Tables\Columns\MoneyColumn;
@@ -99,6 +101,7 @@ class OrderResource extends Resource
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
+                ExportBulkAction::make()->exporter(OrderExporter::class),
             ])
             ->defaultSort("created_at", "desc");
     }
