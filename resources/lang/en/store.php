@@ -583,4 +583,10 @@ return [
         " Find everything you need with easy navigation, detailed descriptions, and secure checkout" =>
             "Browse our curated collection of high-quality products. Find everything you need with easy navigation, detailed descriptions, and secure checkout.",
     ],
+    "Get in touch with our team for any inquiries or assistance" =>
+        "Get in touch with our team for any inquiries or assistance",
+    "Frequently asked questions about our products and services" =>
+        "Frequently asked questions about our products and services",
+    "Find answers to frequently asked questions about our products" =>
+        "Find answers to frequently asked questions about our products, shipping, returns, and more.",
 ];

@@ -1,6 +1,9 @@
 <x-store-main-layout>
-    <x-slot name="title">
-        <title>{{ getPageTitle(__("store.FAQ")) }}</title>
+    <x-slot name="seo">
+        {!! seo($seo) !!}
+    </x-slot>
+    <x-slot name="graph">
+        {!! $graph !!}
     </x-slot>
     <main class="padding-from-side-menu py-20">
         <h1 class="text-[6rem] font-[800] leading-[100px]">

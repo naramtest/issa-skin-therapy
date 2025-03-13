@@ -6,6 +6,8 @@ use App\Models\Info;
 use App\Services\Info\InfoCacheService;
 use App\Services\SEO\SchemaServices\AboutPageSchemaService;
 use App\Services\SEO\SchemaServices\BundlePageSchemaService;
+use App\Services\SEO\SchemaServices\ContactPageSchemaService;
+use App\Services\SEO\SchemaServices\FaqPageSchemaService;
 use App\Services\SEO\SchemaServices\HomePageSchemaService;
 use App\Services\SEO\SchemaServices\ShopPageSchemaService;
 use App\Services\SEO\SchemaServices\SingleProductSchemaService;
@@ -70,10 +72,9 @@ class SchemaManager
                 $data
             ),
             "bundle" => app(BundlePageSchemaService::class)->setBundle($data),
-            "about" => app(
-                AboutPageSchemaService::class
-            ), //            'contact' => app(ContactPageSchemaService::class)->generate(),
-            //            'faq' => app(FaqPageSchemaService::class)->generate(),
+            "about" => app(AboutPageSchemaService::class),
+            "contact" => app(ContactPageSchemaService::class),
+            "faq" => app(FaqPageSchemaService::class)->setFaqSections($data),
         };
         return $schemeService->setInfo($info)->generate();
     }

@@ -3,6 +3,7 @@
 namespace App\Services\SEO\SchemaServices;
 
 use App\Models\Info;
+use App\Services\Info\InfoCacheService;
 use Illuminate\Support\Facades\URL;
 use Spatie\SchemaOrg\Organization;
 use Spatie\SchemaOrg\Schema;
@@ -12,14 +13,32 @@ abstract class BaseSchemaService
 {
     protected ?Info $info;
 
-    abstract public function setInfo(Info $info): static;
-
     /**
      * Generate the schema markup for the page
      *
      * @return string
      */
     abstract public function generate(): string;
+
+    protected function getInfo(): Info
+    {
+        if (!$this->info) {
+            $this->setInfo(app(InfoCacheService::class)->getInfo());
+        }
+        return $this->info;
+    }
+
+    /**
+     * Set the info object and initialize parent
+     *
+     * @param Info $info
+     * @return self
+     */
+    public function setInfo(Info $info): static
+    {
+        $this->info = $info;
+        return $this;
+    }
 
     /**
      * Create a base WebPage schema
@@ -76,8 +95,13 @@ abstract class BaseSchemaService
      */
     protected function combineSchemas(array $schemas): string
     {
-        $combinedSchema = Schema::itemList()->itemListElement($schemas);
+        $scriptTags = [];
+        foreach ($schemas as $schema) {
+            if ($schema !== null) {
+                $scriptTags[] = $schema->toScript();
+            }
+        }
 
-        return $combinedSchema->toScript();
+        return implode("\n", $scriptTags);
     }
 }

@@ -4,9 +4,7 @@ namespace App\Services\SEO\SchemaServices;
 
 use App\Helpers\Media\ImageGetter;
 use App\Models\Bundle;
-use App\Models\Info;
 use App\Services\Currency\CurrencyHelper;
-use App\Services\Info\InfoCacheService;
 use Illuminate\Support\Facades\URL;
 use Spatie\SchemaOrg\ItemAvailability;
 use Spatie\SchemaOrg\Product;
@@ -85,25 +83,5 @@ class BundlePageSchemaService extends BaseSchemaService
         $bundleSchema->isRelatedTo($includedProducts->toArray());
 
         return $bundleSchema;
-    }
-
-    protected function getInfo(): Info
-    {
-        if (!$this->info) {
-            $this->setInfo(app(InfoCacheService::class)->getInfo());
-        }
-        return $this->info;
-    }
-
-    /**
-     * Set the info object and initialize parent
-     *
-     * @param Info $info
-     * @return self
-     */
-    public function setInfo(Info $info): static
-    {
-        $this->info = $info;
-        return $this;
     }
 }

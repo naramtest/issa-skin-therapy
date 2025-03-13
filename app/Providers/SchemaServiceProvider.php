@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Services\SEO\SchemaManager;
 use App\Services\SEO\SchemaServices\AboutPageSchemaService;
 use App\Services\SEO\SchemaServices\BundlePageSchemaService;
+use App\Services\SEO\SchemaServices\ContactPageSchemaService;
+use App\Services\SEO\SchemaServices\FaqPageSchemaService;
 use App\Services\SEO\SchemaServices\HomePageSchemaService;
 use App\Services\SEO\SchemaServices\ShopPageSchemaService;
 use App\Services\SEO\SchemaServices\SingleProductSchemaService;
@@ -28,8 +30,8 @@ class SchemaServiceProvider extends ServiceProvider
 
         // Register our new schema services
         $this->app->singleton(AboutPageSchemaService::class);
-        //        $this->app->singleton(ContactPageSchemaService::class);
-        //        $this->app->singleton(FaqPageSchemaService::class);
+        $this->app->singleton(ContactPageSchemaService::class);
+        $this->app->singleton(FaqPageSchemaService::class);
     }
 
     /**

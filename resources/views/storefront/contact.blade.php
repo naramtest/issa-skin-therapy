@@ -1,6 +1,9 @@
 <x-store-main-layout>
-    <x-slot name="title">
-        <title>{{ getPageTitle(__("store.Contact Us")) }}</title>
+    <x-slot name="seo">
+        {!! seo($seo) !!}
+    </x-slot>
+    <x-slot name="graph">
+        {!! $graph !!}
     </x-slot>
     <div
         class="padding-from-side-menu flex flex-col gap-8 pt-12 md:flex-row lg:pt-24"
