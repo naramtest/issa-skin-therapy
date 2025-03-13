@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Content;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Services\Post\PostCacheService;
+use App\Services\SEO\Schema;
+use App\Traits\Seo\HasPageSeo;
 
 class PostController extends Controller
 {
+    use HasPageSeo;
+
     public function __construct(
         private readonly PostCacheService $postCacheService
     ) {
@@ -16,8 +20,20 @@ class PostController extends Controller
     public function index()
     {
         $categories = $this->postCacheService->getCategories();
-
-        return view("storefront.posts.index", ["categories" => $categories]);
+        $posts = $this->postCacheService->getAllPosts(5);
+        return view("storefront.posts.index", [
+            "categories" => $categories,
+            "graph" => Schema::getSchema("blog", data: $posts),
+            "seo" => self::seoData(
+                title: getPageTitle(__("store.Blog")),
+                description: __(
+                    "store.Explore our articles and insights on skincare, beauty tips, and product recommendations"
+                ),
+                image: "storage/test/hero1.webp",
+                tags: ["blog", "skincare", "beauty", "tips", "skincare advice"],
+                section: "Blog"
+            ),
+        ]);
     }
 
     public function show(Post $post)
@@ -48,6 +64,7 @@ class PostController extends Controller
             "latestPosts" => $latestPosts,
             "nextPost" => $nextPost,
             "pastPost" => $pastPost,
+            "graph" => Schema::getSchema("post", data: $post),
         ]);
     }
 

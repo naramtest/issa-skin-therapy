@@ -589,4 +589,6 @@ return [
         "Frequently asked questions about our products and services",
     "Find answers to frequently asked questions about our products" =>
         "Find answers to frequently asked questions about our products, shipping, returns, and more.",
+    "Explore our articles and insights on skincare, beauty tips, and product recommendations" =>
+        "Explore our articles and insights on skincare, beauty tips, and product recommendations",
 ];

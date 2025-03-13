@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ProductStatus;
-use App\Traits\HasPostSeo;
+use App\Traits\Seo\HasPostSeo;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
-use RalphJSmit\Laravel\SEO\Support\SEOData;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -27,6 +26,7 @@ class Post extends Model implements HasMedia
     use HasTranslations;
     use InteractsWithMedia;
     use Prunable, SoftDeletes;
+    use HasPostSeo;
 
     //    use Searchable;
 
@@ -134,11 +134,6 @@ class Post extends Model implements HasMedia
     public function isScheduled(): bool
     {
         return $this->scheduled_at && $this->scheduled_at->isFuture();
-    }
-
-    public function getDynamicSEOData(): SEOData
-    {
-        return self::getPostSeoData($this);
     }
 
     public function scopePublished($query)

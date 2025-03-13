@@ -5,6 +5,8 @@ namespace App\Services\SEO;
 use App\Models\Info;
 use App\Services\Info\InfoCacheService;
 use App\Services\SEO\SchemaServices\AboutPageSchemaService;
+use App\Services\SEO\SchemaServices\BlogPageSchemaService;
+use App\Services\SEO\SchemaServices\BlogPostSchemaService;
 use App\Services\SEO\SchemaServices\BundlePageSchemaService;
 use App\Services\SEO\SchemaServices\ContactPageSchemaService;
 use App\Services\SEO\SchemaServices\FaqPageSchemaService;
@@ -75,6 +77,8 @@ class SchemaManager
             "about" => app(AboutPageSchemaService::class),
             "contact" => app(ContactPageSchemaService::class),
             "faq" => app(FaqPageSchemaService::class)->setFaqSections($data),
+            "blog" => app(BlogPageSchemaService::class)->setPosts($data),
+            "post" => app(BlogPostSchemaService::class)->setPost($data),
         };
         return $schemeService->setInfo($info)->generate();
     }

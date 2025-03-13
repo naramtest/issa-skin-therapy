@@ -1,6 +1,9 @@
 <x-store-main-layout>
-    <x-slot name="title">
-        <title>{{ getPageTitle($post->title) }}</title>
+    <x-slot name="seo">
+        {!! seo()->for($post) !!}
+    </x-slot>
+    <x-slot name="graph">
+        {!! $graph !!}
     </x-slot>
     <main>
         <x-post.header :post="$post" />

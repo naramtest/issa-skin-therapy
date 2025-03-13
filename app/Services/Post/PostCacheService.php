@@ -162,4 +162,34 @@ class PostCacheService
     {
         Cache::tags(["posts"])->flush();
     }
+
+    public function getAllPosts(?int $limit = null): Collection
+    {
+        $cacheKey = "posts.all-" . $limit;
+
+        return Cache::tags(["posts"])->remember(
+            $cacheKey,
+            now()->addDay(),
+            function () use ($limit) {
+                $query = Post::published()
+                    ->select(array_merge(self::COLUMNS, ["updated_at"]))
+                    ->with([
+                        "media",
+
+                        "categories" => function ($query) {
+                            $query->select(
+                                "categories.id",
+                                "categories.name",
+                                "categories.slug"
+                            );
+                        },
+                    ])
+                    ->byDate();
+                if ($limit) {
+                    $query->limit($limit);
+                }
+                return $query->get();
+            }
+        );
+    }
 }
