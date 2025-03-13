@@ -28,6 +28,7 @@ class PostCacheService
         "published_at",
         "is_featured",
         "excerpt",
+        "status",
     ];
 
     private const POST_CACHE_TTL = 30 * 24 * 3600;

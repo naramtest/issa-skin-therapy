@@ -143,7 +143,7 @@ class Bundle extends Model implements HasMedia, Purchasable
 
     public function getName(): string
     {
-        return $this->stock_status;
+        return $this->name;
     }
 
     public function getFacebookIdAttribute(): string
