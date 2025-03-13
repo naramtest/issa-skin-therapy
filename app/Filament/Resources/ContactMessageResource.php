@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\ContactMessageExporter;
 use App\Filament\Resources\ContactMessageResource\Pages;
 use App\Models\ContactMessage;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -109,6 +111,9 @@ class ContactMessageResource extends Resource
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
                 ]),
+                ExportBulkAction::make()->exporter(
+                    ContactMessageExporter::class
+                ),
             ])
             ->defaultSort("created_at", "desc");
     }
