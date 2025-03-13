@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Services\Faq\FaqService;
 use App\Services\Info\InfoCacheService;
 use App\Services\SEO\Schema;
-use Carbon\Carbon;
-use RalphJSmit\Laravel\SEO\Support\SEOData;
+use App\Traits\Seo\HasPageSeo;
 
 class FaqController extends Controller
 {
+    use HasPageSeo;
+
     public function index(
         FaqService $faqService,
         InfoCacheService $infoCacheService
@@ -21,17 +22,12 @@ class FaqController extends Controller
         return view("storefront.faq", [
             "faqSections" => $faqSections,
             "graph" => Schema::getSchema("faq", $faqSections, $info),
-            "seo" => new SEOData(
+            "seo" => self::seoData(
                 title: getPageTitle(__("store.FAQ")),
                 description: __(
                     "store.Find answers to frequently asked questions about our products"
                 ),
-                author: $info->name,
                 image: "storage/test/hero1.webp",
-                enableTitleSuffix: true,
-                published_time: Carbon::parse("2024-06-15"),
-                modified_time: Carbon::parse("2024-11-20"),
-                section: "Help",
                 tags: [
                     "faq",
                     "help",
@@ -40,8 +36,8 @@ class FaqController extends Controller
                     "support",
                     "guidance",
                 ],
-                site_name: getLocalAppName(),
-                locale: app()->getLocale()
+                section: "Help",
+                author: $info->name
             ),
         ]);
     }

@@ -7,10 +7,12 @@ use App\Services\Info\InfoCacheService;
 use App\Services\Post\PostCacheService;
 use App\Services\Product\ProductCacheService;
 use App\Services\SEO\Schema;
-use RalphJSmit\Laravel\SEO\Support\SEOData;
+use App\Traits\Seo\HasPageSeo;
 
 class HomeController extends Controller
 {
+    use HasPageSeo;
+
     /**
      * @throws \Exception
      */
@@ -34,12 +36,13 @@ class HomeController extends Controller
                 data: $featuredProduct,
                 info: $info
             ),
-            "seo" => new SEOData(
+            "seo" => self::seoData(
                 title: $info->name,
                 description: $info->about,
-                author: $info->name,
                 image: "storage/test/hero1.webp",
-                tags: ["skincare", "beauty", "skin health", "cleanser"]
+
+                tags: ["skincare", "beauty", "skin health", "cleanser"],
+                author: $info->name
             ),
         ]);
     }

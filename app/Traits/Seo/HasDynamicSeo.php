@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace App\Traits\Seo;
 
 use App\Helpers\Media\ImageGetter;
 use App\Models\Bundle;

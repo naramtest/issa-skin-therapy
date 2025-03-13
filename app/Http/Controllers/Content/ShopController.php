@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Content;
 use App\Http\Controllers\Controller;
 use App\Services\Product\ProductCacheService;
 use App\Services\SEO\Schema;
-use RalphJSmit\Laravel\SEO\Support\SEOData;
+use App\Traits\Seo\HasPageSeo;
 
 class ShopController extends Controller
 {
+    use HasPageSeo;
+
     public function index(ProductCacheService $productCacheService)
     {
         $bundles = $productCacheService->allBundles();
@@ -20,12 +22,13 @@ class ShopController extends Controller
                 "products" => $productCacheService->allProducts(),
                 "bundles" => $bundles,
             ]),
-            "seo" => new SEOData(
+            "seo" => self::seoData(
                 title: getPageTitle(__("store.Shop")),
                 description: __(
                     "store.Browse our curated collection of high-quality products. Find everything you need with easy navigation, detailed descriptions, and secure checkout"
                 ),
                 image: "storage/images/shop.webp",
+
                 tags: [
                     "skincare",
                     "beauty",
