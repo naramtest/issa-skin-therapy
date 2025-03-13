@@ -313,6 +313,7 @@ return [
     "Order" => "order",
     "Orders" => "Orders",
     "Customer" => "Customer",
+    "Customers" => "Customers",
     "Failed" => "Failed",
     "Unit Price" => "Unit Price",
     "Order Status" => "Order Status",

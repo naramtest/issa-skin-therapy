@@ -64,12 +64,6 @@ class OrderResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ForceDeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
-                //                Action::make("createShipment")
-                //                    ->label("DHL")
-                //                    ->icon("heroicon-o-truck")
-                //                    ->requiresConfirmation()
-                //                    ->hidden(fn(Order $record) => DHLAction::hidden($record))
-                //                    ->action(fn(Order $record) => DHLAction::action($record)),
 
                 ActionGroup::make([
                     Action::make("download")
