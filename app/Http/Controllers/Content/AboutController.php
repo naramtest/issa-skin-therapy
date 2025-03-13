@@ -19,7 +19,7 @@ class AboutController extends Controller
             "seo" => self::seoData(
                 title: getPageTitle(__("store.About Us")),
                 description: $info->about,
-                image: "storage/images/about.webp",
+                image: "storage/images/about-us-hero.webp",
 
                 tags: [
                     "about us",
