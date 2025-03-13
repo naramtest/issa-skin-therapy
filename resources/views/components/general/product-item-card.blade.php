@@ -16,6 +16,7 @@
         <button
             @click="isModalOpen = true"
             class="absolute end-3 top-4 rounded-full border p-3 transition-colors hover:bg-white/80"
+            aria-label="{{ __("store.View details") }}"
         >
             <x-gmdi-visibility-o class="h-5 w-5 text-gray-500" />
         </button>
@@ -52,9 +53,9 @@
     </div>
     <div class="h-full px-2 pb-3 pt-5">
         <div class="flex h-full flex-col justify-between">
-            <p class="text-xs text-[#8C92A4]">
+            <p class="text-xs text-[#37383d]">
                 @if (count($product->categories))
-                    <span class="hover:text-gray-500">
+                    <span class="transition-colors hover:text-black">
                         <a
                             href="{{ route("product.category", ["slug" => $product->categories[0]->slug]) }}"
                         >
@@ -67,6 +68,7 @@
                     <span>-</span>
                     <span>
                         <a
+                            class="transition-colors hover:text-black"
                             href=" {{ route("product.category", ["slug" => $product->types[0]->slug]) }}"
                         >
                             {{ $product->types[0]->name }}

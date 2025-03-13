@@ -591,4 +591,6 @@ return [
         "Find answers to frequently asked questions about our products, shipping, returns, and more.",
     "Explore our articles and insights on skincare, beauty tips, and product recommendations" =>
         "Explore our articles and insights on skincare, beauty tips, and product recommendations",
+    "Login From Here" => "Login From Here",
+    "View details" => "View details",
 ];

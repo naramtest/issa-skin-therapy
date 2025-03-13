@@ -36,7 +36,10 @@
                     </span>
                 </a>
             @else
-                <a href="{{ route("login") }}">
+                <a
+                    href="{{ route("login") }}"
+                    aria-label="{{ __("store.Login From Here") }}"
+                >
                     <x-icons.person class="h-7 w-7" />
                 </a>
             @endauth
