@@ -23,6 +23,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 "webhooks/tabby", // <-- exclude this route
             ]
         );
+        $middleware->web(
+            append: [\Statikbe\CookieConsent\CookieConsentMiddleware::class]
+        );
         $middleware->alias([
             "stripe.signature" => VerifyStripeSignature::class,
             "localize" => LaravelLocalizationRoutes::class,

@@ -45,6 +45,7 @@
         "spatie/laravel-responsecache": "^7.6",
         "spatie/laravel-sitemap": "^7.3",
         "spatie/schema-org": "^3.23",
+        "statikbe/laravel-cookie-consent": "^1.10",
         "statikbe/laravel-filament-chained-translation-manager": "^3.2",
         "stripe/stripe-php": "^16.4",
         "symfony/cache": "^7.1",
