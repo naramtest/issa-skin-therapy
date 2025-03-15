@@ -102,17 +102,26 @@ class CartComponent extends Component
         mixed $quantity,
         string $price
     ): void {
-        $currency = CurrencyHelper::defaultCurrency();
-        $this->js("
-            fbq('track', 'AddToCart', {
-                contents: [
+        $currency = CurrencyHelper::getCurrencyCode();
+
+        // Push to the data layer
+        $this->js(
+            "
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                'event': 'addToCart',
+               'contents': [
                     { id: '{$item->facebook_id}', quantity: {$quantity} }
                 ],
-                content_type: 'product',
-                value: {$price},
-                currency: '{$currency}'
+                'contents_tiktok': [
+                    { content_id: '{$item->facebook_id}', quantity: {$quantity} ,content_name: '{$item->name}' ,price:{$price}}
+                ],
+                'content_type': 'product',
+               'value': {$price},
+                'currency': '{$currency}'
             });
-        ");
+        "
+        );
     }
 
     public function updateQuantity(string $itemId, string $action): void
