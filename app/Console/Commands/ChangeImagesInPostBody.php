@@ -28,7 +28,7 @@ class ChangeImagesInPostBody extends Command
      */
     public function handle()
     {
-        $posts = Post::select(["id", "edited", "body", "status"])
+        $posts = Post::select(["id", "edited", "body", "title", "status"])
             ->with(["media"])
             ->where("edited", true)
             ->get();

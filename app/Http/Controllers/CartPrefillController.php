@@ -42,12 +42,7 @@ class CartPrefillController extends Controller
                 );
             }
 
-            return redirect()
-                ->route("checkout.index")
-                ->with(
-                    "success",
-                    __("store.Items have been added to your cart")
-                );
+            return redirect()->route("checkout.index");
         } catch (Exception $e) {
             Log::error("Failed to prefill cart", [
                 "error" => $e->getMessage(),
