@@ -44,7 +44,7 @@
         {{ $graph ?? null }}
         {{ $keywords ?? null }}
 
-        <x-general.facebook-pixel />
+        {{-- <x-general.facebook-pixel /> --}}
 
         @if (app()->getLocale() == "en")
             @googlefonts
