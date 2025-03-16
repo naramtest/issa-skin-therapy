@@ -54,8 +54,9 @@
     @if ($user and $user->created_at->isToday())
         @push("scripts")
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    fbq('track', 'CompleteRegistration');
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    event: 'CompleteRegistration',
                 });
             </script>
         @endpush

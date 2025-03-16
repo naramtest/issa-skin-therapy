@@ -279,19 +279,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('livewire:init', () => {
-            Livewire.on('fb-add-to-cart', (data) => {
-                fbq('track', 'AddToCart', {
-                    contents: [
-                        { id: data[0].content_id, quantity: data[0].quantity },
-                    ],
-                    content_type: 'product',
-                    value: data[0].value,
-                    currency: data[0].currency,
-                });
-            });
-        });
-    </script>
 </div>

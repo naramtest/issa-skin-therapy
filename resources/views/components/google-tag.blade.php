@@ -1,5 +1,6 @@
-<!-- Google tag (gtag.js) -->
 <!-- Google Tag Manager -->
+
+{{-- TODO: add Production --}}
 <script>
     (function (w, d, s, l, i) {
         w[l] = w[l] || [];
