@@ -10,12 +10,12 @@ use App\Models\Order;
 use App\Services\Cart\CartService;
 use App\Services\Checkout\CustomerCheckoutService;
 use App\Services\Checkout\OrderService;
+use App\Services\Currency\CurrencyHelper;
 use App\Services\LocationService;
 use App\Traits\Checkout\LocationHandler;
 use App\Traits\Checkout\WithCouponHandler;
 use App\Traits\Payment\WithPayment;
 use App\Traits\WithShippingCalculation;
-use App\ValueObjects\CartItem;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -219,13 +219,27 @@ class CheckoutComponent extends Component
         }
     }
 
-    public function getFacebookArray(): array
+    public function getPixelArray(): array
     {
-        return array_map(function (CartItem $item) {
+        $collection = collect($this->cartItems)->map(function ($item) {
+            $product = $item->getPurchasable();
+
             return [
-                "id" => $item->getPurchasable()->facebook_id,
+                "id" => $product->facebook_id,
+                "content_id" => $product->facebook_id,
                 "quantity" => $item->getQuantity(),
+                "content_name" => $product->getName(),
+                "price" => CurrencyHelper::decimalFormatter(
+                    $product->current_money_price
+                ),
             ];
-        }, $this->cartItems);
+        });
+
+        return [
+            "facebook" => $collection->select(["id", "quantity"])->values(),
+            "tikTok" => $collection
+                ->select(["content_id", "quantity", "content_name", "price"])
+                ->values(),
+        ];
     }
 }

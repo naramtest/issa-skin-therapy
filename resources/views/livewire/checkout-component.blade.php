@@ -161,8 +161,12 @@
 
     @push("scripts")
         <script>
-            fbq('track', 'InitiateCheckout', {
-                contents: @json($this->getFacebookArray()),
+            window.dataLayer = window.dataLayer || [];
+
+            window.dataLayer.push({
+                event: 'InitiateCheckout',
+                contents: @json($this->getPixelArray()["facebook"]),
+                contents_tiktok: @json($this->getPixelArray()["tikTok"]),
                 currency:
                     '{{ \App\Services\Currency\CurrencyHelper::getCurrencyCode() }}',
                 num_items: {{ count($this->cartItems) }},
