@@ -158,6 +158,9 @@
             "
         ></div>
     </form>
+    @php
+        $pixelContent = $this->getPixelArray();
+    @endphp
 
     @push("scripts")
         <script>
@@ -165,8 +168,8 @@
 
             window.dataLayer.push({
                 event: 'InitiateCheckout',
-                contents: @json($this->getPixelArray()["facebook"]),
-                contents_tiktok: @json($this->getPixelArray()["tikTok"]),
+                contents: @json($pixelContent["facebook"]),
+                contents_tiktok: @json($pixelContent["tikTok"]),
                 currency:
                     '{{ \App\Services\Currency\CurrencyHelper::getCurrencyCode() }}',
                 num_items: {{ count($this->cartItems) }},

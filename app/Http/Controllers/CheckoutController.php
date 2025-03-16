@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App;
 use App\Enums\Checkout\PaymentStatus;
+use App\Helpers\PixelHelper;
 use App\Mail\NewOrderAdminNotification;
 use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
@@ -116,6 +117,7 @@ class CheckoutController extends Controller
                     !auth()->check() &&
                     $order->customer->is_registered === false,
                 "discount" => $discount,
+                "pixelContent" => PixelHelper::pixelContentArray($order),
             ]);
         } catch (Exception $e) {
             return redirect()

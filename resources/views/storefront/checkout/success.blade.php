@@ -250,20 +250,16 @@
     </main>
     @push("scripts")
         <script>
-            fbq('track', 'Purchase', {
-                content_type: 'product',
-                contents: [
-                        @foreach($order->items as $item)
-                    {
-                        id: '{{ $item->purchasable->facebook_id }}',
-                        quantity: {{ $item->quantity }},
+            window.dataLayer = window.dataLayer || [];
 
-                    }{{ !$loop->last ? ',' : '' }}
-                        @endforeach
-                ],
+            window.dataLayer.push({
+                event: 'Purchase',
+                content_type: 'product',
+                contents: @json($pixelContent["facebook"]),
+                contents_tiktok: @json($pixelContent["tikTok"]),
                 currency: '{{ $order->currency_code }}',
-                num_items: {{ $order->items->sum('quantity') }},
-                value: {{ \App\Services\Currency\CurrencyHelper::decimalFormatter($order->getMoneyTotal()) }}
+                num_items: {{ $order->items->sum("quantity") }},
+                value: {{ \App\Services\Currency\CurrencyHelper::decimalFormatter($order->getMoneyTotal()) }},
             });
         </script>
     @endpush
