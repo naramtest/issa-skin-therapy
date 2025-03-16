@@ -51,8 +51,13 @@
     </main>
     @push("scripts")
         <script>
-            fbq('track', 'ViewContent', {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'ViewContent',
                 content_ids: ['{{ $bundle->facebook_id }}'],
+                content_type: 'product',
+                quantity: 1,
+                description: '{{ strip_tags($bundle->description) }}',
                 currency:
                     '{{ \App\Services\Currency\CurrencyHelper::getCurrencyCode() }}',
                 value: {{ \App\Services\Currency\CurrencyHelper::decimalFormatter($bundle->current_money_price) }},

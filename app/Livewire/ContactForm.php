@@ -47,6 +47,8 @@ class ContactForm extends Component
                 new ContactFormSubmission($contactMessage)
             );
         }
+
+        //TODO: add user email and phone address to the event
         $this->dispatch(
             "fb-event",
             type: "Lead",

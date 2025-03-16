@@ -130,7 +130,11 @@
             document.addEventListener('livewire:init', () => {
                 Livewire.on('fb-event', (eventData) => {
                     if (eventData.type === 'Lead') {
-                        fbq('track', 'Lead', eventData.params);
+                        window.dataLayer = window.dataLayer || [];
+                        window.dataLayer.push({
+                            event: 'Lead',
+                            ...eventData.params,
+                        });
                     }
                 });
             });
