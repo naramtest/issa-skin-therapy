@@ -4,6 +4,7 @@ namespace App\Actions\Fortify;
 
 use App\Models\Customer;
 use App\Models\User;
+use App\Rules\TurnstileCheckRule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -31,8 +32,8 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             "password" => $this->passwordRules(),
+            "turnstileToken" => ["required", new TurnstileCheckRule()],
         ])->validate();
-
         $user = User::create([
             "first_name" => $input["first_name"],
             "last_name" => $input["last_name"],

@@ -1,5 +1,31 @@
 <x-store-main-layout>
-    <main class="flex h-full w-full flex-col items-center justify-center py-20">
+    <main
+        class="flex h-full w-full flex-col items-center justify-center py-20"
+        x-data="{
+            turnstileToken: '',
+            async initTurnstile() {
+                // Wait for turnstile to be fully loaded
+                await new Promise((resolve) => {
+                    if (document.readyState === 'complete') {
+                        resolve()
+                    } else {
+                        window.addEventListener('load', resolve)
+                    }
+                })
+                turnstile.render('#turnstile-container', {
+                    theme: 'light',
+                    action: 'contactform',
+                    size: 'normal',
+                    callback: (token) => {
+                        this.turnstileToken = token
+                        console.log(this.turnstileToken)
+                    },
+                    sitekey: '{{ config("services.cloudflare.site_key") }}',
+                })
+            },
+        }"
+        x-init="initTurnstile()"
+    >
         <h1 class="text-5xl font-bold md:text-[95px]">
             {{ __("store.Create Account") }}
         </h1>
@@ -23,7 +49,7 @@
                 />
                 <x-auth.components.input
                     label="{{ __('store.Email Address') }}"
-                    placeholder="{{ __('store.Enter your email here ...') }}"
+                    placeholder="{{ __('store.Enter your email here ') }}"
                     type="email"
                     field="email"
                     :is-required="true"
@@ -43,8 +69,18 @@
                     field="password_confirmation"
                     :is-required="true"
                 />
-                <x-general.button-black-animation class="!w-fit !py-2 px-6">
-                    <button class="relative z-10" type="submit">
+                <input
+                    type="hidden"
+                    name="turnstileToken"
+                    x-model="turnstileToken"
+                />
+
+                @error("turnstileToken")
+                    <p class="my-1 text-sm text-red-500">{{ $message }}</p>
+                @enderror
+
+                <x-general.button-black-animation class="!w-fit !py-0">
+                    <button class="relative z-10 !py-2 px-6" type="submit">
                         {{ __("store.Create Account") }}
                     </button>
                 </x-general.button-black-animation>
@@ -60,10 +96,18 @@
                 {{ __("store.Login") }}
             </a>
         </div>
-
+        <!-- Invisible Turnstile container -->
+        <div id="turnstile-container" class="hidden"></div>
         <a href="{{ route("storefront.index") }}" class="mt-6 flex gap-x-2">
             <x-icons.back-to-store class="h-4 w-4" />
             <p>{{ __("store.Back To Store") }}</p>
         </a>
     </main>
+    @pushonce("scripts")
+        <script
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+            async
+            defer
+        ></script>
+    @endpushonce
 </x-store-main-layout>
