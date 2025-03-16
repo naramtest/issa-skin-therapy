@@ -24,4 +24,5 @@ Schedule::command("tabby:capture-payments")
     ->everyTenMinutes()
     ->withoutOverlapping();
 
-Schedule::command("catalog:export-facebook")->daily();
+Schedule::command("catalog:export-facebook")->dailyAt("00:00");
+Schedule::command("catalog:export-tiktok")->dailyAt("00:00");
