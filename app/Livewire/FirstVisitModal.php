@@ -54,8 +54,8 @@ class FirstVisitModal extends Component
                 return;
             }
         } else {
-            $result = $this->createNewSubscriber();
-            if (!$result) {
+            $subscriber = $this->createNewSubscriber();
+            if (!$subscriber->save()) {
                 $this->closeAndDispatch(
                     message: __(
                         "store.There seems to be a temporary issue with subscriptions"
@@ -93,7 +93,7 @@ class FirstVisitModal extends Component
                 $subscriber->sent_attempts >= 3;
     }
 
-    protected function createNewSubscriber(): bool
+    protected function createNewSubscriber(): ?Subscriber
     {
         $subscriber = new Subscriber();
         $token = hash("sha256", time());
@@ -101,7 +101,7 @@ class FirstVisitModal extends Component
         $subscriber->email = $this->email;
         $subscriber->token = $token;
         $subscriber->status = SubscriberStatus::PENDING;
-        return $subscriber->save();
+        return $subscriber;
     }
 
     public function sendEmail($email, string $token): void
