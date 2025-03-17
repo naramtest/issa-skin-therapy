@@ -612,4 +612,10 @@ return [
         " Please contact our support team" =>
             "An error occurred while verifying your subscription. Please contact our support team",
     ],
+    "Subscribed On" => "Subscribed On",
+    "Subscriber Information" => "Subscriber Information",
+    "Email Attempts" => "Email Attempts",
+    "Subscriber" => "Subscriber",
+    "Subscribers" => "Subscribers",
+    "Unsubscribed" => "Unsubscribed",
 ];
