@@ -4,6 +4,7 @@ namespace App\Services\SEO\SchemaServices;
 
 use App\Helpers\Media\ImageGetter;
 use App\Services\Currency\CurrencyHelper;
+use App\Traits\Seo\HasReturnPolicy;
 use Illuminate\Support\Facades\URL;
 use Spatie\SchemaOrg\ItemAvailability;
 use Spatie\SchemaOrg\Product;
@@ -11,6 +12,8 @@ use Spatie\SchemaOrg\Schema;
 
 class HomePageSchemaService extends BaseSchemaService
 {
+    use HasReturnPolicy;
+
     protected ?\App\Models\Product $featuredProduct;
 
     public function setFeaturedProduct(
@@ -68,6 +71,7 @@ class HomePageSchemaService extends BaseSchemaService
                     )
                     ->priceCurrency(CurrencyHelper::getCurrencyCode())
                     ->availability(ItemAvailability::InStock)
+                    ->hasMerchantReturnPolicy(self::getMerchantReturnPolicy())
                     ->url(URL::route("product.show", $this->featuredProduct))
             );
     }

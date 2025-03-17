@@ -5,13 +5,15 @@ namespace App\Services\SEO\SchemaServices;
 use App\Helpers\Media\ImageGetter;
 use App\Models\Bundle;
 use App\Services\Currency\CurrencyHelper;
+use App\Traits\Seo\HasReturnPolicy;
 use Illuminate\Support\Facades\URL;
 use Spatie\SchemaOrg\ItemAvailability;
-use Spatie\SchemaOrg\Product;
 use Spatie\SchemaOrg\Schema;
 
 class BundlePageSchemaService extends BaseSchemaService
 {
+    use HasReturnPolicy;
+
     protected Bundle $bundle;
 
     public function setBundle(Bundle $bundle): static
@@ -38,46 +40,49 @@ class BundlePageSchemaService extends BaseSchemaService
         ]);
     }
 
-    protected function createBundleSchema(): Product
+    protected function createBundleSchema(): \Spatie\SchemaOrg\Product
     {
         $bundle = $this->bundle;
+
+        // Create the base offer schema
+        $offerSchema = Schema::offer()
+            ->price(
+                CurrencyHelper::decimalFormatter(
+                    value: $bundle->getCurrentPrice()
+                )
+            )
+            ->priceCurrency(CurrencyHelper::getCurrencyCode())
+            ->availability(
+                $bundle->inventory()->isInStock()
+                    ? ItemAvailability::InStock
+                    : ItemAvailability::OutOfStock
+            )
+            ->hasMerchantReturnPolicy(self::getMerchantReturnPolicy())
+            ->url(URL::route("product.bundle", $bundle));
 
         $bundleSchema = Schema::product()
             ->name($bundle->name)
             ->description(strip_tags($bundle->description) ?? "")
             ->brand(Schema::brand()->name($this->info->name))
             ->image(ImageGetter::getMediaUrl($bundle))
-            ->offers(
-                Schema::offer()
-                    ->price(
-                        CurrencyHelper::decimalFormatter(
-                            value: $bundle->getCurrentPrice()
-                        )
-                    )
-                    ->priceCurrency(CurrencyHelper::getCurrencyCode())
-                    ->availability(
-                        $bundle->inventory()->isInStock()
-                            ? ItemAvailability::InStock
-                            : ItemAvailability::OutOfStock
-                    )
-                    ->url(URL::route("product.bundle", $bundle))
-            );
+            ->offers($offerSchema);
 
         // Add included products as parts of the bundle
         $includedProducts = $bundle->products->map(function ($product) {
+            $productOfferSchema = Schema::offer()
+                ->price(
+                    CurrencyHelper::decimalFormatter(
+                        value: $product->getCurrentPrice()
+                    )
+                )
+                ->hasMerchantReturnPolicy(self::getMerchantReturnPolicy())
+                ->priceCurrency(CurrencyHelper::getCurrencyCode());
+
             return Schema::product()
                 ->name($product->name)
                 ->description(strip_tags($product->description) ?? "")
                 ->image(ImageGetter::getMediaUrl($product))
-                ->offers(
-                    Schema::offer()
-                        ->price(
-                            CurrencyHelper::decimalFormatter(
-                                value: $product->getCurrentPrice()
-                            )
-                        )
-                        ->priceCurrency(CurrencyHelper::getCurrencyCode())
-                );
+                ->offers($productOfferSchema);
         });
 
         $bundleSchema->isRelatedTo($includedProducts->toArray());

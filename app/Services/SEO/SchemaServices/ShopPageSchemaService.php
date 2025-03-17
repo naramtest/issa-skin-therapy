@@ -5,6 +5,7 @@ namespace App\Services\SEO\SchemaServices;
 use App\Helpers\Media\ImageGetter;
 use App\Models\Product;
 use App\Services\Currency\CurrencyHelper;
+use App\Traits\Seo\HasReturnPolicy;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Spatie\SchemaOrg\ItemAvailability;
@@ -12,6 +13,8 @@ use Spatie\SchemaOrg\Schema;
 
 class ShopPageSchemaService extends BaseSchemaService
 {
+    use HasReturnPolicy;
+
     protected Collection $products;
     protected Collection $bundles;
 
@@ -71,6 +74,9 @@ class ShopPageSchemaService extends BaseSchemaService
                                 $product->inventory()->isInStock()
                                     ? ItemAvailability::InStock
                                     : ItemAvailability::OutOfStock
+                            )
+                            ->hasMerchantReturnPolicy(
+                                self::getMerchantReturnPolicy()
                             )
                             ->url(
                                 $product instanceof Product
