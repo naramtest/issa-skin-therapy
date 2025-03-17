@@ -13,6 +13,7 @@ use App\Http\Controllers\Content\LegalController;
 use App\Http\Controllers\Content\PostController;
 use App\Http\Controllers\Content\ProductController;
 use App\Http\Controllers\Content\ShopController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\Webhook\StripeWebhookController;
 use App\Http\Controllers\Webhook\TabbyWebhookController;
@@ -126,6 +127,11 @@ Route::post("/webhooks/tabby", [
 Route::get("/cart/prefill", CartPrefillController::class)
     ->name("cart.prefill")
     ->middleware("signed");
+Route::controller(NewsletterController::class)->group(function () {
+    Route::get("/subscriber/verify/{token}/{email}", "verify")->name(
+        "subscriber_verify"
+    );
+});
 
 Route::get("/s/{code}", function (string $code) {
     $url = app(UrlShortenerService::class)->getOriginalUrl($code);

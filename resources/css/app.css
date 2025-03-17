@@ -420,3 +420,24 @@ body.menu-open {
     transform: translate(-50%, -50%);
     z-index: 9999;
 }
+
+
+.first-modal-loader {
+    width: 24px;
+    height: 24px;
+    border: 3px dotted #FFF;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    animation: first-modal-rotation 2s linear infinite;
+}
+
+@keyframes first-modal-rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

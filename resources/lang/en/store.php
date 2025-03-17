@@ -594,4 +594,22 @@ return [
         "Explore our articles and insights on skincare, beauty tips, and product recommendations",
     "Login From Here" => "Login From Here",
     "View details" => "View details",
+    "verification_message" =>
+        "You're almost there! To complete your newsletter subscription with :siteName, please click the button below or use the following link:<br><br><a href=':link'>:link</a><br><br>If you did not sign up for our newsletter, you can safely ignore this email.",
+    "Please Confirm Your Newsletter Subscription" =>
+        "Please Confirm Your Newsletter Subscription",
+    "You are already on the list to receive our newsletter" =>
+        "Great taste! You are already on the list to receive our newsletter",
+    "hitting the subscribe button a little too fast" =>
+        'Seems like you\'re hitting the subscribe button a little too fast',
+    "Check your email to activate and start receiving our newsletter" =>
+        "Check your email to activate and start receiving our newsletter",
+    "There seems to be a temporary issue with subscriptions" =>
+        "There seems to be a temporary issue with subscriptions",
+    "Your subscription is now active" =>
+        "Great! Your subscription is now active. Welcome to the community!",
+    "An error occurred while verifying your subscription" => [
+        " Please contact our support team" =>
+            "An error occurred while verifying your subscription. Please contact our support team",
+    ],
 ];
