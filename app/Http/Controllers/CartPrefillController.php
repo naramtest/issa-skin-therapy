@@ -29,6 +29,9 @@ class CartPrefillController extends Controller
 
             // Add each item to cart
             foreach ($items as $item) {
+                if (!array_key_exists("type", $item)) {
+                    continue;
+                }
                 $type = ProductType::tryFrom($item["type"]);
 
                 if (!$type) {
