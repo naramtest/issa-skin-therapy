@@ -37,7 +37,7 @@ class CurrencyService
         $currencies = collect(CurrencyHelper::getAvailableCurrencies())
             ->pluck("code")
             ->toArray();
-        $baseCurrency = config("app.currency", "AED");
+        $baseCurrency = CurrencyHelper::getCurrencyCode();
 
         foreach ($currencies as $currency) {
             if ($currency === $baseCurrency) {
