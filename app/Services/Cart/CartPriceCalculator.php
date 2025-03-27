@@ -31,7 +31,6 @@ readonly class CartPriceCalculator
 
         // 3. Calculate total with tax
         $total = $subtotal;
-        dd($costs, $subtotal, $taxableAmount, $total);
         foreach ($costs as $cost) {
             $total = $cost->subtract
                 ? $total->subtract($cost->amount)
