@@ -7,8 +7,6 @@
     dir="{{ app()->getLocale() == "en" ? "ltr" : "rtl" }}"
 >
     <head>
-        <x-google-tag />
-
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -60,14 +58,7 @@
 
     <body class="w-full bg-lightColor antialiased">
         <!-- Google Tag Manager (noscript) -->
-        <noscript>
-            <iframe
-                src="https://www.googletagmanager.com/ns.html?id=GTM-5KXKMSZQ"
-                height="0"
-                width="0"
-                style="display: none; visibility: hidden"
-            ></iframe>
-        </noscript>
+
         <!-- End Google Tag Manager (noscript) -->
         <x-layout.header-home />
         <x-layout.fixed-menu />

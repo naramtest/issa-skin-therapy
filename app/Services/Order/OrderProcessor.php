@@ -4,7 +4,6 @@ namespace App\Services\Order;
 
 use App\Enums\Checkout\OrderStatus;
 use App\Enums\Checkout\PaymentStatus;
-use App\Mail\NewOrderAdminNotification;
 use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
 use App\Services\Invoice\InvoiceService;
@@ -52,10 +51,6 @@ readonly class OrderProcessor
             if (app()->isProduction()) {
                 Mail::to($order->email)->queue(
                     new OrderConfirmationMail($order)
-                );
-                //TODO: make it dynamic from the dashboard (setting page)
-                Mail::to("info@issaskintherapy.com")->queue(
-                    new NewOrderAdminNotification($order)
                 );
             }
             DB::commit();

@@ -32,7 +32,9 @@ trait WithTabbyData
                 "email" => App::isLocal()
                     ? "otp.rejected@tabby.ai"
                     : $this->form->email,
-                "phone" => App::isLocal() ? "971500000001" : $this->form->phone,
+                "phone" => App::isLocal()
+                    ? "+966500000001"
+                    : $this->form->phone,
                 "name" =>
                     $this->form->billing_first_name .
                     " " .
@@ -204,7 +206,7 @@ trait WithTabbyData
             "description" => "Order #{$order->order_number}",
             "buyer" => [
                 "phone" => App::isLocal()
-                    ? "971500000001"
+                    ? "+966500000001"
                     : $order->shippingAddress->phone,
                 "email" => App::isLocal()
                     ? "otp.success@tabby.ai"

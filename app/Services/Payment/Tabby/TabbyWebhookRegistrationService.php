@@ -17,7 +17,7 @@ class TabbyWebhookRegistrationService
     {
         $this->baseUrl = "https://api.tabby.ai/api/v1/";
         $this->secretKey = config("services.tabby.secret_key") ?? "";
-        $this->merchantCode = config("services.tabby.merchant_code") ?? "";
+        $this->merchantCode = tabbyStoreCode() ?? "";
         $this->isTestMode = !app()->isProduction();
     }
 

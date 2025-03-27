@@ -1,11 +1,24 @@
 <?php
 
+use App\Services\Currency\CurrencyHelper;
 use Carbon\Carbon;
 
 if (!function_exists("formattedDate")) {
     function formattedDate(Carbon $date): string
     {
         return $date->translatedFormat("F j, Y");
+    }
+}
+
+if (!function_exists("tabbyStoreCode")) {
+    function tabbyStoreCode(): string
+    {
+        $currency = CurrencyHelper::userCurrency()->getCode();
+        if ($currency === "SAR") {
+            return config("services.tabby.merchant_code_sauce");
+        } else {
+            return config("services.tabby.merchant_code");
+        }
     }
 }
 

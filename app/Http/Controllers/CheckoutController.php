@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App;
 use App\Enums\Checkout\PaymentStatus;
 use App\Helpers\PixelHelper;
-use App\Mail\NewOrderAdminNotification;
 use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
 use App\Services\Cart\CartService;
@@ -102,13 +101,6 @@ class CheckoutController extends Controller
             if (App::isProduction()) {
                 Mail::to($order->email)->queue(
                     new OrderConfirmationMail($order)
-                );
-                //TODO: make it dynamic from the dashboard (setting page)
-                Mail::to("info@issaskintherapy.com")->queue(
-                    new NewOrderAdminNotification($order)
-                );
-                Mail::to("tarekalkoht@gmail.com")->queue(
-                    new NewOrderAdminNotification($order)
                 );
             }
             return view("storefront.checkout.success", [

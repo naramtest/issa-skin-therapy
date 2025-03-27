@@ -2,11 +2,9 @@
 
 namespace App\Livewire;
 
-use App\Mail\ContactFormSubmission;
 use App\Models\ContactMessage;
 use App\Rules\TurnstileCheckRule;
 use Livewire\Component;
-use Mail;
 
 class ContactForm extends Component
 {
@@ -39,14 +37,6 @@ class ContactForm extends Component
             "message" => $this->message,
             "ip_address" => request()->ip(),
         ]);
-
-        // 2. Send email notification
-        //TODO: update from admin panel
-        if (\App::isProduction()) {
-            Mail::to("info@issaskintherapy.com")->queue(
-                new ContactFormSubmission($contactMessage)
-            );
-        }
 
         //TODO: add user email and phone address to the event
         $this->dispatch(
