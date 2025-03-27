@@ -12,7 +12,7 @@ use Money\Money;
 
 class CartCostsRedisService extends BaseRedisService
 {
-    private const COSTS_PREFIX = "cart:costs";
+    private const COSTS_PREFIX = "test-cart:costs";
 
     public function removeCost(CartCostType $type): void
     {

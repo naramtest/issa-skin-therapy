@@ -11,7 +11,7 @@ use Money\Money;
 
 class CartCouponRedisService extends BaseRedisService
 {
-    private const COUPON_PREFIX = "cart:coupon";
+    private const COUPON_PREFIX = "test-cart:coupon";
 
     public function saveCoupon(Coupon $coupon, Money $discount): void
     {

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Redis;
 
 class CartItemsRedisService extends BaseRedisService
 {
-    private const ITEMS_PREFIX = "cart:items";
+    private const ITEMS_PREFIX = "test-cart:items";
 
     /**
      * @throws Exception
