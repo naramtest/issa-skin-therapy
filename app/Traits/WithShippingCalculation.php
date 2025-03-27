@@ -116,6 +116,7 @@ trait WithShippingCalculation
                 $methods
             );
             if ($hasFreeShipping) {
+                dd(CurrencyHelper::defaultCurrency()->getCode());
                 $this->shippingRates->push([
                     "service_code" => ShippingMethodType::FREE_SHIPPING->value,
                     "service_name" => ShippingMethodType::FREE_SHIPPING,
