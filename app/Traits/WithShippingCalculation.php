@@ -5,7 +5,6 @@ namespace App\Traits;
 use App\Enums\Checkout\CartCostType;
 use App\Enums\Checkout\ShippingMethodType;
 use App\Services\Currency\CurrencyHelper;
-use App\Services\Shipping\DHL\DHLRateCheckService;
 use App\Services\Shipping\ShippingZoneService;
 use Exception;
 use Log;
@@ -107,52 +106,13 @@ trait WithShippingCalculation
                 return;
             }
 
-            $methods = $this->shippingZoneService->getAvailableMethodsForCountry(
-                $destination["country"]
-            );
-
-            $hasFreeShipping = $this->freeShippingCoupon(
-                $destination["country"],
-                $methods
-            );
-            if ($hasFreeShipping) {
-                $this->shippingRates->push([
-                    "service_code" => ShippingMethodType::FREE_SHIPPING->value,
-                    "service_name" => ShippingMethodType::FREE_SHIPPING,
-                    "total_price" => 0,
-                    "currency" => CurrencyHelper::defaultCurrency()->getCode(),
-                    "guaranteed" => false,
-                ]);
-            }
-
-            foreach ($methods as $method) {
-                // Skip methods that don't meet minimum order requirements
-                if (
-                    !$method->meetsMinimumOrderRequirement(
-                        $this->cartService->getSubtotal()
-                    )
-                ) {
-                    continue;
-                }
-
-                $this->shippingRates->push(
-                    $this->shippingZoneService->formatMethodToRate(
-                        $method,
-                        $this->cartService->itemCount()
-                    )
-                );
-            }
-
-            // Get DHL rates
-            $dhlService = app(DHLRateCheckService::class);
-
-            $dhlRates = collect($dhlService->getRates($destination));
-            // Merge rates
-
-            foreach ($dhlRates as $dhlRate) {
-                $this->shippingRates->push($dhlRate);
-            }
-
+            $this->shippingRates->push([
+                "service_code" => ShippingMethodType::FREE_SHIPPING->value,
+                "service_name" => ShippingMethodType::FREE_SHIPPING,
+                "total_price" => 0,
+                "currency" => CurrencyHelper::defaultCurrency()->getCode(),
+                "guaranteed" => false,
+            ]);
             // Select first-rate if none selected
             if (
                 $this->shippingRates->isNotEmpty() &&
