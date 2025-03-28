@@ -115,7 +115,7 @@ trait WithShippingCalculation
                 $destination["country"],
                 $methods
             );
-            if ($hasFreeShipping) {
+            if ($hasFreeShipping or \App::isLocal()) {
                 $this->shippingRates->push([
                     "service_code" => ShippingMethodType::FREE_SHIPPING->value,
                     "service_name" => ShippingMethodType::FREE_SHIPPING,
@@ -143,14 +143,16 @@ trait WithShippingCalculation
                 );
             }
 
-            // Get DHL rates
-            $dhlService = app(DHLRateCheckService::class);
+            if (\App::isProduction()) {
+                // Get DHL rates
+                $dhlService = app(DHLRateCheckService::class);
 
-            $dhlRates = collect($dhlService->getRates($destination));
-            // Merge rates
+                $dhlRates = collect($dhlService->getRates($destination));
+                // Merge rates
 
-            foreach ($dhlRates as $dhlRate) {
-                $this->shippingRates->push($dhlRate);
+                foreach ($dhlRates as $dhlRate) {
+                    $this->shippingRates->push($dhlRate);
+                }
             }
 
             // Select first-rate if none selected

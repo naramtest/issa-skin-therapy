@@ -33,7 +33,7 @@ trait WithTabbyPayment
         }
         $this->tabbyPaymentService = $tabbyPaymentService;
         $this->tabbyPaymentVerificationService = $tabbyPaymentVerificationService;
-        $this->checkAvailability();
+        //        $this->checkAvailability();
     }
 
     public function checkAvailability(): void

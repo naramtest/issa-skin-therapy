@@ -15,6 +15,7 @@ trait WithPayment
     public function setPaymentError($error): void
     {
         $this->error = $error;
+        $this->processing = false;
     }
 
     public function oldOrderExists(): array

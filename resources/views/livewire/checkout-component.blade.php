@@ -73,14 +73,21 @@
                             <button
                                 type="submit"
                                 wire:loading.attr="disabled"
+                                @disabled($processing)
                                 class="w-full rounded-full bg-black px-6 py-3 text-white hover:bg-gray-800 disabled:opacity-50"
                             >
-                                <span wire:loading.remove>
-                                    {{ __("store.Place Order and Pay") }}
-                                </span>
-                                <span wire:loading>
-                                    {{ __("store.Processing") }} ...
-                                </span>
+                                @if (! $processing)
+                                    <span wire:loading.remove>
+                                        {{ __("store.Place Order and Pay") }}
+                                    </span>
+                                    <span wire:loading>
+                                        {{ __("store.Processing") }} ...
+                                    </span>
+                                @else
+                                    <span>
+                                        {{ __("store.Processing") }} ...
+                                    </span>
+                                @endif
                             </button>
 
                             @if ($error)
