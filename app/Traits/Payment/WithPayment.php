@@ -22,12 +22,17 @@ trait WithPayment
         $order = Order::find($this->currentOrderId);
 
         if ($this->form->payment_method == PaymentMethod::CARD->value) {
-            $paymentData = $this->stripeOldOrderExits($order);
-            if (!$paymentData) {
+            try {
+                $paymentData = $this->stripeOldOrderExits($order);
+                $this->dispatch(
+                    "payment-ready",
+                    clientSecret: $paymentData["key"]
+                );
+                return ["success" => true];
+            } catch (\Exception $exception) {
+                logger($exception);
                 return ["success" => false];
             }
-            $this->dispatch("payment-ready", clientSecret: $paymentData["key"]);
-            return ["success" => true];
         }
 
         return $this->tabbyPaymentService->processPayment($order);

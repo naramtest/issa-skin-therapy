@@ -4,6 +4,7 @@ namespace App\Traits\Payment;
 
 use App\Models\Order;
 use App\Services\Payment\StripePaymentService;
+use Exception;
 
 trait WithStripePayment
 {
@@ -38,18 +39,17 @@ trait WithStripePayment
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function stripeOldOrderExits(Order $order): ?array
     {
         if (!$this->orderService->isOrderPendingPayment($order)) {
-            return ["success" => false];
+            throw new Exception("no Pending Payment");
         }
 
-        try {
-            return $this->paymentService->getPaymentIntent(
-                $order->payment_intent_id
-            );
-        } catch (\Exception) {
-            return null;
-        }
+        return $this->paymentService->getPaymentIntent(
+            $order->payment_intent_id
+        );
     }
 }
