@@ -6,6 +6,7 @@ use App\Enums\AddressType;
 use App\Enums\Checkout\PaymentMethod;
 use App\Models\Country;
 use App\Models\State;
+use App\Models\User;
 use Livewire\Attributes\Rule;
 use Livewire\Form;
 
@@ -102,7 +103,7 @@ class CheckoutForm extends Form
     #[Rule("nullable|string|max:50")]
     public ?string $coupon_code = null;
 
-    public function setFromUser($user): void
+    public function setFromUser(?User $user): void
     {
         if ($user) {
             $this->email = $user->email;
