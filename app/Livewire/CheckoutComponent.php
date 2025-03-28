@@ -117,6 +117,8 @@ class CheckoutComponent extends Component
             $order = $this->createAndGetOrder($validatedData);
             $this->currentOrderId = $order->id;
             $paymentData = $this->processPayment($order);
+            logger($paymentData);
+
             DB::commit();
 
             if ($this->form->payment_method == PaymentMethod::CARD->value) {
