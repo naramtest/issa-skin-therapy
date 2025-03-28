@@ -129,7 +129,7 @@ class CheckoutComponent extends Component
             }
         } catch (Exception $exception) {
             DB::rollBack();
-
+            logger($exception);
             $this->error = __("store.Failed to create order. Please try again");
         } finally {
             $this->processing = false;
