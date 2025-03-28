@@ -27,7 +27,7 @@ trait WithPayment
                 logger($paymentData);
                 $this->dispatch(
                     "payment-ready",
-                    clientSecret: $paymentData["key"]
+                    clientSecret: $paymentData["clientSecret"]
                 );
                 return ["success" => true];
             } catch (\Exception $exception) {
