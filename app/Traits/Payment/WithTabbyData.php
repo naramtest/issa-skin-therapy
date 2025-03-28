@@ -163,6 +163,7 @@ trait WithTabbyData
 
         // Get the last 5 paid orders for this customer
         $orders = Order::where("customer_id", $customerId)
+            ->with(["shippingAddress"])
             ->where("payment_status", PaymentStatus::PAID)
             ->orderBy("created_at", "desc")
             ->limit(5)
