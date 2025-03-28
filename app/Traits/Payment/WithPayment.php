@@ -24,7 +24,7 @@ trait WithPayment
         if ($this->form->payment_method == PaymentMethod::CARD->value) {
             try {
                 $paymentData = $this->stripeOldOrderExits($order);
-                dd($paymentData);
+                logger($paymentData);
                 $this->dispatch(
                     "payment-ready",
                     clientSecret: $paymentData["key"]
