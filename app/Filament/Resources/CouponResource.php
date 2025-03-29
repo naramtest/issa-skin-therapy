@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CouponResource\Pages;
 use App\Helpers\Filament\Coupon\CouponForm;
+use App\Helpers\Filament\Coupon\CouponTable;
 use App\Models\Coupon;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -28,6 +29,7 @@ class CouponResource extends Resource
      */
     public static function table(Table $table): Table
     {
+        return CouponTable::make($table);
     }
 
     public static function form(Form $form): Form

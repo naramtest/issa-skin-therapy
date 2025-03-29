@@ -134,4 +134,10 @@ return [
         "Restrict Free Shipping to Countries",
     "Commission Rate (%)" => "Commission Rate (%)",
     "Commission Rate" => "Commission Rate",
+    "password" => "Password",
+    "Commission" => "Commission",
+    "Order Total" => "Order Total",
+    "Rate" => "Rate",
+    "Paid At" => "Paid At",
+    "Commission Amount" => "Commission Amount",
 ];

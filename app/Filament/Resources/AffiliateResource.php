@@ -5,14 +5,16 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\AffiliateResource\Pages;
 use App\Filament\Resources\AffiliateResource\RelationManagers;
 use App\Models\Affiliate;
-use App\Models\User;
 use App\Services\Currency\CurrencyHelper;
 use Filament\Forms;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
+use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 
 class AffiliateResource extends Resource
 {
@@ -25,33 +27,60 @@ class AffiliateResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\Select::make("user_id")
-                ->label(__("dashboard.User"))
-                ->options(User::all()->pluck("name", "id"))
-                ->searchable()
-                ->required(),
-            Forms\Components\TextInput::make("phone")
-                ->label(__("dashboard.Phone"))
-                ->tel(),
-            Forms\Components\TextInput::make("slug")
-                ->label(__("dashboard.Slug"))
-                ->required()
-                ->unique(Affiliate::class, "slug", ignoreRecord: true)
-                ->maxLength(255)
-                ->afterStateUpdated(function (
-                    Forms\Components\TextInput $component,
-                    $state
-                ) {
-                    $component->state(Str::slug($state));
-                }),
-            Forms\Components\Textarea::make("about")
-                ->label(__("dashboard.About"))
-                ->maxLength(65535)
-                ->columnSpanFull(),
-            Forms\Components\Toggle::make("status")
-                ->label(__("dashboard.Active"))
-                ->default(true)
-                ->required(),
+            Forms\Components\Tabs::make()
+                ->columnSpanFull()
+                ->columns()
+                ->tabs([
+                    Tab::make("User")
+                        ->label(__("store.User Information"))
+                        ->icon("gmdi-person")
+                        ->schema([
+                            Group::make()
+                                ->relationship("user")
+                                ->schema([
+                                    TextInput::make("name")
+                                        ->required()
+                                        ->live(onBlur: true)
+                                        ->label(__("store.Name")),
+                                    TextInput::make("email")
+                                        ->required()
+                                        ->unique(ignoreRecord: true)
+                                        ->label(__("store.Email")),
+                                    TextInput::make("password")
+                                        ->label(__("dashboard.password"))
+                                        ->required(
+                                            fn($operation) => $operation ===
+                                                "create"
+                                        )
+                                        ->dehydrated(
+                                            fn($operation, $state) => !is_null(
+                                                $state
+                                            )
+                                        )
+                                        ->password()
+                                        ->revealable(),
+                                ]),
+                        ]),
+                    Tab::make("Details")
+                        ->label(__("store.Details"))
+                        ->icon("gmdi-info-o")
+                        ->schema([
+                            Group::make()->schema([
+                                Forms\Components\Toggle::make("status")
+                                    ->label(__("store.Active"))
+                                    ->default(true)
+                                    ->required(),
+                                PhoneInput::make("phone")->label(
+                                    __("store.phone")
+                                ),
+
+                                Forms\Components\Textarea::make("about")
+                                    ->label(__("store.About"))
+                                    ->maxLength(65535)
+                                    ->columnSpanFull(),
+                            ]),
+                        ]),
+                ]),
         ]);
     }
 

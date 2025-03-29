@@ -12,8 +12,12 @@ class EditAffiliate extends EditRecord
 
     protected function getHeaderActions(): array
     {
-        return [
-            Actions\DeleteAction::make(),
-        ];
+        return [Actions\DeleteAction::make()];
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data["slug"] = \Str::slug($this->data["user"]["name"]);
+        return parent::mutateFormDataBeforeSave($data);
     }
 }

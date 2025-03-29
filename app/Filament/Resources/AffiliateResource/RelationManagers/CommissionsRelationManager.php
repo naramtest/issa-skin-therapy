@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\AffiliateResource\RelationManagers;
 
 use App\Enums\CommissionStatus;
+use App\Filament\Resources\OrderResource\Pages\EditOrder;
 use App\Models\AffiliateCommission;
 use App\Services\Currency\CurrencyHelper;
 use Filament\Forms;
@@ -11,6 +12,9 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
+use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
+use Pelmered\FilamentMoneyField\Forms\Components\MoneyInput;
+use Pelmered\FilamentMoneyField\Tables\Columns\MoneyColumn;
 
 class CommissionsRelationManager extends RelationManager
 {
@@ -21,22 +25,14 @@ class CommissionsRelationManager extends RelationManager
     public function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\TextInput::make("commission_amount")
+            MoneyInput::make("commission_amount")
                 ->label(__("dashboard.Commission Amount"))
-                ->disabled()
-                ->formatStateUsing(
-                    fn($state) => CurrencyHelper::format(
-                        new \Money\Money(
-                            $state,
-                            CurrencyHelper::defaultCurrency()
-                        )
-                    )
-                ),
+                ->disabled(),
             Forms\Components\TextInput::make("commission_rate")
                 ->label(__("dashboard.Commission Rate"))
                 ->disabled()
                 ->formatStateUsing(fn($state) => $state . "%"),
-            Forms\Components\TextInput::make("order_total")
+            MoneyInput::make("order_total")
                 ->label(__("dashboard.Order Total"))
                 ->disabled()
                 ->formatStateUsing(
@@ -49,14 +45,6 @@ class CommissionsRelationManager extends RelationManager
                 ),
             Forms\Components\Select::make("status")
                 ->label(__("dashboard.Status"))
-                ->options([
-                    CommissionStatus::PENDING
-                        ->value => CommissionStatus::PENDING->getLabel(),
-                    CommissionStatus::PAID
-                        ->value => CommissionStatus::PAID->getLabel(),
-                    CommissionStatus::CANCELED
-                        ->value => CommissionStatus::CANCELED->getLabel(),
-                ])
                 ->disabled(
                     fn(AffiliateCommission $record) => !$record->canBePaid() &&
                         $record->status !== CommissionStatus::PENDING
@@ -68,6 +56,9 @@ class CommissionsRelationManager extends RelationManager
         ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function table(Table $table): Table
     {
         return $table
@@ -75,33 +66,32 @@ class CommissionsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make("order.order_number")
                     ->label(__("dashboard.Order"))
-                    ->searchable(),
+                    ->searchable()
+                    ->url(
+                        fn(AffiliateCommission $record): string => route(
+                            EditOrder::getRouteName(),
+                            [
+                                "record" => $record->order_id,
+                            ]
+                        )
+                    ),
                 Tables\Columns\TextColumn::make("coupon.code")
-                    ->label(__("dashboard.Coupon Code"))
+                    ->label(__("store.Coupon Code"))
                     ->searchable(),
-                Tables\Columns\TextColumn::make("money_order_total")
+                MoneyColumn::make("order_total")
                     ->label(__("dashboard.Order Total"))
-                    ->formatStateUsing(
-                        fn($state) => CurrencyHelper::format($state)
-                    )
-                    ->sortable(["order_total"]),
+                    ->sortable(),
                 Tables\Columns\TextColumn::make("commission_rate")
                     ->label(__("dashboard.Rate"))
                     ->formatStateUsing(fn($state) => $state . "%")
                     ->sortable(),
-                Tables\Columns\TextColumn::make("money_commission_amount")
+                MoneyColumn::make("commission_amount")
                     ->label(__("dashboard.Commission"))
-                    ->formatStateUsing(
-                        fn($state) => CurrencyHelper::format($state)
-                    )
-                    ->sortable(["commission_amount"]),
+                    ->sortable(),
                 Tables\Columns\TextColumn::make("status")
                     ->label(__("dashboard.Status"))
-                    ->badge()
-                    ->formatStateUsing(
-                        fn(CommissionStatus $state) => $state->getLabel()
-                    )
-                    ->color(fn(CommissionStatus $state) => $state->getColor()),
+                    ->badge(),
+
                 Tables\Columns\TextColumn::make("created_at")
                     ->label(__("dashboard.Created At"))
                     ->dateTime()
@@ -113,14 +103,12 @@ class CommissionsRelationManager extends RelationManager
                     ->toggleable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make("status")->options([
-                    CommissionStatus::PENDING
-                        ->value => CommissionStatus::PENDING->getLabel(),
-                    CommissionStatus::PAID
-                        ->value => CommissionStatus::PAID->getLabel(),
-                    CommissionStatus::CANCELED
-                        ->value => CommissionStatus::CANCELED->getLabel(),
-                ]),
+                Tables\Filters\SelectFilter::make("status")->options(
+                    CommissionStatus::class
+                ),
+                DateRangeFilter::make("created_at")->label(
+                    __("dashboard.Created At")
+                ),
             ])
             ->headerActions([
                 // No create action - commissions are created automatically
