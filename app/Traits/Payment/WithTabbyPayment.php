@@ -14,8 +14,8 @@ trait WithTabbyPayment
     public bool $isTabbySendingRequest = false;
 
     public bool $isAvailable = false;
-    public bool $shouldChangeRejection = false;
-    public ?string $rejectionReason = "complete_address";
+    public bool $shouldChangeRejection = true;
+    public ?string $rejectionReason = null;
     protected TabbyPaymentService $tabbyPaymentService;
     protected TabbyPaymentVerificationService $tabbyPaymentVerificationService;
 
@@ -54,10 +54,7 @@ trait WithTabbyPayment
             );
             if ($response["status"] === "created") {
                 $this->isAvailable = true;
-                if ($this->shouldChangeRejection) {
-                    $this->rejectionReason = null;
-                }
-                $this->shouldChangeRejection = !$this->shouldChangeRejection;
+                $this->rejectionReason = null;
             } else {
                 $this->isAvailable = false;
                 $this->rejectionReason =

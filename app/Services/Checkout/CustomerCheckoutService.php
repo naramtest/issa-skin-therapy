@@ -161,7 +161,7 @@ readonly class CustomerCheckoutService
                 "area" => $addressData["area"] ?? null,
                 "building" => $addressData["building"] ?? null,
                 "flat" => $addressData["flat"] ?? null,
-                "is_default" => !$customer->addresses()->exists(),
+                "is_default" => !$customer->addresses()->count(),
             ]);
             return $existingAddress;
         }
