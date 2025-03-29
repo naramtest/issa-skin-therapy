@@ -61,7 +61,7 @@ class AffiliateService
         Money $orderTotal,
         float $commissionRate
     ): int {
-        return $orderTotal->multiply($commissionRate / 100)->getAmount();
+        return $orderTotal->multiply("" . $commissionRate / 100)->getAmount();
     }
 
     /**

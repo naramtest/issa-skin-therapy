@@ -140,4 +140,6 @@ return [
     "Rate" => "Rate",
     "Paid At" => "Paid At",
     "Commission Amount" => "Commission Amount",
+    "Mark as Paid" => "Mark as Paid",
+    "Mark as Canceled" => "Mark as Canceled",
 ];

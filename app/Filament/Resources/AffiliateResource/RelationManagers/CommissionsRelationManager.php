@@ -94,7 +94,7 @@ class CommissionsRelationManager extends RelationManager
 
                 Tables\Columns\TextColumn::make("created_at")
                     ->label(__("dashboard.Created At"))
-                    ->dateTime()
+                    ->dateTime("d M ,Y")
                     ->sortable(),
                 Tables\Columns\TextColumn::make("paid_at")
                     ->label(__("dashboard.Paid At"))
