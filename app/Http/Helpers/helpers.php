@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\Currency\CurrencyHelper;
 use Carbon\Carbon;
 
 if (!function_exists("formattedDate")) {
@@ -21,5 +22,17 @@ if (!function_exists("getLocalAppName")) {
     function getLocalAppName(): string
     {
         return config("app.name_" . app()->getLocale());
+    }
+}
+
+if (!function_exists("tabbyStoreCode")) {
+    function tabbyStoreCode(): string
+    {
+        $currency = CurrencyHelper::userCurrency()->getCode();
+        if ($currency === "SAR") {
+            return config("services.tabby.merchant_code_sau");
+        } else {
+            return config("services.tabby.merchant_code");
+        }
     }
 }

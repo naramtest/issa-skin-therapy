@@ -33,7 +33,7 @@ class TabbyPromoComponent extends Component
     {
         return view("livewire.checkout.payment-methods.tabby-promo-component", [
             "publicKey" => config("services.tabby.public_key"),
-            "merchantCode" => config("services.tabby.merchant_code"),
+            "merchantCode" => tabbyStoreCode(),
         ]);
     }
 }

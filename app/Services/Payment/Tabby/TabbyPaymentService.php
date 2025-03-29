@@ -29,7 +29,7 @@ class TabbyPaymentService implements PaymentServiceInterface
         $this->baseUrl = "https://api.tabby.ai/api/v2/";
         $this->publicKey = config("services.tabby.public_key") ?? "";
         $this->secretKey = config("services.tabby.secret_key") ?? "";
-        $this->merchantCode = config("services.tabby.merchant_code") ?? "";
+        $this->merchantCode = tabbyStoreCode() ?? "";
     }
 
     public function confirmPayment(Order $order, string $paymentIntentId): array
