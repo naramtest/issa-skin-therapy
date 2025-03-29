@@ -142,4 +142,7 @@ return [
     "Commission Amount" => "Commission Amount",
     "Mark as Paid" => "Mark as Paid",
     "Mark as Canceled" => "Mark as Canceled",
+    "User" => "User",
+    "Total Commission" => "Total Commission",
+    "Paid Commission" => "Paid Commission",
 ];

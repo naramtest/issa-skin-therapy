@@ -5,16 +5,16 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\AffiliateResource\Pages;
 use App\Filament\Resources\AffiliateResource\RelationManagers;
 use App\Models\Affiliate;
-use App\Services\Currency\CurrencyHelper;
 use Filament\Forms;
 use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
+use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
+use Pelmered\FilamentMoneyField\Tables\Columns\MoneyColumn;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 
 class AffiliateResource extends Resource
@@ -27,80 +27,75 @@ class AffiliateResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form->schema([
-            Forms\Components\Tabs::make()
-                ->columnSpanFull()
-                ->columns()
-                ->tabs([
-                    Tab::make("User")
-                        ->label(__("store.User Information"))
-                        ->icon("gmdi-person")
+        return $form->columns()->schema([
+            Forms\Components\Section::make("User")
+                ->label(__("store.User Information"))
+                ->icon("gmdi-person")
+                ->columnSpan(1)
+                ->schema([
+                    Group::make()
+                        ->relationship("user")
                         ->schema([
-                            Group::make()
-                                ->relationship("user")
-                                ->schema([
-                                    TextInput::make("name")
-                                        ->required()
-                                        ->live(onBlur: true)
-                                        ->label(__("store.Name"))
-                                        ->afterStateUpdated(function (
-                                            Forms\Components\TextInput $component,
-                                            Forms\Set $set,
-                                            $state
-                                        ) {
-                                            $set("../slug", Str::slug($state));
-                                        }),
+                            TextInput::make("name")
+                                ->required()
+                                ->live(onBlur: true)
+                                ->label(__("store.Name"))
+                                ->afterStateUpdated(function (
+                                    Forms\Components\TextInput $component,
+                                    Forms\Set $set,
+                                    $state
+                                ) {
+                                    $set("../slug", Str::slug($state));
+                                }),
 
-                                    TextInput::make("email")
-                                        ->required()
-                                        ->unique(ignoreRecord: true)
-                                        ->label(__("store.Email")),
-                                    TextInput::make("password")
-                                        ->label(__("dashboard.password"))
-                                        ->required(
-                                            fn($operation) => $operation ===
-                                                "create"
-                                        )
-                                        ->dehydrated(
-                                            fn($operation, $state) => !is_null(
-                                                $state
-                                            )
-                                        )
-                                        ->password()
-                                        ->revealable(),
-                                ]),
+                            TextInput::make("email")
+                                ->required()
+                                ->unique(ignoreRecord: true)
+                                ->label(__("store.Email")),
+                            TextInput::make("password")
+                                ->label(__("dashboard.password"))
+                                ->required(
+                                    fn($operation) => $operation === "create"
+                                )
+                                ->dehydrated(
+                                    fn($operation, $state) => !is_null($state)
+                                )
+                                ->password()
+                                ->revealable(),
                         ]),
-                    Tab::make("Details")
-                        ->label(__("store.Details"))
-                        ->icon("gmdi-info-o")
-                        ->schema([
-                            Group::make()->schema([
-                                Forms\Components\Toggle::make("status")
-                                    ->label(__("store.Active"))
-                                    ->default(true)
-                                    ->required(),
-                                PhoneInput::make("phone")->label(
-                                    __("store.phone")
-                                ),
-                                Forms\Components\TextInput::make("slug")
-                                    ->label(__("dashboard.Permalink"))
-                                    ->required()
-                                    ->live()
-                                    ->unique(ignoreRecord: true)
-                                    ->maxLength(255)
-                                    ->afterStateUpdated(function (
-                                        Forms\Components\TextInput $component,
-                                        Forms\Set $set,
-                                        $state
-                                    ) {
-                                        $component->state(Str::slug($state));
-                                    }),
-                                Forms\Components\Textarea::make("about")
-                                    ->label(__("store.About"))
-                                    ->maxLength(65535)
-                                    ->columnSpanFull(),
-                            ]),
-                        ]),
+                ]),
+            Forms\Components\Section::make("Details")
+                ->label(__("store.Details"))
+                ->columnSpan(1)
+                ->icon("gmdi-info-o")
+                ->schema([
+                    Group::make()->schema([
+                        Forms\Components\Toggle::make("status")
+                            ->label(__("store.Active"))
+                            ->default(true)
+                            ->required(),
+                        PhoneInput::make("phone")
+                            ->label(__("store.phone"))
+                            ->inlineLabel(),
+                        Forms\Components\TextInput::make("slug")
+                            ->label(__("dashboard.Permalink"))
+                            ->required()
+                            ->inlineLabel()
+                            ->live()
+                            ->unique(ignoreRecord: true)
+                            ->maxLength(255)
+                            ->afterStateUpdated(function (
+                                Forms\Components\TextInput $component,
+                                Forms\Set $set,
+                                $state
+                            ) {
+                                $component->state(Str::slug($state));
+                            }),
+                        Forms\Components\Textarea::make("about")
+                            ->label(__("store.About"))
+                            ->maxLength(65535)
+                            ->columnSpanFull(),
+                    ]),
                 ]),
         ]);
     }
@@ -114,51 +109,40 @@ class AffiliateResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make("phone")
-                    ->label(__("dashboard.Phone"))
+                    ->label(__("store.phone"))
                     ->searchable(),
                 Tables\Columns\TextColumn::make("slug")
-                    ->label(__("dashboard.Slug"))
+                    ->label(__("dashboard.Permalink"))
                     ->searchable(),
                 Tables\Columns\IconColumn::make("status")
                     ->label(__("dashboard.Status"))
                     ->boolean(),
-                Tables\Columns\TextColumn::make("money_total_commission")
+                MoneyColumn::make("total_commission")
                     ->label(__("dashboard.Total Commission"))
-                    ->formatStateUsing(
-                        fn($state) => CurrencyHelper::format($state)
-                    )
-                    ->sortable(["total_commission"]),
-                Tables\Columns\TextColumn::make("money_paid_commission")
+                    ->sortable(),
+                MoneyColumn::make("paid_commission")
                     ->label(__("dashboard.Paid Commission"))
-                    ->formatStateUsing(
-                        fn($state) => CurrencyHelper::format($state)
-                    )
-                    ->sortable(["paid_commission"]),
-                Tables\Columns\TextColumn::make("money_unpaid_commission")
-                    ->label(__("dashboard.Unpaid Commission"))
-                    ->formatStateUsing(
-                        fn($state) => CurrencyHelper::format($state)
-                    ),
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make("created_at")
                     ->label(__("dashboard.Created At"))
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make("updated_at")
-                    ->label(__("dashboard.Updated At"))
-                    ->dateTime()
+                    ->dateTime("d M , Y")
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort("created_at", "DESC")
             ->filters([
                 Tables\Filters\SelectFilter::make("status")->options([
                     "1" => __("dashboard.Active"),
                     "0" => __("dashboard.Inactive"),
                 ]),
+                DateRangeFilter::make("created_at")->label(
+                    __("dashboard.Created At")
+                ),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

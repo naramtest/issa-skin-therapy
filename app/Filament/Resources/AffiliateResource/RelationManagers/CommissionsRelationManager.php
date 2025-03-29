@@ -110,9 +110,7 @@ class CommissionsRelationManager extends RelationManager
                     __("dashboard.Created At")
                 ),
             ])
-            ->headerActions([
-                // No create action - commissions are created automatically
-            ])
+            ->defaultSort("created_at", "DESC")
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\Action::make("markAsPaid")
