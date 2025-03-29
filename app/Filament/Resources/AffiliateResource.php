@@ -14,6 +14,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 
 class AffiliateResource extends Resource
@@ -41,7 +42,15 @@ class AffiliateResource extends Resource
                                     TextInput::make("name")
                                         ->required()
                                         ->live(onBlur: true)
-                                        ->label(__("store.Name")),
+                                        ->label(__("store.Name"))
+                                        ->afterStateUpdated(function (
+                                            Forms\Components\TextInput $component,
+                                            Forms\Set $set,
+                                            $state
+                                        ) {
+                                            $set("../slug", Str::slug($state));
+                                        }),
+
                                     TextInput::make("email")
                                         ->required()
                                         ->unique(ignoreRecord: true)
@@ -73,7 +82,19 @@ class AffiliateResource extends Resource
                                 PhoneInput::make("phone")->label(
                                     __("store.phone")
                                 ),
-
+                                Forms\Components\TextInput::make("slug")
+                                    ->label(__("dashboard.Permalink"))
+                                    ->required()
+                                    ->live()
+                                    ->unique(ignoreRecord: true)
+                                    ->maxLength(255)
+                                    ->afterStateUpdated(function (
+                                        Forms\Components\TextInput $component,
+                                        Forms\Set $set,
+                                        $state
+                                    ) {
+                                        $component->state(Str::slug($state));
+                                    }),
                                 Forms\Components\Textarea::make("about")
                                     ->label(__("store.About"))
                                     ->maxLength(65535)

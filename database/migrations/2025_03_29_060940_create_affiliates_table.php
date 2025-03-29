@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create("affiliates", function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("user_id")->nullable();
             $table->string("phone")->nullable();
             $table->string("slug")->unique();
             $table->text("about")->nullable();

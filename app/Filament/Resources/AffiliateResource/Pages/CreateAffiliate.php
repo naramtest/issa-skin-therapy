@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\AffiliateResource\Pages;
 
 use App\Filament\Resources\AffiliateResource;
+use App\Models\User;
 use Filament\Resources\Pages\CreateRecord;
+use Spatie\Permission\Models\Role;
 
 class CreateAffiliate extends CreateRecord
 {
@@ -13,5 +15,13 @@ class CreateAffiliate extends CreateRecord
     {
         $data["slug"] = \Str::slug($this->data["user"]["name"]);
         return parent::mutateFormDataBeforeCreate($data);
+    }
+
+    protected function afterCreate(): void
+    {
+        /** @var User $user */
+        $user = $this->record->user;
+        $role = Role::firstOrCreate(["name" => "affiliate"]);
+        $user->assignRole($role);
     }
 }
