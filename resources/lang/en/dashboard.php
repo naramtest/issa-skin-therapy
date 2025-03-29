@@ -121,4 +121,17 @@ return [
     "Collapse All" => "Collapse All",
     "Admins" => "Admins",
     "Admin" => "Admin",
+    "Expiration date" => "Expiration date",
+    "Discount Type" => "Type",
+    "Used Count" => "Used Count",
+    "Expires at" => "Expires at",
+    "Minimum Spend" => "Minimum Spend",
+    "Maximum Spend" => "Maximum Spend",
+    "Usage Limit" => "Usage Limit",
+    "Starts At" => "Starts At",
+    "Include Free Shipping" => "Include Free Shipping",
+    "Restrict Free Shipping to Countries" =>
+        "Restrict Free Shipping to Countries",
+    "Commission Rate (%)" => "Commission Rate (%)",
+    "Commission Rate" => "Commission Rate",
 ];

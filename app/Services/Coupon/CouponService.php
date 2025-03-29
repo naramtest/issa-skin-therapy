@@ -7,12 +7,17 @@ use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Services\Affiliate\AffiliateService;
 use App\Services\Currency\Currency;
 use App\Services\Currency\CurrencyHelper;
 use Money\Money;
 
-class CouponService
+readonly class CouponService
 {
+    public function __construct(protected AffiliateService $affiliateService)
+    {
+    }
+
     public function validateCoupon(string $code, Money $cartTotal): array
     {
         $coupon = Coupon::where("code", $code)->first();
@@ -117,5 +122,10 @@ class CouponService
         ]);
 
         $coupon->incrementUsage();
+
+        // If this is an affiliate coupon, track commission
+        if ($coupon->isAffiliateCoupon()) {
+            $this->affiliateService->trackCommission($order, $coupon);
+        }
     }
 }

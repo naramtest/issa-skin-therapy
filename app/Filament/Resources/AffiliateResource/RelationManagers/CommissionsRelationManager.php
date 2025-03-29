@@ -75,13 +75,7 @@ class CommissionsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make("order.order_number")
                     ->label(__("dashboard.Order"))
-                    ->searchable()
-                    ->url(
-                        fn(AffiliateCommission $record) => route(
-                            "filament.admin.resources.orders.view",
-                            $record->order_id
-                        )
-                    ),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make("coupon.code")
                     ->label(__("dashboard.Coupon Code"))
                     ->searchable(),
