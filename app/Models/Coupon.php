@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\CouponType;
 use App\Services\Currency\CurrencyHelper;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,6 +29,8 @@ class Coupon extends Model
         "expires_at",
         "includes_free_shipping",
         "allowed_shipping_countries",
+        "affiliate_id",
+        "commission_rate",
     ];
 
     protected $casts = [
@@ -40,7 +43,16 @@ class Coupon extends Model
         "expires_at" => "datetime",
         "includes_free_shipping" => "boolean",
         "allowed_shipping_countries" => "json",
+        "commission_rate" => "decimal:2",
     ];
+
+    /**
+     * Get the affiliate that owns the coupon.
+     */
+    public function affiliate(): BelongsTo
+    {
+        return $this->belongsTo(Affiliate::class);
+    }
 
     public function isValid(): bool
     {
@@ -119,25 +131,27 @@ class Coupon extends Model
         return $this->belongsToMany(Customer::class, "coupon_usage");
     }
 
-    public function affiliates(): BelongsToMany
+    /**
+     * Determine if the coupon is an affiliate coupon.
+     */
+    public function isAffiliateCoupon(): bool
     {
-        return $this->belongsToMany(Affiliate::class, "affiliate_coupons")
-            ->withPivot([
-                "commission_rate",
-                "is_active",
-                "starts_at",
-                "expires_at",
-            ])
-            ->withTimestamps();
+        return $this->affiliate_id !== null;
     }
 
-    public function affiliateCoupons(): HasMany
+    /**
+     * Scope a query to only include general coupons.
+     */
+    public function scopeGeneral($query)
     {
-        return $this->hasMany(AffiliateCoupon::class);
+        return $query->whereNull("affiliate_id");
     }
 
-    public function affiliateCommissions(): HasMany
+    /**
+     * Scope a query to only include affiliate coupons.
+     */
+    public function scopeAffiliate($query)
     {
-        return $this->hasMany(AffiliateCommission::class);
+        return $query->whereNotNull("affiliate_id");
     }
 }

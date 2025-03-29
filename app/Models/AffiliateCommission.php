@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Checkout\OrderStatus;
+use App\Enums\CommissionStatus;
 use App\Services\Currency\CurrencyHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,9 +13,8 @@ class AffiliateCommission extends Model
 {
     protected $fillable = [
         "affiliate_id",
-        "coupon_id",
-        "affiliate_coupon_id",
         "order_id",
+        "coupon_id",
         "order_total",
         "commission_rate",
         "commission_amount",
@@ -23,13 +23,13 @@ class AffiliateCommission extends Model
     ];
 
     protected $casts = [
-        "commission_rate" => "float",
+        "commission_rate" => "decimal:2",
+        "status" => CommissionStatus::class,
         "paid_at" => "datetime",
-        "status" => OrderStatus::class,
     ];
 
     /**
-     * Get the affiliate associated with this commission.
+     * Get the affiliate that owns the commission.
      */
     public function affiliate(): BelongsTo
     {
@@ -37,23 +37,7 @@ class AffiliateCommission extends Model
     }
 
     /**
-     * Get the coupon associated with this commission.
-     */
-    public function coupon(): BelongsTo
-    {
-        return $this->belongsTo(Coupon::class);
-    }
-
-    /**
-     * Get the affiliate coupon associated with this commission.
-     */
-    public function affiliateCoupon(): BelongsTo
-    {
-        return $this->belongsTo(AffiliateCoupon::class);
-    }
-
-    /**
-     * Get the order associated with this commission.
+     * Get the order that owns the commission.
      */
     public function order(): BelongsTo
     {
@@ -61,14 +45,19 @@ class AffiliateCommission extends Model
     }
 
     /**
-     * Mark this commission as paid.
+     * Get the coupon that owns the commission.
      */
-    public function markAsPaid(): void
+    public function coupon(): BelongsTo
     {
-        $this->update([
-            "status" => "paid",
-            "paid_at" => now(),
-        ]);
+        return $this->belongsTo(Coupon::class);
+    }
+
+    /**
+     * Get the order total as a Money object.
+     */
+    public function getMoneyOrderTotalAttribute(): Money
+    {
+        return new Money($this->order_total, CurrencyHelper::defaultCurrency());
     }
 
     /**
@@ -83,10 +72,70 @@ class AffiliateCommission extends Model
     }
 
     /**
-     * Get the order total as a Money object.
+     * Mark the commission as paid.
      */
-    public function getMoneyOrderTotalAttribute(): Money
+    public function markAsPaid(): void
     {
-        return new Money($this->order_total, CurrencyHelper::defaultCurrency());
+        if (!$this->canBePaid()) {
+            return;
+        }
+
+        $this->update([
+            "status" => CommissionStatus::PAID,
+            "paid_at" => now(),
+        ]);
+
+        // Update the affiliate's paid commission
+        $this->affiliate->increment(
+            "paid_commission",
+            $this->commission_amount
+        );
+    }
+
+    /**
+     * Determine if the commission can be marked as paid.
+     * Only completed orders can have their commissions paid.
+     */
+    public function canBePaid(): bool
+    {
+        return $this->status === CommissionStatus::PENDING &&
+            $this->order->status === OrderStatus::COMPLETED;
+    }
+
+    /**
+     * Update commission status based on order status.
+     */
+    public function updateStatusFromOrder(): void
+    {
+        if ($this->status !== CommissionStatus::PENDING) {
+            return; // Only update pending commissions
+        }
+
+        if (
+            $this->order->status === OrderStatus::CANCELLED ||
+            $this->order->status === OrderStatus::REFUNDED
+        ) {
+            $this->markAsCanceled();
+        }
+    }
+
+    /**
+     * Mark the commission as canceled.
+     */
+    public function markAsCanceled(): void
+    {
+        if ($this->status === CommissionStatus::PAID) {
+            return; // Can't cancel a paid commission
+        }
+
+        $this->update([
+            "status" => CommissionStatus::CANCELED,
+        ]);
+
+        // Update the affiliate's total commission
+        $this->affiliate->decrement(
+            "total_commission",
+            $this->commission_amount
+        );
     }
 }

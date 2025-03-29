@@ -12,16 +12,13 @@ return new class extends Migration {
     {
         Schema::create("affiliates", function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table
-                ->foreignIdFor(\App\Models\User::class)
-                ->constrained()
-                ->cascadeOnDelete();
-            $table->string("email")->unique();
+            $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->string("phone")->nullable();
-            $table->string("type")->default("other");
-            $table->text("notes")->nullable();
-            $table->boolean("is_active")->default(true);
+            $table->string("slug")->unique();
+            $table->text("about")->nullable();
+            $table->boolean("status")->default(true);
+            $table->unsignedBigInteger("total_commission")->default(0);
+            $table->unsignedBigInteger("paid_commission")->default(0);
             $table->timestamps();
         });
     }
