@@ -23,8 +23,6 @@ class AffiliateResource extends Resource
 
     protected static ?string $navigationIcon = "heroicon-o-users";
 
-    protected static ?string $navigationGroup = "Marketing";
-
     public static function form(Form $form): Form
     {
         return $form->columns()->schema([
@@ -166,5 +164,35 @@ class AffiliateResource extends Resource
             "create" => Pages\CreateAffiliate::route("/create"),
             "edit" => Pages\EditAffiliate::route("/{record}/edit"),
         ];
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __("store.Marketing");
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __("dashboard.Affiliates");
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __("dashboard.Affiliate");
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __("dashboard.Affiliates");
+    }
+
+    public static function getLabel(): ?string
+    {
+        return __("dashboard.Affiliate");
+    }
+
+    public static function getPluralLabel(): ?string
+    {
+        return __("dashboard.Affiliates");
     }
 }

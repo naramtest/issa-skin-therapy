@@ -145,4 +145,6 @@ return [
     "User" => "User",
     "Total Commission" => "Total Commission",
     "Paid Commission" => "Paid Commission",
+    "Affiliates" => "Affiliates",
+    "Affiliate" => "Affiliate",
 ];
