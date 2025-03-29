@@ -118,4 +118,26 @@ class Coupon extends Model
     {
         return $this->belongsToMany(Customer::class, "coupon_usage");
     }
+
+    public function affiliates(): BelongsToMany
+    {
+        return $this->belongsToMany(Affiliate::class, "affiliate_coupons")
+            ->withPivot([
+                "commission_rate",
+                "is_active",
+                "starts_at",
+                "expires_at",
+            ])
+            ->withTimestamps();
+    }
+
+    public function affiliateCoupons(): HasMany
+    {
+        return $this->hasMany(AffiliateCoupon::class);
+    }
+
+    public function affiliateCommissions(): HasMany
+    {
+        return $this->hasMany(AffiliateCommission::class);
+    }
 }

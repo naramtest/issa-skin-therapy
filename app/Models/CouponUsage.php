@@ -12,6 +12,7 @@ class CouponUsage extends Model
         "order_id",
         "customer_id",
         "discount_amount",
+        "affiliate_coupon_id",
         "used_at",
     ];
 
@@ -33,5 +34,10 @@ class CouponUsage extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function affiliateCoupon(): BelongsTo
+    {
+        return $this->belongsTo(AffiliateCoupon::class);
     }
 }
