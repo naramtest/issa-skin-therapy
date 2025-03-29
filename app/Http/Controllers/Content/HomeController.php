@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Content;
 
 use App\Http\Controllers\Controller;
-use App\Models\Coupon;
-use App\Models\Order;
-use App\Services\Affiliate\AffiliateService;
 use App\Services\Info\InfoCacheService;
 use App\Services\Post\PostCacheService;
 use App\Services\Product\ProductCacheService;
@@ -24,10 +21,6 @@ class HomeController extends Controller
         PostCacheService $postCacheService,
         InfoCacheService $infoCacheService
     ) {
-        app(AffiliateService::class)->trackCommission(
-            Order::find(128),
-            Coupon::find(3)
-        );
         $bundles = $productCacheService->allBundles();
         $categories = $productCacheService->allProductCategories();
         $featuredProduct = $productCacheService->getFeaturedProduct();
