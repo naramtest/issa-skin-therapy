@@ -111,12 +111,10 @@
                     $wire.dispatch('payment-error', {
                         error: 'Payment system not initialized properly',
                     })
-
                     return
                 }
 
                 try {
-                    // First submit the elements form
                     const { error: submitError } = await elements.submit()
                     if (submitError) {
                         $wire.dispatch('payment-error', {
@@ -124,6 +122,8 @@
                         })
                         return
                     }
+
+                    // Get billing details from the form
                     const billingDetails = await $wire.getBillingDetails()
 
                     const result = await stripe.confirmPayment({

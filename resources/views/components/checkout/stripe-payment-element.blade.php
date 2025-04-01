@@ -61,22 +61,8 @@
                         },
                     });
 
-                    this.paymentElement = this.elements.create('payment', {
-                        defaultValues: {
-                            billingDetails: {
-                                name: '',
-                                email: '',
-                                phone: '',
-                                address: {
-                                    country: '',
-                                },
-                            },
-                        },
-                        fields: {
-                            billingDetails: 'never',
-                        },
-                    });
-
+                    // Remove the defaultValues and fields configuration
+                    this.paymentElement = this.elements.create('payment');
                     this.paymentElement.mount('#payment-element');
                     window.stripeElements = this.elements;
 
@@ -93,14 +79,6 @@
                     if (this.elements) {
                         await this.elements.update({
                             amount: amount,
-                        });
-                    }
-                },
-
-                async updatePaymentElement(clientSecret) {
-                    if (this.elements) {
-                        await this.elements.update({
-                            clientSecret: clientSecret,
                         });
                     }
                 },
