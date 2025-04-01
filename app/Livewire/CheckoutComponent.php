@@ -107,12 +107,13 @@ class CheckoutComponent extends Component
         try {
             if ($this->currentOrderId) {
                 $data = $this->oldOrderExists();
-                if ($data["success"] and array_key_exists("url", $data)) {
-                    $this->redirect($data["url"]);
+                if ($data["success"]) {
+                    if (array_key_exists("url", $data)) {
+                        $this->redirect($data["url"]);
+                    }
                     return;
                 }
             }
-
             DB::beginTransaction();
             $order = $this->createAndGetOrder($validatedData);
             $this->currentOrderId = $order->id;

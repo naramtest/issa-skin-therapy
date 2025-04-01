@@ -21,23 +21,19 @@ trait WithPayment
     public function oldOrderExists(): array
     {
         $order = Order::find($this->currentOrderId);
-
-        if ($this->form->payment_method == PaymentMethod::CARD->value) {
-            try {
+        try {
+            if ($this->form->payment_method == PaymentMethod::CARD->value) {
                 $paymentData = $this->stripeOldOrderExits($order);
-                logger($paymentData);
                 $this->dispatch(
                     "payment-ready",
                     clientSecret: $paymentData["clientSecret"]
                 );
                 return ["success" => true];
-            } catch (\Exception $exception) {
-                logger($exception);
-                return ["success" => false];
             }
+            return $this->tabbyPaymentService->processPayment($order);
+        } catch (\Exception) {
+            return ["success" => false];
         }
-
-        return $this->tabbyPaymentService->processPayment($order);
     }
 
     public function processPayment(Order $order): array
