@@ -6,6 +6,7 @@ use App\Enums\CommissionStatus;
 use App\Models\AffiliateCommission;
 use App\Models\Coupon;
 use App\Models\Order;
+use App\Services\Currency\CurrencyHelper;
 use Money\Money;
 
 class AffiliateService
@@ -36,10 +37,13 @@ class AffiliateService
             "affiliate_id" => $coupon->affiliate_id,
             "order_id" => $order->id,
             "coupon_id" => $coupon->id,
-            "order_total" => $order->total,
+            "order_total" => $order->subtotal_after_coupon,
             "commission_rate" => $coupon->commission_rate,
             "commission_amount" => $this->calculateCommissionAmount(
-                $order->getMoneySubtotal(),
+                new Money(
+                    $order->subtotal_after_coupon,
+                    CurrencyHelper::defaultCurrency()
+                ),
                 $coupon->commission_rate
             ),
             "status" => CommissionStatus::PENDING,

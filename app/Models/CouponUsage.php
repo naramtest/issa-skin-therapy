@@ -35,9 +35,4 @@ class CouponUsage extends Model
     {
         return $this->belongsTo(Customer::class);
     }
-
-    public function affiliateCoupon(): BelongsTo
-    {
-        return $this->belongsTo(AffiliateCoupon::class);
-    }
 }

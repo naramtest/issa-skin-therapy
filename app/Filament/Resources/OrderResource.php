@@ -3,11 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Enums\Checkout\OrderStatus;
-use App\Enums\Checkout\PaymentStatus;
 use App\Filament\Exports\OrderExporter;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\Partials\Components\EmailAction;
 use App\Filament\Resources\OrderResource\Partials\OrderForm;
+use App\Helpers\Filament\OrderTable;
 use App\Models\Order;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,8 +16,6 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Table;
-use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
-use Pelmered\FilamentMoneyField\Tables\Columns\MoneyColumn;
 
 class OrderResource extends Resource
 {
@@ -30,37 +28,7 @@ class OrderResource extends Resource
      */
     public static function table(Table $table): Table
     {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make("order_number")
-                    ->label(__("store.Order Number"))
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make("customer.full_name")
-                    ->label(__("store.Customer"))
-                    ->searchable(["first_name", "last_name"]),
-                MoneyColumn::make("total")
-                    ->sortable()
-                    ->label(__("store.Total")),
-
-                Tables\Columns\TextColumn::make("status")->badge()->sortable(),
-                Tables\Columns\TextColumn::make("payment_status")->badge(),
-                Tables\Columns\TextColumn::make("created_at")
-                    ->dateTime()
-                    ->sortable(),
-            ])
-            ->filters([
-                Tables\Filters\SelectFilter::make("status")->options(
-                    OrderStatus::class
-                ),
-                Tables\Filters\SelectFilter::make("payment_status")->options(
-                    PaymentStatus::class
-                ),
-                DateRangeFilter::make("created_at")->label(
-                    __("dashboard.Created At")
-                ),
-                Tables\Filters\TrashedFilter::make(),
-            ])
+        return OrderTable::make($table)
             ->actions([
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\EditAction::make(),
@@ -102,8 +70,7 @@ class OrderResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
                 ExportBulkAction::make()->exporter(OrderExporter::class),
-            ])
-            ->defaultSort("created_at", "desc");
+            ]);
     }
 
     public static function form(Form $form): Form

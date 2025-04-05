@@ -87,11 +87,6 @@ class Order extends Model
         return new Money($this->total, CurrencyHelper::defaultCurrency());
     }
 
-    public function getMoneySubtotal(): Money
-    {
-        return new Money($this->subtotal, CurrencyHelper::defaultCurrency());
-    }
-
     public function getMoneyShippingCostAttribute(): Money
     {
         return new Money(
@@ -146,5 +141,23 @@ class Order extends Model
     public function shippingOrder(): HasOne
     {
         return $this->hasOne(ShippingOrder::class);
+    }
+
+    public function commission(): HasOne
+    {
+        return $this->hasOne(AffiliateCommission::class);
+    }
+
+    public function getSubtotalAfterCouponAttribute(): int
+    {
+        if (!$this->couponUsage) {
+            return $this->subtotal;
+        }
+        return $this->subtotal - $this->couponUsage->discount_amount;
+    }
+
+    public function getMoneySubtotal(): Money
+    {
+        return new Money($this->subtotal, CurrencyHelper::defaultCurrency());
     }
 }

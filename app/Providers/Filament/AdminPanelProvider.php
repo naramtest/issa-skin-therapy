@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\LatestOrdersWidget;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Exception;
 use Filament\Http\Middleware\Authenticate;
@@ -61,7 +62,7 @@ class AdminPanelProvider extends PanelProvider
                 in: app_path("Filament/Widgets"),
                 for: "App\\Filament\\Widgets"
             )
-            ->widgets([Widgets\AccountWidget::class])
+            ->widgets([Widgets\AccountWidget::class, LatestOrdersWidget::class])
             ->navigationGroups([
                 NavigationGroup::make()->label(
                     fn(): string => __("store.Shop")
