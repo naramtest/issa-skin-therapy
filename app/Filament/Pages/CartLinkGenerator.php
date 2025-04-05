@@ -6,6 +6,7 @@ use App\Enums\ProductType;
 use App\Models\Bundle;
 use App\Models\Product;
 use App\Services\UrlShortenerService;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -20,6 +21,7 @@ use Livewire\Attributes\On;
 class CartLinkGenerator extends Page implements HasForms
 {
     use InteractsWithForms;
+    use HasPageShield;
 
     protected static ?string $navigationIcon = "heroicon-o-link";
     protected static ?int $navigationSort = 2;

@@ -25,7 +25,7 @@ return [
     | (visit: https://laravel.com/docs/10.x/authorization)
     |
     */
-    "gate" => null,
+    "gate" => "page_TranslationManagerPage",
 
     /*
      |--------------------------------------------------------------------------
