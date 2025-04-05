@@ -18,6 +18,9 @@ class EditAffiliate extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $data["slug"] = \Str::slug($this->data["user"]["name"]);
+        if ($data["password"] == null) {
+            unset($data["password"]);
+        }
         return parent::mutateFormDataBeforeSave($data);
     }
 }

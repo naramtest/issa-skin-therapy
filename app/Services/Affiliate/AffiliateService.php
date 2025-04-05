@@ -39,7 +39,7 @@ class AffiliateService
             "order_total" => $order->total,
             "commission_rate" => $coupon->commission_rate,
             "commission_amount" => $this->calculateCommissionAmount(
-                $order->getMoneyTotal(),
+                $order->getMoneySubtotal(),
                 $coupon->commission_rate
             ),
             "status" => CommissionStatus::PENDING,
