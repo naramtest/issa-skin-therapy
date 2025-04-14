@@ -101,8 +101,6 @@ class CleanupAbandonedOrdersJob implements ShouldQueue
             "status" => OrderStatus::CANCELLED,
             "payment_status" => PaymentStatus::FAILED,
         ]);
-
-        Log::info("Cleaned up abandoned order", ["order_id" => $order->id]);
     }
 
     /**

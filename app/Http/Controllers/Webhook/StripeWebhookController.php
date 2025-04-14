@@ -126,16 +126,17 @@ class StripeWebhookController extends Controller
     /**
      * @throws Exception
      */
-    protected function getOrderFromPaymentIntent(array $paymentIntent): Order
-    {
-        $order = Order::where(
-            "payment_intent_id",
-            $paymentIntent["id"]
-        )->first();
+    protected function getOrderFromPaymentIntent(
+        array|string $paymentIntent
+    ): Order {
+        $paymentIntentId = is_array($paymentIntent)
+            ? $paymentIntent["id"]
+            : $paymentIntent;
+        $order = Order::where("payment_intent_id", $paymentIntentId)->first();
 
         if (!$order) {
             Log::error("Order not found for payment intent", [
-                "payment_intent_id" => $paymentIntent["id"],
+                "payment_intent_id" => $paymentIntentId,
             ]);
             throw new Exception("Order not found");
         }
