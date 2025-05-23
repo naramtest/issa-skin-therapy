@@ -171,4 +171,27 @@ class CurrencyHelper
 
         return $moneyFormatter->format($money); // outputs 1.00
     }
+
+    public static function getCurrencyDecimals(string $currencyCode): int
+    {
+        $currencies = new ISOCurrencies();
+        $currency = new Currency($currencyCode);
+        return $currencies->subunitFor($currency);
+    }
+
+    /**
+     * Ensure amount meets Stripe's requirements for three-decimal currencies
+     */
+    public static function ensureValidStripeAmount(
+        int $amount,
+        string $currencyCode
+    ): int {
+        $threeDecimalCurrencies = ["BHD", "JOD", "KWD", "OMR", "TND"];
+
+        if (in_array(strtoupper($currencyCode), $threeDecimalCurrencies)) {
+            return (int) floor($amount / 10) * 10;
+        }
+
+        return $amount;
+    }
 }

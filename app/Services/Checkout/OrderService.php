@@ -31,6 +31,21 @@ readonly class OrderService
         // Create the order
         $userCurrency = CurrencyHelper::getUserCurrency();
         $defaultCurrency = CurrencyHelper::defaultCurrency();
+        $userCurrency = CurrencyHelper::getUserCurrency();
+        $subtotal = $data->subtotal;
+        $total = $data->total;
+
+        // Ensure the amount is valid for Stripe if using a three-decimal currency
+        if (CurrencyHelper::getCurrencyDecimals($userCurrency) === 3) {
+            $subtotal = CurrencyHelper::ensureValidStripeAmount(
+                $subtotal,
+                $userCurrency
+            );
+            $total = CurrencyHelper::ensureValidStripeAmount(
+                $total,
+                $userCurrency
+            );
+        }
         $order = Order::create([
             "order_number" => $orderNumber,
             "customer_id" => $data->customerId,
@@ -40,9 +55,9 @@ readonly class OrderService
             "status" => $data->status,
             "payment_status" => $data->paymentStatus,
             "shipping_method" => $data->shippingMethod,
-            "subtotal" => $data->subtotal,
+            "subtotal" => $subtotal,
             "shipping_cost" => $data->shippingCost,
-            "total" => $data->total,
+            "total" => $total,
             "notes" => $data->notes,
             "currency_code" => $userCurrency,
             "default_currency" => $defaultCurrency,

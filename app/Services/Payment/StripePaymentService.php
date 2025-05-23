@@ -194,7 +194,23 @@ class StripePaymentService implements PaymentServiceInterface
             $order->getMoneyTotal(),
             $order->currency_code
         );
-        return $money->getAmount();
+
+        $amount = $money->getAmount();
+
+        // Handle special case for currencies with 3 decimal places (like KWD)
+        if ($this->hasCurrencyThreeDecimals($order->currency_code)) {
+            // Ensure the amount is divisible by 10 (last decimal is 0)
+            $amount = (int) floor($amount / 10) * 10;
+        }
+
+        return $amount;
+    }
+
+    private function hasCurrencyThreeDecimals(string $currencyCode): bool
+    {
+        // List of currencies with 3 decimal places
+        $threeDecimalCurrencies = ["BHD", "JOD", "KWD", "OMR", "TND"];
+        return in_array(strtoupper($currencyCode), $threeDecimalCurrencies);
     }
 
     protected function formatShippingData(Order $order): array
