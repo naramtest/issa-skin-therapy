@@ -5,6 +5,7 @@ namespace App\Exports;
 use App\Enums\DHLFieldDefinitions;
 use App\Models\Order;
 use App\Services\Currency\CurrencyHelper;
+use App\Services\Utils\ArabicTransliterationService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -21,10 +22,14 @@ class DHLOrderExport implements
 {
     protected Collection $orders;
     protected array $headings;
+    protected ArabicTransliterationService $transliterationService;
 
     public function __construct(Collection $orders)
     {
         $this->orders = $orders;
+        $this->transliterationService = app(
+            ArabicTransliterationService::class
+        );
         $this->headings = array_map(
             fn($field) => $field->value,
             DHLFieldDefinitions::cases()
@@ -53,7 +58,6 @@ class DHLOrderExport implements
     /** @var Order $order */
     public function map($order): array
     {
-        // We'll need to create multiple rows if order has multiple items
         $rows = [];
 
         foreach ($order->items as $item) {
@@ -68,35 +72,49 @@ class DHLOrderExport implements
                 DHLFieldDefinitions::DATE->value => $order->created_at->format(
                     "Y-m-d"
                 ),
-                DHLFieldDefinitions::TO_NAME->value => Str::limit(
+
+                // Transliterate Arabic names and addresses
+                DHLFieldDefinitions::TO_NAME
+                    ->value => $this->transliterateAndLimit(
                     $order->shippingAddress->full_name,
-                    DHLFieldDefinitions::TO_NAME->getMaxLength()
+                    DHLFieldDefinitions::TO_NAME->getMaxLength(),
+                    "name"
                 ),
-                DHLFieldDefinitions::DESTINATION_BUILDING->value => Str::limit(
+                DHLFieldDefinitions::DESTINATION_BUILDING
+                    ->value => $this->transliterateAndLimit(
                     $order->shippingAddress->building .
                         " Flat: " .
                         $order->shippingAddress->flat,
-                    DHLFieldDefinitions::DESTINATION_BUILDING->getMaxLength()
+                    DHLFieldDefinitions::DESTINATION_BUILDING->getMaxLength(),
+                    "address"
                 ),
-                DHLFieldDefinitions::DESTINATION_STREET->value => Str::limit(
+                DHLFieldDefinitions::DESTINATION_STREET
+                    ->value => $this->transliterateAndLimit(
                     $order->shippingAddress->address,
-                    DHLFieldDefinitions::DESTINATION_STREET->getMaxLength()
+                    DHLFieldDefinitions::DESTINATION_STREET->getMaxLength(),
+                    "address"
                 ),
-                DHLFieldDefinitions::DESTINATION_SUBURB->value => Str::limit(
+                DHLFieldDefinitions::DESTINATION_SUBURB
+                    ->value => $this->transliterateAndLimit(
                     $order->shippingAddress->area,
-                    DHLFieldDefinitions::DESTINATION_SUBURB->getMaxLength()
+                    DHLFieldDefinitions::DESTINATION_SUBURB->getMaxLength(),
+                    "address"
                 ),
-                DHLFieldDefinitions::DESTINATION_CITY->value => Str::limit(
+                DHLFieldDefinitions::DESTINATION_CITY
+                    ->value => $this->transliterateAndLimit(
                     $order->shippingAddress->city,
-                    DHLFieldDefinitions::DESTINATION_CITY->getMaxLength()
+                    DHLFieldDefinitions::DESTINATION_CITY->getMaxLength(),
+                    "city"
                 ),
                 DHLFieldDefinitions::DESTINATION_POSTCODE->value => Str::limit(
                     $order->shippingAddress->postal_code,
                     DHLFieldDefinitions::DESTINATION_POSTCODE->getMaxLength()
                 ),
-                DHLFieldDefinitions::DESTINATION_STATE->value => Str::limit(
+                DHLFieldDefinitions::DESTINATION_STATE
+                    ->value => $this->transliterateAndLimit(
                     $order->shippingAddress->state,
-                    DHLFieldDefinitions::DESTINATION_STATE->getMaxLength()
+                    DHLFieldDefinitions::DESTINATION_STATE->getMaxLength(),
+                    "address"
                 ),
                 DHLFieldDefinitions::DESTINATION_COUNTRY->value => Str::limit(
                     $order->shippingAddress->country,
@@ -111,8 +129,9 @@ class DHLOrderExport implements
                     DHLFieldDefinitions::DESTINATION_PHONE->getMaxLength()
                 ),
 
-                // Item specific fields
-                DHLFieldDefinitions::ITEM_NAME->value => Str::limit(
+                // Item specific fields - transliterate product names
+                DHLFieldDefinitions::ITEM_NAME
+                    ->value => $this->transliterateAndLimit(
                     $purchasable->name,
                     DHLFieldDefinitions::ITEM_NAME->getMaxLength()
                 ),
@@ -120,7 +139,8 @@ class DHLOrderExport implements
                     ->value => CurrencyHelper::decimalFormatter(
                     $item->money_unit_price
                 ),
-                DHLFieldDefinitions::INSTRUCTIONS->value => Str::limit(
+                DHLFieldDefinitions::INSTRUCTIONS
+                    ->value => $this->transliterateAndLimit(
                     $order->notes,
                     DHLFieldDefinitions::INSTRUCTIONS->getMaxLength()
                 ),
@@ -179,5 +199,24 @@ class DHLOrderExport implements
         }
 
         return $rows;
+    }
+
+    /**
+     * Transliterate Arabic text and limit to maximum length
+     */
+    protected function transliterateAndLimit(
+        ?string $text,
+        int $maxLength,
+        string $fieldType = "default"
+    ): string {
+        if (empty($text)) {
+            return "";
+        }
+
+        $transliterated = $this->transliterationService->transliterateForField(
+            $text,
+            $fieldType
+        );
+        return Str::limit($transliterated, $maxLength);
     }
 }

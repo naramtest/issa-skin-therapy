@@ -9,4 +9,5 @@ return [
     App\Providers\ObserverProvider::class,
     App\Providers\SchemaServiceProvider::class,
     App\Providers\SingletonProvider::class,
+    App\Providers\UtilsServiceProvider::class,
 ];
