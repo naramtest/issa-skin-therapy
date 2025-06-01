@@ -23,7 +23,7 @@ class CurrencyService
     {
         $this->swap = $swap;
         $this->currencies = new ISOCurrencies();
-        $this->defaultCurrency = config("app.currency", "USD");
+        $this->defaultCurrency = CurrencyHelper::getCurrencyCode();
         $exchange = new SwapExchange($this->swap);
         $exchange = new ReversedCurrenciesExchange($exchange);
         $this->converter = new Converter($this->currencies, $exchange);

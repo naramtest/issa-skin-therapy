@@ -71,7 +71,7 @@
                         x-effect="show = $wire.form.payment_method === 'tabby'"
                     >
                         <div
-                            x-show="show"
+                            x-show="show && $wire.isAvailable"
                             x-collapse.duration.800ms
                             class="mt-4 border-t border-gray-200 p-4"
                         >
@@ -81,6 +81,7 @@
                             />
                         </div>
                     </div>
+
                     @if ($rejectionReason)
                         <div class="mt-4 rounded-lg bg-red-50 p-4">
                             <div class="text-sm text-red-700">

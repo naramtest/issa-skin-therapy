@@ -39,37 +39,6 @@ class CurrencyHelper
         return new Currency(self::getCurrencyCode());
     }
 
-    public static function setUserCurrency(string $currency): void
-    {
-        if (!self::isValidCurrency($currency)) {
-            throw new \InvalidArgumentException(
-                "Invalid currency code: $currency"
-            );
-        }
-        session()->put("currency", $currency);
-    }
-
-    public static function isValidCurrency(string $currency): bool
-    {
-        return collect(self::getAvailableCurrencies())
-            ->pluck("code")
-            ->contains($currency);
-    }
-
-    public static function getAvailableCurrencies(): array
-    {
-        return config("currency");
-    }
-
-    public static function getUserCurrency(): string
-    {
-        try {
-            return session()->get("currency", self::getCurrencyCode());
-        } catch (NotFoundExceptionInterface | ContainerExceptionInterface) {
-            return self::getCurrencyCode();
-        }
-    }
-
     /**
      * Get currency symbol by code
      */
@@ -79,6 +48,11 @@ class CurrencyHelper
             "code",
             $currencyCode
         )["symbol"] ?? $currencyCode;
+    }
+
+    public static function getAvailableCurrencies(): array
+    {
+        return config("currency");
     }
 
     /**
@@ -193,5 +167,75 @@ class CurrencyHelper
         }
 
         return $amount;
+    }
+
+    public static function getUserCurrency(): string
+    {
+        try {
+            if (session()->has("currency")) {
+                return session("currency");
+            }
+
+            // Try to detect currency based on location
+            $locationService = app(LocationDetectionService::class);
+            return $locationService->detectAndSetUserCurrency();
+        } catch (\Exception $e) {
+            return self::getCurrencyCode();
+        }
+    }
+
+    /**
+     * Set user currency (with manual selection flag)
+     */
+    public static function setUserCurrency(
+        string $currency,
+        bool $isManual = true
+    ): void {
+        if (!self::isValidCurrency($currency)) {
+            throw new \InvalidArgumentException(
+                "Invalid currency code: $currency"
+            );
+        }
+
+        session(["currency" => $currency]);
+
+        // Mark as manually selected to prevent auto-detection override
+        if ($isManual) {
+            session(["currency_manually_selected" => true]);
+        }
+    }
+
+    public static function isValidCurrency(string $currency): bool
+    {
+        return collect(self::getAvailableCurrencies())
+            ->pluck("code")
+            ->contains($currency);
+    }
+
+    /**
+     * Clear user currency preference
+     */
+    public static function clearUserCurrency(): void
+    {
+        session()->forget(["currency", "currency_manually_selected"]);
+    }
+
+    /**
+     * Get user's detected location currency (without setting it)
+     */
+    public static function getDetectedCurrency(): string
+    {
+        try {
+            $locationService = app(LocationDetectionService::class);
+            $countryCode = $locationService->getUserCountryFromIP();
+
+            if ($countryCode) {
+                return $locationService->getCurrencyByCountry($countryCode);
+            }
+        } catch (\Exception $e) {
+            // Log error if needed
+        }
+
+        return self::getCurrencyCode();
     }
 }

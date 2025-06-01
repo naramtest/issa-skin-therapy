@@ -24,7 +24,10 @@ return Application::configure(basePath: dirname(__DIR__))
             ]
         );
         $middleware->web(
-            append: [\Statikbe\CookieConsent\CookieConsentMiddleware::class]
+            append: [
+                \Statikbe\CookieConsent\CookieConsentMiddleware::class,
+                \App\Http\Middleware\DetectUserCurrency::class,
+            ]
         );
         $middleware->alias([
             "stripe.signature" => VerifyStripeSignature::class,
