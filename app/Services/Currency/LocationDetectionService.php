@@ -81,8 +81,7 @@ class LocationDetectionService
      */
     public function getUserCountryFromIP(?string $ip = null): ?string
     {
-        //        $ip = $ip ?? request()->ip();
-        $ip = "37.231.83.201";
+        $ip = $ip ?? request()->ip();
         // Cache the result for 24 hours to reduce API calls
         return Cache::remember(
             "user_country_{$ip}",
